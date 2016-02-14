@@ -32,6 +32,7 @@ So what are you waiting for? Follow this simple user guide to pick up J.I.M in t
     - [Shortcuts](#shortcuts)
 - [Exiting](#exiting)
 - [Commands Sheet](#commands-sheet)
+- [Units and Values](#units-and-values)
 
 <!-- /MarkdownTOC -->
 
@@ -63,6 +64,8 @@ For more features and magic, refer to our 'Feature Details' section below!
 # Feature Details
 
 ## Basics
+<!-- MarkdownTOC -->
+
   - [View](#view)
   - [Create](#create)
   - [Modify](#modify)
@@ -75,6 +78,9 @@ For more features and magic, refer to our 'Feature Details' section below!
   - [Categorize](#categorize)
   - [Undo and Redo](#undo-and-redo)
   - [Reschedule](#reschedule)
+
+  <!-- /MarkdownTOC -->
+
 
   ### View
 
@@ -234,10 +240,15 @@ For more features and magic, refer to our 'Feature Details' section below!
 
 
 ## Advanced
+<!-- MarkdownTOC -->
+
   - [Recurring Tasks](#recurring-tasks)
   - [Set Reminders](#set-reminders)
   - [Shortcuts](#shortcuts)
   - [Natural Commands](#natural-commands)
+
+  <!-- /MarkdownTOC -->
+
 
   ### Recurring Tasks
 
