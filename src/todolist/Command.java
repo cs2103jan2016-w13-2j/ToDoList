@@ -6,7 +6,7 @@ public class Command() {
     
     public Command(String input) {
         this.rawCommand = input;
-        smart = Parser.CheckType(this);
+        smart = Parser.checkType(this);
     }
     
     public String getCommand() {
