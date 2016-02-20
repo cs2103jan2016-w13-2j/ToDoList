@@ -8,23 +8,7 @@ public class UI {
 
 
 		while(true) {
-
-
-			System.in();
-
-
-      CommandHandler(new Command("      "));
-
-
-
-			//dataBase.add(task);
-
-
-
-
-
+		    
 		}
-
-
 	}
 }
