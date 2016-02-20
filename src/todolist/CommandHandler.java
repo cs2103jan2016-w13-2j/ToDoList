@@ -1,22 +1,14 @@
 package todolist;
 
 public class CommandHandler() {
+    
+  public void static execute(Command Command) {
 
-
-  public CommandHandler(Command rawCommand) {
-
-    Type commandType = rawCommand.getCommandType();
-
-
-    if(Parser.checkType(rawCommand)) {
-      NormalCommandHandler(rawCommand);
+    if(command.isSmart) {
+        FlexiCommandHander.execute(new FlexiCommand(command));
     } else {
-      FlexiCommandHander(rawCommand);
+        NormalCommandHandler.execute(new NormalCommand(command));
     }
-
-
-
   }
-
-
+  
 }

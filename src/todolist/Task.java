@@ -9,12 +9,13 @@ public class Task {
 	private Category category;
 	private Priority priority;
 
-	public Task(Name name, Time startTime, Time endTime, Category category, Priority priority) {
+	public Task(Name name, Time startTime, Time endTime, Category category, Priority priority, Reminder reminder) {
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.category = category;
 		this.priority = priority;
+		this.reminder = reminder;
 	}
 
 	public Name getName() {
@@ -35,5 +36,9 @@ public class Task {
 
 	public Priority getPriority() {
 		return priority;
+	}
+	
+	public Reminder getReminder() {
+	    return reminder;
 	}
 }
