@@ -2,11 +2,11 @@ Package todolist;
 
 public Class Parser() {
     
-    public Boolean static CheckType(Command command) {
+    public Boolean static checkType(Command command) {
         
     }
     
-    public NormalCommand static Translate(FlexiCommand flexicommand) {
+    public NormalCommand static translate(FlexiCommand flexiCommand) {
         
     }
 }

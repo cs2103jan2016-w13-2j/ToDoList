@@ -6,8 +6,8 @@ public class NormalCommand() {
   String action = null;
   String args[];
 
-  public Command(String UserInput) {
-      this.rawInput = Userinput;
+  public NormalCommand(Command command) {
+      this.rawInput = command.getCommand();
       
       String temp[] = rawInput.split(" ");
       this.action = temp[0];
