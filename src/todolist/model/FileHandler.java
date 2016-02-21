@@ -1,7 +1,8 @@
-package todolist;
+package todolist.model;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,10 +14,20 @@ public class FileHandler {
 		this.fileName = fileName;
 	}
 
-	public String read() {
-		FileReader fileReader = new FileReader(fileName);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
+	public String read() throws IOException {
+		FileReader fileReader = null;
+		BufferedReader bufferedReader = null;
+		String content = null;
+		try {
+			fileReader = new FileReader(fileName);
+			bufferedReader = new BufferedReader(fileReader);
 
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+
+		bufferedReader.close();
 		return content;
 	}
 

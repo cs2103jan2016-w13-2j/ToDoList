@@ -1,4 +1,4 @@
-package todolist;
+package todolist.model;
 
 import java.sql.Time;
 
@@ -8,6 +8,7 @@ public class Task {
 	private Time endTime;
 	private Category category;
 	private Priority priority;
+	private Reminder reminder;
 
 	public Task(Name name, Time startTime, Time endTime, Category category, Priority priority, Reminder reminder) {
 		this.name = name;

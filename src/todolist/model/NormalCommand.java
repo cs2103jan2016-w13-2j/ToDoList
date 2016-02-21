@@ -1,6 +1,6 @@
-package todolist;
+package todolist.model;
 
-public class NormalCommand() {
+public class NormalCommand {
 
   String rawInput = null;
   String action = null;
@@ -12,9 +12,9 @@ public class NormalCommand() {
       String temp[] = rawInput.split(" ");
       this.action = temp[0];
       
-      args[] = new String[temp.size() -1];
+      args = new String[temp.length -1];
       
-      for(int i=0; i<temp.size()-1; i++) {
+      for(int i=0; i<temp.length-1; i++) {
           args[i] = temp[i+1];
       }
   }
