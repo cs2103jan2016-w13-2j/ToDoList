@@ -1,4 +1,4 @@
-package todolist;
+package todolist.model;
 
 public class DataBase {
 	
@@ -31,7 +31,7 @@ public class DataBase {
 	}
 	
 	public Task retrieve(SearchCommand command) {
-		
+		Task task = null;
 		
 		return task;
 	}

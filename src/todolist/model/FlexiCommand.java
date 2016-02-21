@@ -1,6 +1,6 @@
-Package todolist;
+package todolist.model;
 
-public class FlexiCommand() {
+public class FlexiCommand {
     
     String rawInput = null;
 

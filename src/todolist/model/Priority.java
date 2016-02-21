@@ -1,4 +1,4 @@
-package todolist;
+package todolist.model;
 
 public class Priority implements Comparable<Priority>{
 

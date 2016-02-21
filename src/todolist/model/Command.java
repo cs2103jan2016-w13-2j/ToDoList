@@ -1,6 +1,6 @@
-Package todolist;
+package todolist.model;
 
-public class Command() {
+public class Command {
     String rawCommand = null;
     Boolean smart;
     
