@@ -30,8 +30,8 @@ public class DataBase {
 		
 	}
 	
-	public Task retrieve(SearchCommand command) {
-		Task task = null;
+	public ArrayList<Task> retrieve(SearchCommand command) {
+		ArrayList<task> taskList = null;
 		
 		return task;
 	}
