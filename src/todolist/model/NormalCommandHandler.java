@@ -2,20 +2,35 @@ package todolist.model;
 
 public class NormalCommandHandler {
 	
+	public static DataBase dataBase = new dataBase();
 	
 	public static void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
 	    Name name = new Name(title);
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	    LocalDateTime start = LocalDateTime.parse(startDate + " " + startTime, formatter);
-	    Task newEvent = new Task(name, start, null, null, null, null, false);
+	    LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
+	    Task newEvent = new Task(name, start, end, null, null, null, false);
+	    
+	    dataBase.add(newEvent);
+	    UIHandler.add(newEvent);
 	}
 	
 	public static void addDeadline(String title, String endDate, String endTime) {
+	    Name name = new Name(title);
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	    LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
+	    Task newEvent = new Task(name, null, end, null, null, null, false);
 	    
+	    dataBase.add(newEvent);
+	    UIHandler.add(newEvent);
 	}
 	
 	public static void addTask(String title) {
+	    Name name = new Name(title);
+	    Task newEvent = new Task(name, null, null, null, null, null, false);
 	    
+	    dataBase.add(newEvent);
+	    UIHandler.add(newEvent);
 	}
 	
 	public static void done(String title) {
@@ -86,6 +101,14 @@ public class NormalCommandHandler {
 	
 	public static void redo(int steps) {
 	    
+	}
+	
+	public static void generateTimeUnit(String unit) {
+	    switch(unit) {
+	        case "day": return TimeUnit.DAYS;
+	        case "hour": return TimeUnit.HOURS;
+	        case "minute": return TimeUnit.MINUTES;
+	    }
 	}
 	
 	public static void execute(NormalCommand normalCommand) {
