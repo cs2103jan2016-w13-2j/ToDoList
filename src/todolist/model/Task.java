@@ -21,15 +21,45 @@ public class Task {
 		this.isDone = isDone;
 	}
 
-	public Name getName() {
+    public void setName(Name name) {
+		this.name = name;
+	}
+
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setNameetEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public void setPriority(Priority priority) {
+		this.priority = priority;
+	}
+	
+	public void setReminder(Reminder reminder) {
+	    this.reminder = reminder;
+	}
+	
+	public void setDoneStatus(Boolean isDone) {
+	    this.isDone = isDone;
+	}
+	
+	///////////////////////////////////////////
+	
+	public void getName() {
 		return name;
 	}
 
-	public Time getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public Time getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
