@@ -29,7 +29,7 @@ public class Task {
 		this.startTime = startTime;
 	}
 
-	public void setNameetEndTime(LocalDateTime endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
 
@@ -51,7 +51,7 @@ public class Task {
 	
 	///////////////////////////////////////////
 	
-	public void getName() {
+	public Name getName() {
 		return name;
 	}
 
@@ -77,5 +77,11 @@ public class Task {
 	
 	public Boolean getDoneStatus() {
 	    return isDone;
+	}
+	
+	/////////////////////////////////////////////
+	
+	public void changeByField(String fieldName, String newContent) {
+	    
 	}
 }
