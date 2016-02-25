@@ -51,10 +51,21 @@ public class NormalCommandHandler {
 	    
 	    UIHandler.delete(tempTask);
 	    
+	    switch(fieldName) {
+	        "title": tempTask.setName(newValue);
+	        "done": tempTask.setDoneStatus(true);
+	        "undone": tempTask.setDoneStatus(false);
+	        "start-time": DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
+	        LocalDateTime start = LocalDateTime.parse(newValue, formatter);
+	        tempTask.setStartTime(start);
+	        "end-time": DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
+	        LocalDateTime end = LocalDateTime.parse(newValue, formatter);
+	        tempTask.setEndTime(end);
+	    }
 	    
-
-
-        
+        dataBase.add(tempTask);
+	    
+	    UIHandler.add(tempTask);
 	}
 	
 	public static void delete(String title) {
@@ -71,7 +82,7 @@ public class NormalCommandHandler {
 	}
 	
 	public static void filter(String category) {
-	    ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", title));
+	    ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
 	    
 	    UIHandler.highLight(tempTaskList);
 	}
@@ -221,11 +232,13 @@ public class NormalCommandHandler {
 	
 	
 	public static void undo(int steps) {
-	    
+	    UIHandler.undo();
+	    dataBase.undo();
 	}
 	
 	public static void redo(int steps) {
-	    
+	    UIHandler.redo();
+	    dataBase.redo();
 	}
 	
 	public static void generateTimeUnit(String unit) {
