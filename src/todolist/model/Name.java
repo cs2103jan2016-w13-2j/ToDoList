@@ -2,7 +2,7 @@ package todolist.model;
 
 public class Name implements Comparable<Name>{
 
-	String name;
+	private String name;
 	
 	public Name(String name) {
 	    this.name = name;
