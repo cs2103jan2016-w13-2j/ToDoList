@@ -2,7 +2,7 @@ package todolist.model;
 
 public class NormalCommandHandler {
 	
-	public static DataBase dataBase = new dataBase();
+	private DataBase dataBase = new DataBase();
 	
 	public static void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
 	    Name name = new Name(title);
@@ -66,6 +66,7 @@ public class NormalCommandHandler {
         dataBase.add(tempTask);
 	    
 	    UIHandler.add(tempTask);
+        
 	}
 	
 	public static void delete(String title) {
