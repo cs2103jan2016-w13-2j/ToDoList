@@ -1,8 +1,8 @@
 package todolist.model;
 
 public class Command {
-    String rawCommand = null;
-    Boolean smart;
+    private String rawCommand = null;
+    private Boolean smart;
     
     public Command(String input) {
         this.rawCommand = input;

@@ -2,8 +2,8 @@ package todolist.model;
 
 public class SearchCommand {
     
-    String type = null;
-    String content = null;
+    private String type = null;
+    private String content = null;
     
     public SearchCommand(String type, String content) {
         this.type = type;

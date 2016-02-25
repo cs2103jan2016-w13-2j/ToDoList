@@ -2,8 +2,8 @@ package todolist.model;
 
 public class Reminder {
     
-    public Boolean switcher = null;
-    public LocalDateTime time = null;
+    private Boolean switcher = null;
+    private LocalDateTime time = null;
     
     public Reminder(Boolean switcher, LocalDateTime time) {
         this.switcher = switcher;
