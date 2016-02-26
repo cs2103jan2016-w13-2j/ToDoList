@@ -4,30 +4,62 @@ import java.sql.Time;
 
 public class Task {
 	private Name name;
-	private Time startTime;
-	private Time endTime;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
 	private Category category;
 	private Priority priority;
 	private Reminder reminder;
+	private Boolean isDone;
 
-	public Task(Name name, Time startTime, Time endTime, Category category, Priority priority, Reminder reminder) {
+	public Task(Name name, LocalDateTime startTime, LocalDateTime endTime, Category category, Priority priority, Reminder reminder, Boolean isDone) {
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.category = category;
 		this.priority = priority;
 		this.reminder = reminder;
+		this.isDone = isDone;
 	}
 
+    public void setName(Name name) {
+		this.name = name;
+	}
+
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public void setPriority(Priority priority) {
+		this.priority = priority;
+	}
+	
+	public void setReminder(Reminder reminder) {
+	    this.reminder = reminder;
+	}
+	
+	public void setDoneStatus(Boolean isDone) {
+	    this.isDone = isDone;
+	}
+	
+	///////////////////////////////////////////
+	
 	public Name getName() {
 		return name;
 	}
 
-	public Time getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
-	public Time getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
@@ -41,5 +73,15 @@ public class Task {
 	
 	public Reminder getReminder() {
 	    return reminder;
+	}
+	
+	public Boolean getDoneStatus() {
+	    return isDone;
+	}
+	
+	/////////////////////////////////////////////
+	
+	public void changeByField(String fieldName, String newContent) {
+	    
 	}
 }

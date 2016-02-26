@@ -2,7 +2,7 @@ package todolist.model;
 
 public class FlexiCommand {
     
-    String rawInput = null;
+    private String rawInput = null;
 
     public FlexiCommand(Command command) {
         this.rawInput = command.getCommand();
