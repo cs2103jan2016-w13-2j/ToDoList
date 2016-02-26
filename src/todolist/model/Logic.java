@@ -1,6 +1,6 @@
 package todolist.model;
 
-public Class Logic() {
+public class Logic {
 
     public Logic() {
         private Database database = new Database("myDataBase.txt");

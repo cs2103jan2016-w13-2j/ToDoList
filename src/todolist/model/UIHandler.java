@@ -1,6 +1,6 @@
 package todolist.model;
 
-public static Class UIHandler() {
+public static class UIHandler {
     
     private Database database;
     
