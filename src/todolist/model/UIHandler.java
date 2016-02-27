@@ -77,13 +77,4 @@ public static class UIHandler {
     public void exit() {
         System.exit(0);
     }
-    
-    public String retrieve() {
-        String userInput = null;
-        return userInput;
-    }
-    
-    public String enter() {
-        return false;;
-    }
 }

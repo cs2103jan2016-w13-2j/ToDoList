@@ -17,5 +17,4 @@ public class Name implements Comparable<Name>{
 	public getName() {
 	    return name;
 	}
-
 }
