@@ -14,7 +14,7 @@ public class Name implements Comparable<Name>{
 		return 0;
 	}
 	
-	public getName() {
+	public String getName() {
 	    return name;
 	}
 
