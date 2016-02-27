@@ -2,7 +2,7 @@ package todolist.model;
 
 public static class UIHandler {
     
-    private Database database;
+    private DataBase dataBase;
     
     private Boolean isSorted = false;
     private Boolean isFiltered = false;
@@ -11,8 +11,8 @@ public static class UIHandler {
     private String category = null;
     private String order = null;
     
-    public UIHandler(Database database) {
-        this.database = database;
+    public UIHandler(Database dataBase) {
+        this.dataBase = database;
     }
     
     public void refresh() {
