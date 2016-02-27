@@ -1,10 +1,10 @@
 package todolist.model;
 
-import java.util.ArrayList;
 
 public static class UIHandler {
     
-    private DataBase database;
+    private DataBase dataBase;
+
     
     private Boolean isSorted = false;
     private Boolean isFiltered = false;
@@ -13,8 +13,13 @@ public static class UIHandler {
     private String category = null;
     private String order = null;
     
-    public UIHandler(DataBase database) {
-        this.database = database;
+
+    private MainApp mainApp;
+    
+    public UIHandler(Database dataBase, MainApp mainApp) {
+        this.dataBase = database;
+        this.mainApp = mainApp;
+
     }
     
     public void refresh() {
@@ -27,37 +32,43 @@ public static class UIHandler {
         }
         
         if(isFiltered&&isSorted) {
-            ArrayList<Task> tempTaskList = new Task(database.retreive(new SearchCommand("Category", category));
-            UI.display(Sorter.sort(tempTaskList));
+
+            ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
+            mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
         }
         
         if(!isSorted&&!isFiltered) {
-            UI.display(database.retrieveAll());
+            mainApp.setDisplayTasks(dataBase.retrieveAll());
+
         }
     }
     
     public void sendMessage(String message) {
-        UI.messageBox(message);
+        mainApp.messageBox(message);
     }
     
     public void highLight(Task task) {
-        UI.highLight(task);
+        mainApp.highLight(task);
     }
     
     public void search(String title) {
-        ArrayList<Task> tempTaskList = new Task(database.retreive(new SearchCommand("Name", title));
-        UI.highLight(tempTaskList);
+
+        ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Name", title));
+        mainApp.highLight(tempTaskList);
+
     }
     
     public void sort(String fieldName, String order) {
         if(isFiltered) {
             this.sort = sort;
-            ArrayList<Task> tempTaskList = new Task(database.retreive(new SearchCommand("Category", category));
-            UI.display(Sorter.sort(tempTaskList));
+
+            ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
+            mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
             isSorted = true;
         } else {
             this.sort = sort;
-            UI.display(Sorter.sort(database.retrieveAll()));
+            mainApp.setDisplayTasks(Sorter.sort(dataBase.retrieveAll()));
+
             isSorted = true;
         }
     }
@@ -65,27 +76,19 @@ public static class UIHandler {
     public void filter(String category) {
         if(isSorted) {
             this.category = category;
-            ArrayList<Task> tempTaskList = new Tdatabase.retreiveAll());
-            UI.display(Sorter.sort(tempTaskList));
+
+            ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
+            mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
             isFiltered = true;
         } else {
             this.category = category;
-            ArrayList<Task> tempTaskList = new Task(database.retreive(new SearchCommand("Category", category));
-            UI.display(tempTaskList);
+            ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
+            mainApp.setDisplayTasks(tempTaskList);
             isFiltered = true;
         }
     }
     
     public void exit() {
         System.exit(0);
-    }
-    
-    public String retrieve() {
-        String userInput = null;
-        return userInput;
-    }
-    
-    public String enter() {
-        return false;;
     }
 }

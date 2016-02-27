@@ -2,11 +2,11 @@ package todolist.model;
 
 public class NormalCommandHandler {
     
-    private Database database;
+    private DataBase dataBase;
     private UIhandler uiHandler;
     
-    public NormalCommandHandler(Database database, UIHandler uiHandler) {
-        this.database = database;
+    public NormalCommandHandler(Database dataBase, UIHandler uiHandler) {
+        this.dataBase = dataBase;
         this.uiHandler = uiHandler;
     }
     

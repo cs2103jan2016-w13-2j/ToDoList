@@ -1,0 +1,137 @@
+/*@author Huang Lie Jun (A0123994W) */
+
+/* Color Template */
+
+/* default-theme
+ * --------------
+ * background: #D8E9F0;
+ * accent: #4AA0D5;
+ * accent-two: #A9EEE6;
+ * content: #F8F3D4;
+ * content-two: #FEFAEC;
+ * focus: #EB586F;
+ * dark: #454553;
+ * hint: #7A9EAF;
+*/
+
+
+/* Panel CSS Options */
+
+.root-layout {
+	-fx-background-color: #D8E9F0;
+}
+
+.main-view {
+    -fx-padding: 6.0 6.0 6.0 6.0;
+	-fx-border-color: transparent;
+	-fx-background-color: transparent;
+	-fx-box-border: transparent;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.split-pane {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.titled-pane {
+    -fx-padding: 0.0 0.0 6.0 0.0;
+	-fx-text-fill: white;
+    -fx-font-size: 12.0pt;
+    -fx-font-family: "System Font";
+}
+
+.titled-pane:focused {
+	-fx-text-fill: white;
+}
+
+.titled-pane > .title {
+	-fx-background-color: #4AA0D5;
+}
+
+.titled-pane:focused > .title {
+	-fx-color: #4AA0D5;
+}
+
+.titled-pane > .content {
+	-fx-background-color: #F8F3D4;
+	-fx-background-radius: 0.0 0.0 6.0 6.0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .label {
+    -fx-background-color: transparent;
+    -fx-text-fill: #454553;
+    -fx-font-size: 10.0pt;
+    -fx-font-family: "System Font";
+    -fx-alignment: center-left;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: #454553;
+    -fx-font-size: 10.0pt;
+    -fx-font-family: "System Font";
+}
+
+.table-view .table-cell {
+    -fx-font-size: 10.0pt;
+    -fx-font-family: "System Font";
+  	-fx-border-width: 0;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+  	-fx-border-color: transparent;
+    -fx-text-fill: #454553;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: transparent;
+    -fx-text-fill: #454553;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #EB586F;
+    -fx-text-fill: white;
+}
+
+.table-column-cell:empty { 
+	-fx-background-color: transparent;
+    -fx-border-style: solid;
+    -fx-border-color: #454553;
+}
+
+.text-field {
+	-fx-background-color: #F8F3D4;
+    -fx-font-size: 10.0pt;
+    -fx-font-family: "System Font";
+    -fx-prompt-text-fill: #7A9EAF;
+}
+
+.title-bar {
+	-fx-background-color: #4AA0D5;
+}
+
+.hbox-group {
+	-fx-font-size: 20.0pt;
+}
+
+.image-view {
+    -fx-padding: 6.0 6.0 6.0 10.0;
+}
+
+.side-bar {
+	-fx-background-color: #454553;
+}
+
+.accent {
+    -fx-background-color: #4AA0D5;
+}

@@ -2,21 +2,21 @@ package todolist.model;
 
 public class Logic {
 	
-	private DataBase database;
+    private MainApp mainApp;
+    private DataBase dataBase;
     private UIHandler uiHandler;
     private CommandHandler commandHandler;
 
-    public Logic() {
-        database = new DataBase();
-        uiHandler = new UIHandler(database);
-        commandHandler = new CommandHandler(uiHandler, database);
+    public Logic(MainApp mainApp) {
+        this.mainApp = mainApp;
+        this.dataBase = new Database("myDataBase.txt");
+        this.uiHandler = new UIHandler(dataBase, mainApp);
+        this.commandHandler = new CommandHandler(uiHandler, database);
+
     }
     
-    public void run() {
-        while(true) {
-            if(uiHandler.enter()) {
-                commandHandler(uiHandler.retrieve());
-            }
-        }
+    
+    public process(String input) {
+        commandHandler(input);
     }
 }
