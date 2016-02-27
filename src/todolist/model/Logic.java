@@ -1,7 +1,7 @@
 package todolist.model;
 
 public class Logic {
-    
+	
     private MainApp mainApp;
     private DataBase dataBase;
     private UIHandler uiHandler;
@@ -12,6 +12,7 @@ public class Logic {
         this.dataBase = new Database("myDataBase.txt");
         this.uiHandler = new UIHandler(dataBase, mainApp);
         this.commandHandler = new CommandHandler(uiHandler, database);
+
     }
     
     

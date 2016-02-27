@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 package todolist.model;
 
 import java.util.ArrayList;
@@ -12,84 +12,113 @@ import java.util.ArrayList;
 public class DataBase {
 	private FileHandler fh;
 	private ArrayList<Task> taskList;
-	
+
 	public DataBase() {
-		fh = new FileHandler(); 
+		fh = new FileHandler();
 		loadFromFile();
 	}
-	
+
 	private void loadFromFile() {
 		taskList = fh.read();
-		if(taskList == null) {
+		if (taskList == null) {
 			taskList = new ArrayList<Task>();
-		}		
+		}
 	}
 
 	/**
 	 * This method handles the writing into the text file with the add command.
 	 * It returns true if the task is successfully written into the file.
 	 * 
-	 * @param    Task       the task to be added
-	 * @return   boolean    whether the task is successfully added
+	 * @param Task
+	 *            the task to be added
+	 * @return boolean whether the task is successfully added
 	 */
 	public boolean add(Task task) {
-		insertIntoTaskList(task);
+		taskList.add(task);
 		fh.write(taskList);
-		return true;		
+		return true;
 	}
-	
+
 	/**
-	 * This method handles the updating of text file when the specified task is to be deleted.
-	 * Returns true if teh task is successfully deleted. 
+	 * This method handles the updating of text file when the specified task is
+	 * to be deleted. Returns true if the task is successfully deleted.
 	 * 
-	 * @param    Task    the task to be deleted
-	 * @return   boolean  true if the task is successfully deleted;
-	 *                     false if the task cannot be found
+	 * @param Task
+	 *            the task to be deleted
+	 * @return boolean true if the task is successfully deleted; false if the
+	 *         task cannot be found
 	 */
 	public boolean delete(Task taskToDelete) {
-		if(taskList.size() == 0) {
+		if (taskList.size() == 0) {
 			return false;
 		}
 		Integer index = searchForIndexOfTask(taskToDelete);
-		if(index == null) {
+		if (index == null) {
 			return false;
 		}
 		taskList.remove(index);
 		fh.write(taskList);
-		return true;		
+		return true;
 	}
-	
+
 	/**
 	 * This method returns whether a task is in the text file.
 	 * 
-	 * @param   Task      task to search
-	 * @return  boolean   returns true if the task is found; false if not.
+	 * @param Task
+	 *            task to search
+	 * @return boolean returns true if the task is found; false if not.
 	 */
 	public boolean checkExistence(Task taskToCheck) {
 		Integer index = searchForIndexOfTask(taskToCheck);
-		if(index == null) {
+		if (index == null) {
 			return false;
 		}
-		return true;		
+		return true;
+	}
+    
+	public ArrayList<Task> retrieveAll() {
+		return taskList;
 	}
 	
-	/**
-	 * This method is to find from the storage and return an ArrayList of the queried list of tasks.
-	 * 
-	 * @param command  the search command
-	 * @return         an ArrayList<Task> containing the tasks that fulfill the requirement
-	 */
-	public Task retrieve(SearchCommand command) {
-		Task task = null;
-		
-		return task;
+	public ArrayList<Task> retrieve(SearchCommand command) {
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		switch (command.getType()) {
+			case "category" :
+				resultList = searchByCategory(command.getContent());
+				break;
+			case "name" :
+				resultList = searchByName(command.getContent());
+				break;
+		}
+		return resultList;
 	}
 	
-	/**
-	 * This method is to set new file for the storage of data. 
+	private ArrayList<Task> searchByName(String content) {
+		ArrayList<Task> result = new ArrayList<Task>();
+		for(Task eachTask: taskList) {
+			if(eachTask.getName().compareTo(new Name(content)) == 0) {
+				result.add(eachTask);
+			}
+		}
+		return result;
+	}
+
+	private ArrayList<Task> searchByCategory(String content) {
+		ArrayList<Task> result = new ArrayList<Task>();
+		for(Task eachTask: taskList) {
+			if(eachTask.getCategory().compareTo(new Category(content)) == 0) {
+				result.add(eachTask);
+			}
+		}
+		return result;
+	}
+
+	/*
+	 * This method is to set new file for the storage of data.
 	 * 
-	 * @param newFilePath   the string that contains the new path and file name
-	 * @return              true if the directory exists and the new file is set.
+	 * @param newFile
+	 *            the string that contains the new path and file name
+	 * @return true if the directory exists and the new file is set.
 	 */
 	public boolean setNewFile(String newFilePath) {
 		boolean isSet = false;
@@ -97,75 +126,24 @@ public class DataBase {
 		this.loadFromFile();
 		return isSet;
 	}
-	
+
 	public String getPath() {
 		return fh.getPath();
 	}
-	
+
 	public String getFileName() {
 		return fh.getFileName();
 	}
-	
-	//helper methods
-	private void insertIntoTaskList(Task taskToInsert) {
-		for(int i = 0; i < taskList.size(); i++) {//Task needs to have a compareTo method based on date and time
-	        Task currentTask=taskList.get(i);
-			if(currentTask.compareTo(taskToInsert) >= 0) {
-				taskList.add(i,taskToInsert);
-				return;
+
+	// helper methods	
+	private Integer searchForIndexOfTask(Task taskToDelete) {
+		for (int i = 0; i < taskList.size(); i++) {
+			Task currentTask = taskList.get(i);
+			if (currentTask.equals(taskToDelete)) {
+				return i;
 			}
 		}
-		taskList.add(taskToInsert);
-	}
-	
-	private Integer searchForIndexOfTask(Task taskToDelete) {
-	    for(int i = 0; i < taskList.size(); i++) {
-	    	Task currentTask=taskList.get(i);
-	    	if(currentTask.equals(taskToDelete)) {
-	    		return i;
-	    	}
-	    }
 		return null;
 	}
-}
-=======
-package todolist.model;
 
-public class DataBase {
-	
-	public DataBase(String filename) {
-		new FileHandler(filename); 
-	}
-	
-	public boolean add(Task task) {
-		return false;
-		
-	}
-	
-	public boolean delete(Task task) {
-		return false;
-		
-	}
-	
-	public boolean modify(Task task) {
-		
-		delete(task);
-		add(task);
-		
-		return false;
-		
-	}
-	
-	public boolean checkExistence(Task task) {
-		return false;
-		
-	}
-	
-	public ArrayList<Task> retrieve(SearchCommand command) {
-		ArrayList<task> taskList = null;
-		
-		return task;
-	}
-	
 }
->>>>>>> master
