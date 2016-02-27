@@ -1,11 +1,17 @@
 package todolist.model;
 
 public class Logic {
+    
+    private MainApp mainApp;
+    private DataBase dataBase;
+    private UIHandler uiHandler;
+    private CommandHandler commandHandler;
 
-    public Logic() {
-        private DataBase dataBase = new Database("myDataBase.txt");
-        private UIHandler uiHandler = new UIHandler(dataBase);
-        private CommandHandler commandHandler = new CommandHandler(uiHandler, database);
+    public Logic(MainApp mainApp) {
+        this.mainApp = mainApp;
+        this.dataBase = new Database("myDataBase.txt");
+        this.uiHandler = new UIHandler(dataBase, mainApp);
+        this.commandHandler = new CommandHandler(uiHandler, database);
     }
     
     
