@@ -1,11 +1,15 @@
 package todolist.model;
 
-public Class Logic() {
+public class Logic {
+	
+	private DataBase database;
+    private UIHandler uiHandler;
+    private CommandHandler commandHandler;
 
     public Logic() {
-        private Database database = new Database("myDataBase.txt");
-        private UIHandler uiHandler = new UIHandler(database);
-        private CommandHandler commandHandler = new CommandHandler(uiHandler, database);
+        database = new DataBase();
+        uiHandler = new UIHandler(database);
+        commandHandler = new CommandHandler(uiHandler, database);
     }
     
     public void run() {
