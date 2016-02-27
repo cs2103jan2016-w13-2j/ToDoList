@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.FlowPane?>
+
+<!--  Prepared by Huang Lie Jun (A0123994W) -->
+
+<FlowPane prefHeight="540.0" prefWidth="60.0" styleClass="side-bar"
+	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<!-- TODO Add Nodes -->
+</FlowPane>
