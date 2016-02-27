@@ -1,8 +1,10 @@
 package todolist.model;
 
+
 public static class UIHandler {
     
     private DataBase dataBase;
+
     
     private Boolean isSorted = false;
     private Boolean isFiltered = false;
@@ -11,11 +13,13 @@ public static class UIHandler {
     private String category = null;
     private String order = null;
     
+
     private MainApp mainApp;
     
     public UIHandler(Database dataBase, MainApp mainApp) {
         this.dataBase = database;
         this.mainApp = mainApp;
+
     }
     
     public void refresh() {
@@ -28,12 +32,14 @@ public static class UIHandler {
         }
         
         if(isFiltered&&isSorted) {
+
             ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
             mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
         }
         
         if(!isSorted&&!isFiltered) {
             mainApp.setDisplayTasks(dataBase.retrieveAll());
+
         }
     }
     
@@ -46,19 +52,23 @@ public static class UIHandler {
     }
     
     public void search(String title) {
+
         ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Name", title));
         mainApp.highLight(tempTaskList);
+
     }
     
     public void sort(String fieldName, String order) {
         if(isFiltered) {
             this.sort = sort;
+
             ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
             mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
             isSorted = true;
         } else {
             this.sort = sort;
             mainApp.setDisplayTasks(Sorter.sort(dataBase.retrieveAll()));
+
             isSorted = true;
         }
     }
@@ -66,6 +76,7 @@ public static class UIHandler {
     public void filter(String category) {
         if(isSorted) {
             this.category = category;
+
             ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
             mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
             isFiltered = true;

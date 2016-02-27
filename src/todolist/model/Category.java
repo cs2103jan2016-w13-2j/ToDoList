@@ -1,11 +1,16 @@
 package todolist.model;
 
 public class Category implements Comparable<Category>{
-
+    private String category;
+	public Category(String category) {
+    	this.category = category;
+    }
 	@Override
 	public int compareTo(Category o) {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.category.compareToIgnoreCase(o.getCategory());
 	}
-
+	
+	public String getCategory() {
+		return category;
+	}
 }
