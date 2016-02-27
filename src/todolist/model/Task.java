@@ -1,22 +1,20 @@
 package todolist.model;
 
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class Task {
 	private Name name;
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
 	private Category category;
-	private Priority priority;
 	private Reminder reminder;
 	private Boolean isDone;
 
-	public Task(Name name, LocalDateTime startTime, LocalDateTime endTime, Category category, Priority priority, Reminder reminder, Boolean isDone) {
+	public Task(Name name, LocalDateTime startTime, LocalDateTime endTime, Category category, Reminder reminder, Boolean isDone) {
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.category = category;
-		this.priority = priority;
 		this.reminder = reminder;
 		this.isDone = isDone;
 	}
@@ -35,10 +33,6 @@ public class Task {
 
 	public void setCategory(Category category) {
 		this.category = category;
-	}
-
-	public void setPriority(Priority priority) {
-		this.priority = priority;
 	}
 	
 	public void setReminder(Reminder reminder) {
@@ -65,10 +59,6 @@ public class Task {
 
 	public Category getCategory() {
 		return category;
-	}
-
-	public Priority getPriority() {
-		return priority;
 	}
 	
 	public Reminder getReminder() {

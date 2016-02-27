@@ -1,13 +1,14 @@
 package todolist;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import todolist.model.Category;
-import todolist.model.Priority;
-import todolist.model.Reminder;
+//import todolist.model.Priority;
+//import todolist.model.Reminder;
 import todolist.model.Task;
+import todolist.model.TaskWrapper;
 import todolist.view.MainViewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -58,7 +59,7 @@ public class MainApp extends Application {
     private FlowPane sideBarView;
 
     // Models: Lists to display, provided by backend components
-    private ObservableList<Task> tasksToDisplay = FXCollections.observableArrayList();
+    private ObservableList<TaskWrapper> tasksToDisplay = FXCollections.observableArrayList();
     private ObservableList<Category> categoriesToDisplay = FXCollections.observableArrayList();
     
     // Controllers
@@ -74,16 +75,16 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
 
         // SAMPLE DATASET for testing
-        tasksToDisplay.add(new Task("Do UI Handler", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("CS2103T Project"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-        tasksToDisplay.add(new Task("Setup Trello", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("CS2103T Project"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-        tasksToDisplay.add(new Task("Prepare CV", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("Personal"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-        tasksToDisplay.add(new Task("Buy leather shoes", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("Personal"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-        tasksToDisplay.add(new Task("Send emails", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("18th MC"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new Task("Do UI Handler", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("CS2103T Project"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new Task("Setup Trello", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("CS2103T Project"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new Task("Prepare CV", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("Personal"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new Task("Buy leather shoes", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("Personal"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new Task("Send emails", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("18th MC"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
 
         // Load Model Lists from Storage
         // ... Load Categories into categoriesToDisplay
@@ -121,14 +122,18 @@ public class MainApp extends Application {
 
     /*** MODEL GETTERS-SETTERS ***/
     
-    public ObservableList<Task> getDisplayTasks() {
+    public ObservableList<TaskWrapper> getDisplayTasks() {
         return tasksToDisplay;
     }
 
     public void setDisplayTasks(ArrayList<Task> tasks) {
         tasksToDisplay.clear();
         for (int i = 0; i < tasks.size(); ++i) {
-            tasksToDisplay.add(tasks.get(i));
+            
+            // ... Convert Task to TaskWrapper
+            TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
+            
+            tasksToDisplay.add(wrappedTask);
         }
     }
     
@@ -162,6 +167,7 @@ public class MainApp extends Application {
 
         } catch (IOException e) {
             System.out.println(MESSAGE_ERROR_LOAD_MAIN);
+            e.printStackTrace();
             System.exit(1);
         }
     }

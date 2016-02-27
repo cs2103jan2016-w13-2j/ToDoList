@@ -21,33 +21,21 @@ public class TaskWrapper {
 	private ObjectProperty<LocalDateTime> startTime;
 	private ObjectProperty<LocalDateTime> endTime;
 	private ObjectProperty<Category> category;
-	private ObjectProperty<Priority> priority;
 	private ObjectProperty<Reminder> reminder;
 	
-//	public Task(Name name, Time startTime, Time endTime, Category category, Priority priority, Reminder reminder) {
-//		this.name = name;
-//		this.startTime = startTime;
-//		this.endTime = endTime;
-//		this.category = category;
-//		this.priority = priority;
-//		this.reminder = reminder;
+//	public TaskWrapper(String task, LocalDateTime start, LocalDateTime end, Category category, Reminder reminder) {
+//		this.taskTitle = new SimpleStringProperty(task);
+//		this.startTime = new SimpleObjectProperty<LocalDateTime>(start);
+//		this.endTime = new SimpleObjectProperty<LocalDateTime>(end);
+//		this.category = new SimpleObjectProperty<Category>(category);
+//		this.reminder = new SimpleObjectProperty<Reminder>(reminder);
 //	}
-	
-	public TaskWrapper(String task, LocalDateTime start, LocalDateTime end, Category category, Priority priority, Reminder reminder) {
-		this.taskTitle = new SimpleStringProperty(task);
-		this.startTime = new SimpleObjectProperty<LocalDateTime>(start);
-		this.endTime = new SimpleObjectProperty<LocalDateTime>(end);
-		this.category = new SimpleObjectProperty<Category>(category);
-		this.priority = new SimpleObjectProperty<Priority>(priority);
-		this.reminder = new SimpleObjectProperty<Reminder>(reminder);
-	}
 	
 	   public TaskWrapper(Task task) {
 	        this.taskTitle = new SimpleStringProperty(task.getName().getName());
 	        this.startTime = new SimpleObjectProperty<LocalDateTime>(task.getStartTime());
 	        this.endTime = new SimpleObjectProperty<LocalDateTime>(task.getEndTime());
 	        this.category = new SimpleObjectProperty<Category>(task.getCategory());
-	        this.priority = new SimpleObjectProperty<Priority>(task.getPriority());
 	        this.reminder = new SimpleObjectProperty<Reminder>(task.getReminder());
 	    }
 
@@ -102,19 +90,6 @@ public class TaskWrapper {
 	public Category getCategory() {
 		return category.get();
 	}
-
-	
-	public ObjectProperty<Priority> priorityProperty() {
-		return priority;
-	}
-
-	public void setPriority(Priority priority) {
-		this.priority.set(priority);
-	}
-	
-	public Priority getPriority() {
-		return priority.get();
-	}
 	
 	
 	public ObjectProperty<Reminder> reminderProperty() {
@@ -128,29 +103,5 @@ public class TaskWrapper {
 	public Reminder getReminder() {
 		return reminder.get();
 	}
-
 	
-//	public Name getName() {
-//		return name;
-//	}
-//
-//	public Time getStartTime() {
-//		return startTime;
-//	}
-//
-//	public Time getEndTime() {
-//		return endTime;
-//	}
-//
-//	public Category getCategory() {
-//		return category;
-//	}
-//
-//	public Priority getPriority() {
-//		return priority;
-//	}
-//	
-//	public Reminder getReminder() {
-//	    return reminder;
-//	}
 }

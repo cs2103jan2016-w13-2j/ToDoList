@@ -71,8 +71,6 @@
 											text="End" />
 										<TableColumn fx:id="categoryColumn" prefWidth="116.0"
 											text="Category" />
-										<TableColumn fx:id="priorityColumn" minWidth="0.0"
-											prefWidth="0.0" text="Lvl." />
 									</columns>
 								</TableView>
 							</content>

@@ -5,9 +5,10 @@ import java.time.format.FormatStyle;
 
 import todolist.MainApp;
 import todolist.model.Command;
-import todolist.model.CommandHandlerStub;
-import todolist.model.Feedback;
-import todolist.model.Task;
+//import todolist.model.CommandHandlerStub;
+//import todolist.model.Feedback;
+import todolist.model.Logic;
+import todolist.model.TaskWrapper;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
@@ -28,28 +29,28 @@ public class MainViewController {
     private static final double PROPORTION_START_TIME_COLUMN = 0.20;
     private static final double PROPORTION_END_TIME_COLUMN = 0.20;
     private static final double PROPORTION_CATEGORY_COLUMN = 0.20;
-    private static final double PROPORTION_PRIORITY_COLUMN = 0.05;
+//    private static final double PROPORTION_PRIORITY_COLUMN = 0.05;
 
     @FXML
-    private TableView<Task> taskTable;
+    private TableView<TaskWrapper> taskTable;
 
     @FXML
-    private TableColumn<Task, String> numberColumn;
+    private TableColumn<TaskWrapper, String> numberColumn;
 
     @FXML
-    private TableColumn<Task, String> taskTitleColumn;
+    private TableColumn<TaskWrapper, String> taskTitleColumn;
 
     @FXML
-    private TableColumn<Task, String> startTimeColumn;
+    private TableColumn<TaskWrapper, String> startTimeColumn;
 
     @FXML
-    private TableColumn<Task, String> endTimeColumn;
+    private TableColumn<TaskWrapper, String> endTimeColumn;
 
     @FXML
-    private TableColumn<Task, String> categoryColumn;
+    private TableColumn<TaskWrapper, String> categoryColumn;
 
-    @FXML
-    private TableColumn<Task, String> priorityColumn;
+//    @FXML
+//    private TableColumn<TaskWrapper, String> priorityColumn;
 
     private MainApp mainApplication;
 
@@ -60,6 +61,7 @@ public class MainViewController {
     public void setCommandLineCallback(TextField commandField) {
         // Set Callback for TextField
         EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
+            Logic handler = new Logic(mainApplication);
             @Override
             public void handle(ActionEvent event) {
                 String commandString = commandField.getText();
@@ -67,9 +69,8 @@ public class MainViewController {
                 System.out.println(command.getCommand());
 
                 // Pass Command Line input for processing
-                CommandHandlerStub handler = new CommandHandlerStub(mainApplication);
-                Feedback feedback = handler.execute(command);
-                System.out.println(feedback.getStatus());
+                handler.process(command);
+                
             }
         };
 
@@ -89,22 +90,22 @@ public class MainViewController {
         setStartTimeColumn();
         setEndTimeColumn();
         setCategoryColumn();
-        setPriorityColumn();
+//        setPriorityColumn();
 
         setResizing();
     }
 
     private void setNumberColumn() {
         numberColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
 
                     @Override
-                    public ObservableValue<String> call(CellDataFeatures<Task, String> param) {
+                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
                         String cellValue = getNumberValue(param);
                         return new ReadOnlyObjectWrapper<String>(cellValue);
                     }
 
-                    private String getNumberValue(CellDataFeatures<Task, String> param) {
+                    private String getNumberValue(CellDataFeatures<TaskWrapper, String> param) {
                         int number = taskTable.getItems().indexOf(param.getValue()) + 1;
                         return Integer.toString(number);
                     }
@@ -117,76 +118,88 @@ public class MainViewController {
 
     private void setStartTimeColumn() {
         startTimeColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
 
                     @Override
-                    public ObservableValue<String> call(CellDataFeatures<Task, String> param) {
+                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
                         String shortDateTime = getDateTimeValue(param);
 
                         return new SimpleStringProperty(shortDateTime);
                     }
 
-                    private String getDateTimeValue(CellDataFeatures<Task, String> param) {
+                    private String getDateTimeValue(CellDataFeatures<TaskWrapper, String> param) {
                         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM,
                                 FormatStyle.SHORT);
-                        String dateTime = param.getValue().getStartTime().format(dateTimeFormat);
-                        return formatDateTime(dateTime);
+                        if (param.getValue() == null || param.getValue().getStartTime() == null) {
+                            return "null";
+                        } else {
+                            String dateTime = param.getValue().getStartTime().format(dateTimeFormat);
+                            return formatDateTime(dateTime);
+                        }
                     }
                 });
     }
 
     private void setEndTimeColumn() {
         endTimeColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
 
                     @Override
-                    public ObservableValue<String> call(CellDataFeatures<Task, String> param) {
+                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
                         String shortDateTime = getDateTimeValue(param);
 
                         return new SimpleStringProperty(shortDateTime);
                     }
 
-                    private String getDateTimeValue(CellDataFeatures<Task, String> param) {
+                    private String getDateTimeValue(CellDataFeatures<TaskWrapper, String> param) {
                         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM,
                                 FormatStyle.SHORT);
-                        String dateTime = param.getValue().getEndTime().format(dateTimeFormat);
-                        return formatDateTime(dateTime);
+                        if (param.getValue() == null || param.getValue().getEndTime() == null) {
+                            return "null";
+                        } else {
+                            String dateTime = param.getValue().getEndTime().format(dateTimeFormat);
+                            return formatDateTime(dateTime);
+                        }
                     }
                 });
     }
 
     private void setCategoryColumn() {
         categoryColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
 
                     @Override
-                    public ObservableValue<String> call(CellDataFeatures<Task, String> param) {
+                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
                         String cellValue = getCategoryValue(param);
                         return new SimpleStringProperty(cellValue);
                     }
 
-                    private String getCategoryValue(CellDataFeatures<Task, String> param) {
-                        return param.getValue().getCategory().getCategoryName();
+                    private String getCategoryValue(CellDataFeatures<TaskWrapper, String> param) {
+                        if (param.getValue() == null || param.getValue().getCategory() == null) {
+                            return "null";
+                        } else {
+                            return param.getValue().getCategory().getCategory();
+                        }
                     }
                 });
     }
 
-    private void setPriorityColumn() {
-        priorityColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
-
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<Task, String> param) {
-                        String cellValue = getPriorityValue(param);
-                        return new SimpleStringProperty(cellValue);
-                    }
-
-                    private String getPriorityValue(CellDataFeatures<Task, String> param) {
-                        int priority = param.getValue().getPriority().getPriorityLevel();
-                        return Integer.toString(priority);
-                    }
-                });
-    }
+//    private void setPriorityColumn() {
+//        priorityColumn.setCellValueFactory(
+//                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
+//
+//                    @Override
+//                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
+//                        String cellValue = getPriorityValue(param);
+//                        return new SimpleStringProperty(cellValue);
+//                    }
+//
+//                    private String getPriorityValue(CellDataFeatures<TaskWrapper, String> param) {
+//                        int priority = param.getValue().getPriority().getPriorityLevel();
+//                        return Integer.toString(priority);
+//                    }
+//                });
+//    }
 
     private void setResizing() {
         DoubleBinding numberBinder = taskTable.widthProperty().multiply(PROPORTION_NUMBER_COLUMN);
@@ -204,8 +217,8 @@ public class MainViewController {
         DoubleBinding categoryBinder = taskTable.widthProperty().multiply(PROPORTION_CATEGORY_COLUMN);
         categoryColumn.prefWidthProperty().bind(categoryBinder);
 
-        DoubleBinding priorityBinder = taskTable.widthProperty().multiply(PROPORTION_PRIORITY_COLUMN);
-        priorityColumn.prefWidthProperty().bind(priorityBinder);
+//        DoubleBinding priorityBinder = taskTable.widthProperty().multiply(PROPORTION_PRIORITY_COLUMN);
+//        priorityColumn.prefWidthProperty().bind(priorityBinder);
 
         taskTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }

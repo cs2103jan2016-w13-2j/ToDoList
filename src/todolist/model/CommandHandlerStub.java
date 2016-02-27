@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import todolist.MainApp;
-import todolist.model.Feedback.Page;
+//import todolist.model.Feedback.Page;
 
 public class CommandHandlerStub {
 
@@ -14,7 +14,7 @@ public class CommandHandlerStub {
 	private static ArrayList<TaskWrapper> tasksToDisplay = new ArrayList<TaskWrapper>();
 	private static ArrayList<Reminder> remindersToTrack = new ArrayList<Reminder>();
 	private static String currentSearch = "";
-	private static Page page = Page.Home;
+//	private static Page page = Page.Home;
 	
 	private MainApp main = null;
 	
@@ -22,32 +22,32 @@ public class CommandHandlerStub {
 	    this.main = main;
 	}
 
-	public Feedback execute(Command command) {
+	public void execute(Command command) {
 		
-		Feedback feedback= new Feedback(status, page,
-			categoriesToDisplay, currentCategory,
-			tasksToDisplay,
-			remindersToTrack, currentSearch);
+//		Feedback feedback= new Feedback(status, page,
+//			categoriesToDisplay, currentCategory,
+//			tasksToDisplay,
+//			remindersToTrack, currentSearch);
 		
 		// ... Do something 
 		
 		ArrayList<TaskWrapper> tasksToDisplay = new ArrayList<TaskWrapper>();
 		
-		tasksToDisplay.add(new TaskWrapper("Do UI Handler (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("CS2103T Project (CHANGED)"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-        tasksToDisplay.add(new TaskWrapper("Setup Trello (THIS ALSO CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("CS2103T Project (CHANGED)"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-        tasksToDisplay.add(new TaskWrapper("Prepare CV (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("Personal (CHANGED)"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-        tasksToDisplay.add(new TaskWrapper("Buy leather shoes (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("Personal (CHANGED)"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-        tasksToDisplay.add(new TaskWrapper("Send emails (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
-                new Category("18th MC (CHANGED)"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
+//		tasksToDisplay.add(new TaskWrapper("Do UI Handler (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("CS2103T Project (CHANGED)"), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new TaskWrapper("Setup Trello (THIS ALSO CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("CS2103T Project (CHANGED)"), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new TaskWrapper("Prepare CV (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("Personal (CHANGED)"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new TaskWrapper("Buy leather shoes (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("Personal (CHANGED)"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
+//        tasksToDisplay.add(new TaskWrapper("Send emails (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
+//                new Category("18th MC (CHANGED)"), new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
                 
         // Call my functions ...
         
-		main.setDisplayTasks(tasksToDisplay);
+//		main.setDisplayTasks(tasksToDisplay);
         
-		return feedback;
+//		return feedback;
 	}
 }

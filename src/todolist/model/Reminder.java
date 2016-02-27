@@ -1,5 +1,7 @@
 package todolist.model;
 
+import java.time.LocalDateTime;
+
 public class Reminder {
     
     private Boolean switcher = null;
