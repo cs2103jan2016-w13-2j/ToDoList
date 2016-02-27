@@ -3,8 +3,8 @@ package todolist.model;
 public class Logic {
 
     public Logic() {
-        private Database database = new Database("myDataBase.txt");
-        private UIHandler uiHandler = new UIHandler(database);
+        private DataBase dataBase = new Database("myDataBase.txt");
+        private UIHandler uiHandler = new UIHandler(dataBase);
         private CommandHandler commandHandler = new CommandHandler(uiHandler, database);
     }
     
