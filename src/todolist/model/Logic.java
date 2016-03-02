@@ -14,7 +14,6 @@ public class Logic {
         this.dataBase = new DataBase("myDataBase.txt");
         this.uiHandler = new UIHandler(dataBase, mainApp);
         this.commandHandler = new CommandHandler(uiHandler, dataBase);
-
     }
     
     
