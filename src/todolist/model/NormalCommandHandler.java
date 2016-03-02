@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 
 public class NormalCommandHandler {
 
@@ -23,7 +23,6 @@ public class NormalCommandHandler {
         switch (action) {
         case "add":
             String type = arg[0];
-            break;
             switch (type) {
             case "event":
                 addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
@@ -34,8 +33,9 @@ public class NormalCommandHandler {
             case "task":
                 addTask(arg[1]);
                 break;
+            default:
+                // ...
             }
-
             break;
         case "edit":
             edit(arg[0], arg[1], arg[2]);
