@@ -13,7 +13,7 @@ public class Name implements Comparable<Name>{
 		if (this.getName().equals(o.getName()) {
 		    return 0;
 		} else {
-		    this.getName.compareTo(o.getName() < 0) {
+		    this.getName().compareTo(o.getName() < 0) {
 		        return -1;
 		    } else {
 		        return 1;
