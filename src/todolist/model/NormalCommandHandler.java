@@ -85,6 +85,7 @@ public class NormalCommandHandler {
             break;
         case "exit":
             exit();
+            break;
         case "undo":
             undo(Integer.parseInt(arg[0]));
             break;
