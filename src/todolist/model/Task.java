@@ -1,6 +1,6 @@
 package todolist.model;
 
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class Task {
 	private Name name;

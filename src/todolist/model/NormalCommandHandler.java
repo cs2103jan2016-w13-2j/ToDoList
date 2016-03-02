@@ -3,9 +3,9 @@ package todolist.model;
 public class NormalCommandHandler {
     
     private DataBase dataBase;
-    private UIhandler uiHandler;
+    private UIHandler uiHandler;
     
-    public NormalCommandHandler(Database dataBase, UIHandler uiHandler) {
+    public NormalCommandHandler(DataBase dataBase, UIHandler uiHandler) {
         this.dataBase = dataBase;
         this.uiHandler = uiHandler;
     }
@@ -26,23 +26,61 @@ public class NormalCommandHandler {
 		            break;
 		        }
 		        break;
-		    case "edit": edit(arg[0], arg[1], arg[2]);break;
-		    case "delete": delete(arg[0]);break;
-		    case "search": search(arg[0]);break;
-		    case "filter": filter(arg[0]);break;
-		    case "sort": sort(arg[0], arg[1]);break;
-		    case "insert": insert(arg[0], arg[1], arg[2]);break;
-		    case "switchPosition": switchPosition(arg[0], arg[1]);break;
-		    case "label": label(arg[0], arg[1]);break;
-		    case "postpone": postpone(arg[0], arg[1], arg[2]);break;
-		    case "forward": forward(arg[0], arg[1], arg[2]);break;
-		    case "add-remind": addRemind(arg);break;
-		    case "remind": remind(arg);break;
-		    case "add-remind-bef": addRemindBef(arg);break;
-		    case "remind-bef": remindBef(arg[0], arg[1], arg[2]);break;
-		    case "exit": exit();break;
-		    case "undo": undo(Integer.parseInt(arg[0]));break;
-		    case "redo": redo(Integer.parseInt(arg[0]));break;
+		    case "edit": 
+		        edit(arg[0], arg[1], arg[2]);
+		        break;
+		    case "delete": 
+		        delete(arg[0]);
+		        break;
+		    case "search": 
+		        search(arg[0]);
+		        break;
+		    case "filter": 
+		        filter(arg[0]);
+		        break;
+		    case "sort": 
+		        sort(arg[0], arg[1]);
+		        break;
+		    case "insert": 
+		        insert(arg[0], arg[1], arg[2]);
+		        break;
+		    case "switchPosition": 
+		        switchPosition(arg[0], arg[1]);
+		        break;
+		    case "label": 
+		        label(arg[0], arg[1]);
+		        break;
+		    case "postpone": 
+		        postpone(arg[0], arg[1], arg[2]);
+		        break;
+		    case "forward": 
+		        forward(arg[0], arg[1], arg[2]);
+		        break;
+		    case "add-remind": 
+		        addRemind(arg);
+		        break;
+		    case "remind": 
+		        remind(arg);
+		        break;
+		    case "add-remind-bef": 
+		        String[] restOfArgs = new String[arg.length - 2];
+                for (int i = 0; i < arg.length; i++) {
+                    restOfArgs[i] = arg[i + 2];
+                }
+                addRemindBef(arg[0], arg[1], restOfArgs);
+		        break;
+		    case "remind-bef": 
+		        remindBef(arg[0], arg[1], arg[2]);
+		        break;
+		    case "exit": 
+		        exit();
+		        break;
+		    case "undo": 
+		        undo(Integer.parseInt(arg[0]));
+		        break;
+		    case "redo": 
+		        redo(Integer.parseInt(arg[0]));
+		        break;
 		}
 	}
     
@@ -82,7 +120,7 @@ public class NormalCommandHandler {
 	}
 	
 	private void done(String title) {
-	    Task tempTask = new Task(dataBase.retreive(new SearchCommand("Name", title).get(0));
+	    Task tempTask = dataBase.retreive(new SearchCommand("Name", title)).get(0);
 	    dataBase.delete(tempTask);
 	    
 	    tempTask.setDoneStatus(true);
@@ -94,7 +132,7 @@ public class NormalCommandHandler {
 	}
 	
 	private void edit(String title, String fieldName, String newValue) {
-	    Task tempTask = new Task(dataBase.retreive(new SearchCommand("Name", title).get(0));
+	    Task tempTask = dataBase.retreive(new SearchCommand("Name", title)).get(0);
 	    dataBase.delete(tempTask);
 	   
 	    switch(fieldName) {
@@ -118,7 +156,7 @@ public class NormalCommandHandler {
 	}
 	
 	private void delete(String title) {
-	    Task tempTask = new Task(dataBase.retreive(new SearchCommand("Name", title));
+	    Task tempTask = dataBase.retreive(new SearchCommand("Name", title)).get(0);
 	    dataBase.delete(tempTask);
 	    
 	    uiHandler.refresh();
@@ -146,7 +184,7 @@ public class NormalCommandHandler {
 	}
 	
 	private void label(String title, String category) {
-	    Task tempTask = new Task(dataBase.retreive(new SearchCommand("Name", title).get(0));
+	    Task tempTask = dataBase.retreive(new SearchCommand("Name", title)).get(0);
 	    dataBase.delete(tempTask);
 	    
 	    tempTask.setCategory(new Category(category));
@@ -157,7 +195,7 @@ public class NormalCommandHandler {
 	}
 	
 	private void postpone(String title, String quantity, String timeUnit) {
-	    Task tempTask = new Task(dataBase.retreive(new SearchCommand("Name", title).get(0));
+	    Task tempTask = dataBase.retreive(new SearchCommand("Name", title)).get(0);
 	    dataBase.delete(tempTask);
 
         if(tempTask.getStartTime() == null) {
@@ -186,7 +224,7 @@ public class NormalCommandHandler {
 	}
 	
 	private void forward(String title, String quantity, String timeUnit) {
-	    Task tempTask = new Task(dataBase.retreive(new SearchCommand("Name", title).get(0));
+	    Task tempTask = dataBase.retreive(new SearchCommand("Name", title)).get(0);
 	    dataBase.delete(tempTask);
         
         if(tempTask.getStartTime() == null) {
@@ -225,7 +263,7 @@ public class NormalCommandHandler {
 		  remind(arg[1]);
 	}
 	
-	private void addRemindBef(String[] arg, String quantity, String timeUnit) {
+	private void addRemindBef(String quantity, String timeUnit, String[] arg) {
 	    String type = arg[0];
 		  switch(type) {
 		      case "event": addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
@@ -251,7 +289,7 @@ public class NormalCommandHandler {
             }
 	    }
 	    
-	    Task tempTask = new Task(dataBase.retreive(new SearchCommand("Name", title).get(0));
+	    Task tempTask = dataBase.retreive(new SearchCommand("Name", title)).get(0);
 	    
 	    dataBase.delete(tempTask);
         
@@ -285,12 +323,17 @@ public class NormalCommandHandler {
 	    uiHandler.refresh();
 	}
 	
-	private void generateTimeUnit(String unit) {
-	    switch(unit) {
-	        case "day": return TimeUnit.DAYS;
-	        case "hour": return TimeUnit.HOURS;
-	        case "minute": return TimeUnit.MINUTES;
-	    }
-	}
+	 private TemporalUnit generateTimeUnit(String unit) {
+        switch (unit) {
+        case "day":
+            return ChronoUnit.DAYS;
+        case "hour":
+            return ChronoUnit.HOURS;
+        case "minute":
+            return ChronoUnit.MINUTES;
+        default:
+            return null;
+        }
+    }
 }
 

@@ -3,10 +3,10 @@ package todolist.model;
 public class FlexiCommandHandler {
     
     private DataBase dataBase;
-    private UIhandler uiHandler;
+    private UIHandler uiHandler;
     private NormalCommandHandler normalHandler;
     
-    public FlexiCommandHandler(UIHandler uiHandler, Database dataBase, NormalCommandHandler normalHandler) {
+    public FlexiCommandHandler(UIHandler uiHandler, DataBase dataBase, NormalCommandHandler normalHandler) {
         this.dataBase = dataBase;
         this.uiHandler = uiHandler;
         this.normalHandler = normalHandler;
