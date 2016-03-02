@@ -9,14 +9,14 @@ public class Logic {
 
     public Logic(MainApp mainApp) {
         this.mainApp = mainApp;
-        this.dataBase = new Database("myDataBase.txt");
+        this.dataBase = new DataBase("myDataBase.txt");
         this.uiHandler = new UIHandler(dataBase, mainApp);
-        this.commandHandler = new CommandHandler(uiHandler, database);
+        this.commandHandler = new CommandHandler(uiHandler, dataBase);
 
     }
     
     
     public process(String input) {
-        commandHandler(input);
+        commandHandler.execute(input);
     }
 }

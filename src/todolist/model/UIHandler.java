@@ -16,8 +16,8 @@ public static class UIHandler {
 
     private MainApp mainApp;
     
-    public UIHandler(Database dataBase, MainApp mainApp) {
-        this.dataBase = database;
+    public UIHandler(DataBase dataBase, MainApp mainApp) {
+        this.dataBase = dataBase;
         this.mainApp = mainApp;
 
     }
@@ -33,7 +33,7 @@ public static class UIHandler {
         
         if(isFiltered&&isSorted) {
 
-            ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
+            ArrayList<Task> tempTaskList = dataBase.retreive(new SearchCommand("Category", category));
             mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
         }
         
@@ -53,7 +53,7 @@ public static class UIHandler {
     
     public void search(String title) {
 
-        ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Name", title));
+        ArrayList<Task> tempTaskList = dataBase.retreive(new SearchCommand("Name", title));
         mainApp.highLight(tempTaskList);
 
     }
@@ -62,7 +62,7 @@ public static class UIHandler {
         if(isFiltered) {
             this.sort = sort;
 
-            ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
+            ArrayList<Task> tempTaskList = dataBase.retreive(new SearchCommand("Category", category));
             mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
             isSorted = true;
         } else {
@@ -77,12 +77,12 @@ public static class UIHandler {
         if(isSorted) {
             this.category = category;
 
-            ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
+            ArrayList<Task> tempTaskList = dataBase.retreive(new SearchCommand("Category", category));
             mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
             isFiltered = true;
         } else {
             this.category = category;
-            ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new SearchCommand("Category", category));
+            ArrayList<Task> tempTaskList = dataBase.retreive(new SearchCommand("Category", category));
             mainApp.setDisplayTasks(tempTaskList);
             isFiltered = true;
         }
