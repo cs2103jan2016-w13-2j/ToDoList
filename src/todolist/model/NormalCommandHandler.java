@@ -19,26 +19,30 @@ public class NormalCommandHandler {
 		        String type = arg[0];
 		        switch(type) {
 		            case "event": addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
+		            break;
 		            case "deadline": addDeadline(arg[1], arg[2], arg[3]);
+		            break;
 		            case "task": addTask(arg[1]);
+		            break;
 		        }
-		    case "edit": edit(arg[0], arg[1], arg[2]);
-		    case "delete": delete(arg[0]);
-		    case "search": search(arg[0]);
-		    case "filter": filter(arg[0]);
-		    case "sort": sort(arg[0], arg[1]);
-		    case "insert": insert(arg[0], arg[1], arg[2]);
-		    case "switchPosition": switchPosition(arg[0], arg[1]);
-		    case "label": label(arg[0], arg[1]);
-		    case "postpone": postpone(arg[0], arg[1], arg[2]);
-		    case "forward": forward(arg[0], arg[1], arg[2]);
-		    case "add-remind": addRemind(arg);
-		    case "remind": remind(arg);
-		    case "add-remind-bef": addRemindBef(arg);
-		    case "remind-bef": remindBef(arg[0], arg[1], arg[2]);
-		    case "exit": exit();
-		    case "undo": undo(Integer.parseInt(arg[0]));
-		    case "redo": redo(Integer.parseInt(arg[0]));
+		        break;
+		    case "edit": edit(arg[0], arg[1], arg[2]);break;
+		    case "delete": delete(arg[0]);break;
+		    case "search": search(arg[0]);break;
+		    case "filter": filter(arg[0]);break;
+		    case "sort": sort(arg[0], arg[1]);break;
+		    case "insert": insert(arg[0], arg[1], arg[2]);break;
+		    case "switchPosition": switchPosition(arg[0], arg[1]);break;
+		    case "label": label(arg[0], arg[1]);break;
+		    case "postpone": postpone(arg[0], arg[1], arg[2]);break;
+		    case "forward": forward(arg[0], arg[1], arg[2]);break;
+		    case "add-remind": addRemind(arg);break;
+		    case "remind": remind(arg);break;
+		    case "add-remind-bef": addRemindBef(arg);break;
+		    case "remind-bef": remindBef(arg[0], arg[1], arg[2]);break;
+		    case "exit": exit();break;
+		    case "undo": undo(Integer.parseInt(arg[0]));break;
+		    case "redo": redo(Integer.parseInt(arg[0]));break;
 		}
 	}
     
