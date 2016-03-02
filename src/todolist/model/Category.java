@@ -6,8 +6,16 @@ public class Category implements Comparable<Category>{
     	this.category = category;
     }
 	@Override
-	public int compareTo(Category o) {
-		return this.category.compareToIgnoreCase(o.getCategory());
+	public int compareTo(Name o) {
+		if (this.getCategory().equals(o.getCategory()) {
+		    return 0;
+		} else {
+		    this.getCategory().compareTo(o.getCategory() < 0) {
+		        return -1;
+		    } else {
+		        return 1;
+		    }
+		}
 	}
 	
 	public String getCategory() {
