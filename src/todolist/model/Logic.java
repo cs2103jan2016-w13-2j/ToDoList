@@ -1,5 +1,7 @@
 package todolist.model;
 
+import todolist.MainApp;
+
 public class Logic {
 	
     private MainApp mainApp;
@@ -20,3 +22,4 @@ public class Logic {
         commandHandler.execute(input);
     }
 }
+
