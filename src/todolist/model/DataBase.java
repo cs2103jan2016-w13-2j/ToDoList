@@ -11,6 +11,19 @@ import java.util.Comparator;
  * This class is the storage class, handling the read and write of local file with relative commands.
  * It will be called by the logic.
  * 
+ * for the retrieve method, now can support 3 search command
+ * 1:"category" + category
+ * 2:"name" + keyword 
+ * 3:"view"+view (overdue, archived)
+ * 
+ * for the sorting methods, can now sort by
+ * 1:name
+ * 2:end date
+ * 3:start date
+ * 4:category
+ * but they are not integrated with the search method yet!!
+ * 
+ * 
  * @author yuxin
  */
 public class DataBase {
@@ -25,18 +38,53 @@ public class DataBase {
 	public static enum ViewType {
 		ARCHIVE, OVERDUE, TODAY;
 	}
+	
 	private FileHandler fh;
 	private ArrayList<Task> taskList;
-
+    
 	public DataBase() {
 		fh = new FileHandler();
 		loadFromFile();
 	}
-
+	
+    //firstly convert every task in the arraylist to string, then call write function in filehandler
+	private void writeToFile() {
+		sort_StartDate(taskList);
+		ArrayList<String> taskList_str = new ArrayList<String>();
+		for(Task eachTask: taskList) {
+			taskList_str.add(convert_TaskToString(eachTask));
+		}
+		fh.write(taskList_str);
+	}
+	//helper method
+	private Task convert_StringToTask(String taskStr) {
+		String[] taskInfo = taskStr.split(" ");
+		Name name = new Name(taskInfo[0]);
+		LocalDateTime startTime = LocalDateTime.parse(taskInfo[1]);
+		LocalDateTime endTime = LocalDateTime.parse(taskInfo[2]);
+		Category category = new Category(taskInfo[3]);
+		Reminder reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), LocalDateTime.parse(taskInfo[4].split("+")[1]));
+		Boolean isDone = Boolean.valueOf(taskInfo[6]);
+		return new Task(name, startTime, endTime, category, reminder, isDone);
+	}
+	//helper method
+    private String convert_TaskToString(Task currentTask) {
+    	String task_str = "";
+    	task_str += currentTask.getName().getName() + " ";
+    	task_str += currentTask.getStartTime().toString() + " ";
+    	task_str += currentTask.getEndTime().toString() + " ";
+    	task_str += currentTask.getCategory().getCategory() + " ";
+    	task_str += currentTask.getReminder().getStatus().toString() + "+";
+    	task_str += currentTask.getReminder().getTime().toString();
+    	return task_str;
+    }
+    
+    //firstly call read function in filehandler, then convert every string into a task object
 	private void loadFromFile() {
-		taskList = fh.read();
-		if (taskList == null) {
-			taskList = new ArrayList<Task>();
+		ArrayList<String> taskList_str = fh.read();
+		taskList = new ArrayList<Task>();
+		for(String eachTask_str: taskList_str) {
+			taskList.add(convert_StringToTask(eachTask_str));		
 		}
 	}
 
@@ -50,7 +98,7 @@ public class DataBase {
 	 */
 	public boolean add(Task task) {
 		taskList.add(task);
-		fh.write(taskList);
+		writeToFile();
 		return true;
 	}
 
@@ -72,7 +120,7 @@ public class DataBase {
 			return false;
 		}
 		taskList.remove(index);
-		fh.write(taskList);
+		writeToFile();
 		return true;
 	}
 
@@ -91,6 +139,7 @@ public class DataBase {
 		return true;
 	}
     
+	//return all tasks
 	public ArrayList<Task> retrieveAll() {
 		return taskList;
 	}
