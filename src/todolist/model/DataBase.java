@@ -156,7 +156,7 @@ public class DataBase {
 		}
 		return resultList;
 	}
-
+    //helper method for retrieve_View
 	private ArrayList<Task> retrieve_ViewArchive() {
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		for(Task eachTask: taskList) {
@@ -166,7 +166,7 @@ public class DataBase {
 		}
 		return resultList;
 	}
-
+    //helper method for retrieve_View
 	private ArrayList<Task> retrieve_ViewOverDue() {
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		for(Task eachTask: taskList) {
@@ -201,7 +201,7 @@ public class DataBase {
 	private boolean isOverdue(String content) {
 		return content.equalsIgnoreCase("overdue");
 	}
-
+   
 	private ArrayList<Task> retrieve_Name(SearchCommand command) {
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		String requiredName = command.getContent();
