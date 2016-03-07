@@ -1,12 +1,13 @@
 package todolist.model;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /*
@@ -17,44 +18,65 @@ import java.util.ArrayList;
  *
  */
 public class FileHandler {
-	private String fileName = "taskStorage.xml";
+	private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
+	private String fileName = "taskStorage.txt";
     private String path = "";
-
+    
 	public FileHandler() {
+		checkForUpdatedDirectory();
 	}
-
+    public static void main(String[] args){
+    	FileHandler fh=new FileHandler();
+    	System.out.println(fh.read());
+    }
+    
 	/**
-	 * This method reads from the local file. It returns a ArrayList containing all the objects in the file.
-	 * @return taskList     the list of task objects stored in file
-	 *                      if no objects in the file, return null.
+	 * This method reads from the local file. It returns a ArrayList containing all the Strings in the file.
+	 * @return taskList    the list of string representation of tasks stored in file
+	 *                      if no such file or the file is empty, return null.
 	 */
-	@SuppressWarnings("unchecked")
-	public ArrayList<Task> read() {
-		ArrayList<Task> taskList;
-		try{ 
-			XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(fileName)));
-			taskList = (ArrayList<Task>) decoder.readObject();
-			decoder.close();
-		} catch(Exception e) {
-			return null;
-		}
+	public ArrayList<String> read() {
+		ArrayList<String> taskList = null;
+		File filePath = new File(path + fileName);
+		if(isFileReady(filePath) && !isFileEmpty(filePath)) {
+			try {
+				taskList = new ArrayList<String>();
+				FileReader fr=new FileReader(path + fileName);
+				BufferedReader br=new BufferedReader(fr);
+				String input=null;
+				input=br.readLine();
+				
+				while(!input.equals("null")){
+					taskList.add(input);
+					input=br.readLine();
+				}
+				br.close();
+			}catch (FileNotFoundException e) {
+				return null;
+			}catch (IOException e) {
+				return null;
+			}
+		}	
 		return taskList;		
 	}
     
 	/**
-	 * This method write directly the task list of the user to the local file.
+	 * This method write directly the string representation of the task to the local file.
 	 * 
-	 * @param taskList    the list of task objects to be written
+	 * @param taskList    the list of string of tasks to be written
 	 * @return            true if it is successfully written; false if the target file cannot be found
 	 */
-	public boolean write(ArrayList<Task> taskList) {
-		try {
-			XMLEncoder encoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(fileName)));
-			encoder.writeObject(taskList);
-			encoder.close();
-		} catch(Exception e) {
-			return false;
-		}
+	public boolean write(ArrayList<String> taskList) {
+		    try{
+				FileWriter fw=new FileWriter(path + fileName);
+				BufferedWriter bw=new BufferedWriter(fw);
+				for(String eachTask: taskList) {
+					bw.write(eachTask);
+				}
+				bw.close();
+			}catch (Exception e) {
+				return false;
+			}			
 		return true;	
 	}
 	
@@ -80,21 +102,31 @@ public class FileHandler {
 	 * @return              true if the file is set; false if the path is not a correct path
 	 */
 	public boolean setFile(String newFilePath) {
-		ArrayList<Task> existingTaskList = this.read();
+		ArrayList<String> existingTaskList = this.read();
 		//set path
 		String newPath = getPathOfNewFile(newFilePath);
+		String newFileName = getNewFileName(newFilePath);
+		
 		if(isPathCorrect(newFilePath)) {
 			this.path = newPath;
+			this.fileName=newFileName;
+			if(existingTaskList!=null) {
+				this.write(existingTaskList);			
+			}	
+			
+			try{
+				FileWriter fw=new FileWriter(path + fileName);
+				BufferedWriter bw=new BufferedWriter(fw);
+				bw.write(path + "\n");
+				bw.write(fileName + "\n");
+				bw.close();
+			}catch (Exception e) {
+				return false;
+			}
+		    return true;
 		}
-		
-		//set fileName
-		String newFileName = getNewFileName(newFilePath);
-		this.fileName=newFileName;
-		
-		if(!existingTaskList.equals(null)) {
-			this.write(existingTaskList);			
-		}		  	
-		return true;
+		  	
+		return false;
 	}
 	
 	public String getPath() {
@@ -107,6 +139,33 @@ public class FileHandler {
 	}
 	
 	//helper methods
+	private void checkForUpdatedDirectory() {
+		File updatedDirectory = new File(PATH_UPDATEDDIRECTORY);	
+		
+		try {
+			if(!isFileEmpty(updatedDirectory)) {
+			    FileReader fr = new FileReader(updatedDirectory);
+			    BufferedReader br = new BufferedReader(fr);		
+			    path = br.readLine();
+			    fileName = br.readLine();
+			    br.close();
+			}
+		}catch (Exception e) {
+			return;
+		}
+	}
+	
+	private boolean isFileReady(File filePath) {
+		return filePath.exists();
+	}
+	
+	private boolean isFileEmpty(File filePath) {
+		if(isFileReady(filePath)) {
+			return filePath.length() == 0;
+		}
+		return true;
+	}
+	
 	private boolean isPathCorrect(String pathName) {
 		if(pathName.equals("")) {
 			return true;
