@@ -71,7 +71,7 @@ public class FileHandler {
 				FileWriter fw=new FileWriter(path + fileName);
 				BufferedWriter bw=new BufferedWriter(fw);
 				for(String eachTask: taskList) {
-					bw.write(eachTask);
+					bw.write(eachTask+"\n");
 				}
 				bw.close();
 			}catch (Exception e) {
