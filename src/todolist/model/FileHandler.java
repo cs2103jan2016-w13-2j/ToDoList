@@ -33,10 +33,10 @@ public class FileHandler {
 	/**
 	 * This method reads from the local file. It returns a ArrayList containing all the Strings in the file.
 	 * @return taskList    the list of string representation of tasks stored in file
-	 *                      if no such file or the file is empty, return null.
+	 *                      if no such file or the file is empty, return an empty arraylist.
 	 */
 	public ArrayList<String> read() {
-		ArrayList<String> taskList = null;
+		ArrayList<String> taskList = new ArrayList<String>();
 		File filePath = new File(path + fileName);
 		if(isFileReady(filePath) && !isFileEmpty(filePath)) {
 			try {
