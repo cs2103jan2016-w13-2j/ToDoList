@@ -4,21 +4,21 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 
-<!--  Prepared by Huang Lie Jun (A0123994W) -->
+<!-- Prepared by Huang Lie Jun (A0123994W) -->
 
-<BorderPane minHeight="400.0" minWidth="600.0" prefHeight="600.0"
+<BorderPane minHeight="300.0" minWidth="300.0" prefHeight="600.0"
 	prefWidth="800.0" styleClass="root-layout" stylesheets="@DefaultTheme.css"
 	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
 	<left>
-		<FlowPane maxWidth="-Infinity" minHeight="340.0" minWidth="-Infinity"
+		<FlowPane maxWidth="-Infinity" minWidth="-Infinity"
 			prefWidth="60.0" BorderPane.alignment="TOP_LEFT" />
 	</left>
 	<center>
-		<BorderPane minHeight="340.0" minWidth="540.0" prefHeight="540.0"
+		<BorderPane minHeight="200.0" minWidth="200.0" prefHeight="540.0"
 			prefWidth="740.0" BorderPane.alignment="TOP_LEFT" />
 	</center>
 	<top>
-		<HBox maxWidth="-Infinity" minHeight="-Infinity" minWidth="600.0"
-			prefHeight="40.0" BorderPane.alignment="TOP_LEFT" />
+		<HBox maxWidth="-Infinity" minHeight="-Infinity" prefHeight="40.0"
+			BorderPane.alignment="TOP_LEFT" />
 	</top>
 </BorderPane>

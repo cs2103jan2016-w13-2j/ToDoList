@@ -1,67 +1,109 @@
 package todolist.view;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import todolist.MainApp;
+import todolist.model.Category;
 import todolist.model.Command;
-//import todolist.model.CommandHandlerStub;
-//import todolist.model.Feedback;
 import todolist.model.Logic;
+import todolist.model.Name;
+import todolist.model.Reminder;
+import todolist.model.Task;
 import todolist.model.TaskWrapper;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableView;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 public class MainViewController {
 
-    private static final double PROPORTION_NUMBER_COLUMN = 0.05;
-    private static final double PROPORTION_TASK_TITLE_COLUMN = 0.30;
-    private static final double PROPORTION_START_TIME_COLUMN = 0.20;
-    private static final double PROPORTION_END_TIME_COLUMN = 0.20;
-    private static final double PROPORTION_CATEGORY_COLUMN = 0.20;
-//    private static final double PROPORTION_PRIORITY_COLUMN = 0.05;
+    // private static final String MESSAGE_EMPTY_LIST = "No Content To Show";
 
+    /*** MODEL DATA ***/
+    private ObservableList<TaskWrapper> tasksToDisplay = null;
+    private ObservableList<String> tasksToDisplayStub = null;
+
+    private ArrayList<Task> taskListStub = new ArrayList<Task>();
+
+    /*** MAIN APP ***/
+    private MainApp mainApplication = null;
+
+    /*** VIEWS ***/
     @FXML
-    private TableView<TaskWrapper> taskTable;
+    private ListView<TaskWrapper> listView = null;
 
-    @FXML
-    private TableColumn<TaskWrapper, String> numberColumn;
-
-    @FXML
-    private TableColumn<TaskWrapper, String> taskTitleColumn;
-
-    @FXML
-    private TableColumn<TaskWrapper, String> startTimeColumn;
-
-    @FXML
-    private TableColumn<TaskWrapper, String> endTimeColumn;
-
-    @FXML
-    private TableColumn<TaskWrapper, String> categoryColumn;
-
-//    @FXML
-//    private TableColumn<TaskWrapper, String> priorityColumn;
-
-    private MainApp mainApplication;
-
+    /*** CORE CONTROLLER FUNCTIONS ***/
     public MainViewController() {
-        // ...
+        tasksToDisplay = FXCollections.observableArrayList();
+        tasksToDisplayStub = FXCollections.observableArrayList("Single", "Double", "Suite", "Family App");
+
+        listView = new ListView<TaskWrapper>();
+
+        taskListStub.add(new Task(new Name("Proposal Meeting"), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub.add(new Task(new Name("Scrum Discussion"), LocalDateTime.now().plusHours(21),
+                LocalDateTime.now().plusHours(22), new Category("New Release Project"),
+                new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub.add(new Task(new Name("Buy Coffee"), null, null, new Category("Personal"),
+                new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub.add(new Task(new Name("Module Submission"), null, LocalDateTime.now().plusHours(154),
+                new Category("Deadlines"), new Reminder(false, LocalDateTime.now()), false));
+
+        taskListStub.add(new Task(new Name("Send email"), null, LocalDateTime.now().minusHours(2),
+                new Category("Tasks"), new Reminder(false, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+        
+        setTasks(taskListStub);
+    }
+
+    public void setMainApp(MainApp mainApp) {
+        mainApplication = mainApp;
+    }
+
+    @FXML
+    public void initialize() {
+        initTaskListView();
     }
 
     public void setCommandLineCallback(TextField commandField) {
         // Set Callback for TextField
         EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
             Logic handler = new Logic(mainApplication);
+
             @Override
             public void handle(ActionEvent event) {
                 String commandString = commandField.getText();
@@ -70,163 +112,51 @@ public class MainViewController {
 
                 // Pass Command Line input for processing
                 handler.process(command);
-                
+
             }
         };
 
         commandField.setOnAction(commandHandler);
     }
 
-    public void setMainApp(MainApp mainApp) {
-        mainApplication = mainApp;
-        taskTable.setItems(mainApplication.getDisplayTasks());
+    /*** VIEW GETTERS-SETTERS-LOADERS ***/
+
+    public ListView<TaskWrapper> getTaskListView() {
+        return listView;
     }
 
-    @FXML
-    private void initialize() {
-
-        setNumberColumn();
-        setTitleColumn();
-        setStartTimeColumn();
-        setEndTimeColumn();
-        setCategoryColumn();
-//        setPriorityColumn();
-
-        setResizing();
+    public void populateTaskListView() {
+        listView.setItems(tasksToDisplay);
     }
 
-    private void setNumberColumn() {
-        numberColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
+    public void initTaskListView() {
+        listView.setCellFactory(new Callback<ListView<TaskWrapper>, javafx.scene.control.ListCell<TaskWrapper>>() {
+            @Override
+            public ListCell<TaskWrapper> call(ListView<TaskWrapper> listView) {
+                return new TaskListCell();
+            }
+        });
+        
+        VBox.setVgrow(listView, Priority.ALWAYS);
+        HBox.setHgrow(listView, Priority.ALWAYS);
 
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
-                        String cellValue = getNumberValue(param);
-                        return new ReadOnlyObjectWrapper<String>(cellValue);
-                    }
-
-                    private String getNumberValue(CellDataFeatures<TaskWrapper, String> param) {
-                        int number = taskTable.getItems().indexOf(param.getValue()) + 1;
-                        return Integer.toString(number);
-                    }
-                });
     }
 
-    private void setTitleColumn() {
-        taskTitleColumn.setCellValueFactory(cellData -> cellData.getValue().taskTitleProperty());
+    /*** MODEL GETTERS-SETTERS-RELOADERS ***/
+
+    public ObservableList<TaskWrapper> getTasks() {
+        return tasksToDisplay;
     }
 
-    private void setStartTimeColumn() {
-        startTimeColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
+    public void setTasks(ArrayList<Task> tasks) {
+        tasksToDisplay.clear();
+        for (int i = 0; i < tasks.size(); ++i) {
 
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
-                        String shortDateTime = getDateTimeValue(param);
+            // ... Convert Task to TaskWrapper
+            TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
 
-                        return new SimpleStringProperty(shortDateTime);
-                    }
-
-                    private String getDateTimeValue(CellDataFeatures<TaskWrapper, String> param) {
-                        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM,
-                                FormatStyle.SHORT);
-                        if (param.getValue() == null || param.getValue().getStartTime() == null) {
-                            return "null";
-                        } else {
-                            String dateTime = param.getValue().getStartTime().format(dateTimeFormat);
-                            return formatDateTime(dateTime);
-                        }
-                    }
-                });
+            tasksToDisplay.add(wrappedTask);
+        }
     }
 
-    private void setEndTimeColumn() {
-        endTimeColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
-
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
-                        String shortDateTime = getDateTimeValue(param);
-
-                        return new SimpleStringProperty(shortDateTime);
-                    }
-
-                    private String getDateTimeValue(CellDataFeatures<TaskWrapper, String> param) {
-                        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM,
-                                FormatStyle.SHORT);
-                        if (param.getValue() == null || param.getValue().getEndTime() == null) {
-                            return "null";
-                        } else {
-                            String dateTime = param.getValue().getEndTime().format(dateTimeFormat);
-                            return formatDateTime(dateTime);
-                        }
-                    }
-                });
-    }
-
-    private void setCategoryColumn() {
-        categoryColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
-
-                    @Override
-                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
-                        String cellValue = getCategoryValue(param);
-                        return new SimpleStringProperty(cellValue);
-                    }
-
-                    private String getCategoryValue(CellDataFeatures<TaskWrapper, String> param) {
-                        if (param.getValue() == null || param.getValue().getCategory() == null) {
-                            return "null";
-                        } else {
-                            return param.getValue().getCategory().getCategory();
-                        }
-                    }
-                });
-    }
-
-//    private void setPriorityColumn() {
-//        priorityColumn.setCellValueFactory(
-//                new Callback<TableColumn.CellDataFeatures<TaskWrapper, String>, ObservableValue<String>>() {
-//
-//                    @Override
-//                    public ObservableValue<String> call(CellDataFeatures<TaskWrapper, String> param) {
-//                        String cellValue = getPriorityValue(param);
-//                        return new SimpleStringProperty(cellValue);
-//                    }
-//
-//                    private String getPriorityValue(CellDataFeatures<TaskWrapper, String> param) {
-//                        int priority = param.getValue().getPriority().getPriorityLevel();
-//                        return Integer.toString(priority);
-//                    }
-//                });
-//    }
-
-    private void setResizing() {
-        DoubleBinding numberBinder = taskTable.widthProperty().multiply(PROPORTION_NUMBER_COLUMN);
-        numberColumn.prefWidthProperty().bind(numberBinder);
-
-        DoubleBinding titleBinder = taskTable.widthProperty().multiply(PROPORTION_TASK_TITLE_COLUMN);
-        taskTitleColumn.prefWidthProperty().bind(titleBinder);
-
-        DoubleBinding startTimeBinder = taskTable.widthProperty().multiply(PROPORTION_START_TIME_COLUMN);
-        startTimeColumn.prefWidthProperty().bind(startTimeBinder);
-
-        DoubleBinding endTimeBinder = taskTable.widthProperty().multiply(PROPORTION_END_TIME_COLUMN);
-        endTimeColumn.prefWidthProperty().bind(endTimeBinder);
-
-        DoubleBinding categoryBinder = taskTable.widthProperty().multiply(PROPORTION_CATEGORY_COLUMN);
-        categoryColumn.prefWidthProperty().bind(categoryBinder);
-
-//        DoubleBinding priorityBinder = taskTable.widthProperty().multiply(PROPORTION_PRIORITY_COLUMN);
-//        priorityColumn.prefWidthProperty().bind(priorityBinder);
-
-        taskTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    }
-
-    private String formatDateTime(String dateTime) {
-        String[] dateTimeSplit = dateTime.split(" ");
-        dateTimeSplit[1] = dateTimeSplit[1].replace(",", "");
-        String shortDateTime = dateTimeSplit[0] + "-" + dateTimeSplit[1] + " " + dateTimeSplit[3] + dateTimeSplit[4];
-        return shortDateTime;
-    }
 }

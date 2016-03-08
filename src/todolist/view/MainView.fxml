@@ -2,19 +2,20 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <!-- Prepared by Huang Lie Jun (A0123994W) -->
 
-<BorderPane minHeight="340.0" minWidth="540.0" prefHeight="540.0"
-	prefWidth="740.0" stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+	minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0"
+	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.view.MainViewController">
 	<bottom>
 		<TextField prefHeight="40.0" prefWidth="720.0"
@@ -28,58 +29,6 @@
 			</BorderPane.margin>
 		</TextField>
 	</bottom>
-	<center>
-		<SplitPane dividerPositions="0.2" minHeight="280.0"
-			minWidth="540.0" prefHeight="480.0" prefWidth="720.0" stylesheets="@DefaultTheme.css"
-			BorderPane.alignment="CENTER">
-			<items>
-				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
-					prefWidth="100.0">
-					<children>
-						<TitledPane collapsible="false" layoutX="21.0" layoutY="79.0"
-							prefHeight="498.0" prefWidth="242.0" text="categories"
-							textAlignment="CENTER" AnchorPane.bottomAnchor="0.0"
-							AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-							AnchorPane.topAnchor="0.0">
-							<font>
-								<Font size="14.0" />
-							</font>
-						</TitledPane>
-					</children>
-				</AnchorPane>
-				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
-					prefWidth="100.0">
-					<children>
-						<TitledPane collapsible="false" layoutX="103.0"
-							layoutY="49.0" prefHeight="498.0" prefWidth="488.0" text="tasks"
-							AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-							<font>
-								<Font size="14.0" />
-							</font>
-							<content>
-								<TableView fx:id="taskTable" prefHeight="200.0"
-									prefWidth="200.0" stylesheets="@DefaultTheme.css">
-									<columns>
-										<TableColumn fx:id="numberColumn" prefWidth="42.0"
-											sortable="false" text="#" />
-										<TableColumn fx:id="taskTitleColumn" prefWidth="330.0"
-											text="Title" />
-										<TableColumn fx:id="startTimeColumn" prefWidth="61.0"
-											text="Start" />
-										<TableColumn fx:id="endTimeColumn" prefWidth="59.0"
-											text="End" />
-										<TableColumn fx:id="categoryColumn" prefWidth="116.0"
-											text="Category" />
-									</columns>
-								</TableView>
-							</content>
-						</TitledPane>
-					</children>
-				</AnchorPane>
-			</items>
-		</SplitPane>
-	</center>
 	<padding>
 		<Insets left="6.0" top="6.0" />
 	</padding>
@@ -88,4 +37,33 @@
 		<String fx:value="split-pane" />
 		<String fx:value="split-pane-divider" />
 	</styleClass>
+	<center>
+		<TitledPane animated="false" collapsible="false"
+			maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+			stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_CENTER">
+			<content>
+				<ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0"
+					stylesheets="@DefaultTheme.css">
+					<placeholder>
+						<Label text="No Content To Show" />
+					</placeholder>
+					<opaqueInsets>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</opaqueInsets>
+					<padding>
+						<Insets bottom="5.0" />
+					</padding>
+				</ListView>
+			</content>
+			<graphic>
+				<HBox id="titled-pane-hbox" maxHeight="1.7976931348623157E308"
+					maxWidth="1.7976931348623157E308" stylesheets="@DefaultTheme.css">
+					<children>
+						<Text id="titled-pane-hbox-text" strokeType="OUTSIDE"
+							strokeWidth="0.0" text="&lt;tasks&gt;" />
+					</children>
+				</HBox>
+			</graphic>
+		</TitledPane>
+	</center>
 </BorderPane>
