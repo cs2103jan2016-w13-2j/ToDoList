@@ -3,6 +3,7 @@ package todolist;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import todolist.model.Logic;
 import todolist.model.Task;
 import todolist.model.TaskWrapper;
 import todolist.view.MainViewController;
@@ -59,6 +60,9 @@ public class MainApp extends Application {
     private MainViewController mainController;
 //    private TitleBarController titlebarController;
 //    private SideBarController sidebarController;
+    
+    
+    public Logic handler = null;
 
     public static void main(String[] args) {
         launch(args);
@@ -71,11 +75,15 @@ public class MainApp extends Application {
         // ... Load Model Lists from Storage through controllers
         // ... Load Tasks into tasksToDisplay
 
+        handler = new Logic(this);
+
         // Load Views
         loadRootView(primaryStage);
         loadMainView();
         loadTitleBar();
         loadSideBar();
+        
+
     }
 
     private void loadRootView(Stage primaryStage) {

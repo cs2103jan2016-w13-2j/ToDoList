@@ -41,6 +41,7 @@ public class MainViewController {
 
     /*** CORE CONTROLLER FUNCTIONS ***/
     public MainViewController() {
+
         tasksToDisplay = FXCollections.observableArrayList();
 
         listView = new ListView<TaskWrapper>();
@@ -60,7 +61,7 @@ public class MainViewController {
 
         taskListStub.add(new Task(new Name("Send email"), null, LocalDateTime.now().minusHours(2),
                 new Category("Tasks"), new Reminder(false, LocalDateTime.now()), false));
-        
+
         setTasks(taskListStub);
     }
 
@@ -76,7 +77,6 @@ public class MainViewController {
     public void setCommandLineCallback(TextField commandField) {
         // Set Callback for TextField
         EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
-            Logic handler = new Logic(mainApplication);
 
             @Override
             public void handle(ActionEvent event) {
@@ -85,7 +85,7 @@ public class MainViewController {
                 System.out.println(command.getCommand());
 
                 // Pass Command Line input for processing
-                handler.process(command);
+                mainApplication.handler.process(command);
 
             }
         };
@@ -100,8 +100,8 @@ public class MainViewController {
     }
 
     public void populateTaskListView() {
-        listView.setItems(FXCollections.observableArrayList());
-        listView.setItems(tasksToDisplay);
+        mainApplication.handler.uiHandler.refresh();
+//        listView.setItems(tasksToDisplay);
     }
 
     public void initTaskListView() {
@@ -111,7 +111,7 @@ public class MainViewController {
                 return new TaskListCell();
             }
         });
-        
+
         VBox.setVgrow(listView, Priority.ALWAYS);
         HBox.setHgrow(listView, Priority.ALWAYS);
 
@@ -124,15 +124,18 @@ public class MainViewController {
     }
 
     public void setTasks(ArrayList<Task> tasks) {
-        tasksToDisplay.clear();
-        
+        ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
+        listView.getItems().clear();
+
         for (int i = 0; i < tasks.size(); ++i) {
             // ... Convert Task to TaskWrapper
             TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
-            tasksToDisplay.add(wrappedTask);
+            arrayOfWrappers.add(wrappedTask);
+            
         }
         
-        populateTaskListView();
+        listView.getItems().addAll(arrayOfWrappers);
+
     }
 
 }

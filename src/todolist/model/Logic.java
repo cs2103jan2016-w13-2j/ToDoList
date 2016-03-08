@@ -6,7 +6,7 @@ public class Logic {
 	
     private MainApp mainApp;
     private DataBase dataBase;
-    private UIHandler uiHandler;
+    public UIHandler uiHandler;
     private CommandHandler commandHandler;
 
     public Logic(MainApp mainApp) {

@@ -12,7 +12,8 @@ public class TaskListCell extends ListCell<TaskWrapper> {
             TaskNode taskNode = new TaskNode(task, this.getIndex());
             setGraphic(taskNode.getNode());
         } else {
-            // ...
+            setText(null);
+            setGraphic(null);
         }
     }
 }

@@ -32,32 +32,30 @@ public class DataBase {
     public static enum FilterType {
         VIEW, CATEGORY, NAME, END_DATE, START_DATE;
     }
-
+    
     public static enum ViewType {
         ARCHIVE, OVERDUE, TODAY;
     }
-
+    
     private FileHandler fh;
     private ArrayList<Task> taskList;
     private ArrayList<ArrayList<Task>> snapshot;
-
+    
     public DataBase() {
         fh = new FileHandler();
         loadFromFile();
     }
-
-    // firstly convert every task in the arraylist to string, then call write
-    // function in filehandler
+    
+    //firstly convert every task in the arraylist to string, then call write function in filehandler
     private void writeToFile() {
         sort_StartDate(taskList);
         ArrayList<String> taskList_str = new ArrayList<String>();
-        for (Task eachTask : taskList) {
+        for(Task eachTask: taskList) {
             taskList_str.add(convert_TaskToString(eachTask));
         }
         fh.write(taskList_str);
     }
-
-    // helper method
+    //helper method
     private Task convert_StringToTask(String taskStr) {
         String[] taskInfo = taskStr.split(" ");
         Name name = new Name(taskInfo[0]);
@@ -66,95 +64,96 @@ public class DataBase {
         Category category = null;
         Reminder reminder = null;
         Boolean isDone = null;
-
-        if (!taskInfo[1].equals(new String("null"))) {
+        
+        if(!taskInfo[1].equals(new String("mynull"))) {
             startTime = LocalDateTime.parse(taskInfo[1]);
         }
-
-        if (!taskInfo[2].equals(new String("null"))) {
+        
+        if(!taskInfo[2].equals(new String("mynull"))) {
             endTime = LocalDateTime.parse(taskInfo[2]);
         }
 
-        if (!taskInfo[3].equals(new String("null"))) {
+        if(!taskInfo[3].equals(new String("mynull"))) {
             category = new Category(taskInfo[3]);
         }
-
-        if (!taskInfo[6].equals(new String("null"))) {
-            isDone = Boolean.valueOf(taskInfo[6]);
+        
+        if(!taskInfo[4].equals(new String("mynull"))) {
+            isDone = Boolean.valueOf(taskInfo[4]);
         }
-
-        if (!taskInfo[4].equals(new String("null"))) {
-            if (!taskInfo[4].split("+")[1].equals("null")) {
+        
+        if(!taskInfo[5].equals(new String("mynull+mynull"))) {
+            if(!taskInfo[4].split("+")[1].equals("mynull")) {
                 reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), null);
             } else {
-                reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]),
-                        LocalDateTime.parse(taskInfo[4].split("+")[1]));
+                reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), LocalDateTime.parse(taskInfo[4].split("+")[1]));
             }
         }
-
-        // Reminder reminder = new
-        // Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]),
-        // LocalDateTime.parse(taskInfo[4].split("+")[1]));
+        
+        //Reminder reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), LocalDateTime.parse(taskInfo[4].split("+")[1]));
 
         return new Task(name, startTime, endTime, category, reminder, isDone);
     }
-
-    // helper method
+    //helper method
     private String convert_TaskToString(Task currentTask) {
         String task_str = "";
         task_str += currentTask.getName().getName() + " ";
-
-        if (currentTask.getStartTime() == null) {
-            task_str += "null" + " ";
+        
+        if(currentTask.getStartTime() == null) {
+            task_str += "mynull" + " ";
         } else {
             task_str += currentTask.getStartTime().toString() + " ";
         }
-
-        if (currentTask.getEndTime() == null) {
-            task_str += "null" + " ";
+        
+        if(currentTask.getEndTime() == null) {
+            task_str += "mynull" + " ";
         } else {
             task_str += currentTask.getEndTime().toString() + " ";
         }
-
-        if (currentTask.getCategory() == null) {
-            task_str += "null" + " ";
+        
+        if(currentTask.getCategory() == null) {
+            task_str += "mynull" + " ";
         } else {
             task_str += currentTask.getCategory().toString() + " ";
         }
-
-        if (currentTask.getReminder() == null) {
-            task_str += "null" + "+";
-            task_str += "null";
+        
+        if(currentTask.getDoneStatus() == null) {
+            task_str += "mynull" + " ";
         } else {
-            if (currentTask.getReminder().getStatus() == null) {
-                task_str += "null" + "+";
-                if (currentTask.getReminder().getTime() == null) {
-                    task_str += "null";
+            task_str += currentTask.getDoneStatus().toString() + " ";
+        }
+        
+        if(currentTask.getReminder() == null) {
+            task_str += "mynull" + "+";
+            task_str += "mynull";
+        } else {
+            if(currentTask.getReminder().getStatus() == null) {
+                task_str += "mynull" + "+";
+                if(currentTask.getReminder().getTime() == null) {
+                    task_str += "mynull";
                 } else {
                     task_str += currentTask.getReminder().getTime().toString();
                 }
             } else {
                 task_str += currentTask.getReminder().getStatus().toString() + "+";
-                if (currentTask.getReminder().getTime() == null) {
-                    task_str += "null";
+                if(currentTask.getReminder().getTime() == null) {
+                    task_str += "mynull";
                 } else {
                     task_str += currentTask.getReminder().getTime().toString();
                 }
             }
         }
-
-        // task_str += currentTask.getReminder().getStatus().toString() + "+";
-        // task_str += currentTask.getReminder().getTime().toString();
+    
+        //task_str += currentTask.getReminder().getStatus().toString() + "+";
+        //task_str += currentTask.getReminder().getTime().toString();
         return task_str;
     }
-
-    // firstly call read function in filehandler, then convert every string into
-    // a task object
+    
+    //firstly call read function in filehandler, then convert every string into a task object
     private void loadFromFile() {
         ArrayList<String> taskList_str = fh.read();
         taskList = new ArrayList<Task>();
-        for (String eachTask_str : taskList_str) {
-            taskList.add(convert_StringToTask(eachTask_str));
+        for(String eachTask_str: taskList_str) {
+            taskList.add(convert_StringToTask(eachTask_str));       
         }
     }
 
@@ -169,7 +168,7 @@ public class DataBase {
     public boolean add(Task task) {
         taskList.add(task);
         writeToFile();
-        // snapshot.add(retrieveAll());
+        //snapshot.add(retrieveAll());
         return true;
     }
 
@@ -192,7 +191,7 @@ public class DataBase {
         }
         taskList.remove(index);
         writeToFile();
-        // snapshot.add(retrieveAll());
+        //snapshot.add(retrieveAll());
         return true;
     }
 
@@ -210,43 +209,43 @@ public class DataBase {
         }
         return true;
     }
-
-    // return all tasks
+    
+    //return all tasks
     public ArrayList<Task> retrieveAll() {
         return taskList;
     }
-
-    // keep!!
-    // retrieving
+    
+    //keep!!
+    //retrieving
     public ArrayList<Task> retrieve(SearchCommand command) {
         ArrayList<Task> resultList = new ArrayList<Task>();
         FilterType type = getFilterType(command);
 
         switch (type) {
-        case CATEGORY:
-            resultList = retrieve_Category(command);
-            break;
-        case NAME:
-            resultList = retrieve_Name(command);
-            break;
-        case VIEW:
-            resultList = retrieve_View(command);
-            break;
-        default:
-            return resultList;
+            case CATEGORY :
+                resultList = retrieve_Category(command);
+                break;
+            case NAME :
+                resultList = retrieve_Name(command);
+                break;
+            case VIEW :
+                resultList = retrieve_View(command);
+                break;
+            default :
+                return resultList;
         }
         return resultList;
     }
-
+    
     private FilterType getFilterType(SearchCommand command) {
         String type = command.getType();
-        if (isCategory(type)) {
+        if(isCategory(type)) {
             return FilterType.CATEGORY;
         }
-        if (isView(type)) {
+        if(isView(type)) {
             return FilterType.VIEW;
         }
-        if (isName(type)) {
+        if(isName(type)) {
             return FilterType.NAME;
         }
         return null;
@@ -255,11 +254,9 @@ public class DataBase {
     private boolean isName(String type) {
         return type.equalsIgnoreCase("name");
     }
-
     private boolean isView(String type) {
         return type.equalsIgnoreCase("view");
     }
-
     private boolean isCategory(String type) {
         return type.equalsIgnoreCase("category");
     }
@@ -267,35 +264,33 @@ public class DataBase {
     private ArrayList<Task> retrieve_View(SearchCommand command) {
         ArrayList<Task> resultList = new ArrayList<Task>();
         ViewType viewToFilter = determineViewType(command.getContent());
-        switch (viewToFilter) {
-        case OVERDUE:
+        switch(viewToFilter) {
+        case OVERDUE :
             resultList = retrieve_ViewOverDue();
             break;
-        case ARCHIVE:
+        case ARCHIVE :
             resultList = retrieve_ViewArchive();
             break;
-        default:
+        default :
             return resultList;
         }
         return resultList;
     }
-
-    // helper method for retrieve_View
+    //helper method for retrieve_View
     private ArrayList<Task> retrieve_ViewArchive() {
         ArrayList<Task> resultList = new ArrayList<Task>();
-        for (Task eachTask : taskList) {
-            if (eachTask.getDoneStatus()) {
+        for(Task eachTask: taskList) {
+            if(eachTask.getDoneStatus()) {
                 resultList.add(eachTask);
             }
         }
         return resultList;
     }
-
-    // helper method for retrieve_View
+    //helper method for retrieve_View
     private ArrayList<Task> retrieve_ViewOverDue() {
         ArrayList<Task> resultList = new ArrayList<Task>();
-        for (Task eachTask : taskList) {
-            if (isTaskOverdue(eachTask.getEndTime())) {
+        for(Task eachTask: taskList) {
+            if(isTaskOverdue(eachTask.getEndTime())) {
                 resultList.add(eachTask);
             }
         }
@@ -303,17 +298,17 @@ public class DataBase {
     }
 
     private boolean isTaskOverdue(LocalDateTime endTime) {
-        if (endTime == null) {
+        if(endTime == null) {
             return false;
         }
         return endTime.isBefore(LocalDateTime.now());
     }
 
     private ViewType determineViewType(String content) {
-        if (isOverdue(content)) {
+        if(isOverdue(content)) {
             return ViewType.OVERDUE;
         }
-        if (isArchive(content)) {
+        if(isArchive(content)) {
             return ViewType.ARCHIVE;
         }
         return null;
@@ -326,12 +321,12 @@ public class DataBase {
     private boolean isOverdue(String content) {
         return content.equalsIgnoreCase("overdue");
     }
-
+   
     private ArrayList<Task> retrieve_Name(SearchCommand command) {
         ArrayList<Task> resultList = new ArrayList<Task>();
         String requiredName = command.getContent();
-        for (Task eachTask : taskList) {
-            if (isSame(eachTask.getName().getName(), requiredName)) {
+        for(Task eachTask: taskList) {
+            if(isSame(eachTask.getName().getName(), requiredName)) {
                 resultList.add(eachTask);
             }
         }
@@ -345,69 +340,69 @@ public class DataBase {
     private ArrayList<Task> retrieve_Category(SearchCommand command) {
         ArrayList<Task> resultList = new ArrayList<Task>();
         String requiredCategory = command.getContent();
-        for (Task eachTask : taskList) {
-            if (isSame(eachTask.getCategory().getCategory(), requiredCategory)) {
+        for(Task eachTask: taskList) {
+            if(isSame(eachTask.getCategory().getCategory(), requiredCategory)) {
                 resultList.add(eachTask);
             }
         }
         return resultList;
     }
-
-    // sorting
-    // 1.startDate
+    
+    //sorting
+    //1.startDate
     private ArrayList<Task> sort_StartDate(ArrayList<Task> currentList) {
         Collections.sort(currentList, new StartDateComparator<Task>());
         return currentList;
     }
-
+   
     private class StartDateComparator<Task> implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             LocalDateTime firstDate = ((todolist.model.Task) t1).getStartTime();
             LocalDateTime secondDate = ((todolist.model.Task) t2).getStartTime();
-            if (firstDate == null && secondDate == null) {
+            if(firstDate == null && secondDate == null) {
                 String t1_Name = ((todolist.model.Task) t1).getName().getName();
                 String t2_Name = ((todolist.model.Task) t2).getName().getName();
                 return t1_Name.compareToIgnoreCase(t2_Name);
-            } else if (firstDate == null) {
-                return -1;
-            } else if (secondDate == null) {
+            }else if(firstDate == null) {
+                return -1;          
+            }else if(secondDate == null) {
                 return 1;
-            } else {
+            }else {
                 return firstDate.compareTo(secondDate);
             }
         }
     }
-
-    // 2.endDate
+    
+    //2.endDate
     private ArrayList<Task> sort_EndDate(ArrayList<Task> currentList) {
         Collections.sort(currentList, new EndDateComparator<Task>());
         return currentList;
     }
-
+   
     private class EndDateComparator<Task> implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             LocalDateTime firstDate = ((todolist.model.Task) t1).getEndTime();
             LocalDateTime secondDate = ((todolist.model.Task) t2).getEndTime();
-            if (firstDate == null && secondDate == null) {
+            if(firstDate == null && secondDate == null) {
                 String t1_Name = ((todolist.model.Task) t1).getName().getName();
                 String t2_Name = ((todolist.model.Task) t2).getName().getName();
                 return t1_Name.compareToIgnoreCase(t2_Name);
-            } else if (firstDate == null) {
-                return -1;
-            } else if (secondDate == null) {
+            }else if(firstDate == null) {
+                return -1;          
+            }else if(secondDate == null) {
                 return 1;
-            } else {
+            }else {
                 return firstDate.compareTo(secondDate);
             }
         }
     }
-
-    // 3.category
+    
+    //3.category
     private ArrayList<Task> sort_Category(ArrayList<Task> currentList) {
         Collections.sort(currentList, new CategoryComparator<Task>());
         return currentList;
     }
-
+   
     private class CategoryComparator<Task> implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             String firstCategory = ((todolist.model.Task) t1).getCategory().getCategory();
@@ -415,13 +410,12 @@ public class DataBase {
             return firstCategory.compareToIgnoreCase(secondCategory);
         }
     }
-
-    // 4.name
+    //4.name
     private ArrayList<Task> sort_Name(ArrayList<Task> currentList) {
         Collections.sort(currentList, new NameComparator<Task>());
         return currentList;
     }
-
+   
     private class NameComparator<Task> implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             String firstName = ((todolist.model.Task) t1).getName().getName();
@@ -429,12 +423,12 @@ public class DataBase {
             return firstName.compareToIgnoreCase(secondName);
         }
     }
-
+    
     /*
      * This method is to set new file for the storage of data.
      * 
-     * @param newFile the string that contains the new path and file name
-     * 
+     * @param newFile
+     *            the string that contains the new path and file name
      * @return true if the directory exists and the new file is set.
      */
     public boolean setNewFile(String newFilePath) {
@@ -452,7 +446,7 @@ public class DataBase {
         return fh.getFileName();
     }
 
-    // helper methods
+    // helper methods   
     private Integer searchForIndexOfTask(Task taskToDelete) {
         for (int i = 0; i < taskList.size(); i++) {
             Task currentTask = taskList.get(i);
@@ -468,3 +462,4 @@ public class DataBase {
         writeToFile();
     }
 }
+
