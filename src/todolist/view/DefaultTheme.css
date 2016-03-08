@@ -7,9 +7,11 @@
  * background: #D8E9F0;
  * accent: #4AA0D5;
  * accent-two: #A9EEE6;
+ * accent-three: #95E1D3;
  * content: #F8F3D4;
  * content-two: #FEFAEC;
  * focus: #EB586F;
+ * focus-two: #F08A5D;
  * dark: #454553;
  * hint: #7A9EAF;
 */
@@ -18,7 +20,7 @@
 /* Panel CSS Options */
 
 .root-layout {
-	-fx-background-color: #D8E9F0;
+	-fx-background-color: #7A9EAF;
 }
 
 .main-view {
@@ -64,22 +66,52 @@
 }
 
 .titled-pane > .content {
-	-fx-background-color: #F8F3D4;
-	-fx-background-radius: 0.0 0.0 6.0 6.0;
+	-fx-background-color: #FEFAEC;
+	-fx-background-radius: 0.0 0.0 6.5 6.5;
 }
 
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: #4AA0D5;
-    -fx-text-fill: white;
+.list-view .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-padding: -12;
 }
 
 .list-cell {
     -fx-background-color: transparent;
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0px, 10px;
 }
 
-.list-cell:filled:hover {
-    -fx-background-color: #7A9EAF;
-    -fx-text-fill: white;
+.list-cell:filled:selected:focused > #task-hbox-item {
+    -fx-background-color: #95E1D3;
+    -fx-text-fill: #FEFAEC;
+	-fx-fill: #FEFAEC;
+}
+
+.list-cell:filled:selected:focused > #task-hbox-item .label {
+    -fx-text-fill: #FEFAEC;
+}
+
+.list-cell:filled > #task-hbox-item {
+    -fx-background-color: #D8E9F0;
+    -fx-text-fill: #FEFAEC;
+	-fx-fill: #FEFAEC;
+}
+
+.list-cell:filled > #task-hbox-item .label {
+    -fx-text-fill: #454553;
+	-fx-fill: #454553;
+}
+
+
+.list-cell:filled:hover > #task-hbox-item {
+    -fx-text-fill: #FEFAEC;
+	-fx-fill: #FEFAEC;
+}
+
+#task-hbox-item {
+    -fx-border-color: transparent;
+    -fx-border-width: 0.0;
 }
 
 .table-view .column-header-background {
@@ -130,9 +162,10 @@
 }
 
 .text-field {
-	-fx-background-color: #F8F3D4;
+	-fx-background-color: #FEFAEC;
     -fx-font-size: 12.0pt;
     -fx-font-family: "System Font";
+    -fx-text-fill: #454553;
     -fx-prompt-text-fill: #7A9EAF;
 }
 

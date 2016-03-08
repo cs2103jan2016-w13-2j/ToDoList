@@ -1,9 +1,13 @@
 package todolist.view;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import todolist.MainApp;
+import todolist.model.Category;
 import todolist.model.Command;
 import todolist.model.Logic;
+import todolist.model.Name;
+import todolist.model.Reminder;
 import todolist.model.Task;
 import todolist.model.TaskWrapper;
 import javafx.collections.FXCollections;
@@ -11,42 +15,90 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class MainViewController {
+
+    // private static final String MESSAGE_EMPTY_LIST = "No Content To Show";
 
     /*** MODEL DATA ***/
     private ObservableList<TaskWrapper> tasksToDisplay = null;
     private ObservableList<String> tasksToDisplayStub = null;
 
-    
+    private ArrayList<Task> taskListStub = new ArrayList<Task>();
+
     /*** MAIN APP ***/
     private MainApp mainApplication = null;
-    
-    
+
     /*** VIEWS ***/
     @FXML
-    private ListView<String> listView = null;
+    private ListView<TaskWrapper> listView = null;
 
-    
     /*** CORE CONTROLLER FUNCTIONS ***/
     public MainViewController() {
         tasksToDisplay = FXCollections.observableArrayList();
         tasksToDisplayStub = FXCollections.observableArrayList("Single", "Double", "Suite", "Family App");
+
+        listView = new ListView<TaskWrapper>();
+
+        taskListStub.add(new Task(new Name("Proposal Meeting"), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub.add(new Task(new Name("Scrum Discussion"), LocalDateTime.now().plusHours(21),
+                LocalDateTime.now().plusHours(22), new Category("New Release Project"),
+                new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub.add(new Task(new Name("Buy Coffee"), null, null, new Category("Personal"),
+                new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub.add(new Task(new Name("Module Submission"), null, LocalDateTime.now().plusHours(154),
+                new Category("Deadlines"), new Reminder(false, LocalDateTime.now()), false));
+
+        taskListStub.add(new Task(new Name("Send email"), null, LocalDateTime.now().minusHours(2),
+                new Category("Tasks"), new Reminder(false, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
+
+        taskListStub
+                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
         
-        listView = new ListView<String>();
+        setTasks(taskListStub);
     }
 
-    @FXML
-    private void initialize() {
-
-    }
-    
     public void setMainApp(MainApp mainApp) {
         mainApplication = mainApp;
     }
-    
+
+    @FXML
+    public void initialize() {
+        initTaskListView();
+    }
+
     public void setCommandLineCallback(TextField commandField) {
         // Set Callback for TextField
         EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
@@ -67,18 +119,29 @@ public class MainViewController {
         commandField.setOnAction(commandHandler);
     }
 
-    
-    /*** VIEW GETTERS-SETTERS-RELOADERS ***/
-    
-    public ListView<String> getListView() {
+    /*** VIEW GETTERS-SETTERS-LOADERS ***/
+
+    public ListView<TaskWrapper> getTaskListView() {
         return listView;
     }
 
-    public void reloadTaskListView() {
-        listView.setItems(tasksToDisplayStub);
+    public void populateTaskListView() {
+        listView.setItems(tasksToDisplay);
     }
-    
-    
+
+    public void initTaskListView() {
+        listView.setCellFactory(new Callback<ListView<TaskWrapper>, javafx.scene.control.ListCell<TaskWrapper>>() {
+            @Override
+            public ListCell<TaskWrapper> call(ListView<TaskWrapper> listView) {
+                return new TaskListCell();
+            }
+        });
+        
+        VBox.setVgrow(listView, Priority.ALWAYS);
+        HBox.setHgrow(listView, Priority.ALWAYS);
+
+    }
+
     /*** MODEL GETTERS-SETTERS-RELOADERS ***/
 
     public ObservableList<TaskWrapper> getTasks() {
@@ -95,5 +158,5 @@ public class MainViewController {
             tasksToDisplay.add(wrappedTask);
         }
     }
-    
+
 }

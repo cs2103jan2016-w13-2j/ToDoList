@@ -20,14 +20,14 @@ import javafx.stage.Stage;
 
 /*
  * MainApp is the GUI class for the application.
- *  
  * @author Huang Lie Jun (A0123994W)
  */
 public class MainApp extends Application {
 
     // Window constants
-    private static final double MIN_HEIGHT = 424;
-    private static final double MIN_WIDTH = 616;
+    //424, 616
+    private static final double MIN_HEIGHT = 400;
+    private static final double MIN_WIDTH = 400;
     private static final double DEFAULT_HEIGHT = 600;
     private static final double DEFAULT_WIDTH = 800;
     private static final String WINDOW_TITLE = "todolist by [w13-2j]";
@@ -47,6 +47,7 @@ public class MainApp extends Application {
     private static final String STYLE_CLASS_TITLEBAR = "title-bar";
     private static final String DIRECTORY_SIDEBAR = "view/SideBarView.fxml";
     private static final String STYLE_CLASS_SIDEBAR = "side-bar";
+    public static final String DIRECTORY_TASKITEM = "TaskNode.fxml";
 
     // Views: Display and UI components
     private BorderPane rootView;
@@ -98,8 +99,6 @@ public class MainApp extends Application {
         loadMainView();
         loadTitleBar();
         loadSideBar();
-        reloadDisplay();
-
     }
 
     private void loadRootView(Stage primaryStage) {
@@ -125,7 +124,7 @@ public class MainApp extends Application {
     }
 
     private void refreshTaskList() {
-        mainController.reloadTaskListView();
+        mainController.populateTaskListView();
     }
     
     
@@ -145,6 +144,7 @@ public class MainApp extends Application {
             mainController.setMainApp(this);
 
             loadCommandLine();
+            reloadDisplay();
 
         } catch (IOException e) {
             System.out.println(MESSAGE_ERROR_LOAD_MAIN);

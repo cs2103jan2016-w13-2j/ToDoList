@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
@@ -12,8 +13,9 @@
 
 <!-- Prepared by Huang Lie Jun (A0123994W) -->
 
-<BorderPane minHeight="340.0" minWidth="540.0" prefHeight="540.0"
-	prefWidth="740.0" stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+	minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0"
+	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.view.MainViewController">
 	<bottom>
 		<TextField prefHeight="40.0" prefWidth="720.0"
@@ -37,14 +39,25 @@
 	</styleClass>
 	<center>
 		<TitledPane animated="false" collapsible="false"
-			prefHeight="3000.0" stylesheets="@DefaultTheme.css"
-			BorderPane.alignment="TOP_CENTER">
+			maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+			stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_CENTER">
 			<content>
 				<ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0"
-					stylesheets="@DefaultTheme.css" />
+					stylesheets="@DefaultTheme.css">
+					<placeholder>
+						<Label text="No Content To Show" />
+					</placeholder>
+					<opaqueInsets>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</opaqueInsets>
+					<padding>
+						<Insets bottom="5.0" />
+					</padding>
+				</ListView>
 			</content>
 			<graphic>
-				<HBox id="titled-pane-hbox" stylesheets="@DefaultTheme.css">
+				<HBox id="titled-pane-hbox" maxHeight="1.7976931348623157E308"
+					maxWidth="1.7976931348623157E308" stylesheets="@DefaultTheme.css">
 					<children>
 						<Text id="titled-pane-hbox-text" strokeType="OUTSIDE"
 							strokeWidth="0.0" text="&lt;tasks&gt;" />

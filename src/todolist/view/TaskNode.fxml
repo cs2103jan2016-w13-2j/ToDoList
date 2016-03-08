@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<HBox id="task-hbox-item" fx:id="root" alignment="CENTER_LEFT"
+	maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+	prefHeight="60.0" prefWidth="200.0" stylesheets="@DefaultTheme.css"
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="70.0"
+			stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
+		<StackPane fx:id="numberLabel" prefWidth="50.0">
+			<children>
+				<Circle fx:id="numLabelBase" fill="DODGERBLUE" radius="25.0"
+					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+					<StackPane.margin>
+						<Insets left="10.0" right="10.0" />
+					</StackPane.margin>
+				</Circle>
+				<Label fx:id="number" text="1" textFill="WHITE">
+					<font>
+						<Font name="System Bold" size="14.0" />
+					</font>
+				</Label>
+			</children>
+		</StackPane>
+		<VBox fx:id="details" maxHeight="1.7976931348623157E308"
+			maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="100.0"
+			HBox.hgrow="ALWAYS">
+			<children>
+				<HBox fx:id="titleBox" alignment="CENTER_LEFT" prefHeight="100.0">
+					<children>
+						<Label fx:id="title" text="Title" textFill="WHITE">
+							<font>
+								<Font name="System Bold" size="16.0" />
+							</font>
+						</Label>
+						<ImageView fx:id="reminderIcon" fitHeight="15.0"
+							fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+							<HBox.margin>
+								<Insets left="5.0" right="5.0" />
+							</HBox.margin>
+						</ImageView>
+					</children>
+					<VBox.margin>
+						<Insets />
+					</VBox.margin>
+					<padding>
+						<Insets top="10.0" />
+					</padding>
+				</HBox>
+				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" prefHeight="100.0"
+					prefWidth="200.0">
+					<children>
+						<Circle fx:id="overdueFlag" fill="DODGERBLUE" radius="3.0"
+							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+							<HBox.margin>
+								<Insets right="2.0" />
+							</HBox.margin>
+						</Circle>
+						<Label fx:id="dateRange" text="Date Range" textFill="WHITE">
+							<font>
+								<Font size="10.0" />
+							</font>
+						</Label>
+					</children>
+				</HBox>
+				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" prefHeight="100.0"
+					prefWidth="200.0">
+					<children>
+						<Circle fx:id="categorySprite" fill="DODGERBLUE" radius="3.0"
+							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+							<HBox.margin>
+								<Insets right="2.0" />
+							</HBox.margin>
+						</Circle>
+						<Label fx:id="category" text="Category" textFill="WHITE">
+							<font>
+								<Font size="10.0" />
+							</font>
+						</Label>
+					</children>
+					<padding>
+						<Insets bottom="10.0" />
+					</padding>
+				</HBox>
+			</children>
+		</VBox>
+		<CheckBox fx:id="checkbox" alignment="CENTER" contentDisplay="CENTER"
+			graphicTextGap="0.0" mnemonicParsing="false" prefHeight="18.0"
+			prefWidth="15.0">
+			<HBox.margin>
+				<Insets left="20.0" right="5.0" />
+			</HBox.margin>
+		</CheckBox>
+	</children>
+	<opaqueInsets>
+		<Insets />
+	</opaqueInsets>
+</HBox>
