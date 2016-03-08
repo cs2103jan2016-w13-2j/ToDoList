@@ -29,6 +29,7 @@ public class TaskNode {
     private static final String COLOR_DEADLINE = "#FF6464";
     private static final String COLOR_EVENT = "#FFBD67";
     private static final String COLOR_UNKNOWN = "#748B9C";
+    private static final String COLOR_OVERDUE = "#FF6464";
 
     private TaskWrapper task = null;
     private int index = -1;
@@ -143,7 +144,9 @@ public class TaskNode {
             // Handle Deadline
         } else if (startDateTime == null && endDateTime != null) {
             numLabelBase.setFill(Color.web(COLOR_DEADLINE));
-            
+            if (endDateTime.isBefore(LocalDateTime.now())) {
+                overdueFlag.setFill(Color.web(COLOR_OVERDUE));
+            }
             return "Due: " + endDateTime.getDayOfWeek() + ", "
                     + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
             // Handle Event

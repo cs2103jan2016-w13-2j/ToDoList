@@ -57,7 +57,7 @@ public class UIHandler {
 
 	public void search(String title) {
 
-		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("Name", title));
+		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
 		mainApp.setDisplayTasks(tempTaskList);
 		// mainApp.highLight(tempTaskList);
 
