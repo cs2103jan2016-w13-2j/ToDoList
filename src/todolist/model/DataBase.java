@@ -1,7 +1,9 @@
-
 package todolist.model;
 
+<<<<<<< HEAD
 import java.time.LocalDate;
+=======
+>>>>>>> v0.11
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +43,10 @@ public class DataBase {
 	
 	private FileHandler fh;
 	private ArrayList<Task> taskList;
+<<<<<<< HEAD
+=======
+	private ArrayList<ArrayList<Task>> snapshot;
+>>>>>>> v0.11
     
 	public DataBase() {
 		fh = new FileHandler();
@@ -60,22 +66,102 @@ public class DataBase {
 	private Task convert_StringToTask(String taskStr) {
 		String[] taskInfo = taskStr.split(" ");
 		Name name = new Name(taskInfo[0]);
+<<<<<<< HEAD
 		LocalDateTime startTime = LocalDateTime.parse(taskInfo[1]);
 		LocalDateTime endTime = LocalDateTime.parse(taskInfo[2]);
 		Category category = new Category(taskInfo[3]);
 		Reminder reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), LocalDateTime.parse(taskInfo[4].split("+")[1]));
 		Boolean isDone = Boolean.valueOf(taskInfo[6]);
+=======
+		LocalDateTime startTime = null;
+		LocalDateTime endTime = null;
+		Category category = null;
+		Reminder reminder = null;
+		Boolean isDone = null;
+		
+		if(!taskInfo[1].equals(new String("null"))) {
+			startTime = LocalDateTime.parse(taskInfo[1]);
+		}
+		
+		if(!taskInfo[2].equals(new String("null"))) {
+			endTime = LocalDateTime.parse(taskInfo[2]);
+		}
+
+		if(!taskInfo[3].equals(new String("null"))) {
+			category = new Category(taskInfo[3]);
+		}
+		
+		if(!taskInfo[6].equals(new String("null"))) {
+			isDone = Boolean.valueOf(taskInfo[6]);
+		}
+		
+		if(!taskInfo[4].equals(new String("null"))) {
+			if(!taskInfo[4].split("+")[1].equals("null")) {
+				reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), null);
+			} else {
+				reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), LocalDateTime.parse(taskInfo[4].split("+")[1]));
+			}
+		}
+		
+		//Reminder reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), LocalDateTime.parse(taskInfo[4].split("+")[1]));
+
+>>>>>>> v0.11
 		return new Task(name, startTime, endTime, category, reminder, isDone);
 	}
 	//helper method
     private String convert_TaskToString(Task currentTask) {
     	String task_str = "";
     	task_str += currentTask.getName().getName() + " ";
+<<<<<<< HEAD
     	task_str += currentTask.getStartTime().toString() + " ";
     	task_str += currentTask.getEndTime().toString() + " ";
     	task_str += currentTask.getCategory().getCategory() + " ";
     	task_str += currentTask.getReminder().getStatus().toString() + "+";
     	task_str += currentTask.getReminder().getTime().toString();
+=======
+    	
+    	if(currentTask.getStartTime() == null) {
+    		task_str += "null" + " ";
+    	} else {
+    		task_str += currentTask.getStartTime().toString() + " ";
+    	}
+    	
+    	if(currentTask.getEndTime() == null) {
+    		task_str += "null" + " ";
+    	} else {
+    		task_str += currentTask.getEndTime().toString() + " ";
+    	}
+    	
+    	if(currentTask.getCategory() == null) {
+    		task_str += "null" + " ";
+    	} else {
+    		task_str += currentTask.getCategory().toString() + " ";
+    	}
+    	
+    	if(currentTask.getReminder() == null) {
+    		task_str += "null" + "+";
+    		task_str += "null";
+    	} else {
+    		if(currentTask.getReminder().getStatus() == null) {
+    			task_str += "null" + "+";
+    			if(currentTask.getReminder().getTime() == null) {
+    				task_str += "null";
+    			} else {
+    				task_str += currentTask.getReminder().getTime().toString();
+    			}
+    		} else {
+    			task_str += currentTask.getReminder().getStatus().toString() + "+";
+    			if(currentTask.getReminder().getTime() == null) {
+    				task_str += "null";
+    			} else {
+    				task_str += currentTask.getReminder().getTime().toString();
+    			}
+    		}
+    	}
+    	
+    	//task_str += currentTask.getReminder().getStatus().toString() + "+";
+    	//task_str += currentTask.getReminder().getTime().toString();
+>>>>>>> v0.11
     	return task_str;
     }
     
@@ -99,6 +185,10 @@ public class DataBase {
 	public boolean add(Task task) {
 		taskList.add(task);
 		writeToFile();
+<<<<<<< HEAD
+=======
+		snapshot.add(retrieveAll());
+>>>>>>> v0.11
 		return true;
 	}
 
@@ -121,6 +211,10 @@ public class DataBase {
 		}
 		taskList.remove(index);
 		writeToFile();
+<<<<<<< HEAD
+=======
+		snapshot.add(retrieveAll());
+>>>>>>> v0.11
 		return true;
 	}
 
@@ -260,12 +354,21 @@ public class DataBase {
 			}
 		}
 		return resultList;
+<<<<<<< HEAD
 	}
 
 	private boolean isSame(String str1, String str2) {
 		return str1.equalsIgnoreCase(str2);
 	}
 
+=======
+	}
+
+	private boolean isSame(String str1, String str2) {
+		return str1.equalsIgnoreCase(str2);
+	}
+
+>>>>>>> v0.11
 	private ArrayList<Task> retrieve_Category(SearchCommand command) {
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		String requiredCategory = command.getContent();
@@ -386,4 +489,8 @@ public class DataBase {
 		return null;
 	}
 
+	public void retrieveHistory(int steps) {
+		taskList = snapshot.get(steps);
+		writeToFile();
+	}
 }
