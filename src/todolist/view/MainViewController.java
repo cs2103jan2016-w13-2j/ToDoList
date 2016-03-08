@@ -29,7 +29,6 @@ public class MainViewController {
 
     /*** MODEL DATA ***/
     private ObservableList<TaskWrapper> tasksToDisplay = null;
-    private ObservableList<String> tasksToDisplayStub = null;
 
     private ArrayList<Task> taskListStub = new ArrayList<Task>();
 
@@ -43,49 +42,24 @@ public class MainViewController {
     /*** CORE CONTROLLER FUNCTIONS ***/
     public MainViewController() {
         tasksToDisplay = FXCollections.observableArrayList();
-        tasksToDisplayStub = FXCollections.observableArrayList("Single", "Double", "Suite", "Family App");
 
         listView = new ListView<TaskWrapper>();
 
-        taskListStub.add(new Task(new Name("Proposal Meeting"), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+        taskListStub.add(new Task(new Name("Proposal meeting"), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
                 new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
 
-        taskListStub.add(new Task(new Name("Scrum Discussion"), LocalDateTime.now().plusHours(21),
+        taskListStub.add(new Task(new Name("Scrum discussion"), LocalDateTime.now().plusHours(21),
                 LocalDateTime.now().plusHours(22), new Category("New Release Project"),
                 new Reminder(true, LocalDateTime.now()), false));
 
-        taskListStub.add(new Task(new Name("Buy Coffee"), null, null, new Category("Personal"),
+        taskListStub.add(new Task(new Name("Buy coffee"), null, null, new Category("Personal"),
                 new Reminder(true, LocalDateTime.now()), false));
 
-        taskListStub.add(new Task(new Name("Module Submission"), null, LocalDateTime.now().plusHours(154),
+        taskListStub.add(new Task(new Name("Module submission"), null, LocalDateTime.now().plusHours(154),
                 new Category("Deadlines"), new Reminder(false, LocalDateTime.now()), false));
 
         taskListStub.add(new Task(new Name("Send email"), null, LocalDateTime.now().minusHours(2),
                 new Category("Tasks"), new Reminder(false, LocalDateTime.now()), false));
-
-        taskListStub
-                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
-
-        taskListStub
-                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
-
-        taskListStub
-                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
-
-        taskListStub
-                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
-
-        taskListStub
-                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
-
-        taskListStub
-                .add(new Task(new Name("Proposal Meeting ..."), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                        new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
         
         setTasks(taskListStub);
     }
