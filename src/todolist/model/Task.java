@@ -20,6 +20,7 @@ public class Task {
 	}
 
     public void setName(Name name) {
+        
 		this.name = name;
 	}
 

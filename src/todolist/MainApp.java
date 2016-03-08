@@ -25,7 +25,6 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
 
     // Window constants
-    //424, 616
     private static final double MIN_HEIGHT = 400;
     private static final double MIN_WIDTH = 400;
     private static final double DEFAULT_HEIGHT = 600;
@@ -68,30 +67,8 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // SAMPLE DATASET for testing
-        
-        /*
-         * Sample Dataset
-         * 
-         * tasksToDisplay.add(new Task("Do UI Handler", LocalDateTime.now(),
-         * LocalDateTime.now().plusHours(3), new Category("CS2103T Project"),
-         * new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-         * tasksToDisplay.add(new Task("Setup Trello", LocalDateTime.now(),
-         * LocalDateTime.now().plusHours(3), new Category("CS2103T Project"),
-         * new Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-         * tasksToDisplay.add(new Task("Prepare CV", LocalDateTime.now(),
-         * LocalDateTime.now().plusHours(3), new Category("Personal"), new
-         * Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-         * tasksToDisplay.add(new Task("Buy leather shoes", LocalDateTime.now(),
-         * LocalDateTime.now().plusHours(3), new Category("Personal"), new
-         * Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-         * tasksToDisplay.add(new Task("Send emails", LocalDateTime.now(),
-         * LocalDateTime.now().plusHours(3), new Category("18th MC"), new
-         * Priority(1), new Reminder(LocalDateTime.now().plusHours(3))));
-         */
-
-        // Load Model Lists from Storage through controllers
-        // ... Load Categories into categoriesToDisplay
+        // TODO: 
+        // ... Load Model Lists from Storage through controllers
         // ... Load Tasks into tasksToDisplay
 
         // Load Views
@@ -211,10 +188,4 @@ public class MainApp extends Application {
         return mainController.getTasks();
     }
 
-    
-    /*** TO-DO ***/
-    
-    // Must add listeners to models ...
-
-    // Might need to cache states and load on start ...
 }
