@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import todolist.MainApp;
 import todolist.model.Category;
 import todolist.model.Command;
-import todolist.model.Logic;
 import todolist.model.Name;
 import todolist.model.Reminder;
 import todolist.model.Task;

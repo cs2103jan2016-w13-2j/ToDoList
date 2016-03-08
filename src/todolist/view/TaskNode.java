@@ -8,10 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.IllegalFormatException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -24,9 +21,9 @@ import todolist.model.TaskWrapper;
 
 public class TaskNode {
 
-    private static enum PriorityLevel {
-        URGENT, NORMAL, CASUAL
-    }
+//    private static enum PriorityLevel {
+//        URGENT, NORMAL, CASUAL
+//    }
 
     private static final String COLOR_FLOATING = "#3BB873";
     private static final String COLOR_DEADLINE = "#FF6464";
@@ -36,9 +33,9 @@ public class TaskNode {
     private static final String COLOR_TODAY = "#FAAC64";
     private static final String COLOR_SPARE = "#5BAAEC";
 
-    private static final String COLOR_IMMEDIATE = "#FF6464";
-    private static final String COLOR_URGENT = "#FF6464";
-    private static final String COLOR_NEUTRAL = "#FF6464";
+//    private static final String COLOR_IMMEDIATE = "#FF6464";
+//    private static final String COLOR_URGENT = "#FF6464";
+//    private static final String COLOR_NEUTRAL = "#FF6464";
 
     private static final String COLOR_COMPLETE = "#5BE7A9";
     private static final String COLOR_INCOMPLETE = "#FAAC64";
@@ -109,7 +106,7 @@ public class TaskNode {
         try {
             mapTaskToNode();
         } catch (IllegalArgumentException iae) {
-            // ...
+            // call feedback modal
         }
 
     }
@@ -132,7 +129,7 @@ public class TaskNode {
         }
 
         if (task.getCategory() == null) {
-            category = new String("Not Available");
+            category = new String("Category: Not Available");
         } else {
             category = task.getCategory().getCategory();
         }
@@ -154,12 +151,12 @@ public class TaskNode {
             statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
             status.setText("ONGOING");
         }
-        
-//        reminderIcon.setImage(new Image("reminderIcon.png"));
-//        
-//        if (task.getReminder() == null || !task.getReminder().getStatus()) {
-//            reminderIcon.setEffect(new ColorAdjust(1, 1, 1, 1));
-//        }
+
+        // reminderIcon.setImage(new Image("reminderIcon.png"));
+        //
+        // if (task.getReminder() == null || !task.getReminder().getStatus()) {
+        // reminderIcon.setEffect(new ColorAdjust(1, 1, 1, 1));
+        // }
     }
 
     public HBox getNode() {
@@ -201,10 +198,19 @@ public class TaskNode {
                 overdueFlag.setFill(Color.web(COLOR_SPARE));
             }
 
-            return "From " + startDateTime.getDayOfWeek() + ", "
-                    + startDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT))
-                    + " to " + endDateTime.getDayOfWeek() + ", "
-                    + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+            if (startDateTime.getDayOfYear() == endDateTime.getDayOfYear()
+                    && startDateTime.getYear() == endDateTime.getYear()) {
+                return startDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) + ", from "
+                        + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
+                        + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+                // Handle Exceptions
+            } else {
+                return "From " + startDateTime.getDayOfWeek() + ", "
+                        + startDateTime
+                                .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT))
+                        + " to " + endDateTime.getDayOfWeek() + ", " + endDateTime
+                                .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+            }
             // Handle Exceptions
         } else {
             numLabelBase.setFill(Color.web(COLOR_UNKNOWN));

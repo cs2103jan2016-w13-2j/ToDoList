@@ -35,7 +35,7 @@ public class NormalCommandHandler {
                 addTask(arg[1]);
                 break;
             default:
-                // ...
+                // call feedback modal
             }
             steps = steps + 1;
             break;
@@ -105,6 +105,8 @@ public class NormalCommandHandler {
         case "redo":
             redo(Integer.parseInt(arg[0]));
             break;
+        default:
+            // call feedback modal...
         }
     }
 
