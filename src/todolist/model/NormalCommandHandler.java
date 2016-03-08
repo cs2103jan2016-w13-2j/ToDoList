@@ -173,8 +173,8 @@ public class NormalCommandHandler {
             break;
         case "start-time":
             LocalDateTime start = null;
-            
-            if(newValue.equals("remove")) {
+
+            if (newValue.equals("remove")) {
                 start = null;
             } else {
                 start = LocalDateTime.parse(newValue, formatter);
@@ -183,8 +183,8 @@ public class NormalCommandHandler {
             break;
         case "end-time":
             LocalDateTime end = null;
-            
-            if(newValue.equals("remove")) {
+
+            if (newValue.equals("remove")) {
                 end = null;
             } else {
                 end = LocalDateTime.parse(newValue, formatter);
@@ -210,10 +210,10 @@ public class NormalCommandHandler {
         uiHandler.sendMessage("successfully deleted");
     }
 
-     private void search(String title) {
-     uiHandler.search(title);
-     }
-    
+    private void search(String title) {
+        uiHandler.search(title);
+    }
+
     // private void filter(String category) {
     // uiHandler.filter(category);
     // }
@@ -391,4 +391,3 @@ public class NormalCommandHandler {
         }
     }
 }
-

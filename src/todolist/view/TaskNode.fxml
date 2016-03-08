@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -95,13 +94,21 @@
 				</HBox>
 			</children>
 		</VBox>
-		<CheckBox fx:id="checkbox" alignment="CENTER" contentDisplay="CENTER"
-			graphicTextGap="0.0" mnemonicParsing="false" prefHeight="18.0"
-			prefWidth="15.0">
+		<StackPane fx:id="completeStatus" stylesheets="@DefaultTheme.css">
+			<children>
+				<Rectangle fx:id="statusBacking" arcHeight="10.0"
+					arcWidth="10.0" fill="#ffeb1f" height="25.0" stroke="BLACK"
+					strokeType="INSIDE" strokeWidth="0.0" width="55.0" />
+				<Label fx:id="status" text="Ongoing">
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+				</Label>
+			</children>
 			<HBox.margin>
-				<Insets left="20.0" right="5.0" />
+				<Insets left="15.0" right="15.0" />
 			</HBox.margin>
-		</CheckBox>
+		</StackPane>
 	</children>
 	<opaqueInsets>
 		<Insets />

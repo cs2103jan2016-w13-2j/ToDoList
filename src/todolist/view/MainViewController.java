@@ -101,7 +101,7 @@ public class MainViewController {
 
     public void populateTaskListView() {
         mainApplication.handler.uiHandler.refresh();
-//        listView.setItems(tasksToDisplay);
+        // listView.setItems(tasksToDisplay);
     }
 
     public void initTaskListView() {
@@ -131,9 +131,9 @@ public class MainViewController {
             // ... Convert Task to TaskWrapper
             TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
             arrayOfWrappers.add(wrappedTask);
-            
+
         }
-        
+
         listView.getItems().addAll(arrayOfWrappers);
 
     }

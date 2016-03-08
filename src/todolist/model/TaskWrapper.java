@@ -9,99 +9,109 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class TaskWrapper {
-	
-//	private Name name;
-//	private Time startTime;
-//	private Time endTime;
-//	private Category category;
-//	private Priority priority;
-//	private Reminder reminder;
-	
-	private StringProperty taskTitle;
-	private ObjectProperty<LocalDateTime> startTime;
-	private ObjectProperty<LocalDateTime> endTime;
-	private ObjectProperty<Category> category;
-	private ObjectProperty<Reminder> reminder;
-	
-//	public TaskWrapper(String task, LocalDateTime start, LocalDateTime end, Category category, Reminder reminder) {
-//		this.taskTitle = new SimpleStringProperty(task);
-//		this.startTime = new SimpleObjectProperty<LocalDateTime>(start);
-//		this.endTime = new SimpleObjectProperty<LocalDateTime>(end);
-//		this.category = new SimpleObjectProperty<Category>(category);
-//		this.reminder = new SimpleObjectProperty<Reminder>(reminder);
-//	}
-	
-	   public TaskWrapper(Task task) {
-	        this.taskTitle = new SimpleStringProperty(task.getName().getName());
-	        this.startTime = new SimpleObjectProperty<LocalDateTime>(task.getStartTime());
-	        this.endTime = new SimpleObjectProperty<LocalDateTime>(task.getEndTime());
-	        this.category = new SimpleObjectProperty<Category>(task.getCategory());
-	        this.reminder = new SimpleObjectProperty<Reminder>(task.getReminder());
-	    }
 
-	
-	public StringProperty taskTitleProperty() {
-		return taskTitle;
-	}
+    // private Name name;
+    // private Time startTime;
+    // private Time endTime;
+    // private Category category;
+    // private Priority priority;
+    // private Reminder reminder;
 
-	public void setTaskTitle(String taskTitle) {
-		this.taskTitle.set(taskTitle);
-	}
-	
-	public String getTaskTitle() {
-		return taskTitle.get();
-	}
+    private StringProperty taskTitle;
+    private ObjectProperty<LocalDateTime> startTime;
+    private ObjectProperty<LocalDateTime> endTime;
+    private ObjectProperty<Category> category;
+    private ObjectProperty<Reminder> reminder;
+    private ObjectProperty<Boolean> isDone;
 
-	
-	public ObjectProperty<LocalDateTime> startTimeProperty() {
-		return startTime;
-	}
+    // public TaskWrapper(String task, LocalDateTime start, LocalDateTime end,
+    // Category category, Reminder reminder) {
+    // this.taskTitle = new SimpleStringProperty(task);
+    // this.startTime = new SimpleObjectProperty<LocalDateTime>(start);
+    // this.endTime = new SimpleObjectProperty<LocalDateTime>(end);
+    // this.category = new SimpleObjectProperty<Category>(category);
+    // this.reminder = new SimpleObjectProperty<Reminder>(reminder);
+    // }
 
-	public void setStartTime(LocalDateTime startTime) {
-		this.startTime.set(startTime);
-	}
-	
-	public LocalDateTime getStartTime() {
-		return startTime.get();
-	}
+    public TaskWrapper(Task task) {
+        this.taskTitle = new SimpleStringProperty(task.getName().getName());
+        this.startTime = new SimpleObjectProperty<LocalDateTime>(task.getStartTime());
+        this.endTime = new SimpleObjectProperty<LocalDateTime>(task.getEndTime());
+        this.category = new SimpleObjectProperty<Category>(task.getCategory());
+        this.reminder = new SimpleObjectProperty<Reminder>(task.getReminder());
+        this.isDone = new SimpleObjectProperty<Boolean>(task.getDoneStatus());
+    }
 
-	
-	public ObjectProperty<LocalDateTime> endTimeProperty() {
-		return endTime;
-	}
+    public StringProperty taskTitleProperty() {
+        return taskTitle;
+    }
 
-	public void setEndTime(LocalDateTime endTime) {
-		this.endTime.set(endTime);
-	}
-	
-	public LocalDateTime getEndTime() {
-		return endTime.get();
-	}
+    public void setTaskTitle(String taskTitle) {
+        this.taskTitle.set(taskTitle);
+    }
 
-	
-	public ObjectProperty<Category> categoryProperty() {
-		return category;
-	}
+    public String getTaskTitle() {
+        return taskTitle.get();
+    }
 
-	public void setCategory(Category category) {
-		this.category.set(category);
-	}
-	
-	public Category getCategory() {
-		return category.get();
-	}
-	
-	
-	public ObjectProperty<Reminder> reminderProperty() {
-		return reminder;
-	}
+    public ObjectProperty<LocalDateTime> startTimeProperty() {
+        return startTime;
+    }
 
-	public void setReminder(Reminder reminder) {
-		this.reminder.set(reminder);
-	}
-	
-	public Reminder getReminder() {
-		return reminder.get();
-	}
-	
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime.set(startTime);
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime.get();
+    }
+
+    public ObjectProperty<LocalDateTime> endTimeProperty() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime.set(endTime);
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime.get();
+    }
+
+    public ObjectProperty<Category> categoryProperty() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category.set(category);
+    }
+
+    public Category getCategory() {
+        return category.get();
+    }
+
+    public ObjectProperty<Reminder> reminderProperty() {
+        return reminder;
+    }
+
+    public void setReminder(Reminder reminder) {
+        this.reminder.set(reminder);
+    }
+
+    public Reminder getReminder() {
+        return reminder.get();
+    }
+
+    public ObjectProperty<Boolean> getIsDoneProperty() {
+        return isDone;
+    }
+
+    public void setIsDone(ObjectProperty<Boolean> isDone) {
+        this.isDone = isDone;
+    }
+
+    public Boolean getIsDone() {
+        return isDone.get();
+    }
+
 }

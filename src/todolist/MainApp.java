@@ -58,10 +58,9 @@ public class MainApp extends Application {
 
     // Controllers
     private MainViewController mainController;
-//    private TitleBarController titlebarController;
-//    private SideBarController sidebarController;
-    
-    
+    // private TitleBarController titlebarController;
+    // private SideBarController sidebarController;
+
     public Logic handler = null;
 
     public static void main(String[] args) {
@@ -71,7 +70,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // TODO: 
+        // TODO:
         // ... Load Model Lists from Storage through controllers
         // ... Load Tasks into tasksToDisplay
 
@@ -82,7 +81,6 @@ public class MainApp extends Application {
         loadMainView();
         loadTitleBar();
         loadSideBar();
-        
 
     }
 
@@ -111,8 +109,7 @@ public class MainApp extends Application {
     private void refreshTaskList() {
         mainController.populateTaskListView();
     }
-    
-    
+
     /*** VIEW LOADERS ***/
 
     private void loadMainView() {
@@ -185,13 +182,12 @@ public class MainApp extends Application {
         refreshTaskList();
     }
 
-    
     /*** ACCESS FUNCTIONS FOR MODELS ***/
-    
+
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
         mainController.setTasks(listOfTasks);
     }
-    
+
     public ObservableList<TaskWrapper> getDisplayTasks() {
         return mainController.getTasks();
     }

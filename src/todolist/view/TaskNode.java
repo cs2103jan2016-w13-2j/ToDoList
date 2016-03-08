@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.IllegalFormatException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -25,11 +28,22 @@ public class TaskNode {
         URGENT, NORMAL, CASUAL
     }
 
-    private static final String COLOR_FLOATING = "#5BE7A9";
+    private static final String COLOR_FLOATING = "#3BB873";
     private static final String COLOR_DEADLINE = "#FF6464";
-    private static final String COLOR_EVENT = "#FFBD67";
-    private static final String COLOR_UNKNOWN = "#748B9C";
+    private static final String COLOR_EVENT = "#F3825F";
+
     private static final String COLOR_OVERDUE = "#FF6464";
+    private static final String COLOR_TODAY = "#FAAC64";
+    private static final String COLOR_SPARE = "#5BAAEC";
+
+    private static final String COLOR_IMMEDIATE = "#FF6464";
+    private static final String COLOR_URGENT = "#FF6464";
+    private static final String COLOR_NEUTRAL = "#FF6464";
+
+    private static final String COLOR_COMPLETE = "#5BE7A9";
+    private static final String COLOR_INCOMPLETE = "#FAAC64";
+
+    private static final String COLOR_UNKNOWN = "#748B9C";
 
     private TaskWrapper task = null;
     private int index = -1;
@@ -72,7 +86,11 @@ public class TaskNode {
     private Label category = null;
 
     @FXML
-    private CheckBox checkbox = null;
+    private StackPane completeStatus = null;
+    @FXML
+    private Rectangle statusBacking = null;
+    @FXML
+    private Label status = null;
 
     public TaskNode(TaskWrapper task, int index) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(MainApp.DIRECTORY_TASKITEM));
@@ -119,13 +137,29 @@ public class TaskNode {
             category = task.getCategory().getCategory();
         }
 
-        this.category.setText(category);
-
         try {
             dateRange.setText(parseDateTimeRange(task));
         } catch (IllegalArgumentException iae) {
             throw iae;
         }
+
+        this.category.setText(category);
+
+        categorySprite.setFill(Color.web(COLOR_UNKNOWN));
+
+        if (task.getIsDone()) {
+            statusBacking.setFill(Color.web(COLOR_COMPLETE));
+            status.setText("DONE");
+        } else {
+            statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
+            status.setText("ONGOING");
+        }
+        
+//        reminderIcon.setImage(new Image("reminderIcon.png"));
+//        
+//        if (task.getReminder() == null || !task.getReminder().getStatus()) {
+//            reminderIcon.setEffect(new ColorAdjust(1, 1, 1, 1));
+//        }
     }
 
     public HBox getNode() {
@@ -139,19 +173,34 @@ public class TaskNode {
         // Handle Floating Task
         if (startDateTime == null && endDateTime == null) {
             numLabelBase.setFill(Color.web(COLOR_FLOATING));
-            overdueFlag.setFill(Color.web(COLOR_UNKNOWN));
+            overdueFlag.setFill(Color.web(COLOR_SPARE));
             return "Anytime";
             // Handle Deadline
         } else if (startDateTime == null && endDateTime != null) {
             numLabelBase.setFill(Color.web(COLOR_DEADLINE));
+
             if (endDateTime.isBefore(LocalDateTime.now())) {
                 overdueFlag.setFill(Color.web(COLOR_OVERDUE));
+            } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24) {
+                overdueFlag.setFill(Color.web(COLOR_TODAY));
+            } else {
+                overdueFlag.setFill(Color.web(COLOR_SPARE));
             }
+
             return "Due: " + endDateTime.getDayOfWeek() + ", "
                     + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
             // Handle Event
         } else if (startDateTime != null && endDateTime != null) {
             numLabelBase.setFill(Color.web(COLOR_EVENT));
+
+            if (startDateTime.isBefore(LocalDateTime.now())) {
+                overdueFlag.setFill(Color.web(COLOR_OVERDUE));
+            } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), startDateTime) <= 24) {
+                overdueFlag.setFill(Color.web(COLOR_TODAY));
+            } else {
+                overdueFlag.setFill(Color.web(COLOR_SPARE));
+            }
+
             return "From " + startDateTime.getDayOfWeek() + ", "
                     + startDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT))
                     + " to " + endDateTime.getDayOfWeek() + ", "
@@ -159,6 +208,8 @@ public class TaskNode {
             // Handle Exceptions
         } else {
             numLabelBase.setFill(Color.web(COLOR_UNKNOWN));
+            overdueFlag.setFill(Color.web(COLOR_UNKNOWN));
+
             return "Not Available";
         }
     }
