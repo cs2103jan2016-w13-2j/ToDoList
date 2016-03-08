@@ -138,10 +138,12 @@ public class TaskNode {
         // Handle Floating Task
         if (startDateTime == null && endDateTime == null) {
             numLabelBase.setFill(Color.web(COLOR_FLOATING));
+            overdueFlag.setFill(Color.web(COLOR_UNKNOWN));
             return "Anytime";
             // Handle Deadline
         } else if (startDateTime == null && endDateTime != null) {
             numLabelBase.setFill(Color.web(COLOR_DEADLINE));
+            
             return "Due: " + endDateTime.getDayOfWeek() + ", "
                     + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
             // Handle Event
