@@ -100,6 +100,7 @@ public class MainViewController {
     }
 
     public void populateTaskListView() {
+        listView.setItems(FXCollections.observableArrayList());
         listView.setItems(tasksToDisplay);
     }
 
@@ -124,13 +125,14 @@ public class MainViewController {
 
     public void setTasks(ArrayList<Task> tasks) {
         tasksToDisplay.clear();
+        
         for (int i = 0; i < tasks.size(); ++i) {
-
             // ... Convert Task to TaskWrapper
             TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
-
             tasksToDisplay.add(wrappedTask);
         }
+        
+        populateTaskListView();
     }
 
 }

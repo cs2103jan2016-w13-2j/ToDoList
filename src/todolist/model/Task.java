@@ -3,12 +3,12 @@ package todolist.model;
 import java.time.LocalDateTime;
 
 public class Task {
-	private Name name;
-	private LocalDateTime startTime;
-	private LocalDateTime endTime;
-	private Category category;
-	private Reminder reminder;
-	private Boolean isDone;
+	private Name name = null;
+	private LocalDateTime startTime = null;
+	private LocalDateTime endTime = null;
+	private Category category = null;
+	private Reminder reminder = null;
+	private Boolean isDone = null;
 
 	public Task(Name name, LocalDateTime startTime, LocalDateTime endTime, Category category, Reminder reminder, Boolean isDone) {
 		this.name = name;
@@ -20,7 +20,6 @@ public class Task {
 	}
 
     public void setName(Name name) {
-        
 		this.name = name;
 	}
 
