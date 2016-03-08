@@ -1,27 +1,90 @@
 
 package todolist.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /*
  * This class is the storage class, handling the read and write of local file with relative commands.
  * It will be called by the logic.
  * 
+ * for the retrieve method, now can support 3 search command
+ * 1:"category" + category
+ * 2:"name" + keyword 
+ * 3:"view"+view (overdue, archived)
+ * 
+ * for the sorting methods, can now sort by
+ * 1:name
+ * 2:end date
+ * 3:start date
+ * 4:category
+ * but they are not integrated with the search method yet!!
+ * 
+ * 
  * @author yuxin
  */
 public class DataBase {
+	public static String VIEW_TODAY = "today";
+	public static String VIEW_ARCHIVED = "archive";
+	public static String VIEW_OVERDUE = "overdue";
+
+	public static enum FilterType {
+		VIEW, CATEGORY, NAME, END_DATE, START_DATE;
+	}
+	
+	public static enum ViewType {
+		ARCHIVE, OVERDUE, TODAY;
+	}
+	
 	private FileHandler fh;
 	private ArrayList<Task> taskList;
-
+    
 	public DataBase() {
 		fh = new FileHandler();
 		loadFromFile();
 	}
-
+	
+    //firstly convert every task in the arraylist to string, then call write function in filehandler
+	private void writeToFile() {
+		sort_StartDate(taskList);
+		ArrayList<String> taskList_str = new ArrayList<String>();
+		for(Task eachTask: taskList) {
+			taskList_str.add(convert_TaskToString(eachTask));
+		}
+		fh.write(taskList_str);
+	}
+	//helper method
+	private Task convert_StringToTask(String taskStr) {
+		String[] taskInfo = taskStr.split(" ");
+		Name name = new Name(taskInfo[0]);
+		LocalDateTime startTime = LocalDateTime.parse(taskInfo[1]);
+		LocalDateTime endTime = LocalDateTime.parse(taskInfo[2]);
+		Category category = new Category(taskInfo[3]);
+		Reminder reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), LocalDateTime.parse(taskInfo[4].split("+")[1]));
+		Boolean isDone = Boolean.valueOf(taskInfo[6]);
+		return new Task(name, startTime, endTime, category, reminder, isDone);
+	}
+	//helper method
+    private String convert_TaskToString(Task currentTask) {
+    	String task_str = "";
+    	task_str += currentTask.getName().getName() + " ";
+    	task_str += currentTask.getStartTime().toString() + " ";
+    	task_str += currentTask.getEndTime().toString() + " ";
+    	task_str += currentTask.getCategory().getCategory() + " ";
+    	task_str += currentTask.getReminder().getStatus().toString() + "+";
+    	task_str += currentTask.getReminder().getTime().toString();
+    	return task_str;
+    }
+    
+    //firstly call read function in filehandler, then convert every string into a task object
 	private void loadFromFile() {
-		taskList = fh.read();
-		if (taskList == null) {
-			taskList = new ArrayList<Task>();
+		ArrayList<String> taskList_str = fh.read();
+		taskList = new ArrayList<Task>();
+		for(String eachTask_str: taskList_str) {
+			taskList.add(convert_StringToTask(eachTask_str));		
 		}
 	}
 
@@ -35,7 +98,7 @@ public class DataBase {
 	 */
 	public boolean add(Task task) {
 		taskList.add(task);
-		fh.write(taskList);
+		writeToFile();
 		return true;
 	}
 
@@ -57,7 +120,7 @@ public class DataBase {
 			return false;
 		}
 		taskList.remove(index);
-		fh.write(taskList);
+		writeToFile();
 		return true;
 	}
 
@@ -76,43 +139,220 @@ public class DataBase {
 		return true;
 	}
     
+	//return all tasks
 	public ArrayList<Task> retrieveAll() {
 		return taskList;
 	}
 	
+	//keep!!
+	//retrieving
 	public ArrayList<Task> retrieve(SearchCommand command) {
 		ArrayList<Task> resultList = new ArrayList<Task>();
-		switch (command.getType()) {
-			case "category" :
-				resultList = searchByCategory(command.getContent());
+		FilterType type = getFilterType(command);
+
+		switch (type) {
+			case CATEGORY :
+				resultList = retrieve_Category(command);
 				break;
-			case "name" :
-				resultList = searchByName(command.getContent());
+			case NAME :
+				resultList = retrieve_Name(command);
 				break;
+			case VIEW :
+				resultList = retrieve_View(command);
+				break;
+		    default :
+		    	return resultList;
 		}
 		return resultList;
 	}
 	
-	private ArrayList<Task> searchByName(String content) {
-		ArrayList<Task> result = new ArrayList<Task>();
-		for(Task eachTask: taskList) {
-			if(eachTask.getName().compareTo(new Name(content)) == 0) {
-				result.add(eachTask);
-			}
+	private FilterType getFilterType(SearchCommand command) {
+		String type = command.getType();
+		if(isCategory(type)) {
+			return FilterType.CATEGORY;
 		}
-		return result;
+		if(isView(type)) {
+			return FilterType.VIEW;
+		}
+		if(isName(type)) {
+			return FilterType.NAME;
+		}
+		return null;
 	}
 
-	private ArrayList<Task> searchByCategory(String content) {
-		ArrayList<Task> result = new ArrayList<Task>();
-		for(Task eachTask: taskList) {
-			if(eachTask.getCategory().compareTo(new Category(content)) == 0) {
-				result.add(eachTask);
-			}
-		}
-		return result;
+	private boolean isName(String type) {
+		return type.equalsIgnoreCase("name");
+	}
+	private boolean isView(String type) {
+		return type.equalsIgnoreCase("view");
+	}
+	private boolean isCategory(String type) {
+		return type.equalsIgnoreCase("category");
 	}
 
+	private ArrayList<Task> retrieve_View(SearchCommand command) {
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		ViewType viewToFilter = determineViewType(command.getContent());
+		switch(viewToFilter) {
+		case OVERDUE :
+			resultList = retrieve_ViewOverDue();
+			break;
+		case ARCHIVE :
+			resultList = retrieve_ViewArchive();
+			break;
+		default :
+			return resultList;
+		}
+		return resultList;
+	}
+    //helper method for retrieve_View
+	private ArrayList<Task> retrieve_ViewArchive() {
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		for(Task eachTask: taskList) {
+			if(eachTask.getDoneStatus()) {
+				resultList.add(eachTask);
+			}
+		}
+		return resultList;
+	}
+    //helper method for retrieve_View
+	private ArrayList<Task> retrieve_ViewOverDue() {
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		for(Task eachTask: taskList) {
+			if(isTaskOverdue(eachTask.getEndTime())) {
+				resultList.add(eachTask);
+			}
+		}
+		return null;
+	}
+
+	private boolean isTaskOverdue(LocalDateTime endTime) {
+		if(endTime == null) {
+			return false;
+		}
+		return endTime.isBefore(LocalDateTime.now());
+	}
+
+	private ViewType determineViewType(String content) {
+		if(isOverdue(content)) {
+			return ViewType.OVERDUE;
+		}
+		if(isArchive(content)) {
+			return ViewType.ARCHIVE;
+		}
+	    return null;
+	}
+
+	private boolean isArchive(String content) {
+		return content.equalsIgnoreCase("archive");
+	}
+
+	private boolean isOverdue(String content) {
+		return content.equalsIgnoreCase("overdue");
+	}
+   
+	private ArrayList<Task> retrieve_Name(SearchCommand command) {
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		String requiredName = command.getContent();
+		for(Task eachTask: taskList) {
+			if(isSame(eachTask.getName().getName(), requiredName)) {
+				resultList.add(eachTask);
+			}
+		}
+		return resultList;
+	}
+
+	private boolean isSame(String str1, String str2) {
+		return str1.equalsIgnoreCase(str2);
+	}
+
+	private ArrayList<Task> retrieve_Category(SearchCommand command) {
+		ArrayList<Task> resultList = new ArrayList<Task>();
+		String requiredCategory = command.getContent();
+		for(Task eachTask: taskList) {
+			if(isSame(eachTask.getCategory().getCategory(), requiredCategory)) {
+				resultList.add(eachTask);
+			}
+		}
+		return resultList;
+	}
+	
+	//sorting
+	//1.startDate
+	private ArrayList<Task> sort_StartDate(ArrayList<Task> currentList) {
+		Collections.sort(currentList, new StartDateComparator<Task>());
+		return currentList;
+	}
+   
+	private class StartDateComparator<Task> implements Comparator<Task> {
+    	public int compare(Task t1, Task t2) {
+    		LocalDateTime firstDate = ((todolist.model.Task) t1).getStartTime();
+    		LocalDateTime secondDate = ((todolist.model.Task) t2).getStartTime();
+    		if(firstDate == null && secondDate == null) {
+    			String t1_Name = ((todolist.model.Task) t1).getName().getName();
+    			String t2_Name = ((todolist.model.Task) t2).getName().getName();
+    			return t1_Name.compareToIgnoreCase(t2_Name);
+    		}else if(firstDate == null) {
+    			return -1; 			
+    		}else if(secondDate == null) {
+    			return 1;
+    		}else {
+    			return firstDate.compareTo(secondDate);
+    		}
+    	}
+    }
+	
+	//2.endDate
+	private ArrayList<Task> sort_EndDate(ArrayList<Task> currentList) {
+		Collections.sort(currentList, new EndDateComparator<Task>());
+		return currentList;
+	}
+   
+	private class EndDateComparator<Task> implements Comparator<Task> {
+    	public int compare(Task t1, Task t2) {
+    		LocalDateTime firstDate = ((todolist.model.Task) t1).getEndTime();
+    		LocalDateTime secondDate = ((todolist.model.Task) t2).getEndTime();
+    		if(firstDate == null && secondDate == null) {
+    			String t1_Name = ((todolist.model.Task) t1).getName().getName();
+    			String t2_Name = ((todolist.model.Task) t2).getName().getName();
+    			return t1_Name.compareToIgnoreCase(t2_Name);
+    		}else if(firstDate == null) {
+    			return -1; 			
+    		}else if(secondDate == null) {
+    			return 1;
+    		}else {
+    			return firstDate.compareTo(secondDate);
+    		}
+    	}
+    }
+	
+	//3.category
+	private ArrayList<Task> sort_Category(ArrayList<Task> currentList) {
+		Collections.sort(currentList, new CategoryComparator<Task>());
+		return currentList;
+	}
+   
+	private class CategoryComparator<Task> implements Comparator<Task> {
+    	public int compare(Task t1, Task t2) {
+    		String firstCategory = ((todolist.model.Task) t1).getCategory().getCategory();
+    		String secondCategory = ((todolist.model.Task) t2).getCategory().getCategory();
+    	    return firstCategory.compareToIgnoreCase(secondCategory);
+    	}
+    }
+	//4.name
+	private ArrayList<Task> sort_Name(ArrayList<Task> currentList) {
+		Collections.sort(currentList, new NameComparator<Task>());
+		return currentList;
+	}
+   
+	private class NameComparator<Task> implements Comparator<Task> {
+    	public int compare(Task t1, Task t2) {
+    		String firstName = ((todolist.model.Task) t1).getName().getName();
+    		String secondName = ((todolist.model.Task) t2).getName().getName();
+    	    return firstName.compareToIgnoreCase(secondName);
+    	}
+    }
+	
 	/*
 	 * This method is to set new file for the storage of data.
 	 * 
