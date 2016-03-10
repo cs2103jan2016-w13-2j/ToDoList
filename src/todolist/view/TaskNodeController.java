@@ -19,7 +19,7 @@ import javafx.scene.shape.Rectangle;
 import todolist.MainApp;
 import todolist.model.TaskWrapper;
 
-public class TaskNode {
+public class TaskNodeController {
 
 //    private static enum PriorityLevel {
 //        URGENT, NORMAL, CASUAL
@@ -89,7 +89,7 @@ public class TaskNode {
     @FXML
     private Label status = null;
 
-    public TaskNode(TaskWrapper task, int index) {
+    public TaskNodeController(TaskWrapper task, int index) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(MainApp.DIRECTORY_TASKITEM));
         fxmlLoader.setController(this);
 

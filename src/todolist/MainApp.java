@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /*
@@ -54,7 +55,7 @@ public class MainApp extends Application {
     private BorderPane mainView;
     private TextField commandField;
     private HBox titleBarView;
-    private FlowPane sideBarView;
+    private VBox sideBarView;
 
     // Controllers
     private MainViewController mainController;
@@ -165,7 +166,7 @@ public class MainApp extends Application {
             FXMLLoader loader = new FXMLLoader();
 
             loader.setLocation(MainApp.class.getResource(DIRECTORY_SIDEBAR));
-            sideBarView = (FlowPane) loader.load();
+            sideBarView = (VBox) loader.load();
             sideBarView.getStyleClass().add(STYLE_CLASS_SIDEBAR);
             rootView.setLeft(sideBarView);
 

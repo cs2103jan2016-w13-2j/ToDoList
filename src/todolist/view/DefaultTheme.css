@@ -188,3 +188,28 @@
 .accent {
     -fx-background-color: #4AA0D5;
 }
+
+.button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-text-fill: #FEFAEC;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+}
+
+#home-icon:hover {
+    -fx-image: url("home-hover.png");
+}
+
+#new-button {
+    -fx-background-color: 
+        #000000,
+        linear-gradient(#7ebcea, #2f4b8f),
+        linear-gradient(#426ab7, #263e75),
+        linear-gradient(#395cab, #223768);
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+}

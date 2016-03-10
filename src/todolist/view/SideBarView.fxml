@@ -1,11 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
 
-<!--  Prepared by Huang Lie Jun (A0123994W) -->
+<!-- Prepared by Huang Lie Jun (A0123994W) -->
 
-<FlowPane prefHeight="540.0" prefWidth="60.0" styleClass="side-bar"
-	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
-	xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</FlowPane>
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
+	maxWidth="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="60.0"
+	spacing="20.0" styleClass="side-bar" stylesheets="@DefaultTheme.css"
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<Button contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="HOME">
+			<VBox.margin>
+				<Insets top="20.0" />
+			</VBox.margin>
+			<graphic>
+				<ImageView id="home-icon" fitHeight="30.0" fitWidth="30.0"
+					pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@home.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="EXPIRED">
+			<graphic>
+				<ImageView id="button-graphics" fitHeight="30.0" fitWidth="30.0"
+					pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@overdue.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="TODAY">
+			<graphic>
+				<ImageView id="button-graphics" fitHeight="30.0" fitWidth="30.0"
+					pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@today.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="WEEK">
+			<graphic>
+				<ImageView id="button-graphics" fitHeight="30.0" fitWidth="30.0"
+					pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@week.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="DONE">
+			<graphic>
+				<ImageView id="button-graphics" fitHeight="30.0" fitWidth="30.0"
+					pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@archived.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="OPTIONS">
+			<graphic>
+				<ImageView id="button-graphics" fitHeight="30.0" fitWidth="30.0"
+					pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@settings.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="HELP">
+			<graphic>
+				<ImageView id="button-graphics" fitHeight="30.0" fitWidth="30.0"
+					pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@help.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+	</children>
+</VBox>

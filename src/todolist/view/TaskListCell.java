@@ -9,7 +9,7 @@ public class TaskListCell extends ListCell<TaskWrapper> {
     public void updateItem(TaskWrapper task, boolean empty) {
         if (task != null) {
             super.updateItem(task, empty);
-            TaskNode taskNode = new TaskNode(task, this.getIndex());
+            TaskNodeController taskNode = new TaskNodeController(task, this.getIndex());
             setGraphic(taskNode.getNode());
         } else {
             setText(null);
