@@ -470,12 +470,16 @@ public class DataBase {
      * 
      * @param newFile the string that contains the new path and file name
      * 
-     * @return true if the directory exists and the new file is set.
+     * @return true     if the directory exists and the new file is set.
+     * @throw Exception if the path is invalid
      */
-    public boolean setNewFile(String newFilePath) {
+    public boolean setNewFile(String newFilePath) throws Exception {
         boolean isSet = false;
         isSet = fh.setFile(newFilePath);
         this.loadFromFile();
+        if(!isSet) {
+        	throw new Exception("invalid path");
+        }
         return isSet;
     }
 
