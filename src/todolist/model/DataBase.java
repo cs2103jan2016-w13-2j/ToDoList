@@ -171,15 +171,29 @@ public class DataBase {
      * 
      * @param Task
      *            the task to be added
-     * @return boolean whether the task is successfully added
+     * @return 1 whether the task is successfully added\
+     *         -1 if the task already exists
      */
-    public boolean add(Task task) {
-        taskList.add(task);
-        writeToFile();
-        // snapshot.add(retrieveAll());
-        return true;
+    public int add(Task task) {
+        if(isExistingTask(task)) {
+        	return -1;
+        }
+    	taskList.add(0, task);
+        writeToFile();       
+        return 1;
     }
-
+    
+    //helper method for add function
+    private boolean isExistingTask(Task task) {
+    	String newTaskName = task.getName().getName();
+    	for(int i = 0; i < taskList.size(); i++) {
+    		String thisTaskName = taskList.get(i).getName().getName();
+    		if(isSame(thisTaskName, newTaskName)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
     /**
      * This method handles the updating of text file when the specified task is
      * to be deleted. Returns true if the task is successfully deleted.
@@ -377,11 +391,11 @@ public class DataBase {
     // sorting
     // 1.startDate
     private ArrayList<Task> sort_StartDate(ArrayList<Task> currentList) {
-        Collections.sort(currentList, new StartDateComparator<Task>());
+        Collections.sort(currentList, new StartDateComparator());
         return currentList;
     }
 
-    private class StartDateComparator<Task> implements Comparator<Task> {
+    private class StartDateComparator implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             LocalDateTime firstDate = ((todolist.model.Task) t1).getStartTime();
             LocalDateTime secondDate = ((todolist.model.Task) t2).getStartTime();
@@ -401,11 +415,11 @@ public class DataBase {
 
     // 2.endDate
     private ArrayList<Task> sort_EndDate(ArrayList<Task> currentList) {
-        Collections.sort(currentList, new EndDateComparator<Task>());
+        Collections.sort(currentList, new EndDateComparator());
         return currentList;
     }
 
-    private class EndDateComparator<Task> implements Comparator<Task> {
+    private class EndDateComparator implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             LocalDateTime firstDate = ((todolist.model.Task) t1).getEndTime();
             LocalDateTime secondDate = ((todolist.model.Task) t2).getEndTime();
@@ -425,11 +439,11 @@ public class DataBase {
 
     // 3.category
     private ArrayList<Task> sort_Category(ArrayList<Task> currentList) {
-        Collections.sort(currentList, new CategoryComparator<Task>());
+        Collections.sort(currentList, new CategoryComparator());
         return currentList;
     }
 
-    private class CategoryComparator<Task> implements Comparator<Task> {
+    private class CategoryComparator implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             String firstCategory = ((todolist.model.Task) t1).getCategory().getCategory();
             String secondCategory = ((todolist.model.Task) t2).getCategory().getCategory();
@@ -439,11 +453,11 @@ public class DataBase {
 
     // 4.name
     private ArrayList<Task> sort_Name(ArrayList<Task> currentList) {
-        Collections.sort(currentList, new NameComparator<Task>());
+        Collections.sort(currentList, new NameComparator());
         return currentList;
     }
 
-    private class NameComparator<Task> implements Comparator<Task> {
+    private class NameComparator implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             String firstName = ((todolist.model.Task) t1).getName().getName();
             String secondName = ((todolist.model.Task) t2).getName().getName();
