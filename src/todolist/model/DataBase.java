@@ -1,5 +1,6 @@
 package todolist.model;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +29,10 @@ public class DataBase {
     public static String VIEW_TODAY = "today";
     public static String VIEW_ARCHIVED = "archive";
     public static String VIEW_OVERDUE = "overdue";
-
+    public static String EXCEPTION_INVALID_PATH = "Invalid path!";
+    public static String EXCEPEPTION_REPEATED_TASK = "The task has already existed!";
+    public static String EXCEPTION_TASKNOTEXIST = "The task to delete does not exist!";
+    
     public static enum FilterType {
         VIEW, CATEGORY, NAME, END_DATE, START_DATE;
     }
@@ -171,44 +175,41 @@ public class DataBase {
      * 
      * @param Task
      *            the task to be added
-     * @return 1 whether the task is successfully added\
-     *         -1 if the task already exists
+     * @return  TRUE whether the task is successfully added\
+     *   
+     * @throws IOException  when task already exist
      */
-    public int add(Task task) {
+    public boolean add(Task task) throws IOException {
         if(isExistingTask(task)) {
-        	return -1;
+        	throw new IOException(EXCEPEPTION_REPEATED_TASK) ;
         }
+        
     	taskList.add(0, task);
         writeToFile();       
-        return 1;
+        return true;
     }
     
     //helper method for add function
     private boolean isExistingTask(Task task) {
-    	String newTaskName = task.getName().getName();
-    	for(int i = 0; i < taskList.size(); i++) {
-    		String thisTaskName = taskList.get(i).getName().getName();
-    		if(isSame(thisTaskName, newTaskName)) {
-    			return true;
-    		}
-    	}
-    	return false;
+    	return taskList.contains(task);    	
     }
+    
     /**
      * This method handles the updating of text file when the specified task is
      * to be deleted. Returns true if the task is successfully deleted.
      * 
      * @param Task
      *            the task to be deleted
-     * @return boolean true if the task is successfully deleted; false if the
-     *         task cannot be found
+     * @return boolean true if the task is successfully deleted; 
+     *        
+     * @throws IOException   if the task to delete does not exist
      */
-    public boolean delete(Task taskToDelete) {
+    public boolean delete(Task taskToDelete) throws IOException {
         loadFromFile();
 
         if (taskList.size() == 0) {
             System.out.println(0);
-            return false;
+            throw new IOException(EXCEPTION_TASKNOTEXIST);
         }
 
         System.out.println(taskList.size());
@@ -219,7 +220,7 @@ public class DataBase {
 
         if (index == null) {
             System.out.println("null");
-            return false;
+            throw new IOException(EXCEPTION_TASKNOTEXIST);
         }
 
         taskList.remove(taskList.get(index));
@@ -478,7 +479,7 @@ public class DataBase {
         isSet = fh.setFile(newFilePath);
         this.loadFromFile();
         if(!isSet) {
-        	throw new Exception("invalid path");
+        	throw new Exception(EXCEPTION_INVALID_PATH);
         }
         return isSet;
     }
