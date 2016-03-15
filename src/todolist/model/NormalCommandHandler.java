@@ -18,7 +18,7 @@ public class NormalCommandHandler {
         this.steps = 0;
     }
 
-    public void execute(NormalCommand normalCommand) {
+    public void execute(NormalCommand normalCommand) throws Exception{
         String action = normalCommand.getAction();
         String arg[] = normalCommand.getArgs();
         switch (action) {
@@ -399,5 +399,21 @@ public class NormalCommandHandler {
         default:
             return null;
         }
+    }
+    
+    private dataBaseAdd(Task task) {
+    	try{
+    		dataBase.add(task);
+    	} catch(IOException e){
+    		
+    	}
+    }
+    
+    private dataBaseDelete(Task task) {
+    	try{
+    		dataBase.delete(task);
+    	} catch(IOException e) {
+    		
+    	}
     }
 }
