@@ -105,9 +105,17 @@ public class NormalCommandHandler {
         case "redo":
             redo(Integer.parseInt(arg[0]));
             break;
+        case "reset":
+        	reset();
+        	break;
         default:
             // call feedback modal...
         }
+    }
+    
+    private void reset() {
+    	uiHandler.refresh();
+    	uiHandler.sendMessage("View reseted");
     }
 
     private void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
