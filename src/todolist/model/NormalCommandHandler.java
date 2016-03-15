@@ -154,6 +154,7 @@ public class NormalCommandHandler {
     }
 
     private void addTask(String title) {
+    	assert(title.length()>0);
         Name name = new Name(title);
         Task newEvent = new Task(name, null, null, null, null, false);
 
