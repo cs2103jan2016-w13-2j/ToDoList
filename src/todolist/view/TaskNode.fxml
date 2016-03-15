@@ -36,9 +36,11 @@
 			maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="100.0"
 			HBox.hgrow="ALWAYS">
 			<children>
-				<HBox fx:id="titleBox" alignment="CENTER_LEFT" prefHeight="100.0">
+				<HBox fx:id="titleBox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308"
+					prefHeight="100.0">
 					<children>
-						<Label fx:id="title" text="Title" textFill="WHITE">
+						<Label fx:id="title" maxHeight="1.7976931348623157E308"
+							text="Title" textFill="WHITE" wrapText="true">
 							<font>
 								<Font name="System Bold" size="16.0" />
 							</font>
