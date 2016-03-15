@@ -197,6 +197,7 @@ public class DataBase {
         
         dataBase_Logger.log(Level.INFO, LOGGING_ADDING_TASK + task.getName().getName());
     	taskList.add(0, task);
+    	snapshot.add(taskList);
         writeToFile();       
         return true;
     }
@@ -243,9 +244,8 @@ public class DataBase {
         dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED + taskToDelete.getName().getName());
                
         System.out.println(taskList.size());
-
+        snapshot.add(taskList);
         writeToFile();
-        // snapshot.add(retrieveAll());
         return true;
     }
 

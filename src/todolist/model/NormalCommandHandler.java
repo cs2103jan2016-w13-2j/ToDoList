@@ -6,16 +6,25 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 //import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class NormalCommandHandler {
 
     private DataBase dataBase;
     private UIHandler uiHandler;
+    private Logic logic;
     private int steps;
+    
+    public static String LOGGING_ADDING_TASK = "tring to add task: ";
+    public static String LOGGING_DELETING_TASK = "tring to delete task: ";
+    public static String LOGGING_REPEATED_TASK = "The task has already existed: ";
+    public static String LOGGING_TASK_NOTEXIST = "The task does not exist: ";
+    public static String LOGGING_TASK_DELETED = "The task is deleted from database: ";
 
-    public NormalCommandHandler(DataBase dataBase, UIHandler uiHandler) {
+    public NormalCommandHandler(DataBase dataBase, UIHandler uiHandler, Logic logic) {
         this.dataBase = dataBase;
         this.uiHandler = uiHandler;
+        this.logic = logic;
         this.steps = 0;
     }
 
@@ -405,6 +414,7 @@ public class NormalCommandHandler {
     private void dataBaseAdd(Task task) {
     	try{
     		dataBase.add(task);
+    		logic.writeLog(LOGGING_ADDING_TASK + task.getName().getName());
     	} catch(IOException e){
     		
     	}
@@ -413,6 +423,7 @@ public class NormalCommandHandler {
     private void dataBaseDelete(Task task) {
     	try{
     		dataBase.delete(task);
+    		logic.writeLog(LOGGING_DELETING_TASK + task.getName().getName());
     	} catch(IOException e) {
     		
     	}
