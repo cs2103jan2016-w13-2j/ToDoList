@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * This class is the storage class, handling the read and write of local file with relative commands.
@@ -32,6 +34,13 @@ public class DataBase {
     public static String EXCEPTION_INVALID_PATH = "Invalid path!";
     public static String EXCEPEPTION_REPEATED_TASK = "The task has already existed!";
     public static String EXCEPTION_TASKNOTEXIST = "The task to delete does not exist!";
+    public static String LOGGING_ADDING_TASK = "tring to add task: ";
+    public static String LOGGING_DELETING_TASK = "tring to delete task: ";
+    public static String LOGGING_REPEATED_TASK = "The task has already existed: ";
+    public static String LOGGING_TASK_NOTEXIST = "The task to delete does not exist: ";
+    public static String LOGGING_TASK_DELETED = "The task is deleted from database: ";
+    
+    private static Logger dataBase_Logger = Logger.getLogger("Database logger");
     
     public static enum FilterType {
         VIEW, CATEGORY, NAME, END_DATE, START_DATE;
@@ -44,11 +53,12 @@ public class DataBase {
     private FileHandler fh;
     private ArrayList<Task> taskList;
     private ArrayList<ArrayList<Task>> snapshot;
-
+    
     public DataBase() {
         taskList = null;
         fh = new FileHandler();
         loadFromFile();
+        
     }
 
     // firstly convert every task in the arraylist to string, then call write
@@ -181,9 +191,11 @@ public class DataBase {
      */
     public boolean add(Task task) throws IOException {
         if(isExistingTask(task)) {
+        	dataBase_Logger.log(Level.INFO, LOGGING_REPEATED_TASK + task.getName().getName());
         	throw new IOException(EXCEPEPTION_REPEATED_TASK) ;
         }
         
+        dataBase_Logger.log(Level.INFO, LOGGING_ADDING_TASK + task.getName().getName());
     	taskList.add(0, task);
         writeToFile();       
         return true;
@@ -206,9 +218,12 @@ public class DataBase {
      */
     public boolean delete(Task taskToDelete) throws IOException {
         loadFromFile();
-
+        
+        dataBase_Logger.log(Level.INFO, LOGGING_DELETING_TASK + taskToDelete.getName().getName());
+        
         if (taskList.size() == 0) {
             System.out.println(0);
+            dataBase_Logger.log(Level.INFO, LOGGING_TASK_NOTEXIST + taskToDelete.getName().getName());
             throw new IOException(EXCEPTION_TASKNOTEXIST);
         }
 
@@ -220,11 +235,13 @@ public class DataBase {
 
         if (index == null) {
             System.out.println("null");
+            dataBase_Logger.log(Level.INFO, LOGGING_TASK_NOTEXIST + taskToDelete.getName().getName());
             throw new IOException(EXCEPTION_TASKNOTEXIST);
         }
 
         taskList.remove(taskList.get(index));
-
+        dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED + taskToDelete.getName().getName());
+               
         System.out.println(taskList.size());
 
         writeToFile();
