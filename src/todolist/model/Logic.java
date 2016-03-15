@@ -18,7 +18,7 @@ public class Logic {
     }
     
     
-    public void process(Command input) {
+    public void process(Command input) throws Exception {
         commandHandler.execute(input);
     }
 }

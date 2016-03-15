@@ -15,7 +15,7 @@ public class CommandHandler {
         flexiHandler = new FlexiCommandHandler(this.uiHandler, this.dataBase, this.normalHandler);
     }
     
-    public void execute(Command Command) {
+    public void execute(Command Command) throws Exception {
         
         if(false/*Command.isSmart()*/) {
             flexiHandler.execute(new FlexiCommand(Command));

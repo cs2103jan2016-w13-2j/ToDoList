@@ -84,7 +84,12 @@ public class MainViewController {
                 System.out.println(command.getCommand());
 
                 // Pass Command Line input for processing
-                mainApplication.handler.process(command);
+                try {
+                	mainApplication.handler.process(command);
+                } catch(Exception e) {
+                	
+                }
+                
 
             }
         };

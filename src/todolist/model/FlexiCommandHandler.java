@@ -12,7 +12,7 @@ public class FlexiCommandHandler {
         this.normalHandler = normalHandler;
     }
     
-    public void execute(FlexiCommand flexiCommand) {
+    public void execute(FlexiCommand flexiCommand) throws Exception {
         normalHandler.execute(Parser.translate(flexiCommand));
     }
 

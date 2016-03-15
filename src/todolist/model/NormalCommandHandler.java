@@ -1,5 +1,6 @@
 package todolist.model;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -125,7 +126,7 @@ public class NormalCommandHandler {
         LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
         Task newEvent = new Task(name, start, end, null, null, false);
 
-        dataBase.add(newEvent);
+        dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
         uiHandler.sendMessage("successfully added");
@@ -137,7 +138,7 @@ public class NormalCommandHandler {
         LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
         Task newEvent = new Task(name, null, end, null, null, false);
 
-        dataBase.add(newEvent);
+        dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
         uiHandler.sendMessage("successfully added");
@@ -147,7 +148,7 @@ public class NormalCommandHandler {
         Name name = new Name(title);
         Task newEvent = new Task(name, null, null, null, null, false);
 
-        dataBase.add(newEvent);
+        dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
         uiHandler.sendMessage("successfully added");
@@ -155,10 +156,10 @@ public class NormalCommandHandler {
 
     private void done(String title) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         tempTask.setDoneStatus(true);
-        dataBase.add(tempTask);
+        dataBaseAdd(tempTask);
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
@@ -167,7 +168,7 @@ public class NormalCommandHandler {
 
     private void edit(String title, String fieldName, String newValue) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
 
@@ -203,7 +204,7 @@ public class NormalCommandHandler {
             break;
         }
 
-        dataBase.add(tempTask);
+        dataBaseAdd(tempTask);
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
@@ -214,7 +215,7 @@ public class NormalCommandHandler {
     private void delete(String title) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         System.out.println(dataBase.convert_TaskToString(tempTask));
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         uiHandler.refresh();
         uiHandler.sendMessage("successfully deleted");
@@ -242,10 +243,10 @@ public class NormalCommandHandler {
 
     private void label(String title, String category) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         tempTask.setCategory(new Category(category));
-        dataBase.add(tempTask);
+        dataBaseAdd(tempTask);
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
@@ -253,14 +254,14 @@ public class NormalCommandHandler {
 
     private void postpone(String title, String quantity, String timeUnit) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         if (tempTask.getStartTime() == null) {
             LocalDateTime tempEndTime = tempTask.getEndTime();
             tempEndTime = tempEndTime.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
             tempTask.setEndTime(tempEndTime);
-            dataBase.add(tempTask);
+            dataBaseAdd(tempTask);
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
@@ -273,7 +274,7 @@ public class NormalCommandHandler {
             tempTask.setStartTime(tempStartTime);
             tempTask.setEndTime(tempEndTime);
 
-            dataBase.add(tempTask);
+            dataBaseAdd(tempTask);
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
@@ -282,14 +283,14 @@ public class NormalCommandHandler {
 
     private void forward(String title, String quantity, String timeUnit) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         if (tempTask.getStartTime() == null) {
             LocalDateTime tempEndTime = tempTask.getEndTime();
             tempEndTime = tempEndTime.minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
             tempTask.setEndTime(tempEndTime);
-            dataBase.add(tempTask);
+            dataBaseAdd(tempTask);
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
@@ -302,7 +303,7 @@ public class NormalCommandHandler {
             tempTask.setStartTime(tempStartTime);
             tempTask.setEndTime(tempEndTime);
 
-            dataBase.add(tempTask);
+            dataBaseAdd(tempTask);
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
@@ -356,13 +357,13 @@ public class NormalCommandHandler {
             }
         }
 
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         Reminder newReminder = new Reminder(true, reminderTime);
 
         tempTask.setReminder(newReminder);
 
-        dataBase.add(tempTask);
+        dataBaseAdd(tempTask);
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
@@ -401,7 +402,7 @@ public class NormalCommandHandler {
         }
     }
     
-    private dataBaseAdd(Task task) {
+    private void dataBaseAdd(Task task) {
     	try{
     		dataBase.add(task);
     	} catch(IOException e){
@@ -409,7 +410,7 @@ public class NormalCommandHandler {
     	}
     }
     
-    private dataBaseDelete(Task task) {
+    private void dataBaseDelete(Task task) {
     	try{
     		dataBase.delete(task);
     	} catch(IOException e) {
