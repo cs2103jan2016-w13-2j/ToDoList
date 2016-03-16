@@ -405,13 +405,16 @@ public class DataBase {
         String requiredCategory = command.getContent();
         
         System.out.println(requiredCategory);
-        
+
         for (Task eachTask : taskList) {
-            if (isSame(eachTask.getCategory().getCategory(), requiredCategory)) {
+            if (eachTask.getCategory() != null && isSame(eachTask.getCategory().getCategory(), requiredCategory)) {
             	System.out.println(eachTask.getName().getName());
                 resultList.add(eachTask);
             }
         }
+   
+    
+        System.out.println(resultList.get(0).getName().getName());
         System.out.println(Arrays.toString(resultList.toArray()));
         
         return resultList;
