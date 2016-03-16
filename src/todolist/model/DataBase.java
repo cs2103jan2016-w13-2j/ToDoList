@@ -64,7 +64,7 @@ public class DataBase {
     // firstly convert every task in the arraylist to string, then call write
     // function in filehandler
     private void writeToFile() {
-        sort_StartDate(taskList);
+        //sort_StartDate(taskList);
         ArrayList<String> taskList_str = new ArrayList<String>();
         for (Task eachTask : taskList) {
             taskList_str.add(convert_TaskToString(eachTask));
@@ -528,4 +528,22 @@ public class DataBase {
         taskList = snapshot.get(steps);
         writeToFile();
     }
+    
+	public void sort(String fieldName, String order) {
+
+		switch (fieldName) {
+		case "start":
+			sort_StartDate(taskList);
+		case "end":
+			sort_EndDate(taskList);
+		case "category":
+			sort_Category(taskList);
+		case "name":
+			sort_Name(taskList);
+		}
+		
+		if(order.equals("descending")) {
+			Collections.reverse(taskList);
+		}
+	}
 }

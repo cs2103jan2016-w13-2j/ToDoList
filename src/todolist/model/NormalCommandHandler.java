@@ -68,7 +68,7 @@ public class NormalCommandHandler {
             // filter(arg[0]);
             break;
         case "sort":
-            // sort(arg[0], arg[1]);
+            sort(arg[0], arg[1]);
             break;
         case "insert":
             // insert(arg[0], arg[1], arg[2]);
@@ -264,9 +264,10 @@ public class NormalCommandHandler {
     // uiHandler.filter(category);
     // }
     //
-    // private void sort(String fieldName, String order) {
-    // uiHandler.sort(fieldName, order);
-    // }
+    private void sort(String fieldName, String order) {
+    	dataBase.sort(fieldName, order);
+    	uiHandler.refresh();
+    }
     //
     // private void insert(String title, String befaft, String title) {
     // uiHandler.insert(title, befaft, title);
