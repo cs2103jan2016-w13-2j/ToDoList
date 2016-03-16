@@ -7,14 +7,6 @@ import todolist.MainApp;
 public class UIHandler {
 
     private DataBase dataBase;
-
-    // private Boolean isSorted = false;
-    // private Boolean isFiltered = false;
-
-    // private String fieldName = null;
-    // private String category = null;
-    // private String order = null;
-
     private MainApp mainApp;
 
     public UIHandler(DataBase dataBase, MainApp mainApp) {
@@ -24,26 +16,6 @@ public class UIHandler {
     }
 
     public void refresh() {
-        // if (isSorted && !isFiltered) {
-        //// this.sort(fieldName, order);
-        // }
-        //
-        // if (!isSorted && isFiltered) {
-        //// this.filter(category);
-        // }
-        //
-        // if (isFiltered && isSorted) {
-        //
-        // ArrayList<Task> tempTaskList = dataBase.retrieve(new
-        // SearchCommand("Category", category));
-        // // mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
-        // mainApp.setDisplayTasks(tempTaskList);
-        // }
-        //
-        // if (!isSorted && !isFiltered) {
-        // mainApp.setDisplayTasks(dataBase.retrieveAll());
-        //
-        // }
         mainApp.setDisplayTasks(dataBase.retrieveAll());
     }
 
@@ -63,29 +35,10 @@ public class UIHandler {
 
     }
 
-    // public void sort(String fieldName, String order) {
-    // if (isFiltered) {
-    // this.sort = sort;
-    //
-    // ArrayList<Task> tempTaskList = dataBase.retrieve(new
-    // SearchCommand("Category", category));
-    // // mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
-    // mainApp.setDisplayTasks(tempTaskList);
-    //
-    // isSorted = true;
-    // } else {
-    // this.sort = sort;
-    // mainApp.setDisplayTasks(Sorter.sort(dataBase.retrieveAll()));
-    //
-    // isSorted = true;
-    // }
-    // }
-    //
 	public void filter(String category) {
-
-     ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("Category", category));
-     mainApp.setDisplayTasks(tempTaskList);
-     }
+		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("Category", category));
+		mainApp.setDisplayTasks(tempTaskList);
+	}
 
     public void exit() {
         System.exit(0);
