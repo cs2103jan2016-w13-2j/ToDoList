@@ -99,7 +99,7 @@ public class FileHandler {
 	 * The method is to set a new file to store the tasks in the defined path.
 	 * 
 	 * @param newFilePath   the path of the new file (the path + the file name); it is not null.
-	 * @return              true if the file is set; false if the path is not a correct path
+	 * @return              true if the file is set; false if the path is not a correct path  
 	 */
 	public boolean setFile(String newFilePath) {
 		ArrayList<String> existingTaskList = this.read();
@@ -125,8 +125,10 @@ public class FileHandler {
 			}
 		    return true;
 		}
+		
+	    return false;
 		  	
-		return false;
+		
 	}
 	
 	public String getPath() {

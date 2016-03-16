@@ -1,24 +1,34 @@
 package todolist.model;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 //import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class NormalCommandHandler {
 
     private DataBase dataBase;
     private UIHandler uiHandler;
+    private Logic logic;
     private int steps;
+    
+    public static String LOGGING_ADDING_TASK = "tring to add task: ";
+    public static String LOGGING_DELETING_TASK = "tring to delete task: ";
+    public static String LOGGING_REPEATED_TASK = "The task has already existed: ";
+    public static String LOGGING_TASK_NOTEXIST = "The task does not exist: ";
+    public static String LOGGING_TASK_DELETED = "The task is deleted from database: ";
 
-    public NormalCommandHandler(DataBase dataBase, UIHandler uiHandler) {
+    public NormalCommandHandler(DataBase dataBase, UIHandler uiHandler, Logic logic) {
         this.dataBase = dataBase;
         this.uiHandler = uiHandler;
+        this.logic = logic;
         this.steps = 0;
     }
 
-    public void execute(NormalCommand normalCommand) {
+    public void execute(NormalCommand normalCommand) throws Exception{
         String action = normalCommand.getAction();
         String arg[] = normalCommand.getArgs();
         switch (action) {
@@ -105,9 +115,17 @@ public class NormalCommandHandler {
         case "redo":
             redo(Integer.parseInt(arg[0]));
             break;
+        case "reset":
+        	reset();
+        	break;
         default:
             // call feedback modal...
         }
+    }
+    
+    private void reset() {
+    	uiHandler.refresh();
+    	uiHandler.sendMessage("View reseted");
     }
 
     private void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
@@ -117,7 +135,7 @@ public class NormalCommandHandler {
         LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
         Task newEvent = new Task(name, start, end, null, null, false);
 
-        dataBase.add(newEvent);
+        dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
         uiHandler.sendMessage("successfully added");
@@ -129,17 +147,18 @@ public class NormalCommandHandler {
         LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
         Task newEvent = new Task(name, null, end, null, null, false);
 
-        dataBase.add(newEvent);
+        dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
         uiHandler.sendMessage("successfully added");
     }
 
     private void addTask(String title) {
+    	assert(title.length()>0);
         Name name = new Name(title);
         Task newEvent = new Task(name, null, null, null, null, false);
 
-        dataBase.add(newEvent);
+        dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
         uiHandler.sendMessage("successfully added");
@@ -147,10 +166,10 @@ public class NormalCommandHandler {
 
     private void done(String title) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         tempTask.setDoneStatus(true);
-        dataBase.add(tempTask);
+        dataBaseAdd(tempTask);
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
@@ -159,7 +178,7 @@ public class NormalCommandHandler {
 
     private void edit(String title, String fieldName, String newValue) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
 
@@ -195,7 +214,7 @@ public class NormalCommandHandler {
             break;
         }
 
-        dataBase.add(tempTask);
+        dataBaseAdd(tempTask);
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
@@ -206,7 +225,7 @@ public class NormalCommandHandler {
     private void delete(String title) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         System.out.println(dataBase.convert_TaskToString(tempTask));
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         uiHandler.refresh();
         uiHandler.sendMessage("successfully deleted");
@@ -234,10 +253,10 @@ public class NormalCommandHandler {
 
     private void label(String title, String category) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         tempTask.setCategory(new Category(category));
-        dataBase.add(tempTask);
+        dataBaseAdd(tempTask);
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
@@ -245,14 +264,14 @@ public class NormalCommandHandler {
 
     private void postpone(String title, String quantity, String timeUnit) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         if (tempTask.getStartTime() == null) {
             LocalDateTime tempEndTime = tempTask.getEndTime();
             tempEndTime = tempEndTime.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
             tempTask.setEndTime(tempEndTime);
-            dataBase.add(tempTask);
+            dataBaseAdd(tempTask);
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
@@ -265,7 +284,7 @@ public class NormalCommandHandler {
             tempTask.setStartTime(tempStartTime);
             tempTask.setEndTime(tempEndTime);
 
-            dataBase.add(tempTask);
+            dataBaseAdd(tempTask);
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
@@ -274,14 +293,14 @@ public class NormalCommandHandler {
 
     private void forward(String title, String quantity, String timeUnit) {
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         if (tempTask.getStartTime() == null) {
             LocalDateTime tempEndTime = tempTask.getEndTime();
             tempEndTime = tempEndTime.minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
             tempTask.setEndTime(tempEndTime);
-            dataBase.add(tempTask);
+            dataBaseAdd(tempTask);
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
@@ -294,7 +313,7 @@ public class NormalCommandHandler {
             tempTask.setStartTime(tempStartTime);
             tempTask.setEndTime(tempEndTime);
 
-            dataBase.add(tempTask);
+            dataBaseAdd(tempTask);
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
@@ -348,13 +367,13 @@ public class NormalCommandHandler {
             }
         }
 
-        dataBase.delete(tempTask);
+        dataBaseDelete(tempTask);
 
         Reminder newReminder = new Reminder(true, reminderTime);
 
         tempTask.setReminder(newReminder);
 
-        dataBase.add(tempTask);
+        dataBaseAdd(tempTask);
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
@@ -391,5 +410,23 @@ public class NormalCommandHandler {
         default:
             return null;
         }
+    }
+    
+    private void dataBaseAdd(Task task) {
+    	try{
+    		dataBase.add(task);
+    		logic.writeLog(LOGGING_ADDING_TASK + task.getName().getName());
+    	} catch(IOException e){
+    		
+    	}
+    }
+    
+    private void dataBaseDelete(Task task) {
+    	try{
+    		dataBase.delete(task);
+    		logic.writeLog(LOGGING_DELETING_TASK + task.getName().getName());
+    	} catch(IOException e) {
+    		
+    	}
     }
 }

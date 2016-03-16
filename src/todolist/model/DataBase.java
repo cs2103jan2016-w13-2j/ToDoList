@@ -1,9 +1,12 @@
 package todolist.model;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * This class is the storage class, handling the read and write of local file with relative commands.
@@ -28,7 +31,17 @@ public class DataBase {
     public static String VIEW_TODAY = "today";
     public static String VIEW_ARCHIVED = "archive";
     public static String VIEW_OVERDUE = "overdue";
-
+    public static String EXCEPTION_INVALID_PATH = "Invalid path!";
+    public static String EXCEPEPTION_REPEATED_TASK = "The task has already existed!";
+    public static String EXCEPTION_TASKNOTEXIST = "The task to delete does not exist!";
+    public static String LOGGING_ADDING_TASK = "tring to add task: ";
+    public static String LOGGING_DELETING_TASK = "tring to delete task: ";
+    public static String LOGGING_REPEATED_TASK = "The task has already existed: ";
+    public static String LOGGING_TASK_NOTEXIST = "The task to delete does not exist: ";
+    public static String LOGGING_TASK_DELETED = "The task is deleted from database: ";
+    
+    private static Logger dataBase_Logger = Logger.getLogger("Database logger");
+    
     public static enum FilterType {
         VIEW, CATEGORY, NAME, END_DATE, START_DATE;
     }
@@ -40,11 +53,12 @@ public class DataBase {
     private FileHandler fh;
     private ArrayList<Task> taskList;
     private ArrayList<ArrayList<Task>> snapshot;
-
+    
     public DataBase() {
         taskList = null;
         fh = new FileHandler();
         loadFromFile();
+        
     }
 
     // firstly convert every task in the arraylist to string, then call write
@@ -171,30 +185,47 @@ public class DataBase {
      * 
      * @param Task
      *            the task to be added
-     * @return boolean whether the task is successfully added
+     * @return  TRUE whether the task is successfully added\
+     *   
+     * @throws IOException  when task already exist
      */
-    public boolean add(Task task) {
-        taskList.add(task);
-        writeToFile();
-        // snapshot.add(retrieveAll());
+    public boolean add(Task task) throws IOException {
+        if(isExistingTask(task)) {
+        	dataBase_Logger.log(Level.INFO, LOGGING_REPEATED_TASK + task.getName().getName());
+        	throw new IOException(EXCEPEPTION_REPEATED_TASK) ;
+        }
+        
+        dataBase_Logger.log(Level.INFO, LOGGING_ADDING_TASK + task.getName().getName());
+    	taskList.add(0, task);
+    	snapshot.add(taskList);
+        writeToFile();       
         return true;
     }
-
+    
+    //helper method for add function
+    private boolean isExistingTask(Task task) {
+    	return taskList.contains(task);    	
+    }
+    
     /**
      * This method handles the updating of text file when the specified task is
      * to be deleted. Returns true if the task is successfully deleted.
      * 
      * @param Task
      *            the task to be deleted
-     * @return boolean true if the task is successfully deleted; false if the
-     *         task cannot be found
+     * @return boolean true if the task is successfully deleted; 
+     *        
+     * @throws IOException   if the task to delete does not exist
      */
-    public boolean delete(Task taskToDelete) {
+    public boolean delete(Task taskToDelete) throws IOException {
         loadFromFile();
-
+        
+        dataBase_Logger.log(Level.INFO, LOGGING_DELETING_TASK + taskToDelete.getName().getName());
+        
         if (taskList.size() == 0) {
             System.out.println(0);
-            return false;
+            dataBase_Logger.log(Level.INFO, LOGGING_TASK_NOTEXIST + taskToDelete.getName().getName());
+            throw new IOException(EXCEPTION_TASKNOTEXIST);
         }
 
         System.out.println(taskList.size());
@@ -205,15 +236,16 @@ public class DataBase {
 
         if (index == null) {
             System.out.println("null");
-            return false;
+            dataBase_Logger.log(Level.INFO, LOGGING_TASK_NOTEXIST + taskToDelete.getName().getName());
+            throw new IOException(EXCEPTION_TASKNOTEXIST);
         }
 
         taskList.remove(taskList.get(index));
-
+        dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED + taskToDelete.getName().getName());
+               
         System.out.println(taskList.size());
-
+        snapshot.add(taskList);
         writeToFile();
-        // snapshot.add(retrieveAll());
         return true;
     }
 
@@ -377,11 +409,11 @@ public class DataBase {
     // sorting
     // 1.startDate
     private ArrayList<Task> sort_StartDate(ArrayList<Task> currentList) {
-        Collections.sort(currentList, new StartDateComparator<Task>());
+        Collections.sort(currentList, new StartDateComparator());
         return currentList;
     }
 
-    private class StartDateComparator<Task> implements Comparator<Task> {
+    private class StartDateComparator implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             LocalDateTime firstDate = ((todolist.model.Task) t1).getStartTime();
             LocalDateTime secondDate = ((todolist.model.Task) t2).getStartTime();
@@ -401,11 +433,11 @@ public class DataBase {
 
     // 2.endDate
     private ArrayList<Task> sort_EndDate(ArrayList<Task> currentList) {
-        Collections.sort(currentList, new EndDateComparator<Task>());
+        Collections.sort(currentList, new EndDateComparator());
         return currentList;
     }
 
-    private class EndDateComparator<Task> implements Comparator<Task> {
+    private class EndDateComparator implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             LocalDateTime firstDate = ((todolist.model.Task) t1).getEndTime();
             LocalDateTime secondDate = ((todolist.model.Task) t2).getEndTime();
@@ -425,11 +457,11 @@ public class DataBase {
 
     // 3.category
     private ArrayList<Task> sort_Category(ArrayList<Task> currentList) {
-        Collections.sort(currentList, new CategoryComparator<Task>());
+        Collections.sort(currentList, new CategoryComparator());
         return currentList;
     }
 
-    private class CategoryComparator<Task> implements Comparator<Task> {
+    private class CategoryComparator implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             String firstCategory = ((todolist.model.Task) t1).getCategory().getCategory();
             String secondCategory = ((todolist.model.Task) t2).getCategory().getCategory();
@@ -439,11 +471,11 @@ public class DataBase {
 
     // 4.name
     private ArrayList<Task> sort_Name(ArrayList<Task> currentList) {
-        Collections.sort(currentList, new NameComparator<Task>());
+        Collections.sort(currentList, new NameComparator());
         return currentList;
     }
 
-    private class NameComparator<Task> implements Comparator<Task> {
+    private class NameComparator implements Comparator<Task> {
         public int compare(Task t1, Task t2) {
             String firstName = ((todolist.model.Task) t1).getName().getName();
             String secondName = ((todolist.model.Task) t2).getName().getName();
@@ -456,12 +488,16 @@ public class DataBase {
      * 
      * @param newFile the string that contains the new path and file name
      * 
-     * @return true if the directory exists and the new file is set.
+     * @return true     if the directory exists and the new file is set.
+     * @throw Exception if the path is invalid
      */
-    public boolean setNewFile(String newFilePath) {
+    public boolean setNewFile(String newFilePath) throws Exception {
         boolean isSet = false;
         isSet = fh.setFile(newFilePath);
         this.loadFromFile();
+        if(!isSet) {
+        	throw new Exception(EXCEPTION_INVALID_PATH);
+        }
         return isSet;
     }
 
