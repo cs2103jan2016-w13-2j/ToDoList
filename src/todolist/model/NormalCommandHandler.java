@@ -15,7 +15,11 @@ public class NormalCommandHandler {
     private Logic logic;
     private int steps;
     
-    public static String LOGGING_ADDING_TASK = "tring to add task: ";
+    public static String LOGGING_ADDING_FLOATING_TASK = "tring to add floating task: ";
+    public static String LOGGING_ADDING_EVENT = "tring to add event: ";
+    public static String LOGGING_ADDING_DEADLINE = "tring to add deadline: ";
+    public static String LOGGING_EDITING_TASK = "tring to edit task: ";
+    public static String LOGGING_SEARCHING_TASK = "tring to search task: ";
     public static String LOGGING_DELETING_TASK = "tring to delete task: ";
     public static String LOGGING_REPEATED_TASK = "The task has already existed: ";
     public static String LOGGING_TASK_NOTEXIST = "The task does not exist: ";
@@ -129,6 +133,9 @@ public class NormalCommandHandler {
     }
 
     private void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title + startDate + startTime + quantity + timeUnit);
+    	
         Name name = new Name(title);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime start = LocalDateTime.parse(startDate + " " + startTime, formatter);
@@ -142,6 +149,9 @@ public class NormalCommandHandler {
     }
 
     private void addDeadline(String title, String endDate, String endTime) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_ADDING_DEADLINE + title + endDate + endTime);
+    	
         Name name = new Name(title);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
@@ -154,6 +164,9 @@ public class NormalCommandHandler {
     }
 
     private void addTask(String title) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title);
+    	
     	assert(title.length()>0);
         Name name = new Name(title);
         Task newEvent = new Task(name, null, null, null, null, false);
@@ -165,6 +178,9 @@ public class NormalCommandHandler {
     }
 
     private void done(String title) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+    	
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         dataBaseDelete(tempTask);
 
@@ -177,6 +193,9 @@ public class NormalCommandHandler {
     }
 
     private void edit(String title, String fieldName, String newValue) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+    	
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         dataBaseDelete(tempTask);
 
@@ -223,6 +242,9 @@ public class NormalCommandHandler {
     }
 
     private void delete(String title) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_DELETING_TASK + title);
+    	
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         System.out.println(dataBase.convert_TaskToString(tempTask));
         dataBaseDelete(tempTask);
@@ -232,6 +254,9 @@ public class NormalCommandHandler {
     }
 
     private void search(String title) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_SEARCHING_TASK + title);
+    	
         uiHandler.search(title);
     }
 
@@ -252,6 +277,9 @@ public class NormalCommandHandler {
     // }
 
     private void label(String title, String category) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+    	
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         dataBaseDelete(tempTask);
 
@@ -263,6 +291,9 @@ public class NormalCommandHandler {
     }
 
     private void postpone(String title, String quantity, String timeUnit) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+    	
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         dataBaseDelete(tempTask);
 
@@ -292,6 +323,9 @@ public class NormalCommandHandler {
     }
 
     private void forward(String title, String quantity, String timeUnit) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+    	
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         dataBaseDelete(tempTask);
 
@@ -321,6 +355,7 @@ public class NormalCommandHandler {
     }
 
     private void addRemind(String[] arg) {
+    	
         String type = arg[0];
         switch (type) {
         case "event":
@@ -335,6 +370,7 @@ public class NormalCommandHandler {
     }
 
     private void addRemindBef(String quantity, String timeUnit, String[] arg) {
+    	   	
         String type = arg[0];
         switch (type) {
         case "event":
@@ -349,6 +385,8 @@ public class NormalCommandHandler {
     }
 
     private void remindBef(String title, String quantity, String timeUnit) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         LocalDateTime reminderTime = null;
@@ -380,6 +418,9 @@ public class NormalCommandHandler {
     }
 
     private void remind(String title) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+    	
         remindBef(title, null, null);
     }
 
@@ -415,7 +456,6 @@ public class NormalCommandHandler {
     private void dataBaseAdd(Task task) {
     	try{
     		dataBase.add(task);
-    		logic.writeLog(LOGGING_ADDING_TASK + task.getName().getName());
     	} catch(IOException e){
     		
     	}
@@ -424,7 +464,6 @@ public class NormalCommandHandler {
     private void dataBaseDelete(Task task) {
     	try{
     		dataBase.delete(task);
-    		logic.writeLog(LOGGING_DELETING_TASK + task.getName().getName());
     	} catch(IOException e) {
     		
     	}
