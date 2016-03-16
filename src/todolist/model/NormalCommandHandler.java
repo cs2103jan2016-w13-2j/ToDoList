@@ -126,7 +126,7 @@ public class NormalCommandHandler {
         	reset();
         	break;
         default:
-            // call feedback modal...
+            uiHandler.sendMessage("Opps! I can't understand this command!");
         }
     }
     
