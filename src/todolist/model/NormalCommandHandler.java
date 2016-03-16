@@ -25,6 +25,8 @@ public class NormalCommandHandler {
     public static String LOGGING_REPEATED_TASK = "The task has already existed: ";
     public static String LOGGING_TASK_NOTEXIST = "The task does not exist: ";
     public static String LOGGING_TASK_DELETED = "The task is deleted from database: ";
+    
+    public static String EXCEPTION_TIME_ERROR = "This time was in the past";
 
     public NormalCommandHandler(DataBase dataBase, UIHandler uiHandler, Logic logic) {
         this.dataBase = dataBase;
@@ -133,7 +135,7 @@ public class NormalCommandHandler {
     	uiHandler.sendMessage("View reseted");
     }
 
-    private void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
+    private void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) throws Exception {
     	
     	if(noRepeat(title)) {
     		logic.logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title + startDate + startTime + quantity + timeUnit);
@@ -142,6 +144,11 @@ public class NormalCommandHandler {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime start = LocalDateTime.parse(startDate + " " + startTime, formatter);
             LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
+            
+            if(!start.isAfter(LocalDateTime.now())) {
+            	throw new Exception(EXCEPTION_TIME_ERROR);
+            }
+            
             Task newEvent = new Task(name, start, end, null, null, false);
 
             dataBaseAdd(newEvent);
@@ -151,7 +158,7 @@ public class NormalCommandHandler {
     	}
     }
 
-    private void addDeadline(String title, String endDate, String endTime) {
+    private void addDeadline(String title, String endDate, String endTime) throws Exception{
     	
     	if(noRepeat(title)) {
     		logic.logger.log(Level.INFO, LOGGING_ADDING_DEADLINE + title + endDate + endTime);
@@ -160,6 +167,10 @@ public class NormalCommandHandler {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
             Task newEvent = new Task(name, null, end, null, null, false);
+            
+            if(!end.isAfter(LocalDateTime.now())) {
+            	throw new Exception(EXCEPTION_TIME_ERROR);
+            }
 
             dataBaseAdd(newEvent);
             uiHandler.refresh();
@@ -370,7 +381,7 @@ public class NormalCommandHandler {
         }
     }
 
-    private void addRemind(String[] arg) {
+    private void addRemind(String[] arg) throws Exception {
     	
         String type = arg[0];
         switch (type) {
@@ -385,7 +396,7 @@ public class NormalCommandHandler {
         remind(arg[1]);
     }
 
-    private void addRemindBef(String quantity, String timeUnit, String[] arg) {
+    private void addRemindBef(String quantity, String timeUnit, String[] arg) throws Exception {
     	   	
         String type = arg[0];
         switch (type) {
