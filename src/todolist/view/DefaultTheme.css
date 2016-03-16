@@ -58,11 +58,15 @@
 
 .titled-pane > .title {
 	-fx-background-color: #EB586F;
-    -fx-font-size: 18.0pt;
+    -fx-font-size: 20.0pt;
+    -fx-text-fill: #FEFAEC;
+    -fx-font-weight: bold;
 }
 
 .titled-pane:focused > .title {
 	-fx-color: #4AA0D5;
+    -fx-text-fill: #FEFAEC;
+    -fx-font-weight: bold;
 }
 
 .titled-pane > .content {

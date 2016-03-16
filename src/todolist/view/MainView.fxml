@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
@@ -56,11 +58,21 @@
 				</ListView>
 			</content>
 			<graphic>
-				<HBox id="titled-pane-hbox" maxHeight="1.7976931348623157E308"
-					maxWidth="1.7976931348623157E308" stylesheets="@DefaultTheme.css">
+				<HBox id="titled-pane-hbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
+					maxWidth="1.7976931348623157E308" spacing="10.0" stylesheets="@DefaultTheme.css">
 					<children>
-						<Text id="titled-pane-hbox-text" strokeType="OUTSIDE"
-							strokeWidth="0.0" text="&lt;tasks&gt;" />
+						<ImageView fitHeight="20.0" fitWidth="20.0"
+							pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@img/pen.png" />
+							</image>
+							<HBox.margin>
+								<Insets />
+							</HBox.margin>
+						</ImageView>
+						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD"
+							strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
+							text="tasks" textAlignment="CENTER" />
 					</children>
 				</HBox>
 			</graphic>
