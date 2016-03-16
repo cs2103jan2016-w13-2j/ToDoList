@@ -1,6 +1,5 @@
 package todolist.model;
 
-//import java.sql.Time;
 import java.time.LocalDateTime;
 
 import javafx.beans.property.ObjectProperty;
@@ -10,28 +9,12 @@ import javafx.beans.property.StringProperty;
 
 public class TaskWrapper {
 
-    // private Name name;
-    // private Time startTime;
-    // private Time endTime;
-    // private Category category;
-    // private Priority priority;
-    // private Reminder reminder;
-
     private StringProperty taskTitle;
     private ObjectProperty<LocalDateTime> startTime;
     private ObjectProperty<LocalDateTime> endTime;
     private ObjectProperty<Category> category;
     private ObjectProperty<Reminder> reminder;
     private ObjectProperty<Boolean> isDone;
-
-    // public TaskWrapper(String task, LocalDateTime start, LocalDateTime end,
-    // Category category, Reminder reminder) {
-    // this.taskTitle = new SimpleStringProperty(task);
-    // this.startTime = new SimpleObjectProperty<LocalDateTime>(start);
-    // this.endTime = new SimpleObjectProperty<LocalDateTime>(end);
-    // this.category = new SimpleObjectProperty<Category>(category);
-    // this.reminder = new SimpleObjectProperty<Reminder>(reminder);
-    // }
 
     public TaskWrapper(Task task) {
         this.taskTitle = new SimpleStringProperty(task.getName().getName());

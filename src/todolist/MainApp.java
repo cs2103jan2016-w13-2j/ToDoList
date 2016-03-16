@@ -2,33 +2,30 @@ package todolist;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import todolist.model.Logic;
 import todolist.model.Task;
 import todolist.model.TaskWrapper;
 import todolist.view.MainViewController;
 import todolist.view.SideBarController;
+
 import javafx.animation.PauseTransition;
-//import todolist.view.TitleBarController;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import org.controlsfx.control.NotificationPane;
+
+import com.sun.media.jfxmedia.logging.Logger;
 
 /*
  * MainApp is the GUI class for the application.
@@ -49,6 +46,9 @@ public class MainApp extends Application {
     private static final String MESSAGE_ERROR_LOAD_TITLEBAR = "Error loading title bar view.";
     private static final String MESSAGE_ERROR_LOAD_SIDEBAR = "Error loading side bar view.";
     private static final String MESSAGE_ERROR_LOAD_EMPTY = "Error loading empty view.";
+
+    // Notification messages
+    private static final String NOTIFICATION_WELCOME = "Welcome to todolist! Let's get started...";
 
     // Directories and labels
     private static final String DIRECTORY_ROOT = "view/RootLayout.fxml";
@@ -72,15 +72,18 @@ public class MainApp extends Application {
 
     // Controllers
     private MainViewController mainController;
-    // private TitleBarController titlebarController;
     private SideBarController sidebarController;
 
-    public Logic handler = null;
+    // Other Components
+    public Logic logicUnit = null;
 
-    public NotificationPane np = null;
-    
+    // Notification System
+    public NotificationPane rootWithNotification = null;
     public PauseTransition delay = null;
 
+    
+    /*** CORE FUNCTIONS ***/
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -88,11 +91,8 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // TODO:
-        // ... Load Model Lists from Storage through controllers
-        // ... Load Tasks into tasksToDisplay
-
-        handler = new Logic(this);
+        // Reference and link with Logic component
+        logicUnit = new Logic(this);
 
         // Load Views
         loadRootView(primaryStage);
@@ -100,42 +100,6 @@ public class MainApp extends Application {
         loadTitleBar();
         loadSideBar();
 
-    }
-
-    private void loadRootView(Stage primaryStage) {
-        try {
-            rootView = (BorderPane) FXMLLoader.load(MainApp.class.getResource(DIRECTORY_ROOT));
-            rootView.getStyleClass().add(STYLE_CLASS_ROOT);
-
-            Label label = new Label("content");
-            label.setPadding(new Insets(50));
-            BorderPane borderPane = new BorderPane(label);
-            np = new NotificationPane(borderPane);
-            np.setShowFromTop(true);
-            np.setContent(rootView);
-
-            Scene scene = new Scene(rootView, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-            setWindowDimensions(primaryStage);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-            primaryStage.setScene(new Scene(np, DEFAULT_WIDTH, DEFAULT_HEIGHT));
-
-            primaryStage.show();
-
-            // generate notification
-            np.setText("Welcome to todolist!");
-            np.show();
-
-            delay = new PauseTransition(Duration.seconds(2));
-            delay.setOnFinished(e -> np.hide());
-            delay.play();
-
-        } catch (IOException ioException) {
-            System.out.println(MESSAGE_ERROR_LOAD_ROOT);
-            System.exit(1);
-        }
     }
 
     private void setWindowDimensions(Stage primaryStage) {
@@ -148,18 +112,43 @@ public class MainApp extends Application {
         mainController.populateTaskListView();
     }
 
+    
     /*** VIEW LOADERS ***/
+    
+    private void loadRootView(Stage primaryStage) {
+        try {
+
+            // Acquire FXML and CSS component for root layout
+            rootView = (BorderPane) FXMLLoader.load(MainApp.class.getResource(DIRECTORY_ROOT));
+            rootView.getStyleClass().add(STYLE_CLASS_ROOT);
+
+            setupNotificationPane();
+            setWindowDimensions(primaryStage);
+
+            Scene scene = new Scene(rootWithNotification, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+            notifyWithText(NOTIFICATION_WELCOME);
+
+        } catch (IOException ioException) {
+            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_ROOT);
+            System.exit(1);
+        }
+    }
 
     private void loadMainView() {
         try {
 
+            // Acquire FXML and CSS component for main view
             FXMLLoader loader = new FXMLLoader();
-
             loader.setLocation(MainApp.class.getResource(DIRECTORY_MAIN));
             mainView = (BorderPane) loader.load();
             mainView.getStyleClass().add(STYLE_CLASS_MAIN);
+
             rootView.setCenter(mainView);
 
+            // Set up display logic for main view
             mainController = loader.getController();
             mainController.setMainApp(this);
 
@@ -181,15 +170,13 @@ public class MainApp extends Application {
     private void loadTitleBar() {
         try {
 
+            // Acquire FXML and CSS component for title bar
             FXMLLoader loader = new FXMLLoader();
-
             loader.setLocation(MainApp.class.getResource(DIRECTORY_TITLEBAR));
             titleBarView = (HBox) loader.load();
             titleBarView.getStyleClass().add(STYLE_CLASS_TITLEBAR);
-            rootView.setTop(titleBarView);
 
-            // titlebarController = loader.getController();
-            // controller.setMainApp(this);
+            rootView.setTop(titleBarView);
 
         } catch (IOException e) {
             System.out.println(MESSAGE_ERROR_LOAD_TITLEBAR);
@@ -201,13 +188,15 @@ public class MainApp extends Application {
     private void loadSideBar() {
         try {
 
+            // Acquire FXML and CSS component for side bar
             FXMLLoader loader = new FXMLLoader();
-
             loader.setLocation(MainApp.class.getResource(DIRECTORY_SIDEBAR));
             sideBarView = (VBox) loader.load();
             sideBarView.getStyleClass().add(STYLE_CLASS_SIDEBAR);
+
             rootView.setLeft(sideBarView);
 
+            // Set up display logic for side bar
             sidebarController = loader.getController();
             sidebarController.setMainApp(this);
 
@@ -218,10 +207,54 @@ public class MainApp extends Application {
         }
     }
 
+    private void loadDefaultEmptyView() {
+        try {
+
+            // Acquire FXML and CSS component for empty view
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource(DIRECTORY_EMPTY));
+            emptyView = (BorderPane) loader.load();
+
+            rootView.setCenter(emptyView);
+        } catch (IOException e) {
+            System.out.println(MESSAGE_ERROR_LOAD_EMPTY);
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
     public void reloadDisplay() {
         refreshTaskList();
     }
 
+   
+    /*** NOTIFICATION FUNCTIONS ***/
+    
+    private void setupNotificationPane() {
+        Label label = new Label();
+        label.setPadding(new Insets(50));
+
+        BorderPane borderPane = new BorderPane(label);
+        rootWithNotification = new NotificationPane(borderPane);
+
+        rootWithNotification.setShowFromTop(true);
+        rootWithNotification.setContent(rootView);
+    }
+    
+    
+    
+    public void notifyWithText(String text) {
+
+        rootWithNotification.setText(text);
+        rootWithNotification.show();
+
+        // Delay factor
+        delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(e -> rootWithNotification.hide());
+        delay.play();
+    }
+    
+    
     /*** ACCESS FUNCTIONS FOR MODELS ***/
 
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
@@ -238,24 +271,6 @@ public class MainApp extends Application {
             loadMainView();
         default:
             loadDefaultEmptyView();
-        }
-    }
-
-    private void loadDefaultEmptyView() {
-        try {
-
-            FXMLLoader loader = new FXMLLoader();
-
-            loader.setLocation(MainApp.class.getResource(DIRECTORY_EMPTY));
-            emptyView = (BorderPane) loader.load();
-            rootView.setCenter(emptyView);
-
-            // ... load controller here
-
-        } catch (IOException e) {
-            System.out.println(MESSAGE_ERROR_LOAD_EMPTY);
-            e.printStackTrace();
-            System.exit(1);
         }
     }
 

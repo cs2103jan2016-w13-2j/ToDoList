@@ -11,17 +11,26 @@ import todolist.MainApp;
 
 public class SideBarController {
 
+    /*** TAB STYLES ***/
+    private static final String STYLE_TAB_NORMAL = "-fx-background-color: transparent;";
+    private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #95E1D3;";
+    
+    
     /*** VIEWS ***/
+    
+    // HOME TAB
     @FXML
     private Button home = null;
     @FXML
     private ImageView homeIcon = null;
 
+    // EXPIRED TAB
     @FXML
     private Button expired = null;
     @FXML
     private ImageView expiredIcon = null;
-
+    
+    // TODAY TAB
     @FXML
     private StackPane todayStack = null;
     @FXML
@@ -30,41 +39,44 @@ public class SideBarController {
     private Button today = null;
     @FXML
     private ImageView todayIcon = null;
-
+    private int todayDate = 0;
+    
+    // WEEK TAB
     @FXML
     private Button week = null;
     @FXML
     private ImageView weekIcon = null;
 
+    // DONE TAB
     @FXML
     private Button done = null;
     @FXML
     private ImageView doneIcon = null;
 
+    // OPTIONS TAB
     @FXML
     private Button options = null;
     @FXML
     private ImageView optionsIcon = null;
 
+    // HELP TAB
     @FXML
     private Button help = null;
     @FXML
     private ImageView helpIcon = null;
 
-    /*** MAIN APP ***/
+    
+    /*** SIDEBAR AND PAGE PROPERTIES ***/
+    
+    private int index = 1;
+    private static int NUMBER_BUTTONS = 7;
+    private Button[] buttonArray;
+    
+    // Main Application reference
     private MainApp mainApplication = null;
 
-    private int todayDate = 0;
-
-    private int index = 0;
-
-    private static int NUMBER_BUTTONS = 7;
-
-    private Button[] buttonArray;
-
-    public SideBarController() {
-
-    }
+    
+    /*** CORE FUNCTIONS ***/
 
     public void setMainApp(MainApp mainApp) {
         mainApplication = mainApp;
@@ -72,6 +84,12 @@ public class SideBarController {
 
     @FXML
     public void initialize() {
+        setButtonArray();
+        setTodayDate();
+        colourTab();
+    }
+
+    private void setButtonArray() {
         buttonArray = new Button[NUMBER_BUTTONS];
         buttonArray[0] = home;
         buttonArray[1] = expired;
@@ -80,14 +98,15 @@ public class SideBarController {
         buttonArray[4] = done;
         buttonArray[5] = options;
         buttonArray[6] = help;
-
-        setTodayDate();
-        setInitialIndex();
     }
+    
+    private void setTodayDate() {
+        todayDate = LocalDateTime.now().getDayOfMonth();
 
-    private void setInitialIndex() {
-        this.index = 1;
-        colourTab();        
+        if (todayLabel != null) {
+            todayLabel.setText(Integer.toString(todayDate));
+        }
+
     }
 
     public void setIndex(int index) {
@@ -99,21 +118,13 @@ public class SideBarController {
     private void colourTab() {
         for (int i = 0; i < NUMBER_BUTTONS; ++i) {
             Button currentButton = buttonArray[i];
-            currentButton.setStyle("-fx-background-color: transparent;");
+            currentButton.setStyle(STYLE_TAB_NORMAL);
 
+            // Highlight if focused
             if (i == index - 1) {
-                currentButton.setStyle("-fx-background-color: #95E1D3;");
+                currentButton.setStyle(STYLE_TAB_FOCUSED);
             }
         }
-    }
-
-    private void setTodayDate() {
-        todayDate = LocalDateTime.now().getDayOfMonth();
-
-        if (todayLabel != null) {
-            todayLabel.setText(Integer.toString(todayDate));
-        }
-
     }
 
     public MainApp getMainApplication() {

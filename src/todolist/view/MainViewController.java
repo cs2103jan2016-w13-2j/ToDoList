@@ -1,15 +1,12 @@
 package todolist.view;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import todolist.MainApp;
-import todolist.model.Category;
 import todolist.model.Command;
-import todolist.model.Name;
-import todolist.model.Reminder;
 import todolist.model.Task;
 import todolist.model.TaskWrapper;
-import javafx.animation.PauseTransition;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,16 +19,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import javafx.util.Duration;
 
 public class MainViewController {
 
-    // private static final String MESSAGE_EMPTY_LIST = "No Content To Show";
-
     /*** MODEL DATA ***/
     private ObservableList<TaskWrapper> tasksToDisplay = null;
-
-    private ArrayList<Task> taskListStub = new ArrayList<Task>();
 
     /*** MAIN APP ***/
     private MainApp mainApplication = null;
@@ -40,44 +32,13 @@ public class MainViewController {
     @FXML
     private ListView<TaskWrapper> listView = null;
 
+    
     /*** CORE CONTROLLER FUNCTIONS ***/
+    
     public MainViewController() {
-
+        // Initialise models
         tasksToDisplay = FXCollections.observableArrayList();
-
         listView = new ListView<TaskWrapper>();
-
-        taskListStub.add(new Task(new Name("Proposal meeting"), LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                new Category("Meetings"), new Reminder(true, LocalDateTime.now()), false));
-
-        taskListStub.add(new Task(new Name("Scrum discussion"), LocalDateTime.now().plusHours(21),
-                LocalDateTime.now().plusHours(22), new Category("New Release Project"),
-                new Reminder(true, LocalDateTime.now()), false));
-
-        taskListStub.add(new Task(new Name("Buy coffee"), null, null, new Category("Personal"),
-                new Reminder(true, LocalDateTime.now()), false));
-
-        taskListStub.add(new Task(new Name("Module submission"), null, LocalDateTime.now().plusHours(154),
-                new Category("Deadlines"), new Reminder(false, LocalDateTime.now()), false));
-
-        taskListStub.add(new Task(new Name("Send email"), null, LocalDateTime.now().minusHours(2),
-                new Category("Tasks"), new Reminder(false, LocalDateTime.now()), false));
-
-        setInitialTasks(taskListStub);
-    }
-
-    private void setInitialTasks(ArrayList<Task> tasks) {
-        ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
-        listView.getItems().clear();
-
-        for (int i = 0; i < tasks.size(); ++i) {
-            // ... Convert Task to TaskWrapper
-            TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
-            arrayOfWrappers.add(wrappedTask);
-
-        }
-
-        listView.getItems().addAll(arrayOfWrappers);
     }
 
     public void setMainApp(MainApp mainApp) {
@@ -87,41 +48,6 @@ public class MainViewController {
     @FXML
     public void initialize() {
         initTaskListView();
-    }
-
-    public void setCommandLineCallback(TextField commandField) {
-        // Set Callback for TextField
-        EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                String commandString = commandField.getText();
-                Command command = new Command(commandString);
-                System.out.println(command.getCommand());
-
-                // Pass Command Line input for processing
-                try {
-                	mainApplication.handler.process(command);
-                } catch(Exception e) {
-                	
-                }
-                
-
-            }
-        };
-
-        commandField.setOnAction(commandHandler);
-    }
-
-    /*** VIEW GETTERS-SETTERS-LOADERS ***/
-
-    public ListView<TaskWrapper> getTaskListView() {
-        return listView;
-    }
-
-    public void populateTaskListView() {
-        mainApplication.handler.uiHandler.refresh();
-        // listView.setItems(tasksToDisplay);
     }
 
     public void initTaskListView() {
@@ -137,6 +63,41 @@ public class MainViewController {
 
     }
 
+    public void setCommandLineCallback(TextField commandField) {
+        // Set Callback for TextField
+        EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                String commandString = commandField.getText();
+                Command command = new Command(commandString);
+                System.out.println(command.getCommand());
+
+                // Pass Command Line input for processing
+                try {
+                    mainApplication.logicUnit.process(command);
+                } catch (Exception e) {
+
+                }
+
+            }
+        };
+
+        commandField.setOnAction(commandHandler);
+    }
+
+    
+    /*** VIEW GETTERS-SETTERS-LOADERS ***/
+
+    public ListView<TaskWrapper> getTaskListView() {
+        return listView;
+    }
+
+    public void populateTaskListView() {
+        mainApplication.logicUnit.uiHandler.refresh();
+    }
+
+    
     /*** MODEL GETTERS-SETTERS-RELOADERS ***/
 
     public ObservableList<TaskWrapper> getTasks() {
@@ -147,23 +108,13 @@ public class MainViewController {
         ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
         listView.getItems().clear();
 
+        // Convert Task to TaskWrapper for display handling
         for (int i = 0; i < tasks.size(); ++i) {
-            // ... Convert Task to TaskWrapper
             TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
             arrayOfWrappers.add(wrappedTask);
-
         }
 
         listView.getItems().addAll(arrayOfWrappers);
-
-        // generate notification
-        mainApplication.np.setText("View refreshed!");
-        mainApplication.np.show();
-
-        
-        mainApplication.delay = new PauseTransition(Duration.seconds(2));
-        mainApplication.delay.setOnFinished(e -> mainApplication.np.hide());
-        mainApplication.delay.play();
     }
 
 }
