@@ -12,7 +12,7 @@ public class Logic {
     public UIHandler uiHandler;
     private CommandHandler commandHandler;
     
-    private static Logger logic_Logger = Logger.getLogger("Logic logger");
+    public Logger logger = Logger.getLogger("Logic Logger");
 
     public Logic(MainApp mainApp) {
         this.mainApp = mainApp;
@@ -25,9 +25,5 @@ public class Logic {
     
     public void process(Command input) throws Exception {
         commandHandler.execute(input);
-    }
-    
-    public void writeLog(String log) {
-    	logic_Logger.log(Level.INFO, log);
     }
 }
