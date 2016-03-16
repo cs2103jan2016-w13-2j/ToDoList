@@ -173,7 +173,6 @@ public class NormalCommandHandler {
     	if(noRepeat(title)) {
     		logic.logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title);
         	
-        	assert(title.length()>0);
             Name name = new Name(title);
             Task newEvent = new Task(name, null, null, null, null, false);
 
@@ -474,7 +473,7 @@ public class NormalCommandHandler {
     	try{
     		dataBase.add(task);
     	} catch(IOException e){
-    		
+    		logic.logger.log(Level.INFO, "IOException");
     	}
     }
     
@@ -482,7 +481,7 @@ public class NormalCommandHandler {
     	try{
     		dataBase.delete(task);
     	} catch(IOException e) {
-    		
+    		logic.logger.log(Level.INFO, "IOException");
     	}
     }
     
