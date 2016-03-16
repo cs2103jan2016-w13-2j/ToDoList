@@ -264,7 +264,7 @@ public class NormalCommandHandler {
     private void filter(String category) {
     	
     	logic.logger.log(Level.INFO, LOGGING_SEARCHING_TASK + category);
-    	
+    	uiHandler.filter(category);
     	uiHandler.sendMessage("Here are your filter results");
     }
     
