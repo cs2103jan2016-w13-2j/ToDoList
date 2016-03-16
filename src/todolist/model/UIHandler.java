@@ -36,7 +36,7 @@ public class UIHandler {
     }
 
 	public void filter(String category) {
-		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("Category", category));
+		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("CATEGORY", category));
 		mainApp.setDisplayTasks(tempTaskList);
 	}
 

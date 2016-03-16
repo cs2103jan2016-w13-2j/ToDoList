@@ -3,6 +3,7 @@ package todolist.model;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.logging.Level;
@@ -134,7 +135,7 @@ public class DataBase {
         if (currentTask.getCategory() == null) {
             task_str += "mynull" + " ";
         } else {
-            task_str += currentTask.getCategory().toString() + " ";
+            task_str += currentTask.getCategory().getCategory() + " ";
         }
 
         if (currentTask.getDoneStatus() == null) {
@@ -288,6 +289,9 @@ public class DataBase {
         default:
             return resultList;
         }
+        
+        System.out.println(Arrays.toString(resultList.toArray()));
+        
         return resultList;
     }
 
@@ -388,6 +392,7 @@ public class DataBase {
                 resultList.add(eachTask);
             }
         }
+        System.out.println(Arrays.toString(resultList.toArray()));
         return resultList;
     }
 
@@ -398,11 +403,17 @@ public class DataBase {
     private ArrayList<Task> retrieve_Category(SearchCommand command) {
         ArrayList<Task> resultList = new ArrayList<Task>();
         String requiredCategory = command.getContent();
+        
+        System.out.println(requiredCategory);
+        
         for (Task eachTask : taskList) {
             if (isSame(eachTask.getCategory().getCategory(), requiredCategory)) {
+            	System.out.println(eachTask.getName().getName());
                 resultList.add(eachTask);
             }
         }
+        System.out.println(Arrays.toString(resultList.toArray()));
+        
         return resultList;
     }
 

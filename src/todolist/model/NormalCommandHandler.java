@@ -65,7 +65,7 @@ public class NormalCommandHandler {
             search(arg[0]);
             break;
         case "filter":
-            // filter(arg[0]);
+            filter(arg[0]);
             break;
         case "sort":
             sort(arg[0], arg[1]);
@@ -261,9 +261,12 @@ public class NormalCommandHandler {
     }
 
     private void filter(String category) {
+    	
+    	logic.logger.log(Level.INFO, LOGGING_SEARCHING_TASK + category);
+    	
     	uiHandler.filter(category);
     }
-    //
+    
     private void sort(String fieldName, String order) {
     	dataBase.sort(fieldName, order);
     	uiHandler.refresh();
