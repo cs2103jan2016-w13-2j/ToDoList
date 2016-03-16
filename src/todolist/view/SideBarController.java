@@ -102,11 +102,7 @@ public class SideBarController {
     
     private void setTodayDate() {
         todayDate = LocalDateTime.now().getDayOfMonth();
-
-        if (todayLabel != null) {
-            todayLabel.setText(Integer.toString(todayDate));
-        }
-
+        todayLabel.setText(Integer.toString(todayDate));
     }
 
     public void setIndex(int index) {

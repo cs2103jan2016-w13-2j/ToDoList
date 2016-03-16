@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 
+import com.sun.media.jfxmedia.logging.Logger;
+
 import todolist.MainApp;
 import todolist.model.Category;
 import todolist.model.TaskWrapper;
@@ -147,8 +149,12 @@ public class TaskNodeController {
 
         /** Validation **/
 
+        // Ensure integrity of task object
+        assert (task != null);
+
         // Index Number
         if (indexNumber <= 0) {
+            Logger.logMsg(Logger.ERROR, ERROR_DISPLAY_ITEM_INDEX);
             throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_INDEX);
         } else {
             number.setText(Integer.toString(indexNumber));
@@ -156,6 +162,7 @@ public class TaskNodeController {
 
         // Title
         if (taskTitle == null) {
+            Logger.logMsg(Logger.ERROR, ERROR_DISPLAY_ITEM_TITLE);
             throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_TITLE);
         } else {
             title.setText(taskTitle);
@@ -193,8 +200,7 @@ public class TaskNodeController {
         return root;
     }
 
-    public String formatDateField(TaskWrapper task, LocalDateTime startDateTime, LocalDateTime endDateTime)
-            throws IllegalArgumentException {
+    public String formatDateField(TaskWrapper task, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         TASK_TYPE taskType = checkTaskType(startDateTime, endDateTime);
 
         switch (taskType) {

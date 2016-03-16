@@ -105,6 +105,10 @@ public class MainViewController {
     }
 
     public void setTasks(ArrayList<Task> tasks) {
+        
+        // List provided by logic must be valid
+        assert(tasks != null);
+        
         ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
         listView.getItems().clear();
 
