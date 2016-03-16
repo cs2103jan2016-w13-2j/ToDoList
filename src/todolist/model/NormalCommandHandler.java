@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
 //import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -134,47 +135,53 @@ public class NormalCommandHandler {
 
     private void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
     	
-    	logic.logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title + startDate + startTime + quantity + timeUnit);
-    	
-        Name name = new Name(title);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime start = LocalDateTime.parse(startDate + " " + startTime, formatter);
-        LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
-        Task newEvent = new Task(name, start, end, null, null, false);
+    	if(noRepeat(title)) {
+    		logic.logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title + startDate + startTime + quantity + timeUnit);
+        	
+            Name name = new Name(title);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime start = LocalDateTime.parse(startDate + " " + startTime, formatter);
+            LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
+            Task newEvent = new Task(name, start, end, null, null, false);
 
-        dataBaseAdd(newEvent);
-        uiHandler.refresh();
-        uiHandler.highLight(newEvent);
-        uiHandler.sendMessage("A new event is successfully added");
+            dataBaseAdd(newEvent);
+            uiHandler.refresh();
+            uiHandler.highLight(newEvent);
+            uiHandler.sendMessage("A new event is successfully added");
+    	}
     }
 
     private void addDeadline(String title, String endDate, String endTime) {
     	
-    	logic.logger.log(Level.INFO, LOGGING_ADDING_DEADLINE + title + endDate + endTime);
-    	
-        Name name = new Name(title);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
-        Task newEvent = new Task(name, null, end, null, null, false);
+    	if(noRepeat(title)) {
+    		logic.logger.log(Level.INFO, LOGGING_ADDING_DEADLINE + title + endDate + endTime);
+        	
+            Name name = new Name(title);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
+            Task newEvent = new Task(name, null, end, null, null, false);
 
-        dataBaseAdd(newEvent);
-        uiHandler.refresh();
-        uiHandler.highLight(newEvent);
-        uiHandler.sendMessage("A new deadline is successfully added");
+            dataBaseAdd(newEvent);
+            uiHandler.refresh();
+            uiHandler.highLight(newEvent);
+            uiHandler.sendMessage("A new deadline is successfully added");
+    	}
     }
 
     private void addTask(String title) {
     	
-    	logic.logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title);
-    	
-    	assert(title.length()>0);
-        Name name = new Name(title);
-        Task newEvent = new Task(name, null, null, null, null, false);
+    	if(noRepeat(title)) {
+    		logic.logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title);
+        	
+        	assert(title.length()>0);
+            Name name = new Name(title);
+            Task newEvent = new Task(name, null, null, null, null, false);
 
-        dataBaseAdd(newEvent);
-        uiHandler.refresh();
-        uiHandler.highLight(newEvent);
-        uiHandler.sendMessage("A new floating task is successfully added");
+            dataBaseAdd(newEvent);
+            uiHandler.refresh();
+            uiHandler.highLight(newEvent);
+            uiHandler.sendMessage("A new floating task is successfully added");
+    	}
     }
 
     private void done(String title) {
@@ -476,6 +483,17 @@ public class NormalCommandHandler {
     		dataBase.delete(task);
     	} catch(IOException e) {
     		
+    	}
+    }
+    
+    private boolean noRepeat(String title) {
+    	ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
+    	System.out.println(tempTaskList.size());
+    	if(tempTaskList.size()>0) {
+    		uiHandler.sendMessage("Failure. Existing task with same name detected!");
+    		return false;
+    	} else {
+    		return true;
     	}
     }
 }
