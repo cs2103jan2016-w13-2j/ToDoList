@@ -77,7 +77,9 @@ public class MainApp extends Application {
 
     public Logic handler = null;
 
-    private NotificationPane np = null;
+    public NotificationPane np = null;
+    
+    public PauseTransition delay = null;
 
     public static void main(String[] args) {
         launch(args);
@@ -126,7 +128,7 @@ public class MainApp extends Application {
             np.setText("Welcome to todolist!");
             np.show();
 
-            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+            delay = new PauseTransition(Duration.seconds(2));
             delay.setOnFinished(e -> np.hide());
             delay.play();
 

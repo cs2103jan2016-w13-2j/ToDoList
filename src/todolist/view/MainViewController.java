@@ -9,6 +9,7 @@ import todolist.model.Name;
 import todolist.model.Reminder;
 import todolist.model.Task;
 import todolist.model.TaskWrapper;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 public class MainViewController {
 
@@ -61,7 +63,21 @@ public class MainViewController {
         taskListStub.add(new Task(new Name("Send email"), null, LocalDateTime.now().minusHours(2),
                 new Category("Tasks"), new Reminder(false, LocalDateTime.now()), false));
 
-        setTasks(taskListStub);
+        setInitialTasks(taskListStub);
+    }
+
+    private void setInitialTasks(ArrayList<Task> tasks) {
+        ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
+        listView.getItems().clear();
+
+        for (int i = 0; i < tasks.size(); ++i) {
+            // ... Convert Task to TaskWrapper
+            TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
+            arrayOfWrappers.add(wrappedTask);
+
+        }
+
+        listView.getItems().addAll(arrayOfWrappers);
     }
 
     public void setMainApp(MainApp mainApp) {
@@ -135,6 +151,14 @@ public class MainViewController {
 
         listView.getItems().addAll(arrayOfWrappers);
 
+        // generate notification
+        mainApplication.np.setText("View refreshed!");
+        mainApplication.np.show();
+
+        
+        mainApplication.delay = new PauseTransition(Duration.seconds(2));
+        mainApplication.delay.setOnFinished(e -> mainApplication.np.hide());
+        mainApplication.delay.play();
     }
 
 }
