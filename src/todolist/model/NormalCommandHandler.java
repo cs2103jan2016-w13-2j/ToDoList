@@ -260,9 +260,9 @@ public class NormalCommandHandler {
         uiHandler.search(title);
     }
 
-    // private void filter(String category) {
-    // uiHandler.filter(category);
-    // }
+    private void filter(String category) {
+    	uiHandler.filter(category);
+    }
     //
     private void sort(String fieldName, String order) {
     	dataBase.sort(fieldName, order);
@@ -273,9 +273,11 @@ public class NormalCommandHandler {
     // uiHandler.insert(title, befaft, title);
     // }
     //
-    // private void switchPosition(String title1, String title2) {
-    // uiHandler.insert(title, "aft", title);
-    // }
+    
+    /*
+    private void switchPosition(String title1, String title2) {
+    	uiHandler.insert(title1, "aft", title2);
+    }*/
 
     private void label(String title, String category) {
     	

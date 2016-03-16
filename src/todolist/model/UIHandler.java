@@ -81,22 +81,11 @@ public class UIHandler {
     // }
     // }
     //
-    // public void filter(String category) {
-    // if(isSorted) {
-    // this.category = category;
-    //
-    // ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new
-    // SearchCommand("Category", category));
-    // mainApp.setDisplayTasks(Sorter.sort(tempTaskList));
-    // isFiltered = true;
-    // } else {
-    // this.category = category;
-    // ArrayList<Task> tempTaskList = new Task(dataBase.retreive(new
-    // SearchCommand("Category", category));
-    // mainApp.setDisplayTasks(tempTaskList);
-    // isFiltered = true;
-    // }
-    // }
+	public void filter(String category) {
+
+     ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("Category", category));
+     mainApp.setDisplayTasks(tempTaskList);
+     }
 
     public void exit() {
         System.exit(0);
