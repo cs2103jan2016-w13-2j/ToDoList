@@ -20,7 +20,7 @@ public class UIHandler {
     }
 
     public void sendMessage(String message) {
-        // mainApp.messageBox(message);
+        mainApp.notifyWithText(message);
     }
 
     public void highLight(Task task) {

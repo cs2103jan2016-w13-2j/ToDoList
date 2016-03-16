@@ -145,7 +145,7 @@ public class NormalCommandHandler {
         dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
-        uiHandler.sendMessage("successfully added");
+        uiHandler.sendMessage("A new event is successfully added");
     }
 
     private void addDeadline(String title, String endDate, String endTime) {
@@ -160,7 +160,7 @@ public class NormalCommandHandler {
         dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
-        uiHandler.sendMessage("successfully added");
+        uiHandler.sendMessage("A new deadline is successfully added");
     }
 
     private void addTask(String title) {
@@ -174,7 +174,7 @@ public class NormalCommandHandler {
         dataBaseAdd(newEvent);
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
-        uiHandler.sendMessage("successfully added");
+        uiHandler.sendMessage("A new floating task is successfully added");
     }
 
     private void done(String title) {
@@ -189,7 +189,7 @@ public class NormalCommandHandler {
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage("successfully marked");
+        uiHandler.sendMessage(title + " is marked done!");
     }
 
     private void edit(String title, String fieldName, String newValue) {
@@ -237,7 +237,7 @@ public class NormalCommandHandler {
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage("successfully changed");
+        uiHandler.sendMessage("Task: " + title + " is successfully changed");
 
     }
 
@@ -250,7 +250,7 @@ public class NormalCommandHandler {
         dataBaseDelete(tempTask);
 
         uiHandler.refresh();
-        uiHandler.sendMessage("successfully deleted");
+        uiHandler.sendMessage(title + " is successfully deleted");
     }
 
     private void search(String title) {
@@ -258,18 +258,20 @@ public class NormalCommandHandler {
     	logic.logger.log(Level.INFO, LOGGING_SEARCHING_TASK + title);
     	
         uiHandler.search(title);
+        uiHandler.sendMessage("Here are your search results");
     }
 
     private void filter(String category) {
     	
     	logic.logger.log(Level.INFO, LOGGING_SEARCHING_TASK + category);
     	
-    	uiHandler.filter(category);
+    	uiHandler.sendMessage("Here are your filter results");
     }
     
     private void sort(String fieldName, String order) {
     	dataBase.sort(fieldName, order);
     	uiHandler.refresh();
+    	uiHandler.sendMessage("Sorted!");
     }
     //
     // private void insert(String title, String befaft, String title) {
@@ -325,6 +327,7 @@ public class NormalCommandHandler {
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
+            uiHandler.sendMessage(title + " is successfully postponed");
         }
     }
 
@@ -357,6 +360,7 @@ public class NormalCommandHandler {
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
+            uiHandler.sendMessage(title + " is successfully forwarded");
         }
     }
 
