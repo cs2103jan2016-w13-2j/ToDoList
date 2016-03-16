@@ -47,8 +47,9 @@ public class MainApp extends Application {
     private static final String MESSAGE_ERROR_LOAD_SIDEBAR = "Error loading side bar view. Exiting now ...";
     private static final String MESSAGE_ERROR_LOAD_EMPTY = "Error loading empty view. Exiting now ...";
 
-    // Notification messages
+    // Notification messages and delay
     private static final String NOTIFICATION_WELCOME = "Welcome to todolist! Let's get started...";
+    private static final int DELAY_PERIOD = 3;
 
     // Directories and labels
     private static final String DIRECTORY_ROOT = "view/RootLayout.fxml";
@@ -250,7 +251,7 @@ public class MainApp extends Application {
         rootWithNotification.show();
 
         // Delay factor
-        delay = new PauseTransition(Duration.seconds(2));
+        delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
         delay.setOnFinished(e -> rootWithNotification.hide());
         delay.play();
     }
