@@ -41,11 +41,11 @@ public class MainApp extends Application {
     private static final String WINDOW_TITLE = "todolist by [w13-2j]";
 
     // Error messages
-    private static final String MESSAGE_ERROR_LOAD_ROOT = "Error loading root view.";
-    private static final String MESSAGE_ERROR_LOAD_MAIN = "Error loading main view.";
-    private static final String MESSAGE_ERROR_LOAD_TITLEBAR = "Error loading title bar view.";
-    private static final String MESSAGE_ERROR_LOAD_SIDEBAR = "Error loading side bar view.";
-    private static final String MESSAGE_ERROR_LOAD_EMPTY = "Error loading empty view.";
+    private static final String MESSAGE_ERROR_LOAD_ROOT = "Error loading root view. Exiting now ...";
+    private static final String MESSAGE_ERROR_LOAD_MAIN = "Error loading main view. Exiting now ...";
+    private static final String MESSAGE_ERROR_LOAD_TITLEBAR = "Error loading title bar view. Exiting now ...";
+    private static final String MESSAGE_ERROR_LOAD_SIDEBAR = "Error loading side bar view. Exiting now ...";
+    private static final String MESSAGE_ERROR_LOAD_EMPTY = "Error loading empty view. Exiting now ...";
 
     // Notification messages
     private static final String NOTIFICATION_WELCOME = "Welcome to todolist! Let's get started...";
@@ -133,6 +133,7 @@ public class MainApp extends Application {
 
         } catch (IOException ioException) {
             Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_ROOT);
+            ioException.printStackTrace();
             System.exit(1);
         }
     }
@@ -155,9 +156,9 @@ public class MainApp extends Application {
             loadCommandLine();
             reloadDisplay();
 
-        } catch (IOException e) {
-            System.out.println(MESSAGE_ERROR_LOAD_MAIN);
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_MAIN);
+            ioException.printStackTrace();
             System.exit(1);
         }
     }
@@ -178,9 +179,9 @@ public class MainApp extends Application {
 
             rootView.setTop(titleBarView);
 
-        } catch (IOException e) {
-            System.out.println(MESSAGE_ERROR_LOAD_TITLEBAR);
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_TITLEBAR);
+            ioException.printStackTrace();
             System.exit(1);
         }
     }
@@ -200,9 +201,9 @@ public class MainApp extends Application {
             sidebarController = loader.getController();
             sidebarController.setMainApp(this);
 
-        } catch (IOException e) {
-            System.out.println(MESSAGE_ERROR_LOAD_SIDEBAR);
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_SIDEBAR);
+            ioException.printStackTrace();
             System.exit(1);
         }
     }
@@ -216,9 +217,9 @@ public class MainApp extends Application {
             emptyView = (BorderPane) loader.load();
 
             rootView.setCenter(emptyView);
-        } catch (IOException e) {
-            System.out.println(MESSAGE_ERROR_LOAD_EMPTY);
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_EMPTY);
+            ioException.printStackTrace();
             System.exit(1);
         }
     }
