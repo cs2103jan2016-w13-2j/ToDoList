@@ -21,16 +21,14 @@ public class Logic {
 	private int steps;
 	private Logger logger = Logger.getLogger("Logic Logger");
 
-	public static String LOGGING_ADDING_FLOATING_TASK = "tring to add floating task: ";
-	public static String LOGGING_ADDING_EVENT = "tring to add event: ";
-	public static String LOGGING_ADDING_DEADLINE = "tring to add deadline: ";
-	public static String LOGGING_EDITING_TASK = "tring to edit task: ";
-	public static String LOGGING_SEARCHING_TASK = "tring to search task: ";
-	public static String LOGGING_DELETING_TASK = "tring to delete task: ";
-	public static String LOGGING_REPEATED_TASK = "The task has already existed: ";
-	public static String LOGGING_TASK_NOTEXIST = "The task does not exist: ";
-	public static String LOGGING_TASK_DELETED = "The task is deleted from database: ";
-	public static String EXCEPTION_TIME_ERROR = "This time was in the past";
+	private static String LOGGING_ADDING_FLOATING_TASK = "tring to add floating task: ";
+	private static String LOGGING_ADDING_EVENT = "tring to add event: ";
+	private static String LOGGING_ADDING_DEADLINE = "tring to add deadline: ";
+	private static String LOGGING_EDITING_TASK = "tring to edit task: ";
+	private static String LOGGING_SEARCHING_TASK = "tring to search task: ";
+	private static String LOGGING_DELETING_TASK = "tring to delete task: ";
+	private static String LOGGING_REPEATED_TASK = "The task has already existed: ";
+	private static String LOGGING_TIME_ERROR = "This time was in the past";
 
 	public Logic(MainApp mainApp) {
 		this.mainApp = mainApp;
@@ -56,11 +54,10 @@ public class Logic {
 		uiHandler.sendMessage("View reseted");
 	}
 
-	public void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit)
-			throws Exception {
+	public void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
 
 		if (noRepeat(title)) {
-			logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title + startDate + startTime + quantity + timeUnit);
+			logger.log(Level.INFO, LOGGING_ADDING_EVENT + title + startDate + startTime + quantity + timeUnit);
 
 			Name name = new Name(title);
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -68,7 +65,8 @@ public class Logic {
 			LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
 			if (!start.isAfter(LocalDateTime.now())) {
-				throw new Exception(EXCEPTION_TIME_ERROR);
+				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
+				uiHandler.sendMessage("start time of task is before now");
 			}
 
 			Task newEvent = new Task(name, start, end, null, null, false);
@@ -80,7 +78,7 @@ public class Logic {
 		}
 	}
 
-	public void addDeadline(String title, String endDate, String endTime) throws Exception {
+	public void addDeadline(String title, String endDate, String endTime) {
 
 		if (noRepeat(title)) {
 			logger.log(Level.INFO, LOGGING_ADDING_DEADLINE + title + endDate + endTime);
@@ -91,7 +89,8 @@ public class Logic {
 			Task newEvent = new Task(name, null, end, null, null, false);
 
 			if (!end.isAfter(LocalDateTime.now())) {
-				throw new Exception(EXCEPTION_TIME_ERROR);
+				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
+				uiHandler.sendMessage("deadline of task is before now");
 			}
 
 			dataBaseAdd(newEvent);
@@ -422,6 +421,7 @@ public class Logic {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
 		System.out.println(tempTaskList.size());
 		if (tempTaskList.size() > 0) {
+			logger.log(Level.INFO, LOGGING_REPEATED_TASK + title);
 			uiHandler.sendMessage("Failure. Existing task with same name detected!");
 			return false;
 		} else {
