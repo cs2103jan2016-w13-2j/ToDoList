@@ -10,6 +10,12 @@ public class Parser {
     	this.normalCommandHandler = new NormalCommandHandler();
     }
     
+    /**
+	 * This method takes in a string and parse it.
+	 *
+	 * 
+	 * @return TokenizedCommand 
+	 */
     public TokenizedCommand parse(String input) {
     	if(checkType(input)) {
     		return normalCommandHandler.parse(input);
@@ -18,6 +24,12 @@ public class Parser {
     	}
     }
     
+    /**
+	 * This method takes in a string and check whether it is a flexi command.
+	 *
+	 * 
+	 * @return Boolean
+	 */
     private Boolean checkType(String input) {
 		return true;   
     }

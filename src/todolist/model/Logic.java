@@ -39,21 +39,45 @@ public class Logic {
 		this.steps = 0;
 	}
 
+	/**
+	 * This method takes in raw user input and process it by calling parser
+	 *
+	 * @param String
+	 *            take in the user input string
+	 * @return void
+	 */
 	public void process(String input) {
 		TokenizedCommand tokenizedCommand = parser.parse(input);
 		caseSwitcher.execute(tokenizedCommand);
 	}
 
-	
+	/**
+	 * This method takes in an integer and increment the internal step counter
+	 *
+	 * @param int
+	 * @return void
+	 */
 	public void stepForward(int increment) {
 		this.steps = steps + increment;
 	}
-	
+
+	/**
+	 * This method resets the view
+	 *
+	 * 
+	 * @return void
+	 */
 	public void reset() {
 		uiHandler.refresh();
 		uiHandler.sendMessage("View reseted");
 	}
 
+	/**
+	 * This method adds a new event with start date and duration
+	 *
+	 * 
+	 * @return void
+	 */
 	public void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
 
 		if (noRepeat(title)) {
@@ -78,6 +102,12 @@ public class Logic {
 		}
 	}
 
+	/**
+	 * This method adds a new deadline.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void addDeadline(String title, String endDate, String endTime) {
 
 		if (noRepeat(title)) {
@@ -100,6 +130,12 @@ public class Logic {
 		}
 	}
 
+	/**
+	 * This method adds a new floating task.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void addTask(String title) {
 
 		if (noRepeat(title)) {
@@ -115,6 +151,12 @@ public class Logic {
 		}
 	}
 
+	/**
+	 * This method takes in the title of a task and marks it as done.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void done(String title) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
@@ -130,6 +172,12 @@ public class Logic {
 		uiHandler.sendMessage(title + " is marked done!");
 	}
 
+	/**
+	 * This method edits a task.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void edit(String title, String fieldName, String newValue) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
@@ -179,6 +227,12 @@ public class Logic {
 
 	}
 
+	/**
+	 * This method takes in the title of a task and deletes it.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void delete(String title) {
 
 		logger.log(Level.INFO, LOGGING_DELETING_TASK + title);
@@ -191,6 +245,12 @@ public class Logic {
 		uiHandler.sendMessage(title + " is successfully deleted");
 	}
 
+	/**
+	 * This method takes in the title of a task and displays it.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void search(String title) {
 
 		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + title);
@@ -199,6 +259,13 @@ public class Logic {
 		uiHandler.sendMessage("Here are your search results");
 	}
 
+	/**
+	 * This method takes in the name of a category and displays tasks of that
+	 * category.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void filter(String category) {
 
 		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + category);
@@ -206,6 +273,12 @@ public class Logic {
 		uiHandler.sendMessage("Here are your filter results");
 	}
 
+	/**
+	 * This method sorts all tasks in according to the field name and order.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void sort(String fieldName, String order) {
 		dataBase.sort(fieldName, order);
 		uiHandler.refresh();
@@ -222,6 +295,12 @@ public class Logic {
 	 * uiHandler.insert(title1, "aft", title2); }
 	 */
 
+	/**
+	 * This method takes in the title of a task and labels it with a category.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void label(String title, String category) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
@@ -236,6 +315,12 @@ public class Logic {
 		uiHandler.highLight(tempTask);
 	}
 
+	/**
+	 * This method postpones a task by a duration.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void postpone(String title, String quantity, String timeUnit) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
@@ -269,6 +354,12 @@ public class Logic {
 		}
 	}
 
+	/**
+	 * This method forwards a task by a duration.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void forward(String title, String quantity, String timeUnit) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
@@ -302,7 +393,14 @@ public class Logic {
 		}
 	}
 
-	public void addRemind(String[] arg) throws Exception {
+	/**
+	 * This method adds a task with remind and triggers the remind at the
+	 * deadline.
+	 *
+	 * 
+	 * @return void
+	 */
+	public void addRemind(String[] arg) {
 
 		String type = arg[0];
 		switch (type) {
@@ -317,7 +415,14 @@ public class Logic {
 		remind(arg[1]);
 	}
 
-	public void addRemindBef(String quantity, String timeUnit, String[] arg) throws Exception {
+	/**
+	 * This method adds a task with remind and triggers the remind a duration
+	 * before the deadline.
+	 *
+	 * 
+	 * @return void
+	 */
+	public void addRemindBef(String quantity, String timeUnit, String[] arg) {
 
 		String type = arg[0];
 		switch (type) {
@@ -332,6 +437,13 @@ public class Logic {
 		remindBef(arg[1], quantity, timeUnit);
 	}
 
+	/**
+	 * This method adds remind to an existing task and triggers the remind a
+	 * duration before the deadline.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void remindBef(String title, String quantity, String timeUnit) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
@@ -365,6 +477,13 @@ public class Logic {
 		uiHandler.highLight(tempTask);
 	}
 
+	/**
+	 * This method adds remind to an existing task and triggers the remind at
+	 * the deadline.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void remind(String title) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
@@ -372,16 +491,34 @@ public class Logic {
 		remindBef(title, null, null);
 	}
 
+	/**
+	 * This method terminates the application.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void exit() {
 		uiHandler.exit();
 	}
 
+	/**
+	 * This method takes in an integer and undo that number of steps.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void undo(int undostep) {
 		dataBase.retrieveHistory(steps - undostep);
 		steps = steps - undostep;
 		uiHandler.refresh();
 	}
 
+	/**
+	 * This method takes in an integer and redo that number of steps.
+	 *
+	 * 
+	 * @return void
+	 */
 	public void redo(int redostep) {
 		dataBase.retrieveHistory(steps + redostep);
 		steps = steps + redostep;
