@@ -3,7 +3,6 @@ package todolist.view;
 import java.util.ArrayList;
 
 import todolist.MainApp;
-import todolist.model.Command;
 import todolist.model.Task;
 import todolist.model.TaskWrapper;
 
@@ -70,12 +69,12 @@ public class MainViewController {
             @Override
             public void handle(ActionEvent event) {
                 String commandString = commandField.getText();
-                Command command = new Command(commandString);
-                System.out.println(command.getCommand());
+                //Command command = new Command(commandString);
+                //System.out.println(command.getCommand());
 
                 // Pass Command Line input for processing
                 try {
-                    mainApplication.logicUnit.process(command);
+                    mainApplication.logicUnit.process(commandString);
                 } catch (Exception e) {
 
                 }

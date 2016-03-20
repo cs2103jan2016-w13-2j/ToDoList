@@ -1,14 +1,24 @@
 package todolist.model;
 
 public class Parser {
-    
-    public static Boolean checkType(Command command) {
-		return null;
-        
+	
+	private FlexiCommandHandler flexiCommandHandler;
+    private NormalCommandHandler normalCommandHandler;
+ 
+    public Parser() {
+    	this.flexiCommandHandler = new FlexiCommandHandler();
+    	this.normalCommandHandler = new NormalCommandHandler();
     }
     
-    public static NormalCommand translate(FlexiCommand flexiCommand) {
-		return null;
-        
+    public TokenizedCommand parse(String input) {
+    	if(checkType(input)) {
+    		return normalCommandHandler.parse(input);
+    	} else {
+    		return flexiCommandHandler.parse(input);
+    	}
+    }
+    
+    private Boolean checkType(String input) {
+		return true;   
     }
 }

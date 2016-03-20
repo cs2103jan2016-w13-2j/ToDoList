@@ -22,7 +22,7 @@ public class CommandHandlerStub {
 	    this.main = main;
 	}
 
-	public void execute(Command command) {
+	//public void execute(Command command) {
 		
 //		Feedback feedback= new Feedback(status, page,
 //			categoriesToDisplay, currentCategory,
@@ -31,7 +31,7 @@ public class CommandHandlerStub {
 		
 		// ... Do something 
 		
-		ArrayList<TaskWrapper> tasksToDisplay = new ArrayList<TaskWrapper>();
+		//ArrayList<TaskWrapper> tasksToDisplay = new ArrayList<TaskWrapper>();
 		
 //		tasksToDisplay.add(new TaskWrapper("Do UI Handler (CHANGED)", LocalDateTime.now(), LocalDateTime.now().plusHours(3),
 //                new Category("CS2103T Project (CHANGED)"), new Reminder(LocalDateTime.now().plusHours(3))));
@@ -49,5 +49,5 @@ public class CommandHandlerStub {
 //		main.setDisplayTasks(tasksToDisplay);
         
 //		return feedback;
-	}
+	//}
 }

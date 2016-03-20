@@ -2,13 +2,13 @@ package todolist.model;
 
 public class FlexiCommandHandler {
     
-    private NormalCommandHandler normalHandler;
-    
-    public FlexiCommandHandler(NormalCommandHandler normalHandler) {
-        this.normalHandler = normalHandler;
+    public FlexiCommandHandler() {
+
     }
     
-    public void execute(FlexiCommand flexiCommand) throws Exception {
-        normalHandler.execute(Parser.translate(flexiCommand));
+    public TokenizedCommand parse(String input) {
+    	String action = null;
+    	String args[] = null;
+    	return new TokenizedCommand(action, args);
     }
 }
