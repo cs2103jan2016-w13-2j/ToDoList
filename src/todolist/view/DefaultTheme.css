@@ -16,6 +16,20 @@
  * hint: #7A9EAF;
 */
 
+/* dark-theme
+ * --------------
+ * background: #D8E9F0;
+ * accent: #4AA0D5;
+ * accent-two: #A9EEE6;
+ * accent-three: #95E1D3;
+ * content: #F8F3D4;
+ * content-two: #303841;
+ * focus: #EB586F;
+ * focus-two: #F08A5D;
+ * dark: #454553;
+ * hint: #7A9EAF;
+*/
+
 
 /* Panel CSS Options */
 
@@ -57,6 +71,7 @@
 }
 
 .titled-pane > .title {
+	-fx-background-color: #F08A5D;
 	-fx-background-color: #EB586F;
     -fx-font-size: 20.0pt;
     -fx-text-fill: #FEFAEC;
@@ -70,6 +85,7 @@
 }
 
 .titled-pane > .content {
+	-fx-background-color: #454553;
 	-fx-background-color: #FEFAEC;
 	-fx-background-radius: 0.0 0.0 6.5 6.5;
 }
@@ -87,6 +103,7 @@
 }
 
 .list-cell:filled:selected:focused > #task-hbox-item {
+    -fx-background-color: #EB586F;
     -fx-background-color: #95E1D3;
     -fx-text-fill: #FEFAEC;
 	-fx-fill: #FEFAEC;
@@ -97,12 +114,14 @@
 }
 
 .list-cell:filled > #task-hbox-item {
+    -fx-background-color: #506F86;
     -fx-background-color: #D8E9F0;
     -fx-text-fill: #FEFAEC;
 	-fx-fill: #FEFAEC;
 }
 
 .list-cell:filled > #task-hbox-item .label {
+    -fx-text-fill: #FEFAEC;
     -fx-text-fill: #454553;
 }
 
@@ -165,6 +184,7 @@
 }
 
 .text-field {
+	-fx-background-color: #454553;	
 	-fx-background-color: #FEFAEC;
     -fx-font-size: 12.0pt;
     -fx-font-family: "System Font";

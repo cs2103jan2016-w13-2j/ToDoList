@@ -14,6 +14,7 @@ public class SideBarController {
     /*** TAB STYLES ***/
     private static final String STYLE_TAB_NORMAL = "-fx-background-color: transparent;";
     private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #95E1D3;";
+//    private static final String STYLE_TAB_FOCUSED_DARK = "-fx-background-color: #EB586F;";
     
     
     /*** VIEWS ***/
@@ -119,6 +120,8 @@ public class SideBarController {
             // Highlight if focused
             if (i == index - 1) {
                 currentButton.setStyle(STYLE_TAB_FOCUSED);
+//                currentButton.setStyle(STYLE_TAB_FOCUSED_DARK);
+
             }
         }
     }
