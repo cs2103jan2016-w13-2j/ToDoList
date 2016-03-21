@@ -2,6 +2,8 @@ package todolist.model;
 
 
 import java.io.BufferedReader;
+import com.google.gson.Gson;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,32 +24,31 @@ public class FileHandler {
 	private String fileName = "taskStorage.txt";
     private String path = "";
     
+    private Gson gson = new Gson();
+    
 	public FileHandler() {
 		checkForUpdatedDirectory();
 	}
-    public static void main(String[] args){
-    	FileHandler fh=new FileHandler();
-    	System.out.println(fh.read());
-    }
     
 	/**
 	 * This method reads from the local file. It returns a ArrayList containing all the Strings in the file.
-	 * @return taskList    the list of string representation of tasks stored in file
+	 * @return taskList    the list of tasks stored in file
 	 *                      if no such file or the file is empty, return an empty arraylist.
 	 */
-	public ArrayList<String> read() {
-		ArrayList<String> taskList = new ArrayList<String>();
+	public ArrayList<Task> read() {
+		ArrayList<Task> taskList = new ArrayList<Task>();
 		File filePath = new File(path + fileName);
 		if(isFileReady(filePath) && !isFileEmpty(filePath)) {
 			try {
-				taskList = new ArrayList<String>();
+				
 				FileReader fr=new FileReader(path + fileName);
 				BufferedReader br=new BufferedReader(fr);
 				String input=null;
 				input=br.readLine();
+				System.out.println(input);
 				
 				while(input != null && !input.equals("null")){
-					taskList.add(input);
+					taskList.add(gson.fromJson(input, Task.class));
 					input=br.readLine();
 				}
 				br.close();
@@ -61,17 +62,18 @@ public class FileHandler {
 	}
     
 	/**
-	 * This method write directly the string representation of the task to the local file.
+	 * This method write directly the list of tasks to the local file.
 	 * 
-	 * @param taskList    the list of string of tasks to be written
+	 * @param taskList    the list of tasks to be written
 	 * @return            true if it is successfully written; false if the target file cannot be found
 	 */
-	public boolean write(ArrayList<String> taskList) {
+	public boolean write(ArrayList<Task> taskList) {
 		    try{
 				FileWriter fw=new FileWriter(path + fileName);
 				BufferedWriter bw=new BufferedWriter(fw);
-				for(String eachTask: taskList) {
-					bw.write(eachTask+"\n");
+				for(Task eachTask: taskList) {	
+					System.out.println("writing into file: " +  gson.toJson(eachTask));
+					bw.write(gson.toJson(eachTask) + "\n");
 				}
 				bw.close();
 			}catch (Exception e) {
@@ -102,7 +104,7 @@ public class FileHandler {
 	 * @return              true if the file is set; false if the path is not a correct path  
 	 */
 	public boolean setFile(String newFilePath) {
-		ArrayList<String> existingTaskList = this.read();
+		ArrayList<Task> existingTaskList = this.read();
 		//set path
 		String newPath = getPathOfNewFile(newFilePath);
 		String newFileName = getNewFileName(newFilePath);
