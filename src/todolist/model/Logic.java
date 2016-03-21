@@ -539,7 +539,7 @@ public class Logic {
 	}
 
 	private void dataBaseAdd(Task task) {
-		try {
+        try {
 			dataBase.add(task);
 		} catch (IOException e) {
 			logger.log(Level.INFO, "IOException");
@@ -547,11 +547,7 @@ public class Logic {
 	}
 
 	private void dataBaseDelete(Task task) {
-		try {
-			dataBase.delete(task);
-		} catch (IOException e) {
-			logger.log(Level.INFO, "IOException");
-		}
+		dataBase.delete(task);
 	}
 
 	private boolean noRepeat(String title) {
