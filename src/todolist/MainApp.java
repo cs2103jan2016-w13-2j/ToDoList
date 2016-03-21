@@ -243,8 +243,6 @@ public class MainApp extends Application {
         rootWithNotification.setContent(rootView);
     }
     
-    
-    
     public void notifyWithText(String text) {
 
         rootWithNotification.setText(text);
