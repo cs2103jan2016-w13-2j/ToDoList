@@ -1,8 +1,11 @@
-package todolist.model;
+package todolist.logic;
 
 import java.util.ArrayList;
 
 import todolist.MainApp;
+import todolist.model.SearchCommand;
+import todolist.model.Task;
+import todolist.storage.DataBase;
 
 public class UIHandler {
 

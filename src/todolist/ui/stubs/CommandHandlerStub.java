@@ -1,10 +1,13 @@
-package todolist.model;
+package todolist.ui.stubs;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import todolist.MainApp;
 //import todolist.model.Feedback.Page;
+import todolist.model.Category;
+import todolist.model.Reminder;
+import todolist.ui.TaskWrapper;
 
 public class CommandHandlerStub {
 

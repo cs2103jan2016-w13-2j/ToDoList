@@ -1,8 +1,10 @@
-package todolist.model;
+package todolist.storage;
 
 
 import java.io.BufferedReader;
 import com.google.gson.Gson;
+
+import todolist.model.Task;
 
 import java.io.BufferedWriter;
 import java.io.File;

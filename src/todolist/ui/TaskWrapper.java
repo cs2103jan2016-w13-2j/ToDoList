@@ -1,4 +1,4 @@
-package todolist.model;
+package todolist.ui;
 
 import java.time.LocalDateTime;
 
@@ -6,6 +6,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import todolist.model.Category;
+import todolist.model.Reminder;
+import todolist.model.Task;
 
 public class TaskWrapper {
 

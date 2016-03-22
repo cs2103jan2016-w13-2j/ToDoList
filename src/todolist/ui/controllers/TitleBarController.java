@@ -1,4 +1,4 @@
-package todolist.view;
+package todolist.ui.controllers;
 
 public class TitleBarController {
 

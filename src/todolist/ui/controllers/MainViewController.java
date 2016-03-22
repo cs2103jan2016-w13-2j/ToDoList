@@ -1,11 +1,10 @@
-package todolist.view;
+package todolist.ui.controllers;
 
 import java.util.ArrayList;
 
 import todolist.MainApp;
 import todolist.model.Task;
-import todolist.model.TaskWrapper;
-
+import todolist.ui.TaskWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

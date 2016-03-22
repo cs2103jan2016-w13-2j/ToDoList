@@ -1,4 +1,4 @@
-package todolist.model;
+package todolist.logic;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -10,6 +10,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import todolist.MainApp;
+import todolist.model.Category;
+import todolist.model.Name;
+import todolist.model.Reminder;
+import todolist.model.SearchCommand;
+import todolist.model.Task;
+import todolist.model.TokenizedCommand;
+import todolist.parser.MainParser;
+import todolist.storage.DataBase;
 
 public class Logic {
 

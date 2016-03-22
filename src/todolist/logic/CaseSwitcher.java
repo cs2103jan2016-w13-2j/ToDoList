@@ -1,4 +1,6 @@
-package todolist.model;
+package todolist.logic;
+
+import todolist.model.TokenizedCommand;
 
 public class CaseSwitcher {
 	

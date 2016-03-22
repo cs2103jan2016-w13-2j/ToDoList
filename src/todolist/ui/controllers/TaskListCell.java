@@ -1,7 +1,7 @@
-package todolist.view;
+package todolist.ui.controllers;
 
 import javafx.scene.control.ListCell;
-import todolist.model.TaskWrapper;
+import todolist.ui.TaskWrapper;
 
 public class TaskListCell extends ListCell<TaskWrapper> {
 

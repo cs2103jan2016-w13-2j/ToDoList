@@ -1,4 +1,4 @@
-package todolist.model;
+package todolist.storage;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import todolist.model.SearchCommand;
+import todolist.model.Task;
 
 /*
  * This class is the storage class, handling the read and write of local file with relative commands.

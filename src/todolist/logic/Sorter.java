@@ -1,4 +1,4 @@
-package todolist.model;
+package todolist.logic;
 
 public class Sorter {
     

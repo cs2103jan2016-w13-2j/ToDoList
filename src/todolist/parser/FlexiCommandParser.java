@@ -1,4 +1,4 @@
-package todolist.model;
+package todolist.parser;
 
 import java.util.Date;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
+
+import todolist.model.TokenizedCommand;
 
 public class FlexiCommandParser {
     

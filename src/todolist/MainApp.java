@@ -3,12 +3,11 @@ package todolist;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import todolist.model.Logic;
+import todolist.logic.Logic;
 import todolist.model.Task;
-import todolist.model.TaskWrapper;
-import todolist.view.MainViewController;
-import todolist.view.SideBarController;
-
+import todolist.ui.TaskWrapper;
+import todolist.ui.controllers.MainViewController;
+import todolist.ui.controllers.SideBarController;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -52,16 +51,16 @@ public class MainApp extends Application {
     private static final int DELAY_PERIOD = 3;
 
     // Directories and labels
-    private static final String DIRECTORY_ROOT = "view/RootLayout.fxml";
+    private static final String DIRECTORY_ROOT = "ui/views/RootLayout.fxml";
     private static final String STYLE_CLASS_ROOT = "root-layout";
-    private static final String DIRECTORY_MAIN = "view/MainView.fxml";
+    private static final String DIRECTORY_MAIN = "ui/views/MainView.fxml";
     private static final String STYLE_CLASS_MAIN = "main-view";
-    private static final String DIRECTORY_TITLEBAR = "view/TitleBarView.fxml";
+    private static final String DIRECTORY_TITLEBAR = "ui/views/TitleBarView.fxml";
     private static final String STYLE_CLASS_TITLEBAR = "title-bar";
-    private static final String DIRECTORY_SIDEBAR = "view/SideBarView.fxml";
+    private static final String DIRECTORY_SIDEBAR = "ui/views/SideBarView.fxml";
     private static final String STYLE_CLASS_SIDEBAR = "side-bar";
-    public static final String DIRECTORY_TASKITEM = "TaskNode.fxml";
-    private static final String DIRECTORY_EMPTY = "view/EmptyView.fxml";
+    public static final String DIRECTORY_TASKITEM = "ui/views/TaskNode.fxml";
+    private static final String DIRECTORY_EMPTY = "ui/views/EmptyView.fxml";
 
     // Views: Display and UI components
     private BorderPane rootView;

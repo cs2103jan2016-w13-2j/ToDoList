@@ -1,9 +1,11 @@
-package todolist.model;
+package todolist.storage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import todolist.model.Task;
 
 
 public class TaskSorter {

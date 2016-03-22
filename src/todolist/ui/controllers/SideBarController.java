@@ -1,4 +1,4 @@
-package todolist.view;
+package todolist.ui.controllers;
 
 import java.time.LocalDateTime;
 

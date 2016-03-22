@@ -1,4 +1,6 @@
-package todolist.model;
+package todolist.parser;
+
+import todolist.model.TokenizedCommand;
 
 public class NormalCommandParser {
 

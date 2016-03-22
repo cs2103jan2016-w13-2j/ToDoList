@@ -1,8 +1,10 @@
-package todolist.model;
+package todolist.storage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
+
+import todolist.model.Task;
 
 public class DatabaseModifier {
 	public static String EXCEPEPTION_REPEATED_TASK = "The task has already existed!";

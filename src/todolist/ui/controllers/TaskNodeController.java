@@ -1,4 +1,4 @@
-package todolist.view;
+package todolist.ui.controllers;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -10,8 +10,7 @@ import com.sun.media.jfxmedia.logging.Logger;
 
 import todolist.MainApp;
 import todolist.model.Category;
-import todolist.model.TaskWrapper;
-
+import todolist.ui.TaskWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -117,7 +116,7 @@ public class TaskNodeController {
     private Label status = null;
 
     public TaskNodeController(TaskWrapper task, int index) throws IllegalArgumentException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(MainApp.DIRECTORY_TASKITEM));
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(MainApp.DIRECTORY_TASKITEM));
         fxmlLoader.setController(this);
 
         this.task = task;

@@ -14,8 +14,8 @@
 			prefWidth="60.0" BorderPane.alignment="TOP_LEFT" />
 	</left>
 	<center>
-		<BorderPane minHeight="200.0" minWidth="200.0" prefHeight="540.0"
-			prefWidth="740.0" BorderPane.alignment="TOP_LEFT" />
+	<BorderPane minHeight="200.0" minWidth="200.0" prefHeight="540.0"
+		prefWidth="740.0" BorderPane.alignment="TOP_LEFT" />
 	</center>
 	<top>
 		<HBox maxWidth="-Infinity" minHeight="-Infinity" prefHeight="40.0"

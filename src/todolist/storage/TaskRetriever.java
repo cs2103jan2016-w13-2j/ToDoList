@@ -1,9 +1,12 @@
-package todolist.model;
+package todolist.storage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
+
+import todolist.model.SearchCommand;
+import todolist.model.Task;
 
 
 
