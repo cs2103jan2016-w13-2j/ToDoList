@@ -232,7 +232,7 @@ public class Logic {
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
-		uiHandler.sendMessage(title + " is marked done!");
+		uiHandler.sendMessage(title + " is marked not done!");
 		
 		return deleteResponse && addResponse;
 	}
