@@ -5,7 +5,6 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 public class Task {
-<<<<<<< Updated upstream
 	private Name name = null;
 	private LocalDateTime startTime = null;
 	private LocalDateTime endTime = null;
