@@ -114,6 +114,15 @@ public class TaskNodeController {
     private Rectangle statusBacking = null;
     @FXML
     private Label status = null;
+    
+    // Indicators
+    @FXML
+    private VBox indicatorsHolder = null;
+    @FXML
+    private ImageView recurringIndicator = null;
+    private static final int recurring = 1;
+    private static final int reminder = 2;
+    
 
     public TaskNodeController(TaskWrapper task, int index) throws IllegalArgumentException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(MainApp.DIRECTORY_TASKITEM));
@@ -193,6 +202,9 @@ public class TaskNodeController {
             statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
             status.setText(DISPLAY_ITEM_UNARCHIVED);
         }
+        
+        // Recurring Status
+        recurringIndicator.setVisible(task.isRecurring());
     }
 
     public HBox getNode() {
