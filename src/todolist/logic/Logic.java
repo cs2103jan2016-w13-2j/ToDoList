@@ -101,7 +101,7 @@ public class Logic {
 				uiHandler.sendMessage("start time of task is before now");
 			}
 
-			Task newEvent = new Task(name, start, end, null, null, false);
+			Task newEvent = new Task(name, start, end, null, null, false, false);
 
 			dataBaseAdd(newEvent);
 			uiHandler.refresh();
@@ -124,7 +124,7 @@ public class Logic {
 			Name name = new Name(title);
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
-			Task newEvent = new Task(name, null, end, null, null, false);
+			Task newEvent = new Task(name, null, end, null, null, false, false);
 
 			if (!end.isAfter(LocalDateTime.now())) {
 				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
@@ -150,7 +150,7 @@ public class Logic {
 			logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title);
 
 			Name name = new Name(title);
-			Task newEvent = new Task(name, null, null, null, null, false);
+			Task newEvent = new Task(name, null, null, null, null, false, false);
 
 			dataBaseAdd(newEvent);
 			uiHandler.refresh();

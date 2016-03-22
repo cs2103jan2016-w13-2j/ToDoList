@@ -9,15 +9,17 @@ public class Task {
     private Category category = null;
     private Reminder reminder = null;
     private Boolean isDone = null;
+    private Boolean recurring = null;
 
     public Task(Name name, LocalDateTime startTime, LocalDateTime endTime, Category category, Reminder reminder,
-            Boolean isDone) {
+            Boolean isDone, Boolean recurring) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.category = category;
         this.reminder = reminder;
         this.isDone = isDone;
+        this.recurring = recurring;
     }
 
     public void setName(Name name) {
@@ -70,9 +72,7 @@ public class Task {
         return isDone;
     }
 
-    /////////////////////////////////////////////
-
-    public void changeByField(String fieldName, String newContent) {
-
+    public Boolean getRecurringStatus() {
+    	return recurring;
     }
 }
