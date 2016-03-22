@@ -56,6 +56,7 @@ public class MainParser {
     			head.equals("undo")||
     			head.equals("redo")||
     			head.equals("reset")||
+    			head.equals("tab")||
     			head.equals("set-recurring")||
     			head.equals("remove-recurring");
 		return type;   
