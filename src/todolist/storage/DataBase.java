@@ -57,6 +57,7 @@ public class DataBase {
         sorter = new TaskSorter(); 
         modifier = new DatabaseModifier();
         loadFromFile();
+        snapshot = new ArrayList<ArrayList<Task>>();
         
     }
 
@@ -186,7 +187,8 @@ public class DataBase {
         }catch (IOException e) {
         	return false;
         }
-    	snapshot.add ((ArrayList<Task>) taskList.clone() );
+        ArrayList<Task> temp = fh.read();
+    	snapshot.add (temp);
         writeToFile();       
         return true;
     }
@@ -215,7 +217,8 @@ public class DataBase {
         }
 
         dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED + taskToDelete.getName().getName());
-        snapshot.add((ArrayList<Task>) taskList.clone());
+        ArrayList<Task> temp = fh.read();
+    	snapshot.add (temp);
         writeToFile();
         return true;
     }
