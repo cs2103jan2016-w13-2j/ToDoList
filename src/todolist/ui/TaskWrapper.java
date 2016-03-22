@@ -19,6 +19,7 @@ public class TaskWrapper {
     private ObjectProperty<Reminder> reminder;
     private ObjectProperty<Boolean> isDone;
     private ObjectProperty<Boolean> isRecurring;
+    private ObjectProperty<String> interval;
 
     public TaskWrapper(Task task) {
         this.taskTitle = new SimpleStringProperty(task.getName().getName());
@@ -28,6 +29,7 @@ public class TaskWrapper {
         this.reminder = new SimpleObjectProperty<Reminder>(task.getReminder());
         this.isDone = new SimpleObjectProperty<Boolean>(task.getDoneStatus());
         this.isRecurring = new SimpleObjectProperty<Boolean>(task.getRecurringStatus());
+        this.interval = new SimpleObjectProperty<String>(task.getInterval());
 
     }
 
@@ -115,4 +117,15 @@ public class TaskWrapper {
         return isRecurring.get();
     }
 
+    public ObjectProperty<String> getIntervalProperty() {
+        return interval;
+    }
+
+    public void setInterval(ObjectProperty<String> interval) {
+        this.interval = interval;
+    }
+
+    public String getInterval() {
+        return interval.get();
+    }
 }

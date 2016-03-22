@@ -64,7 +64,7 @@
 						<ImageView fitHeight="20.0" fitWidth="20.0"
 							pickOnBounds="true" preserveRatio="true">
 							<image>
-								<Image url="@img/pen.png" />
+								<Image url="@assets/pen.png" />
 							</image>
 							<HBox.margin>
 								<Insets />
