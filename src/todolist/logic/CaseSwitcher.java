@@ -29,10 +29,10 @@ public class CaseSwitcher {
 			case "recurring":
 				switch (arg[1]) {
 				case "event":
-					logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6]);
+					logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
 					break;
 				case "deadline":
-					logic.addRecurringDeadline(arg[2], arg[3], arg[4]);
+					logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
 					break;
 				}
 				break;
@@ -67,6 +67,11 @@ public class CaseSwitcher {
 		case "label":
 			logic.label(arg[0], arg[1]);
 			break;
+		case "setrecurring":
+			logic.setRecurring(arg[0], true, arg[1]);
+			break;
+		case "removerecurring":
+			logic.setRecurring(arg[0], false, null);
 		case "postpone":
 			logic.postpone(arg[0], arg[1], arg[2]);
 			break;

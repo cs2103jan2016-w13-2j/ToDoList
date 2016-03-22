@@ -91,8 +91,9 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addRecurringEvent(String title, String day, String startTime, String quantity, String unit) {
-		
+	public void addRecurringEvent(String interval, String title, String startDate, String startTime, String quantity, String timeUnit) {
+		addEvent(title, startDate, startTime, quantity, timeUnit);
+		setRecurring(title, true, interval);
 	}
 	
 	/**
@@ -101,8 +102,9 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addRecurringDeadline(String title, String day, String time) {
-		
+	public void addRecurringDeadline(String interval, String title, String endDate, String endTime) {
+		addDeadline(title, endDate, endTime);
+		setRecurring(title, true, interval);
 	}
 
 	/**
@@ -126,7 +128,7 @@ public class Logic {
 				uiHandler.sendMessage("start time of task is before now");
 			}
 
-			Task newEvent = new Task(name, start, end, null, null, false, false);
+			Task newEvent = new Task(name, start, end, null, null, false, false, null);
 
 			dataBaseAdd(newEvent);
 			uiHandler.refresh();
@@ -149,7 +151,7 @@ public class Logic {
 			Name name = new Name(title);
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			LocalDateTime end = LocalDateTime.parse(endDate + " " + endTime, formatter);
-			Task newEvent = new Task(name, null, end, null, null, false, false);
+			Task newEvent = new Task(name, null, end, null, null, false, false, null);
 
 			if (!end.isAfter(LocalDateTime.now())) {
 				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
@@ -175,7 +177,7 @@ public class Logic {
 			logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title);
 
 			Name name = new Name(title);
-			Task newEvent = new Task(name, null, null, null, null, false, false);
+			Task newEvent = new Task(name, null, null, null, null, false, false, null);
 
 			dataBaseAdd(newEvent);
 			uiHandler.refresh();
@@ -351,6 +353,33 @@ public class Logic {
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
+		uiHandler.sendMessage("The category of " + title + " is set to " + category + " !");
+	}
+	
+	/**
+	 * This method edits the recurring status of a task.
+	 *
+	 * 
+	 * @return void
+	 */
+	public void setRecurring(String title, Boolean status, String interval) {
+		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+
+		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
+		dataBaseDelete(tempTask);
+
+		tempTask.setRecurring(status);
+		tempTask.setInterval(interval);
+		dataBaseAdd(tempTask);
+
+		uiHandler.refresh();
+		uiHandler.highLight(tempTask);
+		
+		if(status) {
+			uiHandler.sendMessage(title + " is recurring!");
+		} else {
+			uiHandler.sendMessage(title + " is not recurring!");
+		}
 	}
 
 	/**
@@ -571,6 +600,12 @@ public class Logic {
 			return ChronoUnit.HOURS;
 		case "minute":
 			return ChronoUnit.MINUTES;
+		case "week":
+			return ChronoUnit.WEEKS;
+		case "month":
+			return ChronoUnit.MONTHS;
+		case "year":
+			return ChronoUnit.YEARS;
 		default:
 			return null;
 		}
