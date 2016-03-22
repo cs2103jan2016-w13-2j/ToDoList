@@ -290,9 +290,10 @@ public class DataBase {
      * Goes back to a number of steps ago according to the number of steps pass in.
      * @param steps  the number of steps to go back
      */
-    public void retrieveHistory(int steps) {
+    public Boolean retrieveHistory(int steps) {
         taskList = snapshot.get(steps);
         writeToFile();
+        return true;
     }
     /**
      * Sort the tasks in the text file in the specific order of the specific field.

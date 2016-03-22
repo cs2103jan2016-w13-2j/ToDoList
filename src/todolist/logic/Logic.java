@@ -91,9 +91,10 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addRecurringEvent(String interval, String title, String startDate, String startTime, String quantity, String timeUnit) {
-		addEvent(title, startDate, startTime, quantity, timeUnit);
-		setRecurring(title, true, interval);
+	public Boolean addRecurringEvent(String interval, String title, String startDate, String startTime, String quantity, String timeUnit) {
+		Boolean addResponse = addEvent(title, startDate, startTime, quantity, timeUnit);
+		Boolean setRecurringResponse = setRecurring(title, true, interval);
+		return addResponse && setRecurringResponse;
 	}
 	
 	/**
@@ -102,9 +103,10 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addRecurringDeadline(String interval, String title, String endDate, String endTime) {
-		addDeadline(title, endDate, endTime);
-		setRecurring(title, true, interval);
+	public Boolean addRecurringDeadline(String interval, String title, String endDate, String endTime) {
+		Boolean addResponse = addDeadline(title, endDate, endTime);
+		Boolean setRecurringResponse = setRecurring(title, true, interval);
+		return addResponse && setRecurringResponse;
 	}
 
 	/**
@@ -113,7 +115,7 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
+	public Boolean addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
 
 		if (noRepeat(title)) {
 			logger.log(Level.INFO, LOGGING_ADDING_EVENT + title + startDate + startTime + quantity + timeUnit);
@@ -130,10 +132,13 @@ public class Logic {
 
 			Task newEvent = new Task(name, start, end, null, null, false, false, null);
 
-			dataBaseAdd(newEvent);
+			Boolean addResponse = dataBaseAdd(newEvent);
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
 			uiHandler.sendMessage("A new event is successfully added");
+			return addResponse;
+		} else {
+			return false;
 		}
 	}
 
@@ -143,7 +148,7 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addDeadline(String title, String endDate, String endTime) {
+	public Boolean addDeadline(String title, String endDate, String endTime) {
 
 		if (noRepeat(title)) {
 			logger.log(Level.INFO, LOGGING_ADDING_DEADLINE + title + endDate + endTime);
@@ -158,10 +163,13 @@ public class Logic {
 				uiHandler.sendMessage("deadline of task is before now");
 			}
 
-			dataBaseAdd(newEvent);
+			Boolean addResponse = dataBaseAdd(newEvent);
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
 			uiHandler.sendMessage("A new deadline is successfully added");
+			return addResponse;
+		} else {
+			return false;
 		}
 	}
 
@@ -171,7 +179,7 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addTask(String title) {
+	public Boolean addTask(String title) {
 
 		if (noRepeat(title)) {
 			logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title);
@@ -179,10 +187,13 @@ public class Logic {
 			Name name = new Name(title);
 			Task newEvent = new Task(name, null, null, null, null, false, false, null);
 
-			dataBaseAdd(newEvent);
+			Boolean addResponse = dataBaseAdd(newEvent);
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
 			uiHandler.sendMessage("A new floating task is successfully added");
+			return addResponse;
+		} else {
+			return false;
 		}
 	}
 
@@ -192,19 +203,21 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void done(String title) {
+	public Boolean done(String title) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		dataBaseDelete(tempTask);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
 
 		tempTask.setDoneStatus(true);
-		dataBaseAdd(tempTask);
+		Boolean addResponse = dataBaseAdd(tempTask);
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
 		uiHandler.sendMessage(title + " is marked done!");
+		
+		return deleteResponse && addResponse;
 	}
 
 	/**
@@ -213,12 +226,12 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void edit(String title, String fieldName, String newValue) {
+	public Boolean edit(String title, String fieldName, String newValue) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		dataBaseDelete(tempTask);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
 
@@ -254,11 +267,13 @@ public class Logic {
 			break;
 		}
 
-		dataBaseAdd(tempTask);
+		Boolean addResponse = dataBaseAdd(tempTask);
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
 		uiHandler.sendMessage("Task: " + title + " is successfully changed");
+		
+		return deleteResponse && addResponse;
 
 	}
 
@@ -268,16 +283,17 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void delete(String title) {
+	public Boolean delete(String title) {
 
 		logger.log(Level.INFO, LOGGING_DELETING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		System.out.println(dataBase.convert_TaskToString(tempTask));
-		dataBaseDelete(tempTask);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
 
 		uiHandler.refresh();
 		uiHandler.sendMessage(title + " is successfully deleted");
+		
+		return deleteResponse;
 	}
 
 	/**
@@ -341,19 +357,21 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void label(String title, String category) {
+	public Boolean label(String title, String category) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		dataBaseDelete(tempTask);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
 
 		tempTask.setCategory(new Category(category));
-		dataBaseAdd(tempTask);
+		Boolean addResponse = dataBaseAdd(tempTask);
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
 		uiHandler.sendMessage("The category of " + title + " is set to " + category + " !");
+		
+		return deleteResponse && addResponse;
 	}
 	
 	/**
@@ -362,15 +380,15 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void setRecurring(String title, Boolean status, String interval) {
+	public Boolean setRecurring(String title, Boolean status, String interval) {
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		dataBaseDelete(tempTask);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
 
 		tempTask.setRecurring(status);
 		tempTask.setInterval(interval);
-		dataBaseAdd(tempTask);
+		Boolean addResponse = dataBaseAdd(tempTask);
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
@@ -380,6 +398,8 @@ public class Logic {
 		} else {
 			uiHandler.sendMessage(title + " is not recurring!");
 		}
+		
+		return deleteResponse && addResponse;
 	}
 
 	/**
@@ -388,19 +408,21 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void postpone(String title, String quantity, String timeUnit) {
+	public Boolean postpone(String title, String quantity, String timeUnit) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		dataBaseDelete(tempTask);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
+		
+		Boolean addResponse = false;
 
 		if (tempTask.getStartTime() == null) {
 			LocalDateTime tempEndTime = tempTask.getEndTime();
 			tempEndTime = tempEndTime.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
 			tempTask.setEndTime(tempEndTime);
-			dataBaseAdd(tempTask);
+			addResponse = dataBaseAdd(tempTask);
 
 			uiHandler.refresh();
 			uiHandler.highLight(tempTask);
@@ -413,12 +435,14 @@ public class Logic {
 			tempTask.setStartTime(tempStartTime);
 			tempTask.setEndTime(tempEndTime);
 
-			dataBaseAdd(tempTask);
+			addResponse = dataBaseAdd(tempTask);
 
 			uiHandler.refresh();
 			uiHandler.highLight(tempTask);
 			uiHandler.sendMessage(title + " is successfully postponed");
 		}
+		
+		return deleteResponse && addResponse;
 	}
 
 	/**
@@ -427,19 +451,21 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void forward(String title, String quantity, String timeUnit) {
+	public Boolean forward(String title, String quantity, String timeUnit) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		dataBaseDelete(tempTask);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
+		
+		Boolean addResponse = false;
 
 		if (tempTask.getStartTime() == null) {
 			LocalDateTime tempEndTime = tempTask.getEndTime();
 			tempEndTime = tempEndTime.minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
 			tempTask.setEndTime(tempEndTime);
-			dataBaseAdd(tempTask);
+			addResponse = dataBaseAdd(tempTask);
 
 			uiHandler.refresh();
 			uiHandler.highLight(tempTask);
@@ -452,12 +478,14 @@ public class Logic {
 			tempTask.setStartTime(tempStartTime);
 			tempTask.setEndTime(tempEndTime);
 
-			dataBaseAdd(tempTask);
+			addResponse = dataBaseAdd(tempTask);
 
 			uiHandler.refresh();
 			uiHandler.highLight(tempTask);
 			uiHandler.sendMessage(title + " is successfully forwarded");
 		}
+		
+		return deleteResponse && addResponse;
 	}
 
 	/**
@@ -467,19 +495,26 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addRemind(String[] arg) {
+	public Boolean addRemind(String[] arg) {
+		
+		Boolean addResponse = false;
 
 		String type = arg[0];
 		switch (type) {
 		case "event":
-			addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
+			addResponse = addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
+			break;
 		case "deadline":
-			addDeadline(arg[1], arg[2], arg[3]);
+			addResponse = addDeadline(arg[1], arg[2], arg[3]);
+			break;
 		case "task":
-			addTask(arg[1]);
+			addResponse = addTask(arg[1]);
+			break;
 		}
 
 		remind(arg[1]);
+		
+		return addResponse;
 	}
 
 	/**
@@ -489,19 +524,27 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void addRemindBef(String quantity, String timeUnit, String[] arg) {
+	public Boolean addRemindBef(String quantity, String timeUnit, String[] arg) {
 
 		String type = arg[0];
+		
+		Boolean addResponse = false;
+		
 		switch (type) {
 		case "event":
-			addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
+			addResponse = addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
+			break;
 		case "deadline":
-			addDeadline(arg[1], arg[2], arg[3]);
+			addResponse = addDeadline(arg[1], arg[2], arg[3]);
+			break;
 		case "task":
-			addTask(arg[1]);
+			addResponse = addTask(arg[1]);
+			break;
 		}
 
 		remindBef(arg[1], quantity, timeUnit);
+		
+		return addResponse;
 	}
 
 	/**
@@ -511,7 +554,7 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void remindBef(String title, String quantity, String timeUnit) {
+	public Boolean remindBef(String title, String quantity, String timeUnit) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
@@ -532,16 +575,18 @@ public class Logic {
 			}
 		}
 
-		dataBaseDelete(tempTask);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
 
 		Reminder newReminder = new Reminder(true, reminderTime);
 
 		tempTask.setReminder(newReminder);
 
-		dataBaseAdd(tempTask);
+		Boolean addResponse = dataBaseAdd(tempTask);
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
+		
+		return deleteResponse && addResponse;
 	}
 
 	/**
@@ -551,11 +596,11 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void remind(String title) {
+	public Boolean remind(String title) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
-		remindBef(title, null, null);
+		return remindBef(title, null, null);
 	}
 
 	/**
@@ -574,10 +619,11 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void undo(int undostep) {
-		dataBase.retrieveHistory(steps - undostep);
+	public Boolean undo(int undostep) {
+		Boolean undoResponse = dataBase.retrieveHistory(steps - undostep);
 		steps = steps - undostep;
 		uiHandler.refresh();
+		return undoResponse;
 	}
 
 	/**
@@ -586,10 +632,11 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void redo(int redostep) {
-		dataBase.retrieveHistory(steps + redostep);
+	public Boolean redo(int redostep) {
+		Boolean redoResponse = dataBase.retrieveHistory(steps + redostep);
 		steps = steps + redostep;
 		uiHandler.refresh();
+		return redoResponse;
 	}
 
 	private TemporalUnit generateTimeUnit(String unit) {
@@ -611,19 +658,16 @@ public class Logic {
 		}
 	}
 
-	private void dataBaseAdd(Task task) {
-        try {
-			dataBase.add(task);
-		} catch (IOException e) {
-			logger.log(Level.INFO, "IOException");
-		}
+	private Boolean dataBaseAdd(Task task) {
+		return dataBase.add(task);
+
 	}
 
-	private void dataBaseDelete(Task task) {
-		dataBase.delete(task);
+	private Boolean dataBaseDelete(Task task) {
+		return dataBase.delete(task);
 	}
 
-	private boolean noRepeat(String title) {
+	private Boolean noRepeat(String title) {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
 		System.out.println(tempTaskList.size());
 		if (tempTaskList.size() > 0) {
