@@ -20,7 +20,7 @@ public class DataBaseTest {
 	 * @throws java.lang.Exception
 	 */
 
-	DataBase db;
+	private DataBase db;
 
 	@Before
 	public void setUp() throws Exception {

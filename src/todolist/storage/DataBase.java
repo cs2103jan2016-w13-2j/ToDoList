@@ -43,7 +43,7 @@ public class DataBase {
 	private static Logger dataBase_Logger = Logger.getLogger("Database logger");
 
 	private FileHandler fh;
-	protected ArrayList<Task> taskList;
+	public ArrayList<Task> taskList;
 	private ArrayList<ArrayList<Task>> snapshot;
 	private TaskRetriever retriever;
 	private TaskSorter sorter;

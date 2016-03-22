@@ -22,7 +22,7 @@ import todolist.storage.DataBase;
 public class Logic {
 
 	private MainApp mainApp;
-	private DataBase dataBase;
+	public DataBase dataBase;
 	private UIHandler uiHandler;
 	private MainParser mainParser;
 	private CaseSwitcher caseSwitcher;
