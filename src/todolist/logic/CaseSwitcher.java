@@ -116,6 +116,10 @@ public class CaseSwitcher {
 			logic.done(arg[0]);
 			logic.stepForward(2);
 			break;
+		case "undone":
+			logic.undone(arg[0]);
+			logic.stepForward(2);
+			break;
 		case "exit":
 			logic.exit();
 			break;

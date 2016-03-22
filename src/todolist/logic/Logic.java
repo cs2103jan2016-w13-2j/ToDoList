@@ -219,6 +219,23 @@ public class Logic {
 		
 		return deleteResponse && addResponse;
 	}
+	
+	public Boolean undone(String title) {
+
+		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+
+		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
+
+		tempTask.setDoneStatus(false);
+		Boolean addResponse = dataBaseAdd(tempTask);
+
+		uiHandler.refresh();
+		uiHandler.highLight(tempTask);
+		uiHandler.sendMessage(title + " is marked done!");
+		
+		return deleteResponse && addResponse;
+	}
 
 	/**
 	 * This method edits a task.

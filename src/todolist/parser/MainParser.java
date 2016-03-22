@@ -51,6 +51,7 @@ public class MainParser {
     			head.equals("add-remind-bef")||
     			head.equals("remind-bef")||
     			head.equals("done")||
+    			head.equals("undone")||
     			head.equals("exit")||
     			head.equals("undo")||
     			head.equals("redo")||
