@@ -14,8 +14,9 @@ import todolist.model.Task;
 
 public class LogicTest {
 	
-	private MainApp mainApp;
-	Logic logic = new Logic(mainApp);
+	private MainApp mainAppStub = new MainAppStub();
+	
+	private Logic logic = new Logic(mainAppStub);
 	
 	@Test
 	public void testProcess() {
@@ -51,7 +52,15 @@ public class LogicTest {
 
 	@Test
 	public void testAddEvent() {
-		fail("Not yet implemented");
+		Name name = new Name("title");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime start = LocalDateTime.parse("1970-01-01" + " " + "12:00", formatter);
+		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+		Task newEvent = new Task(name, start, end, null, null, false, false, null);
+		
+		logic.addEvent("title", "1970-01-01", "12:00", "1", "day");
+		Boolean isEqual = logic.dataBase.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
+		assert(isEqual);
 	}
 
 	@Test
