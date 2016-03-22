@@ -16,7 +16,7 @@ public class Logic {
 	private MainApp mainApp;
 	private DataBase dataBase;
 	public UIHandler uiHandler;
-	private Parser parser;
+	private MainParser mainParser;
 	private CaseSwitcher caseSwitcher;
 	private int steps;
 	private Logger logger = Logger.getLogger("Logic Logger");
@@ -33,7 +33,7 @@ public class Logic {
 	public Logic(MainApp mainApp) {
 		this.mainApp = mainApp;
 		this.dataBase = new DataBase();
-		this.parser = new Parser();
+		this.mainParser = new MainParser();
 		this.uiHandler = new UIHandler(dataBase, mainApp);
 		this.caseSwitcher = new CaseSwitcher(this);
 		this.steps = 0;
@@ -47,7 +47,7 @@ public class Logic {
 	 * @return void
 	 */
 	public void process(String input) {
-		TokenizedCommand tokenizedCommand = parser.parse(input);
+		TokenizedCommand tokenizedCommand = mainParser.parse(input);
 		caseSwitcher.execute(tokenizedCommand);
 	}
 

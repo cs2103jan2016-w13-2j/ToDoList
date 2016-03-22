@@ -1,11 +1,11 @@
 package todolist.model;
 
-public class Parser {
+public class MainParser {
 	
 	private FlexiCommandParser flexiCommandParser;
     private NormalCommandParser normalCommandParser;
  
-    public Parser() {
+    public MainParser() {
     	this.flexiCommandParser = new FlexiCommandParser();
     	this.normalCommandParser = new NormalCommandParser();
     }
