@@ -46,7 +46,11 @@ public class Logic {
 		this.caseSwitcher = new CaseSwitcher(this);
 		this.steps = 0;
 	}
-
+	
+	public UIHandler getUIHandler() {
+		return uiHandler;
+	}
+	
 	/**
 	 * This method takes in raw user input and process it by calling parser
 	 *
@@ -54,11 +58,6 @@ public class Logic {
 	 *            take in the user input string
 	 * @return void
 	 */
-	
-	public UIHandler getUIHandler() {
-		return uiHandler;
-	}
-	
 	public void process(String input) {
 		TokenizedCommand tokenizedCommand = mainParser.parse(input);
 		caseSwitcher.execute(tokenizedCommand);
@@ -172,7 +171,7 @@ public class Logic {
 	 * This method adds a new deadline.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean addDeadline(String title, String endDate, String endTime) {
 
@@ -203,7 +202,7 @@ public class Logic {
 	 * This method adds a new floating task.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean addTask(String title) {
 
@@ -227,7 +226,7 @@ public class Logic {
 	 * This method takes in the title of a task and marks it as done.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean done(String title) {
 
@@ -267,7 +266,7 @@ public class Logic {
 	 * This method edits a task.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean edit(String title, String fieldName, String newValue) {
 
@@ -324,7 +323,7 @@ public class Logic {
 	 * This method takes in the title of a task and deletes it.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean delete(String title) {
 
@@ -398,7 +397,7 @@ public class Logic {
 	 * This method takes in the title of a task and labels it with a category.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean label(String title, String category) {
 
@@ -421,7 +420,7 @@ public class Logic {
 	 * This method edits the recurring status of a task.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean setRecurring(String title, Boolean status, String interval) {
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
@@ -449,7 +448,7 @@ public class Logic {
 	 * This method postpones a task by a duration.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean postpone(String title, String quantity, String timeUnit) {
 
@@ -492,7 +491,7 @@ public class Logic {
 	 * This method forwards a task by a duration.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean forward(String title, String quantity, String timeUnit) {
 
@@ -536,7 +535,7 @@ public class Logic {
 	 * deadline.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean addRemind(String[] arg) {
 		
@@ -565,7 +564,7 @@ public class Logic {
 	 * before the deadline.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean addRemindBef(String quantity, String timeUnit, String[] arg) {
 
@@ -595,7 +594,7 @@ public class Logic {
 	 * duration before the deadline.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean remindBef(String title, String quantity, String timeUnit) {
 
@@ -637,7 +636,7 @@ public class Logic {
 	 * the deadline.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean remind(String title) {
 
@@ -660,7 +659,7 @@ public class Logic {
 	 * This method takes in an integer and undo that number of steps.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean undo(int undostep) {
 		Boolean undoResponse = dataBase.retrieveHistory(steps - undostep);
@@ -673,7 +672,7 @@ public class Logic {
 	 * This method takes in an integer and redo that number of steps.
 	 *
 	 * 
-	 * @return void
+	 * @return Boolean
 	 */
 	public Boolean redo(int redostep) {
 		Boolean redoResponse = dataBase.retrieveHistory(steps + redostep);
