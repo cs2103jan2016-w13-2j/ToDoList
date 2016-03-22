@@ -108,8 +108,8 @@ public class SideBarController {
 
     public void setIndex(int index) {
         this.index = index;
-        mainApplication.loadPage(index);
         colourTab();
+        mainApplication.setPageView(index);
     }
 
     private void colourTab() {
@@ -123,7 +123,9 @@ public class SideBarController {
 //                currentButton.setStyle(STYLE_TAB_FOCUSED_DARK);
 
             }
+            
         }
+        
     }
 
     public MainApp getMainApplication() {

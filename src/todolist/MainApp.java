@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -107,6 +108,7 @@ public class MainApp extends Application {
     public NotificationPane rootWithNotification = null;
     public PauseTransition delay = null;
 
+    
     /*** CORE FUNCTIONS ***/
 
     public MainApp() {
@@ -138,6 +140,7 @@ public class MainApp extends Application {
         primaryStage.setMinWidth(MIN_WIDTH);
     }
 
+    
     /*** VIEW LOADERS ***/
 
     private void loadRootView(Stage primaryStage) {
@@ -315,40 +318,11 @@ public class MainApp extends Application {
         }
     }
 
-    /*** NOTIFICATION FUNCTIONS ***/
-
-    private void setupNotificationPane() {
-        Label label = new Label();
-        label.setPadding(new Insets(50));
-
-        BorderPane borderPane = new BorderPane(label);
-        rootWithNotification = new NotificationPane(borderPane);
-
-        rootWithNotification.setShowFromTop(true);
-        rootWithNotification.setContent(rootView);
-    }
-
-    public void notifyWithText(String text) {
-
-        rootWithNotification.setText(text);
-        rootWithNotification.show();
-
-        // Delay factor
-        delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
-        delay.setOnFinished(e -> rootWithNotification.hide());
-        delay.play();
-    }
-
-    /*** ACCESS FUNCTIONS FOR MODELS ***/
-    public void setDisplayTasks(ArrayList<Task> listOfTasks) {
-        mainController.setTasks(listOfTasks);
-    }
-
-    public ObservableList<TaskWrapper> getDisplayTasks() {
-        return mainController.getTasks();
-    }
-
     public void loadPage(int index) {
+        sidebarController.setIndex(index);
+    }
+    
+    public void setPageView(int index) {
         switch (index) {
         case HOME_TAB:
             loadMainView();
@@ -374,6 +348,41 @@ public class MainApp extends Application {
         default:
             loadMainView();
         }
+    }
+    
+    
+    /*** NOTIFICATION FUNCTIONS ***/
+
+    private void setupNotificationPane() {
+        Label label = new Label();
+        label.setPadding(new Insets(50));
+
+        BorderPane borderPane = new BorderPane(label);
+        rootWithNotification = new NotificationPane(borderPane);
+
+        rootWithNotification.setShowFromTop(true);
+        rootWithNotification.setContent(rootView);
+    }
+
+    public void notifyWithText(String text) {
+
+        rootWithNotification.setText(text);
+        rootWithNotification.show();
+
+        // Delay factor
+        delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
+        delay.setOnFinished(e -> rootWithNotification.hide());
+        delay.play();
+    }
+
+    
+    /*** ACCESS FUNCTIONS FOR MODELS ***/
+    public void setDisplayTasks(ArrayList<Task> listOfTasks) {
+        mainController.setTasks(listOfTasks);
+    }
+
+    public ObservableList<TaskWrapper> getDisplayTasks() {
+        return mainController.getTasks();
     }
 
 }
