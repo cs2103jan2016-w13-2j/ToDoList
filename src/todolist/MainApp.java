@@ -70,6 +70,21 @@ public class MainApp extends Application {
     private HBox titleBarView;
     private VBox sideBarView;
     private BorderPane emptyView;
+    private BorderPane overdueView;
+    private BorderPane todayView;
+    private BorderPane weekView;
+    private BorderPane archiveView;
+    private BorderPane settingsView;
+    private BorderPane helpView;
+    
+    // Page view index
+    private static final int HOME_TAB = 1;
+    private static final int EXPIRED_TAB = 2;
+    private static final int TODAY_TAB = 3;
+    private static final int WEEK_TAB = 4;
+    private static final int DONE_TAB = 5;
+    private static final int OPTIONS_TAB = 6;
+    private static final int HELP_TAB = 7;
 
     // Controllers
     private MainViewController mainController;
@@ -223,7 +238,31 @@ public class MainApp extends Application {
         }
     }
 
-   
+    private void loadOverdueView() {
+
+    }
+    
+    private void loadTodayView() {
+        
+    }
+
+    private void loadWeekView() {
+        
+    }
+    
+    private void loadArchiveView() {
+        
+    }
+    
+    private void loadSettingsView() {
+        
+    }
+    
+    private void loadHelpView() {
+        
+    }
+    
+    
     /*** NOTIFICATION FUNCTIONS ***/
     
     private void setupNotificationPane() {
@@ -261,10 +300,29 @@ public class MainApp extends Application {
 
     public void loadPage(int index) {
         switch (index) {
-        case 1:
+        case HOME_TAB:
             loadMainView();
+            break;
+        case EXPIRED_TAB:
+            loadOverdueView();
+            break;
+        case TODAY_TAB:
+            loadTodayView();
+            break;
+        case WEEK_TAB:
+            loadWeekView();
+            break;
+        case DONE_TAB:
+            loadArchiveView();
+            break;
+        case OPTIONS_TAB:
+            loadSettingsView();
+            break;
+        case HELP_TAB:
+            loadHelpView();
+            break;
         default:
-            loadDefaultEmptyView();
+            loadMainView();
         }
     }
 
