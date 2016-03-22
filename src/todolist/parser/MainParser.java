@@ -54,7 +54,9 @@ public class MainParser {
     			head.equals("exit")||
     			head.equals("undo")||
     			head.equals("redo")||
-    			head.equals("reset");
+    			head.equals("reset")||
+    			head.equals("set-recurring")||
+    			head.equals("remove-recurring");
 		return type;   
     }
 }

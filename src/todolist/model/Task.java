@@ -65,8 +65,8 @@ public class Task {
 	}
 
 	public LocalDateTime getStartTime() {
-		if (isRecurring) {
-			String temp[] = interval.split(" ");
+		if (isRecurring && startTime != null) {
+			String temp[] = interval.split("-");
 			String length = temp[0];
 			String unit = temp[1];
 			LocalDateTime now = LocalDateTime.now();
@@ -81,10 +81,10 @@ public class Task {
 
 	public LocalDateTime getEndTime() {
 		if (isRecurring) {
-			String temp[] = interval.split(" ");
+			String temp[] = interval.split("-");
 			String length = temp[0];
 			String unit = temp[1];
-			
+
 			if(startTime != null) {
 				while(startTime.isAfter(endTime)) {
 					endTime = endTime.plus(Long.parseLong(length), generateTimeUnit(unit));
@@ -121,7 +121,7 @@ public class Task {
 	public String getInterval() {
 		return interval;
 	}
-	
+
 	private TemporalUnit generateTimeUnit(String unit) {
 		switch (unit) {
 		case "day":

@@ -34,6 +34,9 @@ public class CaseSwitcher {
 				case "deadline":
 					logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
 					break;
+				default:
+					logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
+
 				}
 				break;
 			default:
@@ -67,10 +70,10 @@ public class CaseSwitcher {
 		case "label":
 			logic.label(arg[0], arg[1]);
 			break;
-		case "setrecurring":
+		case "set-recurring":
 			logic.setRecurring(arg[0], true, arg[1]);
 			break;
-		case "removerecurring":
+		case "remove-recurring":
 			logic.setRecurring(arg[0], false, null);
 		case "postpone":
 			logic.postpone(arg[0], arg[1], arg[2]);
