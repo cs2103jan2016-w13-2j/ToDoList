@@ -73,6 +73,32 @@ public class Logic {
 	public void stepForward(int increment) {
 		this.steps = steps + increment;
 	}
+	
+	public void tab(String workplace) {
+		switch(workplace) {
+		case "home":
+			uiHandler.tab(1);
+			break;
+		case "expired":
+			uiHandler.tab(2);
+			break;
+		case "today":
+			uiHandler.tab(3);
+			break;
+		case "week":
+			uiHandler.tab(4);
+			break;
+		case "done":
+			uiHandler.tab(5);
+			break;
+		case "options":
+			uiHandler.tab(6);
+			break;
+		case "help":
+			uiHandler.tab(7);
+			break;
+		}
+	}
 
 	/**
 	 * This method resets the view

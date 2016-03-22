@@ -132,6 +132,9 @@ public class CaseSwitcher {
 		case "reset":
 			logic.reset();
 			break;
+		case "tab":
+			logic.tab(arg[0]);
+			break;
 		default:
 			logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
 		}

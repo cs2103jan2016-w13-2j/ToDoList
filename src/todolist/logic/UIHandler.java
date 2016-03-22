@@ -38,4 +38,8 @@ public class UIHandler {
     public void display(ArrayList<Task> taskList) {
     	mainApp.setDisplayTasks(taskList);
     }
+    
+    public void tab(int index) {
+    	mainApp.setPage(1);
+    }
 }
