@@ -11,11 +11,16 @@ public class UIHandler {
 
     private DataBase dataBase;
     private MainApp mainApp;
+    private Logic logic;
 
-    public UIHandler(DataBase dataBase, MainApp mainApp) {
+    public UIHandler(DataBase dataBase, MainApp mainApp, Logic logic) {
         this.dataBase = dataBase;
         this.mainApp = mainApp;
-
+        this.logic = logic;
+    }
+    
+    public void process(String input) {
+    	logic.process(input);
     }
 
     public void refresh() {
@@ -29,21 +34,8 @@ public class UIHandler {
     public void highLight(Task task) {
         // mainApp.highLight(task);
     }
-
-    public void search(String title) {
-
-        ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
-        mainApp.setDisplayTasks(tempTaskList);
-        // mainApp.highLight(tempTaskList);
-
-    }
-
-	public void filter(String category) {
-		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("CATEGORY", category));
-		mainApp.setDisplayTasks(tempTaskList);
-	}
-
-    public void exit() {
-        System.exit(0);
+    
+    public void display(ArrayList<Task> taskList) {
+    	mainApp.setDisplayTasks(taskList);
     }
 }

@@ -23,7 +23,7 @@ public class Logic {
 
 	private MainApp mainApp;
 	private DataBase dataBase;
-	public UIHandler uiHandler;
+	private UIHandler uiHandler;
 	private MainParser mainParser;
 	private CaseSwitcher caseSwitcher;
 	private int steps;
@@ -42,7 +42,7 @@ public class Logic {
 		this.mainApp = mainApp;
 		this.dataBase = new DataBase();
 		this.mainParser = new MainParser();
-		this.uiHandler = new UIHandler(dataBase, mainApp);
+		this.uiHandler = new UIHandler(dataBase, mainApp, this);
 		this.caseSwitcher = new CaseSwitcher(this);
 		this.steps = 0;
 	}
@@ -54,6 +54,11 @@ public class Logic {
 	 *            take in the user input string
 	 * @return void
 	 */
+	
+	public UIHandler getUIHandler() {
+		return uiHandler;
+	}
+	
 	public void process(String input) {
 		TokenizedCommand tokenizedCommand = mainParser.parse(input);
 		caseSwitcher.execute(tokenizedCommand);
@@ -78,6 +83,26 @@ public class Logic {
 	public void reset() {
 		uiHandler.refresh();
 		uiHandler.sendMessage("View reseted");
+	}
+	
+	/**
+	 * This method adds an recurring event
+	 *
+	 * 
+	 * @return void
+	 */
+	public void addRecurringEvent(String title, String day, String startTime, String quantity, String unit) {
+		
+	}
+	
+	/**
+	 * This method adds an recurring deadline
+	 *
+	 * 
+	 * @return void
+	 */
+	public void addRecurringDeadline(String title, String day, String time) {
+		
 	}
 
 	/**
@@ -263,7 +288,9 @@ public class Logic {
 
 		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + title);
 
-		uiHandler.search(title);
+		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
+		
+		uiHandler.display(tempTaskList);
 		uiHandler.sendMessage("Here are your search results");
 	}
 
@@ -277,7 +304,10 @@ public class Logic {
 	public void filter(String category) {
 
 		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + category);
-		uiHandler.filter(category);
+		
+		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("CATEGORY", category));
+
+		uiHandler.display(tempTaskList);
 		uiHandler.sendMessage("Here are your filter results");
 	}
 
@@ -506,7 +536,7 @@ public class Logic {
 	 * @return void
 	 */
 	public void exit() {
-		uiHandler.exit();
+		System.exit(0);
 	}
 
 	/**

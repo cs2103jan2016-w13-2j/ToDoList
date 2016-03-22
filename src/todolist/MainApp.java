@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import todolist.logic.Logic;
+import todolist.logic.UIHandler;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 import todolist.ui.controllers.MainViewController;
@@ -76,6 +77,7 @@ public class MainApp extends Application {
 
     // Other Components
     public Logic logicUnit = null;
+    public UIHandler uiHandlerUnit = null;
 
     // Notification System
     public NotificationPane rootWithNotification = null;
@@ -93,6 +95,8 @@ public class MainApp extends Application {
 
         // Reference and link with Logic component
         logicUnit = new Logic(this);
+        uiHandlerUnit = logicUnit.getUIHandler();
+        
 
         // Load Views
         loadRootView(primaryStage);
@@ -150,7 +154,7 @@ public class MainApp extends Application {
             mainController.setMainApp(this);
 
             loadCommandLine();
-            logicUnit.getUIHandler().refresh();
+            uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
             Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_MAIN);

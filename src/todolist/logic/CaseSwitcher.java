@@ -3,13 +3,13 @@ package todolist.logic;
 import todolist.model.TokenizedCommand;
 
 public class CaseSwitcher {
-	
+
 	private Logic logic;
-	
+
 	public CaseSwitcher(Logic logic) {
 		this.logic = logic;
 	}
-	
+
 	public void execute(TokenizedCommand command) {
 		String action = command.getAction();
 		String arg[] = command.getArgs();
@@ -18,26 +18,26 @@ public class CaseSwitcher {
 			String type = arg[0];
 			switch (type) {
 			case "event":
-				try {
-					logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
 				break;
 			case "deadline":
-				try {
-					logic.addDeadline(arg[1], arg[2], arg[3]);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				logic.addDeadline(arg[1], arg[2], arg[3]);
 				break;
 			case "task":
 				logic.addTask(arg[1]);
 				break;
+			case "recurring":
+				switch (arg[1]) {
+				case "event":
+					logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6]);
+					break;
+				case "deadline":
+					logic.addRecurringDeadline(arg[2], arg[3], arg[4]);
+					break;
+				}
+				break;
 			default:
-				logic.uiHandler.sendMessage("Opps! I don't understand this command! Please try again.");
+				logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
 			}
 			logic.stepForward(1);
 			break;
@@ -121,7 +121,7 @@ public class CaseSwitcher {
 			logic.reset();
 			break;
 		default:
-			logic.uiHandler.sendMessage("Opps! I don't understand this command! Please try again.");
+			logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
 		}
 	}
 }
