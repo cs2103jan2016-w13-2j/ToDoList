@@ -1,8 +1,8 @@
 package todolist.model;
 
-public class FlexiCommandHandler {
+public class FlexiCommandParser {
     
-    public FlexiCommandHandler() {
+    public FlexiCommandParser() {
 
     }
     

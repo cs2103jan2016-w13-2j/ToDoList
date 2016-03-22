@@ -1,8 +1,8 @@
 package todolist.model;
 
-public class NormalCommandHandler {
+public class NormalCommandParser {
 
-    public NormalCommandHandler() {
+    public NormalCommandParser() {
 
     }
     

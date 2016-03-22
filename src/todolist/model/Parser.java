@@ -2,12 +2,12 @@ package todolist.model;
 
 public class Parser {
 	
-	private FlexiCommandHandler flexiCommandHandler;
-    private NormalCommandHandler normalCommandHandler;
+	private FlexiCommandParser flexiCommandParser;
+    private NormalCommandParser normalCommandParser;
  
     public Parser() {
-    	this.flexiCommandHandler = new FlexiCommandHandler();
-    	this.normalCommandHandler = new NormalCommandHandler();
+    	this.flexiCommandParser = new FlexiCommandParser();
+    	this.normalCommandParser = new NormalCommandParser();
     }
     
     /**
@@ -18,9 +18,9 @@ public class Parser {
 	 */
     public TokenizedCommand parse(String input) {
     	if(checkType(input)) {
-    		return normalCommandHandler.parse(input);
+    		return normalCommandParser.parse(input);
     	} else {
-    		return flexiCommandHandler.parse(input);
+    		return flexiCommandParser.parse(input);
     	}
     }
     
@@ -31,6 +31,28 @@ public class Parser {
 	 * @return Boolean
 	 */
     private Boolean checkType(String input) {
-		return true;   
+    	String temp[] = input.split(" ");
+    	String head = temp[0];
+    	Boolean type = head.equals("add")||
+    			head.equals("edit")||
+    			head.equals("delete")||
+    			head.equals("search")||
+    			head.equals("filter")||
+    			head.equals("sort")||
+    			head.equals("insert")||
+    			head.equals("switchposition")||
+    			head.equals("label")||
+    			head.equals("postpone")||
+    			head.equals("forward")||
+    			head.equals("add-remind")||
+    			head.equals("remind")||
+    			head.equals("add-remind-bef")||
+    			head.equals("remind-bef")||
+    			head.equals("done")||
+    			head.equals("exit")||
+    			head.equals("undo")||
+    			head.equals("redo")||
+    			head.equals("reset");
+		return type;   
     }
 }
