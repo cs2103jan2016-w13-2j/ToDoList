@@ -40,6 +40,6 @@ public class UIHandler {
     }
     
     public void tab(int index) {
-    	mainApp.setPage(1);
+    	mainApp.setPage(index);
     }
 }
