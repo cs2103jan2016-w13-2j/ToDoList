@@ -24,7 +24,7 @@
 				<ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0"
 					stylesheets="@DefaultTheme.css">
 					<placeholder>
-						<Label text="work in progress!" />
+						<Label style="-fx-font-weight: bold;" text="need help? we will be assisting you shortly!" />
 					</placeholder>
 					<opaqueInsets>
 						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -38,7 +38,7 @@
 				<HBox id="titled-pane-hbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
 					maxWidth="1.7976931348623157E308" spacing="10.0" stylesheets="@DefaultTheme.css">
 					<children>
-						<ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.0"
+						<ImageView fitHeight="20.0" fitWidth="20.0" opacity="100.0"
 							pickOnBounds="true" preserveRatio="true">
 							<image>
 								<Image url="@assets/pen.png" />

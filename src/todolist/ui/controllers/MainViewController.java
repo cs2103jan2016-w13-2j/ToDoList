@@ -21,14 +21,14 @@ import javafx.util.Callback;
 public class MainViewController {
 
     /*** MODEL DATA ***/
-    private ObservableList<TaskWrapper> tasksToDisplay = null;
+    protected ObservableList<TaskWrapper> tasksToDisplay = null;
 
     /*** MAIN APP ***/
     private MainApp mainApplication = null;
 
     /*** VIEWS ***/
     @FXML
-    private ListView<TaskWrapper> listView = null;
+    protected ListView<TaskWrapper> listView = null;
 
     
     /*** CORE CONTROLLER FUNCTIONS ***/

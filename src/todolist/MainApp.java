@@ -8,7 +8,9 @@ import todolist.logic.UIHandler;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 import todolist.ui.controllers.MainViewController;
+import todolist.ui.controllers.OverdueController;
 import todolist.ui.controllers.SideBarController;
+import todolist.ui.controllers.TodayController;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -99,6 +101,8 @@ public class MainApp extends Application {
     // Controllers
     private MainViewController mainController;
     private SideBarController sidebarController;
+    private OverdueController overdueController;
+    private TodayController todayController;
 
     // Other Components
     public Logic logicUnit = null;
@@ -247,6 +251,13 @@ public class MainApp extends Application {
             overdueView = (BorderPane) getView(loader, DIRECTORY_OVERDUE);
             loadMainView();
             mainView.setCenter(overdueView);
+            
+            // Set up display logic for main view
+            overdueController = loader.getController();
+            overdueController.setMainApp(this);
+
+            uiHandlerUnit.refresh();
+            
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -260,6 +271,13 @@ public class MainApp extends Application {
             todayView = (BorderPane) getView(loader, DIRECTORY_TODAY);
             loadMainView();
             mainView.setCenter(todayView);
+            
+            // Set up display logic for main view
+            todayController = loader.getController();
+            todayController.setMainApp(this);
+
+            uiHandlerUnit.refresh();
+            
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -379,6 +397,14 @@ public class MainApp extends Application {
     /*** ACCESS FUNCTIONS FOR MODELS ***/
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
         mainController.setTasks(listOfTasks);
+        
+        if (overdueController != null) {
+            overdueController.setTasks(listOfTasks);
+        }
+        
+        if (todayController != null) {
+            todayController.setTasks(listOfTasks);
+        }
     }
 
     public ObservableList<TaskWrapper> getDisplayTasks() {
