@@ -91,10 +91,6 @@ public class MainViewController {
         return listView;
     }
 
-    public void populateTaskListView() {
-        mainApplication.logicUnit.uiHandler.refresh();
-    }
-
     
     /*** MODEL GETTERS-SETTERS-RELOADERS ***/
 

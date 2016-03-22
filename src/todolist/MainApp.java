@@ -108,10 +108,6 @@ public class MainApp extends Application {
         primaryStage.setMinWidth(MIN_WIDTH);
     }
 
-    private void refreshTaskList() {
-        mainController.populateTaskListView();
-    }
-
     
     /*** VIEW LOADERS ***/
     
@@ -154,7 +150,7 @@ public class MainApp extends Application {
             mainController.setMainApp(this);
 
             loadCommandLine();
-            reloadDisplay();
+            logicUnit.getUIHandler().refresh();
 
         } catch (IOException ioException) {
             Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_MAIN);
@@ -222,10 +218,6 @@ public class MainApp extends Application {
             ioException.printStackTrace();
             System.exit(1);
         }
-    }
-
-    public void reloadDisplay() {
-        refreshTaskList();
     }
 
    
