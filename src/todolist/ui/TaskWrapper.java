@@ -18,6 +18,7 @@ public class TaskWrapper {
     private ObjectProperty<Category> category;
     private ObjectProperty<Reminder> reminder;
     private ObjectProperty<Boolean> isDone;
+    private ObjectProperty<Boolean> isRecurring;
 
     public TaskWrapper(Task task) {
         this.taskTitle = new SimpleStringProperty(task.getName().getName());
@@ -26,6 +27,8 @@ public class TaskWrapper {
         this.category = new SimpleObjectProperty<Category>(task.getCategory());
         this.reminder = new SimpleObjectProperty<Reminder>(task.getReminder());
         this.isDone = new SimpleObjectProperty<Boolean>(task.getDoneStatus());
+        this.isRecurring = new SimpleObjectProperty<Boolean>(task.getRecurringStatus());
+
     }
 
     public StringProperty taskTitleProperty() {
@@ -96,8 +99,20 @@ public class TaskWrapper {
         this.isDone = isDone;
     }
 
-    public Boolean getIsDone() {
+    public Boolean isCompleted() {
         return isDone.get();
+    }
+
+    public ObjectProperty<Boolean> getRecurringStatusProperty() {
+        return isRecurring;
+    }
+
+    public void setIsRecurring(ObjectProperty<Boolean> isRecurring) {
+        this.isRecurring = isRecurring;
+    }
+
+    public Boolean isRecurring() {
+        return isRecurring.get();
     }
 
 }

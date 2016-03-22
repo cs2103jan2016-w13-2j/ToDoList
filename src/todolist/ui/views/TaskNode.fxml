@@ -10,17 +10,12 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<HBox id="task-hbox-item" fx:id="root" alignment="CENTER_LEFT"
-	maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	prefHeight="60.0" prefWidth="200.0" stylesheets="@DefaultTheme.css"
-	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<HBox id="task-hbox-item" fx:id="root" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="200.0" stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="70.0"
-			stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
+		<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
 		<StackPane fx:id="numberLabel" prefWidth="50.0">
 			<children>
-				<Circle fx:id="numLabelBase" fill="DODGERBLUE" radius="25.0"
-					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+				<Circle fx:id="numLabelBase" fill="DODGERBLUE" radius="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
 					<StackPane.margin>
 						<Insets left="10.0" right="10.0" />
 					</StackPane.margin>
@@ -32,21 +27,16 @@
 				</Label>
 			</children>
 		</StackPane>
-		<VBox fx:id="details" maxHeight="1.7976931348623157E308"
-			maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="100.0"
-			HBox.hgrow="ALWAYS">
+		<VBox fx:id="details" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
 			<children>
-				<HBox fx:id="titleBox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308"
-					prefHeight="100.0">
+				<HBox fx:id="titleBox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" prefHeight="100.0">
 					<children>
-						<Label fx:id="title" maxHeight="1.7976931348623157E308"
-							text="Title" textFill="WHITE" wrapText="true">
+						<Label fx:id="title" maxHeight="1.7976931348623157E308" text="Title" textFill="WHITE" wrapText="true">
 							<font>
 								<Font name="System Bold" size="16.0" />
 							</font>
 						</Label>
-						<ImageView fx:id="reminderIcon" fitHeight="15.0"
-							fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+						<ImageView fx:id="reminderIcon" fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
 							<HBox.margin>
 								<Insets left="5.0" right="5.0" />
 							</HBox.margin>
@@ -59,11 +49,9 @@
 						<Insets top="10.0" />
 					</padding>
 				</HBox>
-				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" prefHeight="100.0"
-					prefWidth="200.0">
+				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
 					<children>
-						<Circle fx:id="overdueFlag" fill="DODGERBLUE" radius="3.0"
-							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+						<Circle fx:id="overdueFlag" fill="DODGERBLUE" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
 							<HBox.margin>
 								<Insets right="2.0" />
 							</HBox.margin>
@@ -75,11 +63,9 @@
 						</Label>
 					</children>
 				</HBox>
-				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" prefHeight="100.0"
-					prefWidth="200.0">
+				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
 					<children>
-						<Circle fx:id="categorySprite" fill="DODGERBLUE" radius="3.0"
-							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+						<Circle fx:id="categorySprite" fill="DODGERBLUE" radius="3.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
 							<HBox.margin>
 								<Insets right="2.0" />
 							</HBox.margin>
@@ -98,9 +84,7 @@
 		</VBox>
 		<StackPane fx:id="completeStatus" stylesheets="@DefaultTheme.css">
 			<children>
-				<Rectangle fx:id="statusBacking" arcHeight="10.0"
-					arcWidth="10.0" fill="#ffeb1f" height="25.0" stroke="BLACK"
-					strokeType="INSIDE" strokeWidth="0.0" width="55.0" />
+				<Rectangle fx:id="statusBacking" arcHeight="10.0" arcWidth="10.0" fill="#ffeb1f" height="25.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="55.0" />
 				<Label fx:id="status" text="Ongoing">
 					<font>
 						<Font name="System Bold" size="10.0" />
@@ -111,6 +95,7 @@
 				<Insets left="15.0" right="15.0" />
 			</HBox.margin>
 		</StackPane>
+      <VBox prefHeight="200.0" prefWidth="100.0" />
 	</children>
 	<opaqueInsets>
 		<Insets />

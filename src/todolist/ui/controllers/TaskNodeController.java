@@ -186,7 +186,7 @@ public class TaskNodeController {
         }
 
         // Archive Status
-        if (task.getIsDone()) {
+        if (task.isCompleted()) {
             statusBacking.setFill(Color.web(COLOR_COMPLETE));
             status.setText(DISPLAY_ITEM_ARCHIVED);
         } else {

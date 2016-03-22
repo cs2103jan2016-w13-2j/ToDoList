@@ -27,9 +27,9 @@ public class TaskRetriever {
 	}
 	
 	public ArrayList<Task> retrieveHandler(ArrayList<Task> tasks, SearchCommand command) {
-		    System.out.println("is retrieving");
+//		    System.out.println("is retrieving");
 	    	assert(command instanceof SearchCommand);
-	    	System.out.println("not even here");
+//	    	System.out.println("not even here");
 	    	taskList = tasks;
 	    	
 	        ArrayList<Task> resultList = new ArrayList<Task>();
@@ -37,7 +37,7 @@ public class TaskRetriever {
 	        //dataBase_Logger.log(Level.INFO, LOGGING_RETRIEVE_TASK + type);
 	        switch (type) {
 	        case CATEGORY:
-	        	System.out.println("is retrieving 2222");
+//	        	System.out.println("is retrieving 2222");
 	            resultList = retrieve_Category(command);
 	            break;
 	        case NAME:
@@ -48,7 +48,7 @@ public class TaskRetriever {
 	            resultList = retrieve_View(command);
 	            break;
 	        default:
-	        	System.out.println("is retrieving default");
+//	        	System.out.println("is retrieving default");
 	            return resultList;
 	        }
 	        

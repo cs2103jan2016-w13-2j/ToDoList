@@ -96,7 +96,6 @@ public class MainApp extends Application {
         // Reference and link with Logic component
         logicUnit = new Logic(this);
         uiHandlerUnit = logicUnit.getUIHandler();
-        
 
         // Load Views
         loadRootView(primaryStage);
