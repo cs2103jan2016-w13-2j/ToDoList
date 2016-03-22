@@ -73,6 +73,7 @@ public class MainViewController {
 
                 // Pass Command Line input for processing
                 try {
+                    commandField.clear();
                     mainApplication.uiHandlerUnit.process(commandString);
                 } catch (Exception e) {
 
