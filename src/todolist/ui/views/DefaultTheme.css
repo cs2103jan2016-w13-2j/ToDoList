@@ -221,10 +221,6 @@
     -fx-font-weight: bold;
 }
 
-#home-icon:hover {
-    -fx-image: url("img/home-hover.png");
-}
-
 #new-button {
     -fx-background-color: 
         #000000,

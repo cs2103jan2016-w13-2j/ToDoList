@@ -30,7 +30,6 @@ public class TaskWrapper {
         this.isDone = new SimpleObjectProperty<Boolean>(task.getDoneStatus());
         this.isRecurring = new SimpleObjectProperty<Boolean>(task.getRecurringStatus());
         this.interval = new SimpleObjectProperty<String>(task.getInterval());
-
     }
 
     public StringProperty taskTitleProperty() {

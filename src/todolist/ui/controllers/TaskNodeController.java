@@ -10,6 +10,7 @@ import com.sun.media.jfxmedia.logging.Logger;
 
 import todolist.MainApp;
 import todolist.model.Category;
+import todolist.model.Reminder;
 import todolist.ui.TaskWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -114,15 +115,14 @@ public class TaskNodeController {
     private Rectangle statusBacking = null;
     @FXML
     private Label status = null;
-    
+
     // Indicators
     @FXML
     private VBox indicatorsHolder = null;
     @FXML
     private ImageView recurringIndicator = null;
-    private static final int recurring = 1;
-    private static final int reminder = 2;
-    
+    @FXML
+    private ImageView reminderIndicator = null;
 
     public TaskNodeController(TaskWrapper task, int index) throws IllegalArgumentException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(MainApp.DIRECTORY_TASKITEM));
@@ -152,6 +152,7 @@ public class TaskNodeController {
         String taskTitle = task.getTaskTitle();
         Category category = task.getCategory();
         String categoryName = null;
+        Reminder reminder = task.getReminder();
         LocalDateTime startDateTime = task.getStartTime();
         LocalDateTime endDateTime = task.getEndTime();
 
@@ -202,9 +203,16 @@ public class TaskNodeController {
             statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
             status.setText(DISPLAY_ITEM_UNARCHIVED);
         }
-        
+
         // Recurring Status
         recurringIndicator.setVisible(task.isRecurring());
+
+        // Reminder Status
+        if (reminder == null) {
+            reminderIndicator.setVisible(false);
+        } else {
+            reminderIndicator.setVisible(reminder.getStatus());
+        }
     }
 
     public HBox getNode() {
