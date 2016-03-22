@@ -43,7 +43,7 @@ public class DataBase {
 	private static Logger dataBase_Logger = Logger.getLogger("Database logger");
 
 	private FileHandler fh;
-	private ArrayList<Task> taskList;
+	protected ArrayList<Task> taskList;
 	private ArrayList<ArrayList<Task>> snapshot;
 	private TaskRetriever retriever;
 	private TaskSorter sorter;
@@ -154,7 +154,7 @@ public class DataBase {
 		return task_str;
 	}
 
-	private void loadFromFile() {
+	protected void loadFromFile() {
 		taskList = fh.read();
 	}
 
@@ -217,7 +217,7 @@ public class DataBase {
 	 *            task to search
 	 * @return boolean returns true if the task is found; false if not.
 	 */
-	public boolean checkExistence(ArrayList<Task> taskList, Task taskToCheck) {
+	public boolean checkExistence(Task taskToCheck) {
 		return retriever.isTaskExisting(taskList, taskToCheck);
 	}
 
