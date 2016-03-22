@@ -63,6 +63,11 @@ public class DataBase {
     private void writeToFile() {
         fh.write(taskList);
     }
+    
+    public void clear() {
+    	taskList = new ArrayList<Task>();  	
+    	writeToFile();
+    }
 
     // helper method
     /*
@@ -175,13 +180,13 @@ public class DataBase {
      *   
      * @throws IOException  when task already exist
      */
-    public boolean add(Task task) throws IOException {   	
+    public boolean add(Task task) {   	
         try {
         	taskList = modifier.addTask(taskList, task);
         }catch (IOException e) {
         	return false;
         }
-    	//snapshot.add(taskList);
+    	snapshot.add ((ArrayList<Task>) taskList.clone() );
         writeToFile();       
         return true;
     }
@@ -210,10 +215,11 @@ public class DataBase {
         }
 
         dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED + taskToDelete.getName().getName());
-        //snapshot.add(taskList);
+        snapshot.add((ArrayList<Task>) taskList.clone());
         writeToFile();
         return true;
     }
+    
 
     /**
      * This method returns whether a task is in the text file.
