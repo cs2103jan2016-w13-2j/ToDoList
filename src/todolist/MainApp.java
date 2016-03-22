@@ -14,6 +14,7 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -53,14 +54,22 @@ public class MainApp extends Application {
 
     // Directories and labels
     private static final String DIRECTORY_ROOT = "ui/views/RootLayout.fxml";
-    private static final String STYLE_CLASS_ROOT = "root-layout";
-    private static final String DIRECTORY_MAIN = "ui/views/MainView.fxml";
-    private static final String STYLE_CLASS_MAIN = "main-view";
     private static final String DIRECTORY_TITLEBAR = "ui/views/TitleBarView.fxml";
-    private static final String STYLE_CLASS_TITLEBAR = "title-bar";
     private static final String DIRECTORY_SIDEBAR = "ui/views/SideBarView.fxml";
-    private static final String STYLE_CLASS_SIDEBAR = "side-bar";
     public static final String DIRECTORY_TASKITEM = "ui/views/TaskNode.fxml";
+
+    private static final String STYLE_CLASS_ROOT = "root-layout";
+    private static final String STYLE_CLASS_MAIN = "main-view";
+    private static final String STYLE_CLASS_TITLEBAR = "title-bar";
+    private static final String STYLE_CLASS_SIDEBAR = "side-bar";
+
+    private static final String DIRECTORY_MAIN = "ui/views/MainView.fxml";
+    private static final String DIRECTORY_OVERDUE = "ui/views/OverdueView.fxml";
+    private static final String DIRECTORY_TODAY = "ui/views/TodayView.fxml";
+    private static final String DIRECTORY_WEEK = "ui/views/WeekView.fxml";
+    private static final String DIRECTORY_ARCHIVE = "ui/views/ArchiveView.fxml";
+    private static final String DIRECTORY_SETTINGS = "ui/views/SettingsView.fxml";
+    private static final String DIRECTORY_HELP = "ui/views/HelpView.fxml";
     private static final String DIRECTORY_EMPTY = "ui/views/EmptyView.fxml";
 
     // Views: Display and UI components
@@ -76,7 +85,7 @@ public class MainApp extends Application {
     private BorderPane archiveView;
     private BorderPane settingsView;
     private BorderPane helpView;
-    
+
     // Page view index
     private static final int HOME_TAB = 1;
     private static final int EXPIRED_TAB = 2;
@@ -98,8 +107,11 @@ public class MainApp extends Application {
     public NotificationPane rootWithNotification = null;
     public PauseTransition delay = null;
 
-    
     /*** CORE FUNCTIONS ***/
+
+    public MainApp() {
+        
+    }
     
     public static void main(String[] args) {
         launch(args);
@@ -126,9 +138,8 @@ public class MainApp extends Application {
         primaryStage.setMinWidth(MIN_WIDTH);
     }
 
-    
     /*** VIEW LOADERS ***/
-    
+
     private void loadRootView(Stage primaryStage) {
         try {
 
@@ -147,31 +158,6 @@ public class MainApp extends Application {
 
         } catch (IOException ioException) {
             Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_ROOT);
-            ioException.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    private void loadMainView() {
-        try {
-
-            // Acquire FXML and CSS component for main view
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource(DIRECTORY_MAIN));
-            mainView = (BorderPane) loader.load();
-            mainView.getStyleClass().add(STYLE_CLASS_MAIN);
-
-            rootView.setCenter(mainView);
-
-            // Set up display logic for main view
-            mainController = loader.getController();
-            mainController.setMainApp(this);
-
-            loadCommandLine();
-            uiHandlerUnit.refresh();
-
-        } catch (IOException ioException) {
-            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_MAIN);
             ioException.printStackTrace();
             System.exit(1);
         }
@@ -222,17 +208,29 @@ public class MainApp extends Application {
         }
     }
 
-    private void loadDefaultEmptyView() {
+    private Node getView(FXMLLoader loader, String directory) throws IOException {
+        loader.setLocation(MainApp.class.getResource(directory));
+        Node abstractView = loader.load();
+        rootView.setCenter(abstractView);
+        return abstractView;
+    }
+
+    private void loadMainView() {
         try {
 
-            // Acquire FXML and CSS component for empty view
+            // Acquire FXML and CSS component for main view
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource(DIRECTORY_EMPTY));
-            emptyView = (BorderPane) loader.load();
+            mainView = (BorderPane) getView(loader, DIRECTORY_MAIN);
 
-            rootView.setCenter(emptyView);
+            // Set up display logic for main view
+            mainController = loader.getController();
+            mainController.setMainApp(this);
+
+            loadCommandLine();
+            uiHandlerUnit.refresh();
+
         } catch (IOException ioException) {
-            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_EMPTY);
+            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_MAIN);
             ioException.printStackTrace();
             System.exit(1);
         }
@@ -240,31 +238,85 @@ public class MainApp extends Application {
 
     private void loadOverdueView() {
 
+        // Acquire FXML and CSS component for main view
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            overdueView = (BorderPane) getView(loader, DIRECTORY_OVERDUE);
+            loadMainView();
+            mainView.setCenter(overdueView);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
+
     private void loadTodayView() {
-        
+        // Acquire FXML and CSS component for main view
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            todayView = (BorderPane) getView(loader, DIRECTORY_TODAY);
+            loadMainView();
+            mainView.setCenter(todayView);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private void loadWeekView() {
-        
+        // Acquire FXML and CSS component for main view
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            weekView = (BorderPane) getView(loader, DIRECTORY_WEEK);
+            loadMainView();
+            mainView.setCenter(weekView);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
+
     private void loadArchiveView() {
-        
+        // Acquire FXML and CSS component for main view
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            archiveView = (BorderPane) getView(loader, DIRECTORY_ARCHIVE);
+            loadMainView();
+            mainView.setCenter(archiveView);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
+
     private void loadSettingsView() {
-        
+        // Acquire FXML and CSS component for main view
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            settingsView = (BorderPane) getView(loader, DIRECTORY_SETTINGS);
+            loadMainView();
+            mainView.setCenter(settingsView);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
+
     private void loadHelpView() {
-        
+        // Acquire FXML and CSS component for main view
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            helpView = (BorderPane) getView(loader, DIRECTORY_HELP);
+            loadMainView();
+            mainView.setCenter(helpView);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
-    
+
     /*** NOTIFICATION FUNCTIONS ***/
-    
+
     private void setupNotificationPane() {
         Label label = new Label();
         label.setPadding(new Insets(50));
@@ -275,7 +327,7 @@ public class MainApp extends Application {
         rootWithNotification.setShowFromTop(true);
         rootWithNotification.setContent(rootView);
     }
-    
+
     public void notifyWithText(String text) {
 
         rootWithNotification.setText(text);
@@ -286,10 +338,8 @@ public class MainApp extends Application {
         delay.setOnFinished(e -> rootWithNotification.hide());
         delay.play();
     }
-    
-    
-    /*** ACCESS FUNCTIONS FOR MODELS ***/
 
+    /*** ACCESS FUNCTIONS FOR MODELS ***/
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
         mainController.setTasks(listOfTasks);
     }
