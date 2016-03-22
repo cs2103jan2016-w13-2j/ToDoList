@@ -37,7 +37,9 @@ public class LogicTest {
 
 	@Test
 	public void testStepForward() {
-		fail("Not yet implemented");
+		int original = logic.checkStep();
+		logic.stepForward(1);
+		assertEquals(logic.checkStep(), original + 1);
 	}
 
 	@Test
@@ -65,22 +67,45 @@ public class LogicTest {
 
 	@Test
 	public void testAddDeadline() {
-		fail("Not yet implemented");
+		Name name = new Name("title");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime end = LocalDateTime.parse("1970-01-01" + " " + "12:00", formatter);
+		Task newEvent = new Task(name, null, end, null, null, false, false, null);
+		
+		logic.addDeadline("title", "1970-01-01", "12:00");
+		Boolean isEqual = logic.dataBase.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
+		assert(isEqual);
 	}
 
 	@Test
 	public void testAddTask() {
-		fail("Not yet implemented");
+		Name name = new Name("title");
+		Task newEvent = new Task(name, null, null, null, null, false, false, null);
+		logic.addTask("title");
+		Boolean isEqual = logic.dataBase.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
+		assert(isEqual);
 	}
 
 	@Test
 	public void testDone() {
-		fail("Not yet implemented");
+		logic.addTask("title");
+		logic.done("title");
+		Name name = new Name("title");
+		Task newEvent = new Task(name, null, null, null, null, true, false, null);
+		Boolean isEqual = logic.dataBase.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
+		assert(isEqual);
 	}
 
 	@Test
 	public void testUndone() {
-		fail("Not yet implemented");
+		logic.addTask("title");
+		logic.done("title");
+		logic.undone("title");
+		Name name = new Name("title");
+		Task newEvent = new Task(name, null, null, null, null, false, false, null);
+		logic.addTask("title");
+		Boolean isEqual = logic.dataBase.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
+		assert(isEqual);
 	}
 
 	@Test

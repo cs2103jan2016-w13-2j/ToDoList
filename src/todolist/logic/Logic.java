@@ -73,6 +73,16 @@ public class Logic {
 		this.steps = steps + increment;
 	}
 	
+	/**
+	 * This method returns the current step number
+	 *
+	 * 
+	 * @return int
+	 */
+	public int checkStep() {
+		return this.steps;
+	}
+	
 	public void tab(String workplace) {
 		switch(workplace) {
 		case "home":
