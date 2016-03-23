@@ -12,6 +12,7 @@ import todolist.model.Task;
 
 public class TaskWrapper {
 
+    private Task task;
     private StringProperty taskTitle;
     private ObjectProperty<LocalDateTime> startTime;
     private ObjectProperty<LocalDateTime> endTime;
@@ -30,6 +31,7 @@ public class TaskWrapper {
         this.isDone = new SimpleObjectProperty<Boolean>(task.getDoneStatus());
         this.isRecurring = new SimpleObjectProperty<Boolean>(task.getRecurringStatus());
         this.interval = new SimpleObjectProperty<String>(task.getInterval());
+        this.task = task;
     }
 
     public StringProperty taskTitleProperty() {
@@ -126,5 +128,9 @@ public class TaskWrapper {
 
     public String getInterval() {
         return interval.get();
+    }
+    
+    public Task getTaskObject() {
+        return task;
     }
 }

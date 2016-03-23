@@ -7,10 +7,12 @@ import todolist.logic.Logic;
 import todolist.logic.UIHandler;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
+import todolist.ui.controllers.ArchiveController;
 import todolist.ui.controllers.MainViewController;
 import todolist.ui.controllers.OverdueController;
 import todolist.ui.controllers.SideBarController;
 import todolist.ui.controllers.TodayController;
+import todolist.ui.controllers.WeekController;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -24,6 +26,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -42,7 +45,7 @@ public class MainApp extends Application {
     private static final double MIN_WIDTH = 400;
     private static final double DEFAULT_HEIGHT = 600;
     private static final double DEFAULT_WIDTH = 800;
-    private static final String WINDOW_TITLE = "todolist by [w13-2j]";
+    private static final String WINDOW_TITLE = "ToDoList by [w13-2j]";
 
     // Error messages
     private static final String MESSAGE_ERROR_LOAD_ROOT = "Error loading root view. Exiting now ...";
@@ -52,8 +55,8 @@ public class MainApp extends Application {
     private static final String MESSAGE_ERROR_LOAD_EMPTY = "Error loading empty view. Exiting now ...";
 
     // Notification messages and delay
-    private static final String NOTIFICATION_WELCOME = "Welcome to todolist! Let's get started...";
-    private static final int DELAY_PERIOD = 3;
+    private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
+    private static final int DELAY_PERIOD = 5;
 
     // Directories and labels
     private static final String DIRECTORY_ROOT = "ui/views/RootLayout.fxml";
@@ -74,6 +77,8 @@ public class MainApp extends Application {
     private static final String DIRECTORY_SETTINGS = "ui/views/SettingsView.fxml";
     private static final String DIRECTORY_HELP = "ui/views/HelpView.fxml";
     private static final String DIRECTORY_EMPTY = "ui/views/EmptyView.fxml";
+
+    private static final String DIRECTORY_NOTIFICATION_SOUND = "ui/views/assets/notification-sound-flyff.wav";
 
     // Views: Display and UI components
     private BorderPane rootView;
@@ -103,6 +108,8 @@ public class MainApp extends Application {
     private SideBarController sidebarController;
     private OverdueController overdueController;
     private TodayController todayController;
+    private WeekController weekController;
+    private ArchiveController archiveController;
 
     // Other Components
     public Logic logicUnit = null;
@@ -112,13 +119,12 @@ public class MainApp extends Application {
     public NotificationPane rootWithNotification = null;
     public PauseTransition delay = null;
 
-    
     /*** CORE FUNCTIONS ***/
 
     public MainApp() {
-        
+
     }
-    
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -144,7 +150,6 @@ public class MainApp extends Application {
         primaryStage.setMinWidth(MIN_WIDTH);
     }
 
-    
     /*** VIEW LOADERS ***/
 
     private void loadRootView(Stage primaryStage) {
@@ -251,13 +256,13 @@ public class MainApp extends Application {
             overdueView = (BorderPane) getView(loader, DIRECTORY_OVERDUE);
             loadMainView();
             mainView.setCenter(overdueView);
-            
+
             // Set up display logic for main view
             overdueController = loader.getController();
             overdueController.setMainApp(this);
 
             uiHandlerUnit.refresh();
-            
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -271,13 +276,13 @@ public class MainApp extends Application {
             todayView = (BorderPane) getView(loader, DIRECTORY_TODAY);
             loadMainView();
             mainView.setCenter(todayView);
-            
+
             // Set up display logic for main view
             todayController = loader.getController();
             todayController.setMainApp(this);
 
             uiHandlerUnit.refresh();
-            
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -291,6 +296,12 @@ public class MainApp extends Application {
             weekView = (BorderPane) getView(loader, DIRECTORY_WEEK);
             loadMainView();
             mainView.setCenter(weekView);
+
+            // Set up display logic for main view
+            weekController = loader.getController();
+            weekController.setMainApp(this);
+
+            uiHandlerUnit.refresh();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -304,6 +315,12 @@ public class MainApp extends Application {
             archiveView = (BorderPane) getView(loader, DIRECTORY_ARCHIVE);
             loadMainView();
             mainView.setCenter(archiveView);
+
+            // Set up display logic for main view
+            archiveController = loader.getController();
+            archiveController.setMainApp(this);
+
+            uiHandlerUnit.refresh();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -339,7 +356,7 @@ public class MainApp extends Application {
     public void loadPage(int index) {
         sidebarController.setIndex(index);
     }
-    
+
     public void setPageView(int index) {
         switch (index) {
         case HOME_TAB:
@@ -367,7 +384,7 @@ public class MainApp extends Application {
             loadMainView();
         }
     }
-    
+
     
     /*** NOTIFICATION FUNCTIONS ***/
 
@@ -383,9 +400,12 @@ public class MainApp extends Application {
     }
 
     public void notifyWithText(String text) {
+        AudioClip notificationSound = new AudioClip(
+                this.getClass().getResource(DIRECTORY_NOTIFICATION_SOUND).toExternalForm());
 
         rootWithNotification.setText(text);
         rootWithNotification.show();
+        notificationSound.play();
 
         // Delay factor
         delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
@@ -395,15 +415,26 @@ public class MainApp extends Application {
 
     
     /*** ACCESS FUNCTIONS FOR MODELS ***/
+   
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
-        mainController.setTasks(listOfTasks);
-        
+        if (mainController != null) {
+            mainController.setTasks(listOfTasks);
+        }
+
         if (overdueController != null) {
             overdueController.setTasks(listOfTasks);
         }
-        
+
         if (todayController != null) {
             todayController.setTasks(listOfTasks);
+        }
+
+        if (weekController != null) {
+            weekController.setTasks(listOfTasks);
+        }
+
+        if (archiveController != null) {
+            archiveController.setTasks(listOfTasks);
         }
     }
 
@@ -411,4 +442,28 @@ public class MainApp extends Application {
         return mainController.getTasks();
     }
 
+    
+    /*** HIGHLIGHTER ***/
+    
+    public void highLight(Task task) {
+        if (mainController != null) {
+            mainController.highLight(task);
+        }
+
+        if (overdueController != null) {
+            overdueController.highLight(task);
+        }
+
+        if (todayController != null) {
+            todayController.highLight(task);
+        }
+
+        if (weekController != null) {
+            weekController.highLight(task);
+        }
+
+        if (archiveController != null) {
+            archiveController.highLight(task);
+        }
+    }
 }

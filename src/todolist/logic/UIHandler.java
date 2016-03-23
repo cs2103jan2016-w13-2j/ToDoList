@@ -32,7 +32,7 @@ public class UIHandler {
     }
 
     public void highLight(Task task) {
-        // mainApp.highLight(task);
+         mainApp.highLight(task);
     }
     
     public void display(ArrayList<Task> taskList) {
