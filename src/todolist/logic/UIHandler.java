@@ -3,7 +3,6 @@ package todolist.logic;
 import java.util.ArrayList;
 
 import todolist.MainApp;
-import todolist.model.SearchCommand;
 import todolist.model.Task;
 import todolist.storage.DataBase;
 
@@ -18,9 +17,9 @@ public class UIHandler {
         this.mainApp = mainApp;
         this.logic = logic;
     }
-    
+
     public void process(String input) {
-    	logic.process(input);
+        logic.process(input);
     }
 
     public void refresh() {
@@ -32,14 +31,14 @@ public class UIHandler {
     }
 
     public void highLight(Task task) {
-         mainApp.highLight(task);
+        mainApp.highLight(task);
     }
-    
+
     public void display(ArrayList<Task> taskList) {
-    	mainApp.setDisplayTasks(taskList);
+        mainApp.setDisplayTasks(taskList);
     }
-    
+
     public void tab(int index) {
-    	mainApp.loadPage(index);
+        mainApp.loadPage(index);
     }
 }

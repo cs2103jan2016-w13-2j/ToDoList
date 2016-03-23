@@ -1,6 +1,5 @@
 package todolist.logic;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -39,7 +38,7 @@ public class Logic {
     private static String LOGGING_TIME_ERROR = "This time was in the past";
 
     public Logic(MainApp mainApp) {
-        this.mainApp = mainApp;
+        this.setMainApp(mainApp);
         this.dataBase = new DataBase();
         this.mainParser = new MainParser();
         this.uiHandler = new UIHandler(dataBase, mainApp, this);
@@ -757,5 +756,13 @@ public class Logic {
         } else {
             return true;
         }
+    }
+
+    public MainApp getMainApp() {
+        return mainApp;
+    }
+
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
     }
 }

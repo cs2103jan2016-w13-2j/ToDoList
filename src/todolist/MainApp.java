@@ -13,6 +13,7 @@ import todolist.ui.controllers.OverdueController;
 import todolist.ui.controllers.SideBarController;
 import todolist.ui.controllers.TodayController;
 import todolist.ui.controllers.WeekController;
+
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -22,7 +23,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -52,7 +52,7 @@ public class MainApp extends Application {
     private static final String MESSAGE_ERROR_LOAD_MAIN = "Error loading main view. Exiting now ...";
     private static final String MESSAGE_ERROR_LOAD_TITLEBAR = "Error loading title bar view. Exiting now ...";
     private static final String MESSAGE_ERROR_LOAD_SIDEBAR = "Error loading side bar view. Exiting now ...";
-    private static final String MESSAGE_ERROR_LOAD_EMPTY = "Error loading empty view. Exiting now ...";
+//    private static final String MESSAGE_ERROR_LOAD_EMPTY = "Error loading empty view. Exiting now ...";
 
     // Notification messages and delay
     private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
@@ -65,7 +65,7 @@ public class MainApp extends Application {
     public static final String DIRECTORY_TASKITEM = "ui/views/TaskNode.fxml";
 
     private static final String STYLE_CLASS_ROOT = "root-layout";
-    private static final String STYLE_CLASS_MAIN = "main-view";
+//    private static final String STYLE_CLASS_MAIN = "main-view";
     private static final String STYLE_CLASS_TITLEBAR = "title-bar";
     private static final String STYLE_CLASS_SIDEBAR = "side-bar";
 
@@ -76,11 +76,10 @@ public class MainApp extends Application {
     private static final String DIRECTORY_ARCHIVE = "ui/views/ArchiveView.fxml";
     private static final String DIRECTORY_SETTINGS = "ui/views/SettingsView.fxml";
     private static final String DIRECTORY_HELP = "ui/views/HelpView.fxml";
-    private static final String DIRECTORY_EMPTY = "ui/views/EmptyView.fxml";
+//    private static final String DIRECTORY_EMPTY = "ui/views/EmptyView.fxml";
 
     private static final String DIRECTORY_NOTIFICATION_SOUND = "ui/views/assets/notification-sound-flyff.wav";
     private static final String DIRECTORY_WELCOME_SOUND = "ui/views/assets/notification-sound-twitch.mp3";
-
 
     // Views: Display and UI components
     private BorderPane rootView;
@@ -88,7 +87,7 @@ public class MainApp extends Application {
     private TextField commandField;
     private HBox titleBarView;
     private VBox sideBarView;
-    private BorderPane emptyView;
+//    private BorderPane emptyView;
     private BorderPane overdueView;
     private BorderPane todayView;
     private BorderPane weekView;

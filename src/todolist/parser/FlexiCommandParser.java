@@ -2,7 +2,7 @@ package todolist.parser;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
 import java.util.TimeZone;
 
 import com.joestelmach.natty.DateGroup;
@@ -22,13 +22,13 @@ public class FlexiCommandParser {
         List<DateGroup> groups = parser.parse(input);
         for (DateGroup group : groups) {
             List<Date> dates = group.getDates();
-            int line = group.getLine();
-            int column = group.getPosition();
-            String matchingValue = group.getText();
-            String syntaxTree = group.getSyntaxTree().toStringTree();
-            Map parseMap = group.getParseLocations();
-            boolean isRecurreing = group.isRecurring();
-            Date recursUntil = group.getRecursUntil();
+//            int line = group.getLine();
+//            int column = group.getPosition();
+//            String matchingValue = group.getText();
+//            String syntaxTree = group.getSyntaxTree().toStringTree();
+//            Map parseMap = group.getParseLocations();
+//            boolean isRecurreing = group.isRecurring();
+//            Date recursUntil = group.getRecursUntil();
             System.out.println(dates);
 
         }
