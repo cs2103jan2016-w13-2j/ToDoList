@@ -79,6 +79,8 @@ public class MainApp extends Application {
     private static final String DIRECTORY_EMPTY = "ui/views/EmptyView.fxml";
 
     private static final String DIRECTORY_NOTIFICATION_SOUND = "ui/views/assets/notification-sound-flyff.wav";
+    private static final String DIRECTORY_WELCOME_SOUND = "ui/views/assets/notification-sound-twitch.mp3";
+
 
     // Views: Display and UI components
     private BorderPane rootView;
@@ -118,6 +120,7 @@ public class MainApp extends Application {
     // Notification System
     public NotificationPane rootWithNotification = null;
     public PauseTransition delay = null;
+    private boolean isFirstNotif = true;
 
     /*** CORE FUNCTIONS ***/
 
@@ -385,7 +388,6 @@ public class MainApp extends Application {
         }
     }
 
-    
     /*** NOTIFICATION FUNCTIONS ***/
 
     private void setupNotificationPane() {
@@ -394,7 +396,7 @@ public class MainApp extends Application {
 
         BorderPane borderPane = new BorderPane(label);
         rootWithNotification = new NotificationPane(borderPane);
-        
+
         rootWithNotification.setStyle("-fx-font-size: 10px;");
 
         rootWithNotification.setShowFromTop(true);
@@ -402,12 +404,20 @@ public class MainApp extends Application {
     }
 
     public void notifyWithText(String text) {
-        AudioClip notificationSound = new AudioClip(
-                this.getClass().getResource(DIRECTORY_NOTIFICATION_SOUND).toExternalForm());
 
         rootWithNotification.setText(text);
         rootWithNotification.show();
-        notificationSound.play();
+
+        if (!isFirstNotif) {
+            AudioClip notificationSound = new AudioClip(
+                    this.getClass().getResource(DIRECTORY_NOTIFICATION_SOUND).toExternalForm());
+            notificationSound.play();
+        } else {
+            AudioClip notificationSound = new AudioClip(
+                    this.getClass().getResource(DIRECTORY_WELCOME_SOUND).toExternalForm());
+            notificationSound.play();
+            isFirstNotif = !isFirstNotif;
+        }
 
         // Delay factor
         delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
@@ -415,9 +425,8 @@ public class MainApp extends Application {
         delay.play();
     }
 
-    
     /*** ACCESS FUNCTIONS FOR MODELS ***/
-   
+
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
         if (mainController != null) {
             mainController.setTasks(listOfTasks);
@@ -444,9 +453,8 @@ public class MainApp extends Application {
         return mainController.getTasks();
     }
 
-    
     /*** HIGHLIGHTER ***/
-    
+
     public void highLight(Task task) {
         if (mainController != null) {
             mainController.highLight(task);
