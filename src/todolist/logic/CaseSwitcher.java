@@ -72,6 +72,7 @@ public class CaseSwitcher {
                     logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
 
                 }
+                logic.stepForward(2);
                 break;
             default:
                 logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
@@ -118,6 +119,7 @@ public class CaseSwitcher {
             } else {
                 logic.sort(arg[0], arg[1]);
             }
+            logic.stepForward(1);
             break;
         case "insert":
             // logic.insert(arg[0], arg[1], arg[2]);
@@ -132,6 +134,7 @@ public class CaseSwitcher {
             } else {
                 logic.label(arg[0], arg[1]);
             }
+            logic.stepForward(2);
             break;
         case "set-recurring":
             if (arg.length != 2) {
@@ -140,6 +143,7 @@ public class CaseSwitcher {
             } else {
                 logic.setRecurring(arg[0], true, arg[1]);
             }
+            logic.stepForward(2);
             break;
         case "remove-recurring":
             if (arg.length != 1) {
@@ -148,6 +152,7 @@ public class CaseSwitcher {
             } else {
                 logic.setRecurring(arg[0], false, null);
             }
+            logic.stepForward(2);
             break;
         case "postpone":
             if (arg.length != 3) {
@@ -156,6 +161,7 @@ public class CaseSwitcher {
             } else {
                 logic.postpone(arg[0], arg[1], arg[2]);
             }
+            logic.stepForward(2);
             break;
         case "forward":
             if (arg.length != 3) {
@@ -165,6 +171,7 @@ public class CaseSwitcher {
                 logic.forward(arg[0], arg[1], arg[2]);
                 logic.stepForward(2);
             }
+            logic.stepForward(2);
             break;
         case "add-remind":
             try {
@@ -174,7 +181,7 @@ public class CaseSwitcher {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            logic.stepForward(2);
+            logic.stepForward(3);
             break;
         case "remind":
             if (arg.length != 1) {
@@ -197,7 +204,7 @@ public class CaseSwitcher {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            logic.stepForward(2);
+            logic.stepForward(3);
             break;
         case "remind-bef":
             if (arg.length != 3) {
