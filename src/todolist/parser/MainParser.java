@@ -22,7 +22,8 @@ public class MainParser {
     	if(checkType(input)) {
     		return normalCommandParser.parse(input);
     	} else {
-    		return flexiCommandParser.parse(input);
+            return normalCommandParser.parse(input);
+//    		return flexiCommandParser.parse(input);
     	}
     }
     

@@ -117,7 +117,7 @@ public class Logic {
      */
     public void reset() {
         uiHandler.refresh();
-        uiHandler.sendMessage("View reseted");
+        uiHandler.sendMessage("View refreshed. All search and filter results are cleared!");
     }
 
     /**
@@ -163,7 +163,8 @@ public class Logic {
 
             if (!start.isAfter(LocalDateTime.now())) {
                 logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
-                uiHandler.sendMessage("start time of task is before now");
+                uiHandler.sendMessage(
+                        "Oh no! [" + title + "] is currently ongoing! Please attend it before it's too late!");
             }
 
             Task newEvent = new Task(name, start, end, null, null, false, false, null);
@@ -171,7 +172,8 @@ public class Logic {
             Boolean addResponse = dataBaseAdd(newEvent);
             uiHandler.refresh();
             uiHandler.highLight(newEvent);
-            uiHandler.sendMessage("A new event is successfully added");
+            uiHandler.sendMessage("A new event [" + newEvent.getName().getName()
+                    + "] has been created successfully! [not what you want? try 'undo']");
             return addResponse;
         } else {
             return false;
@@ -196,13 +198,15 @@ public class Logic {
 
             if (!end.isAfter(LocalDateTime.now())) {
                 logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
-                uiHandler.sendMessage("deadline of task is before now");
+                uiHandler.sendMessage(
+                        "Oh no! ToDoList currently does not support time travelling! Try creating a task that is due after now.");
             }
 
             Boolean addResponse = dataBaseAdd(newEvent);
             uiHandler.refresh();
             uiHandler.highLight(newEvent);
-            uiHandler.sendMessage("A new deadline is successfully added");
+            uiHandler.sendMessage("A new deadline [" + newEvent.getName().getName()
+                    + "] has been created successfully. [not what you want? try 'undo']");
             return addResponse;
         } else {
             return false;
@@ -226,7 +230,8 @@ public class Logic {
             Boolean addResponse = dataBaseAdd(newEvent);
             uiHandler.refresh();
             uiHandler.highLight(newEvent);
-            uiHandler.sendMessage("A new floating task is successfully added");
+            uiHandler.sendMessage("A new un-dated task [" + title
+                    + "] has been created successfully. [not what you want? try 'undo']");
             return addResponse;
         } else {
             return false;
@@ -251,7 +256,8 @@ public class Logic {
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(title + " is marked done!");
+        uiHandler.sendMessage("[" + title
+                + "] has been marked as completed! Woohoo another one down! [not what you want? try 'undo']");
 
         return deleteResponse && addResponse;
     }
@@ -268,7 +274,8 @@ public class Logic {
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(title + " is marked not done!");
+        uiHandler.sendMessage(
+                "[" + title + "] has been marked as ongoing! Go get it TIGER! [not what you want? try 'undo']");
 
         return deleteResponse && addResponse;
     }
@@ -324,7 +331,7 @@ public class Logic {
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage("Task: " + title + " is successfully changed");
+        uiHandler.sendMessage("[" + title + "] has been edited successfully! [not what you want? try 'undo']");
 
         return deleteResponse && addResponse;
 
@@ -344,7 +351,7 @@ public class Logic {
         Boolean deleteResponse = dataBaseDelete(tempTask);
 
         uiHandler.refresh();
-        uiHandler.sendMessage(title + " is successfully deleted");
+        uiHandler.sendMessage("[" + title + "] has been deleted successfully! [not what you want? try 'undo']");
 
         return deleteResponse;
     }
@@ -362,7 +369,7 @@ public class Logic {
         ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
 
         uiHandler.display(tempTaskList);
-        uiHandler.sendMessage("Here are your search results");
+        uiHandler.sendMessage("Here are your search results for '" + title + "'! [to clear this search, type 'reset']");
     }
 
     /**
@@ -379,7 +386,8 @@ public class Logic {
         ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("CATEGORY", category));
 
         uiHandler.display(tempTaskList);
-        uiHandler.sendMessage("Here are your filter results");
+        uiHandler.sendMessage("Here are the related tasks under " + category.toUpperCase()
+                + "! [to clear this filter, type 'reset']");
     }
 
     /**
@@ -389,9 +397,14 @@ public class Logic {
      * @return void
      */
     public void sort(String fieldName, String order) {
+        if (fieldName.isEmpty()) {
+            uiHandler.sendMessage(
+                    "Please specify a sorting order! Try sort ['start' | 'end' | 'category' | 'name'], followed by [ascending | descending].");
+        }
         dataBase.sort(fieldName, order);
         uiHandler.refresh();
-        uiHandler.sendMessage("Sorted!");
+        uiHandler.sendMessage(
+                "Ta-da! Your tasks have been sorted by " + fieldName + "! [not what you want? try 'undo']");
     }
     //
     // public void insert(String title, String befaft, String title) {
@@ -422,7 +435,8 @@ public class Logic {
 
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage("The category of " + title + " is set to " + category + " !");
+        uiHandler.sendMessage("You have categorised [" + title + "] under " + category.toUpperCase()
+                + " ! [not what you want? try 'undo']");
 
         return deleteResponse && addResponse;
     }
@@ -447,9 +461,9 @@ public class Logic {
         uiHandler.highLight(tempTask);
 
         if (status) {
-            uiHandler.sendMessage(title + " is recurring!");
+            uiHandler.sendMessage("[" + title + "] is now a recurring task! [not what you want? try 'undo']");
         } else {
-            uiHandler.sendMessage(title + " is not recurring!");
+            uiHandler.sendMessage("[" + title + "] is now an ad-hoc task! [not what you want? try 'undo']");
         }
 
         return deleteResponse && addResponse;
@@ -492,7 +506,7 @@ public class Logic {
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
-            uiHandler.sendMessage(title + " is successfully postponed");
+            uiHandler.sendMessage("[" + title + "] has been postponed! [not what you want? try 'undo']");
         }
 
         return deleteResponse && addResponse;
@@ -535,7 +549,7 @@ public class Logic {
 
             uiHandler.refresh();
             uiHandler.highLight(tempTask);
-            uiHandler.sendMessage(title + " is successfully forwarded");
+            uiHandler.sendMessage("[" + title + "] has been rescheduled forward! [not what you want? try 'undo']");
         }
 
         return deleteResponse && addResponse;
@@ -673,8 +687,20 @@ public class Logic {
      * @return Boolean
      */
     public Boolean undo(int undostep) {
+
+        if (steps <= 0) {
+            uiHandler.sendMessage("Undo was unsuccessful. No actions to undo!");
+        }
+
         Boolean undoResponse = dataBase.retrieveHistory(steps - undostep);
         steps = steps - undostep;
+
+        if (undoResponse) {
+            uiHandler.sendMessage("Undo #" + undostep + " step(s) successfully!");
+        } else {
+            uiHandler.sendMessage("Undo was unsuccessful. Try again!");
+        }
+
         uiHandler.refresh();
         return undoResponse;
     }
@@ -686,7 +712,8 @@ public class Logic {
      * @return Boolean
      */
     public Boolean redo(int redostep) {
-        Boolean redoResponse = dataBase.retrieveHistory(steps + redostep);
+        Boolean redoResponse = false;
+        redoResponse = dataBase.retrieveHistory(steps + redostep);
         steps = steps + redostep;
         uiHandler.refresh();
         return redoResponse;
@@ -725,7 +752,7 @@ public class Logic {
         System.out.println(tempTaskList.size());
         if (tempTaskList.size() > 0) {
             logger.log(Level.INFO, LOGGING_REPEATED_TASK + title);
-            uiHandler.sendMessage("Failure. Existing task with same name detected!");
+            uiHandler.sendMessage("You have added a task with same name before! Try another name!");
             return false;
         } else {
             return true;

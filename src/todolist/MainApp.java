@@ -394,6 +394,8 @@ public class MainApp extends Application {
 
         BorderPane borderPane = new BorderPane(label);
         rootWithNotification = new NotificationPane(borderPane);
+        
+        rootWithNotification.setStyle("-fx-font-size: 10px;");
 
         rootWithNotification.setShowFromTop(true);
         rootWithNotification.setContent(rootView);
