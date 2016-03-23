@@ -32,6 +32,7 @@ public class CaseSwitcher {
                             "Your command was incomplete! To add an event, try: add event [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day].");
                 } else {
                     logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
+                    logic.stepForward(1);
                 }
                 break;
             case "deadline":
@@ -40,6 +41,7 @@ public class CaseSwitcher {
                             "Your command was incomplete! To add a deadline, try: add deadline [title] [YYYY-MM-DD] [HH:MM]");
                 } else {
                     logic.addDeadline(arg[1], arg[2], arg[3]);
+                    logic.stepForward(1);
                 }
                 break;
             case "task":
@@ -48,6 +50,7 @@ public class CaseSwitcher {
                             .sendMessage("Your command was incomplete! To add an un-dated task: add task [title]");
                 } else {
                     logic.addTask(arg[1]);
+                    logic.stepForward(1);
                 }
                 break;
             case "recurring":
@@ -58,6 +61,7 @@ public class CaseSwitcher {
                                 "Your command was incomplete! To add a recurring event, try: add recurring event [7-day] [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day]");
                     } else {
                         logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
+                        logic.stepForward(3);
                     }
                     break;
                 case "deadline":
@@ -66,18 +70,17 @@ public class CaseSwitcher {
                                 "Your command was incomplete! To add a recurring deadline, try: add recurring deadline [7-day] [title] [YYYY-MM-DD] [HH:MM]");
                     } else {
                         logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
+                        logic.stepForward(3);
                     }
                     break;
                 default:
                     logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
 
                 }
-                logic.stepForward(2);
                 break;
             default:
                 logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
             }
-            logic.stepForward(1);
             break;
         case "edit":
             if (arg.length != 3) {
@@ -118,8 +121,8 @@ public class CaseSwitcher {
                         "Your command was incomplete! To sort, try: sort ['start' | 'end' | 'category' | 'name'] [ascending | descending]");
             } else {
                 logic.sort(arg[0], arg[1]);
+                logic.stepForward(1);
             }
-            logic.stepForward(1);
             break;
         case "insert":
             // logic.insert(arg[0], arg[1], arg[2]);
@@ -133,8 +136,8 @@ public class CaseSwitcher {
                         "Your command was incomplete! To categorise or label a task, try: label [title] [category-name]");
             } else {
                 logic.label(arg[0], arg[1]);
+                logic.stepForward(2);
             }
-            logic.stepForward(2);
             break;
         case "set-recurring":
             if (arg.length != 2) {
@@ -142,8 +145,8 @@ public class CaseSwitcher {
                         "Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]");
             } else {
                 logic.setRecurring(arg[0], true, arg[1]);
+                logic.stepForward(2);
             }
-            logic.stepForward(2);
             break;
         case "remove-recurring":
             if (arg.length != 1) {
@@ -151,8 +154,8 @@ public class CaseSwitcher {
                         "Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]");
             } else {
                 logic.setRecurring(arg[0], false, null);
+                logic.stepForward(2);
             }
-            logic.stepForward(2);
             break;
         case "postpone":
             if (arg.length != 3) {
@@ -160,8 +163,8 @@ public class CaseSwitcher {
                         "Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]");
             } else {
                 logic.postpone(arg[0], arg[1], arg[2]);
+                logic.stepForward(2);
             }
-            logic.stepForward(2);
             break;
         case "forward":
             if (arg.length != 3) {
@@ -171,17 +174,16 @@ public class CaseSwitcher {
                 logic.forward(arg[0], arg[1], arg[2]);
                 logic.stepForward(2);
             }
-            logic.stepForward(2);
             break;
         case "add-remind":
             try {
                 // need to handle exceptions here
                 logic.addRemind(arg);
+                logic.stepForward(3);
             } catch (Exception e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            logic.stepForward(3);
             break;
         case "remind":
             if (arg.length != 1) {
@@ -200,11 +202,11 @@ public class CaseSwitcher {
             }
             try {
                 logic.addRemindBef(arg[0], arg[1], restOfArgs);
+                logic.stepForward(3);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            logic.stepForward(3);
             break;
         case "remind-bef":
             if (arg.length != 3) {
