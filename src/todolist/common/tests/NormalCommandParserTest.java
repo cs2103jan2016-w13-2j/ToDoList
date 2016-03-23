@@ -33,7 +33,6 @@ public class NormalCommandParserTest {
 
         TokenizedCommand output = normalCommandParser.parse(testCase);
 
-//        assertEquals(expectedAction, output.getAction());
         assertEquals(expectedArgsSize, output.getArgs().length);
 
         for (int i = 0; i < output.getArgs().length; ++i) {
