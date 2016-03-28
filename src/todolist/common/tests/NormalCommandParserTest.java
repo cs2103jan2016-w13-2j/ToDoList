@@ -20,7 +20,7 @@ public class NormalCommandParserTest {
     public void testParse() {
 
         final String testCase = " add event CS2103T-Tutorial 2016-03-23 13:00 1 hour";
-        final String expectedAction = "add";
+//        final String expectedAction = "add";
         final int expectedArgsSize = 7;
         String[] expectedArgs = new String[expectedArgsSize];
         expectedArgs[0] = "add";
