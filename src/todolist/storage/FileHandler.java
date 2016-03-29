@@ -13,7 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
+//@@author yuxin
 /*
  * This class is to read and write from the file directly. It will be called by the database.
  * 
@@ -90,6 +90,7 @@ public class FileHandler {
 	 * @param path  the path that is going to store the file.
 	 * @return      true if the path exists and is able to store the file
 	 */
+	/*
 	public boolean setPath(String path) {
 		if(path.equals("")) {
 			return true;
@@ -98,26 +99,25 @@ public class FileHandler {
 		}		
 		return true;
 	}
-	
+	*/
 	/**
-	 * The method is to set a new file to store the tasks in the defined path.
+	 * The method is to set a new direction to store the tasks in the defined path.
 	 * 
 	 * @param newFilePath   the path of the new file (the path + the file name); it is not null.
 	 * @return              true if the file is set; false if the path is not a correct path  
 	 */
 	public boolean setFile(String newFilePath) {
 		ArrayList<Task> existingTaskList = this.read();
-		//set path
-		String newPath = getPathOfNewFile(newFilePath);
-		String newFileName = getNewFileName(newFilePath);
+		//set path 
+		String newPath = getPathOfNewFile(newFilePath.trim());
+		String newFileName = getNewFileName(newFilePath.trim());
 		
 		if(isPathCorrect(newFilePath)) {
 			this.path = newPath;
-			this.fileName=newFileName;
+			this.fileName=newFileName + ".txt";
 			if(existingTaskList!=null) {
 				this.write(existingTaskList);			
-			}	
-			
+			}				
 			try{
 				FileWriter fw=new FileWriter(path + fileName);
 				BufferedWriter bw=new BufferedWriter(fw);
@@ -186,10 +186,15 @@ public class FileHandler {
 	private String getPathOfNewFile(String newFilePath) {
 		String[] splitedPath = getSplitedPath(newFilePath);
 		String newPath = "";
+		
+		if(splitedPath.length == 1) {
+			return newPath;
+		}
+		
 		for(int i = 0; i < splitedPath.length-1; i++) {
 			newPath = newPath + splitedPath[i] + "/";
 		}
-		return newPath;
+		return newPath.substring(0, newPath.length()-1);
 	}
 	
 	private String getNewFileName(String newFilePath) {
@@ -197,7 +202,7 @@ public class FileHandler {
 		if(splitedPath.length == 1) {
 			return newFilePath;
 		}
-		return splitedPath[splitedPath.length-1] + ".xml";
+		return splitedPath[splitedPath.length-1];
 	}
 	
 	private String[] getSplitedPath(String newFilePath) {

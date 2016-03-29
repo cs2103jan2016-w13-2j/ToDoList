@@ -47,7 +47,10 @@ public class Logic {
 		this.caseSwitcher = new CaseSwitcher(this);
 		this.steps = 0;
 	}
-
+    
+	public void clean() {
+		this.dataBase.clear();
+	}
 	public UIHandler getUIHandler() {
 		return uiHandler;
 	}
@@ -348,29 +351,32 @@ public class Logic {
 		}
 	}
 
-	/**
-	 * This method takes in the title of a task and marks it as done.
-	 *
-	 * 
-	 * @return Boolean
-	 */
-	public Boolean done(String title) {
+    /**
+     * This method takes in the title of a task and marks it as done.
+     *
+     * 
+     * @return Boolean
+     */
+    public Boolean done(String title) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+        logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+        
+        if(noRepeat(title)) {
+        	return false;
+        }
+        Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
+        Boolean deleteResponse = dataBaseDelete(tempTask);
 
-		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		Boolean deleteResponse = dataBaseDelete(tempTask);
+        tempTask.setDoneStatus(true);
+        Boolean addResponse = dataBaseAdd(tempTask);
 
-		tempTask.setDoneStatus(true);
-		Boolean addResponse = dataBaseAdd(tempTask);
+        uiHandler.refresh();
+        uiHandler.highLight(tempTask);
+        uiHandler.sendMessage("[" + title
+                + "] has been marked as completed! Woohoo another one down! [not what you want? try 'undo']");
 
-		uiHandler.refresh();
-		uiHandler.highLight(tempTask);
-		uiHandler.sendMessage("[" + title
-				+ "] has been marked as completed! Woohoo another one down! [not what you want? try 'undo']");
-
-		return deleteResponse && addResponse;
-	}
+        return deleteResponse && addResponse;
+    }
 
 	public Boolean undone(String title) {
 
