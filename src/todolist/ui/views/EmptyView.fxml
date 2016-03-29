@@ -1,8 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+<!-- Prepared by Huang Lie Jun (A0123994W) -->
+
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+	minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0"
+	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.MainViewController">
+	<center>
+		<TitledPane animated="false" collapsible="false"
+			maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+			stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_CENTER">
+			<content>
+				<ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0"
+					stylesheets="@DefaultTheme.css">
+					<placeholder>
+						<Label text="THIS IS AN EMPTY VIEW" />
+					</placeholder>
+					<opaqueInsets>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</opaqueInsets>
+					<padding>
+						<Insets bottom="5.0" />
+					</padding>
+				</ListView>
+			</content>
+			<graphic>
+				<HBox id="titled-pane-hbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
+					maxWidth="1.7976931348623157E308" spacing="10.0" stylesheets="@DefaultTheme.css">
+					<children>
+						<ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.0"
+							pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@assets/pen.png" />
+							</image>
+							<HBox.margin>
+								<Insets />
+							</HBox.margin>
+						</ImageView>
+						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD"
+							strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
+							text="" textAlignment="CENTER" />
+					</children>
+				</HBox>
+			</graphic>
+		</TitledPane>
+	</center>
 </BorderPane>
-

@@ -21,14 +21,14 @@ import javafx.util.Callback;
 public class MainViewController {
 
     /*** MODEL DATA ***/
-    private ObservableList<TaskWrapper> tasksToDisplay = null;
+    protected ObservableList<TaskWrapper> tasksToDisplay = null;
 
     /*** MAIN APP ***/
     private MainApp mainApplication = null;
 
     /*** VIEWS ***/
     @FXML
-    private ListView<TaskWrapper> listView = null;
+    protected ListView<TaskWrapper> listView = null;
 
     
     /*** CORE CONTROLLER FUNCTIONS ***/
@@ -109,11 +109,34 @@ public class MainViewController {
 
         // Convert Task to TaskWrapper for display handling
         for (int i = 0; i < tasks.size(); ++i) {
-            TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
-            arrayOfWrappers.add(wrappedTask);
+            if (!tasks.get(i).getDoneStatus()) {
+                TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
+                arrayOfWrappers.add(wrappedTask);
+            }
         }
 
         listView.getItems().addAll(arrayOfWrappers);
+    }
+
+    public void highLight(Task task) {
+        // TODO Auto-generated method stub
+        int index = searchInList(task);
+        
+        if (index != -1) {
+            listView.getSelectionModel().select(index);
+            listView.getFocusModel().focus(index);
+            listView.scrollTo(index);
+        }
+    }
+
+    private int searchInList(Task task) {
+        
+        for (int i = 0; i < listView.getItems().size(); ++i) {
+            if (listView.getItems().get(i).getTaskObject().equals(task)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 }

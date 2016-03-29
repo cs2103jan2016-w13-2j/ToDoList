@@ -24,12 +24,18 @@ public class TaskSorter {
 		switch (fieldName) {
 		case "start":
 			sort_StartDate(taskList);
+			break;
 		case "end":
 			sort_EndDate(taskList);
+			break;
 		case "category":
 			sort_Category(taskList);
+			break;
 		case "name":
 			sort_Name(taskList);
+			break;
+		default:
+			
 		}
 		
 		if(order.equals("descending")) {

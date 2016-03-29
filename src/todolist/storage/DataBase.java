@@ -1,11 +1,7 @@
 package todolist.storage;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +39,7 @@ public class DataBase {
 	private static Logger dataBase_Logger = Logger.getLogger("Database logger");
 
 	private FileHandler fh;
-	protected ArrayList<Task> taskList;
+	public ArrayList<Task> taskList;
 	private ArrayList<ArrayList<Task>> snapshot;
 	private TaskRetriever retriever;
 	private TaskSorter sorter;
@@ -154,7 +150,7 @@ public class DataBase {
 		return task_str;
 	}
 
-	protected void loadFromFile() {
+	public void loadFromFile() {
 		taskList = fh.read();
 	}
 

@@ -88,3 +88,5 @@ Thumbs.db
 
 
 taskStorage.txt
+
+*.old

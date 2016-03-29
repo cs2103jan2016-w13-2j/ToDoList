@@ -1,4 +1,4 @@
-package todolist.storage;
+package todolist.common.tests;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +13,7 @@ import org.junit.Test;
 import todolist.model.Name;
 import todolist.model.SearchCommand;
 import todolist.model.Task;
+import todolist.storage.DataBase;
 
 public class DataBaseTest {
 
@@ -20,7 +21,7 @@ public class DataBaseTest {
 	 * @throws java.lang.Exception
 	 */
 
-	DataBase db;
+	private DataBase db;
 
 	@Before
 	public void setUp() throws Exception {
