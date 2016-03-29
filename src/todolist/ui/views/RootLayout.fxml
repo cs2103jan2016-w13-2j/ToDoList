@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- @@author Huang Lie Jun -->
+
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-
-<!-- Prepared by Huang Lie Jun (A0123994W) -->
 
 <BorderPane minHeight="300.0" minWidth="300.0" prefHeight="600.0"
 	prefWidth="800.0" styleClass="root-layout" stylesheets="@DefaultTheme.css"
@@ -14,8 +14,8 @@
 			prefWidth="60.0" BorderPane.alignment="TOP_LEFT" />
 	</left>
 	<center>
-	<BorderPane minHeight="200.0" minWidth="200.0" prefHeight="540.0"
-		prefWidth="740.0" BorderPane.alignment="TOP_LEFT" />
+		<BorderPane minHeight="200.0" minWidth="200.0" prefHeight="540.0"
+			prefWidth="740.0" BorderPane.alignment="TOP_LEFT" />
 	</center>
 	<top>
 		<HBox maxWidth="-Infinity" minHeight="-Infinity" prefHeight="40.0"

@@ -8,6 +8,7 @@ import java.util.Scanner;
 import todolist.MainApp;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +22,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+//@@author Huang Lie Jun
+
+/* 
+ * MainViewController
+ */
 public class MainViewController {
 
 	/*** MODEL DATA ***/
