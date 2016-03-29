@@ -1,5 +1,6 @@
 package todolist.model;
 
+//@@author zhangjiyi
 public class SearchCommand {
 	private String type = null;
 	private String content = null;

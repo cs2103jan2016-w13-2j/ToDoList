@@ -96,10 +96,13 @@ public class MainViewController {
 	
 	//temp code for demo and testing purpose
 	
+	//@@author zhangjiyi
 	public String path = "demo.txt";
 	
+	//@@author zhangjiyi
 	public int demoCounter = 0;
-
+	
+	//@@author zhangjiyi
 	public ArrayList<String> demoFileHandler(String path) {
 		ArrayList<String> myList = new ArrayList<String>();
 		try {
@@ -118,6 +121,7 @@ public class MainViewController {
 		return myList;
 	}
 
+	//@@author zhangjiyi
 	public void setCommandLineCallbackDemo(TextField commandField) {
 		// Set Callback for TextField
 		EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {

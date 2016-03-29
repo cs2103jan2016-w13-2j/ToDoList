@@ -1,5 +1,6 @@
 package todolist.model;
 
+//@@author zhangjiyi
 public class Name implements Comparable<Name>{
 
 	private String name;

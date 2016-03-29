@@ -1,5 +1,6 @@
 package todolist.model;
 
+//@@author zhangjiyi
 public class Category implements Comparable<Category>{
     private String category;
 	public Category(String category) {
