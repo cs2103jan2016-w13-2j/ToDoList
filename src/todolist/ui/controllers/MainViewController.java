@@ -153,7 +153,7 @@ public class MainViewController {
 
 					final Animation animation = new Transition() {
 						{
-							setCycleDuration(new Duration(2000));
+							setCycleDuration(new Duration(commandString.length()*200));
 						}
 
 						protected void interpolate(double frac) {
