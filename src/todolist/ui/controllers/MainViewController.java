@@ -2,13 +2,17 @@ package todolist.ui.controllers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import javafx.util.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import todolist.MainApp;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
-
+import javafx.animation.Animation;
+import javafx.animation.Transition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -92,17 +96,16 @@ public class MainViewController {
 
 		commandField.setOnAction(commandHandler);
 	}
-	
-	
-	//temp code for demo and testing purpose
-	
-	//@@author zhangjiyi
+
+	// temp code for demo and testing purpose
+
+	// @@author zhangjiyi
 	public String path = "demo.txt";
-	
-	//@@author zhangjiyi
+
+	// @@author zhangjiyi
 	public int demoCounter = 0;
-	
-	//@@author zhangjiyi
+
+	// @@author zhangjiyi
 	public ArrayList<String> demoFileHandler(String path) {
 		ArrayList<String> myList = new ArrayList<String>();
 		try {
@@ -121,27 +124,51 @@ public class MainViewController {
 		return myList;
 	}
 
-	//@@author zhangjiyi
+	// @@author zhangjiyi
 	public void setCommandLineCallbackDemo(TextField commandField) {
 		// Set Callback for TextField
 		EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				ArrayList<String> demoList = demoFileHandler(path);
-				String commandString = demoList.get(demoCounter);
-				demoCounter++;
-				// Command command = new Command(commandString);
-				// System.out.println(command.getCommand());
+				synchronized (this) {
+					ArrayList<String> demoList = demoFileHandler(path);
+					String commandString = demoList.get(demoCounter);
+					char[] charArray = commandString.toCharArray();
+					demoCounter++;
+					// Command command = new Command(commandString);
+					// System.out.println(command.getCommand());
 
-				// Pass Command Line input for processing
-				try {
+					// Pass Command Line input for processing
 					commandField.clear();
-					commandField.setText(commandString);
-					mainApplication.uiHandlerUnit.process(commandString);
-				} catch (Exception e) {
+					/*
+					 * for (int i = 0; i < charArray.length; i++) { try {
+					 * TimeUnit.MILLISECONDS.sleep(400); } catch
+					 * (InterruptedException e) { // TODO Auto-generated catch
+					 * block e.printStackTrace(); }
+					 * 
+					 * commandField.appendText(Character.toString(charArray[i]))
+					 * ; }
+					 */
 
+					final Animation animation = new Transition() {
+						{
+							setCycleDuration(new Duration(2000));
+						}
+
+						protected void interpolate(double frac) {
+							final int length = commandString.length();
+							final int n = Math.round(length * (float) frac);
+							commandField.setText(commandString.substring(0, n));
+						}
+
+					};
+
+					animation.play();
+
+					mainApplication.uiHandlerUnit.process(commandString);
 				}
+
 			}
 		};
 

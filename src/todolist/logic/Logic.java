@@ -2,7 +2,6 @@ package todolist.logic;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -19,7 +18,6 @@ import todolist.model.Task;
 import todolist.model.TokenizedCommand;
 import todolist.parser.MainParser;
 import todolist.storage.DataBase;
-
 
 //@@author zhangjiyi
 public class Logic {
@@ -146,19 +144,18 @@ public class Logic {
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
 	}
-	
+
 	public Boolean addRecurringEventLess(String interval, String title, String fuzzyTime, String quantity, String timeUnit) {
 		Boolean addResponse = addEventLess(title, fuzzyTime, quantity, timeUnit);
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
 	}
-	
+
 	public Boolean addRecurringDeadlineLess(String interval, String title, String fuzzyTime) {
 		Boolean addResponse = addDeadlineLess(title, fuzzyTime);
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
 	}
-	
 
 	/**
 	 * This method adds a new event with start date and duration
@@ -175,7 +172,7 @@ public class Logic {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			LocalDateTime start = LocalDateTime.parse(fuzzyParseDate(startDate) + " " + startTime, formatter);
 			LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
-			
+
 			System.out.println(start);
 
 			if (!start.isAfter(LocalDateTime.now())) {
@@ -185,7 +182,7 @@ public class Logic {
 			}
 
 			Task newEvent = new Task(name, start, end, null, null, false, false, null);
-			
+
 			Boolean addResponse = dataBaseAdd(newEvent);
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
@@ -213,7 +210,7 @@ public class Logic {
 	public LocalDateTime fuzzyParseTime(String fuzzyTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		String myTime = null;
-		
+
 		DecimalFormat decimalFormatter = new DecimalFormat("00");
 
 		if (fuzzyTime.contains("-")) {
@@ -227,9 +224,10 @@ public class Logic {
 			}
 		} else {
 			if (fuzzyTime.contains(":")) {
-				myTime = LocalDateTime.now().getYear() + "-" + decimalFormatter.format(LocalDateTime.now().getMonthValue()) + "-"
+				myTime = LocalDateTime.now().getYear() + "-"
+						+ decimalFormatter.format(LocalDateTime.now().getMonthValue()) + "-"
 						+ decimalFormatter.format(LocalDateTime.now().getDayOfMonth()) + " " + fuzzyTime;
-				//System.out.println(myTime);
+				// System.out.println(myTime);
 			} else {
 				uiHandler.sendMessage("no time or date detected");
 			}
@@ -298,7 +296,7 @@ public class Logic {
 			return false;
 		}
 	}
-	
+
 	public Boolean addDeadlineLess(String title, String fuzzyTime) {
 
 		if (noRepeat(title)) {
@@ -830,7 +828,7 @@ public class Logic {
 		uiHandler.refresh();
 		return redoResponse;
 	}
-	
+
 	public boolean setNewFile(String path) {
 		return dataBase.setNewFile(path);
 	}
@@ -866,12 +864,13 @@ public class Logic {
 	private Boolean noRepeat(String title) {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
 		System.out.println(tempTaskList.size());
-		if (tempTaskList.size() > 0) {
+		
+		if (tempTaskList.size() > 0) {	
 			logger.log(Level.INFO, LOGGING_REPEATED_TASK + title);
 			uiHandler.sendMessage("You have added a task with same name before! Try another name!");
 			return false;
-		} else {
-			return true;
+		} else {	
+			return true;	
 		}
 	}
 

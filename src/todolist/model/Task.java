@@ -71,7 +71,7 @@ public class Task {
 			String length = temp[0];
 			String unit = temp[1];
 			LocalDateTime now = LocalDateTime.now();
-			while(now.isAfter(startTime)) {
+			while (now.isAfter(startTime)) {
 				startTime = startTime.plus(Long.parseLong(length), generateTimeUnit(unit));
 			}
 			return startTime;
@@ -86,14 +86,14 @@ public class Task {
 			String length = temp[0];
 			String unit = temp[1];
 
-			if(startTime != null) {
-				while(startTime.isAfter(endTime)) {
+			if (startTime != null) {
+				while (startTime.isAfter(endTime)) {
 					endTime = endTime.plus(Long.parseLong(length), generateTimeUnit(unit));
 				}
 				return endTime;
 			} else {
 				LocalDateTime now = LocalDateTime.now();
-				while(now.isAfter(endTime)) {
+				while (now.isAfter(endTime)) {
 					endTime = endTime.plus(Long.parseLong(length), generateTimeUnit(unit));
 				}
 				return endTime;
