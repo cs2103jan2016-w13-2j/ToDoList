@@ -2,8 +2,6 @@ package todolist.parser;
 
 import java.util.ArrayList;
 
-import com.sun.xml.internal.ws.util.StringUtils;
-
 import todolist.model.TokenizedCommand;
 
 public class NormalCommandParser {
@@ -21,10 +19,6 @@ public class NormalCommandParser {
 
 		String name = null;
 		Boolean generateName = false;
-		int counter = 0;
-		
-		
-
 		for (int i = 0; i < temp.length - 1; i++) {
 	
 			

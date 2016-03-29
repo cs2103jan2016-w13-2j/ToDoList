@@ -179,7 +179,8 @@ public class MainApp extends Application {
 
     private void loadCommandLine() {
         commandField = (TextField) mainView.getBottom();
-        mainController.setCommandLineCallback(commandField);
+        //mainController.setCommandLineCallback(commandField);
+        mainController.setCommandLineCallbackDemo(commandField);
     }
 
     private void loadTitleBar() {

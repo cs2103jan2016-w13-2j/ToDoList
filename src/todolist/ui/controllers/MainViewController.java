@@ -1,6 +1,9 @@
 package todolist.ui.controllers;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import todolist.MainApp;
 import todolist.model.Task;
@@ -20,123 +23,171 @@ import javafx.util.Callback;
 
 public class MainViewController {
 
-    /*** MODEL DATA ***/
-    protected ObservableList<TaskWrapper> tasksToDisplay = null;
+	/*** MODEL DATA ***/
+	protected ObservableList<TaskWrapper> tasksToDisplay = null;
 
-    /*** MAIN APP ***/
-    private MainApp mainApplication = null;
+	/*** MAIN APP ***/
+	private MainApp mainApplication = null;
 
-    /*** VIEWS ***/
-    @FXML
-    protected ListView<TaskWrapper> listView = null;
+	/*** VIEWS ***/
+	@FXML
+	protected ListView<TaskWrapper> listView = null;
 
-    
-    /*** CORE CONTROLLER FUNCTIONS ***/
-    
-    public MainViewController() {
-        // Initialise models
-        tasksToDisplay = FXCollections.observableArrayList();
-        listView = new ListView<TaskWrapper>();
-    }
+	/*** CORE CONTROLLER FUNCTIONS ***/
 
-    public void setMainApp(MainApp mainApp) {
-        mainApplication = mainApp;
-    }
+	public MainViewController() {
+		// Initialise models
+		tasksToDisplay = FXCollections.observableArrayList();
+		listView = new ListView<TaskWrapper>();
+	}
 
-    @FXML
-    public void initialize() {
-        initTaskListView();
-    }
+	public void setMainApp(MainApp mainApp) {
+		mainApplication = mainApp;
+	}
 
-    public void initTaskListView() {
-        listView.setCellFactory(new Callback<ListView<TaskWrapper>, javafx.scene.control.ListCell<TaskWrapper>>() {
-            @Override
-            public ListCell<TaskWrapper> call(ListView<TaskWrapper> listView) {
-                return new TaskListCell();
-            }
-        });
+	@FXML
+	public void initialize() {
+		initTaskListView();
+	}
 
-        VBox.setVgrow(listView, Priority.ALWAYS);
-        HBox.setHgrow(listView, Priority.ALWAYS);
+	public void initTaskListView() {
+		listView.setCellFactory(new Callback<ListView<TaskWrapper>, javafx.scene.control.ListCell<TaskWrapper>>() {
+			@Override
+			public ListCell<TaskWrapper> call(ListView<TaskWrapper> listView) {
+				return new TaskListCell();
+			}
+		});
 
-    }
+		VBox.setVgrow(listView, Priority.ALWAYS);
+		HBox.setHgrow(listView, Priority.ALWAYS);
 
-    public void setCommandLineCallback(TextField commandField) {
-        // Set Callback for TextField
-        EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
+	}
 
-            @Override
-            public void handle(ActionEvent event) {
-                String commandString = commandField.getText();
-                //Command command = new Command(commandString);
-                //System.out.println(command.getCommand());
+	public void setCommandLineCallback(TextField commandField) {
+		// Set Callback for TextField
+		EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
 
-                // Pass Command Line input for processing
-                try {
-                    commandField.clear();
-                    mainApplication.uiHandlerUnit.process(commandString);
-                } catch (Exception e) {
+			@Override
+			public void handle(ActionEvent event) {
+				String commandString = commandField.getText();
+				// Command command = new Command(commandString);
+				// System.out.println(command.getCommand());
 
-                }
+				// Pass Command Line input for processing
+				try {
+					commandField.clear();
+					mainApplication.uiHandlerUnit.process(commandString);
+				} catch (Exception e) {
 
-            }
-        };
+				}
 
-        commandField.setOnAction(commandHandler);
-    }
+			}
+		};
 
-    
-    /*** VIEW GETTERS-SETTERS-LOADERS ***/
+		commandField.setOnAction(commandHandler);
+	}
+	
+	
+	//temp code for demo and testing purpose
+	
+	public String path = "demo.txt";
+	
+	public int demoCounter = 0;
 
-    public ListView<TaskWrapper> getTaskListView() {
-        return listView;
-    }
+	public ArrayList<String> demoFileHandler(String path) {
+		ArrayList<String> myList = new ArrayList<String>();
+		try {
 
-    
-    /*** MODEL GETTERS-SETTERS-RELOADERS ***/
+			File file = new File(path);
+			Scanner scr = new Scanner(file);
+			while (scr.hasNextLine()) {
+				String temp = scr.nextLine();
+				myList.add(temp);
+				System.out.println(temp);
+			}
+			scr.close();
+		} catch (Exception e) {
 
-    public ObservableList<TaskWrapper> getTasks() {
-        return tasksToDisplay;
-    }
+		}
+		return myList;
+	}
 
-    public void setTasks(ArrayList<Task> tasks) {
-        
-        // List provided by logic must be valid
-        assert(tasks != null);
-        
-        ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
-        listView.getItems().clear();
+	public void setCommandLineCallbackDemo(TextField commandField) {
+		// Set Callback for TextField
+		EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
 
-        // Convert Task to TaskWrapper for display handling
-        for (int i = 0; i < tasks.size(); ++i) {
-            if (!tasks.get(i).getDoneStatus()) {
-                TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
-                arrayOfWrappers.add(wrappedTask);
-            }
-        }
+			@Override
+			public void handle(ActionEvent event) {
+				ArrayList<String> demoList = demoFileHandler(path);
+				String commandString = demoList.get(demoCounter);
+				demoCounter++;
+				// Command command = new Command(commandString);
+				// System.out.println(command.getCommand());
 
-        listView.getItems().addAll(arrayOfWrappers);
-    }
+				// Pass Command Line input for processing
+				try {
+					commandField.clear();
+					commandField.setText(commandString);
+					mainApplication.uiHandlerUnit.process(commandString);
+				} catch (Exception e) {
 
-    public void highLight(Task task) {
-        // TODO Auto-generated method stub
-        int index = searchInList(task);
-        
-        if (index != -1) {
-            listView.getSelectionModel().select(index);
-            listView.getFocusModel().focus(index);
-            listView.scrollTo(index);
-        }
-    }
+				}
+			}
+		};
 
-    private int searchInList(Task task) {
-        
-        for (int i = 0; i < listView.getItems().size(); ++i) {
-            if (listView.getItems().get(i).getTaskObject().equals(task)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+		commandField.setOnAction(commandHandler);
+	}
+
+	/*** VIEW GETTERS-SETTERS-LOADERS ***/
+
+	public ListView<TaskWrapper> getTaskListView() {
+		return listView;
+	}
+
+	/*** MODEL GETTERS-SETTERS-RELOADERS ***/
+
+	public ObservableList<TaskWrapper> getTasks() {
+		return tasksToDisplay;
+	}
+
+	public void setTasks(ArrayList<Task> tasks) {
+
+		// List provided by logic must be valid
+		assert (tasks != null);
+
+		ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
+		listView.getItems().clear();
+
+		// Convert Task to TaskWrapper for display handling
+		for (int i = 0; i < tasks.size(); ++i) {
+			if (!tasks.get(i).getDoneStatus()) {
+				TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
+				arrayOfWrappers.add(wrappedTask);
+			}
+		}
+
+		listView.getItems().addAll(arrayOfWrappers);
+	}
+
+	public void highLight(Task task) {
+		// TODO Auto-generated method stub
+		int index = searchInList(task);
+
+		if (index != -1) {
+			listView.getSelectionModel().select(index);
+			listView.getFocusModel().focus(index);
+			listView.scrollTo(index);
+		}
+	}
+
+	private int searchInList(Task task) {
+
+		for (int i = 0; i < listView.getItems().size(); ++i) {
+			if (listView.getItems().get(i).getTaskObject().equals(task)) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
 }

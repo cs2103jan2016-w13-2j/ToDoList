@@ -1,0 +1,6 @@
+reset
+add task 123456
+add event myhahaha 2016-03-29 12:45 1 hour
+done 123456
+add task "ha ha ha ha ha"
+reset
