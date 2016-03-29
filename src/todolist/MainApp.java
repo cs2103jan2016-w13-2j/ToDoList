@@ -497,7 +497,11 @@ public class MainApp extends Application {
     }
 
     public int getPage() {
-        return sidebarController.getIndex();
+        if (sidebarController != null) {
+            return sidebarController.getIndex();
+        } else {
+            return 1;
+        }
     }
 
     /*** NOTIFICATION FUNCTIONS ***/
