@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 
@@ -18,12 +19,12 @@ public class OverdueController extends MainViewController {
         tasksToDisplay = FXCollections.observableArrayList();
         listView = new ListView<TaskWrapper>();
     }
-    
+
     @FXML
     public void initialize() {
         initTaskListView();
     }
-    
+
     @Override
     public void setTasks(ArrayList<Task> tasks) {
 
@@ -36,8 +37,7 @@ public class OverdueController extends MainViewController {
         // Convert Task to TaskWrapper for display handling
         for (int i = 0; i < tasks.size(); ++i) {
             Task task = tasks.get(i);
-            if (task.getEndTime() != null && task.getEndTime().isBefore(LocalDateTime.now())
-                    && !task.getDoneStatus()) {
+            if (task.getEndTime() != null && task.getEndTime().isBefore(LocalDateTime.now()) && !task.getDoneStatus()) {
                 TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
                 arrayOfWrappers.add(wrappedTask);
             }
