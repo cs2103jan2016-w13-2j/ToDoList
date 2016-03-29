@@ -187,10 +187,7 @@ public class DataBase {
 	 * 
 	 * @param Task
 	 *            the task to be deleted
-	 * @return boolean true if the task is successfully deleted;
-	 * 
-	 * @throws IOException
-	 *             if the task to delete does not exist
+	 * @return boolean true if the task is successfully deleted; false if the task to delete does not exist
 	 */
 	public boolean delete(Task taskToDelete) {
 		assert (taskToDelete instanceof Task);

@@ -28,7 +28,11 @@ public class DataBaseTest {
 	}
 
 	@Test
-	public void testAdd() {
+	/**
+	 * test add an event to the database
+	 * 
+	 */
+	public void testAdd1() {
 		db.clear();
 		// create a event
 		Name name = new Name("title");
@@ -46,9 +50,56 @@ public class DataBaseTest {
 		boolean isEqual = db.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
 		assertEquals(isEqual, expected);
 	}
-
+	
 	@Test
-	public void testDelete() {
+	/**
+	 * test add the same event to the database
+	 */
+	public void testAdd2() {
+		db.clear();
+		//add an event to the empty database
+		Name name = new Name("title");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
+		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+		Task newEvent = new Task(name, start, end, null, null, false, false, null);
+		db.add(newEvent);
+		
+		//add the same event to the database again
+		boolean expected = false;
+		assertEquals(db.add(newEvent), expected);
+	}
+	/**
+	 * test add a new event with the same name as one of the existing event to the database
+	 */
+	@Test
+	public void testAdd3() {
+		db.clear();
+		//add an event to the empty database
+		Name name = new Name("title");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
+		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+		Task newEvent = new Task(name, start, end, null, null, false, false, null);
+		db.add(newEvent);
+		
+		//add a new event with the same name as the existing event in the database
+		name = new Name("title");
+		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		start = LocalDateTime.parse("2019-11-11" + " " + "17:00", formatter);
+		end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+		newEvent = new Task(name, start, end, null, null, false, false, null);
+		
+		boolean expected = false;
+		assertEquals(db.add(newEvent), expected);
+		
+	}
+    
+	/**
+	 * test delete an (existing) event from database
+	 */
+	@Test
+	public void testDelete1() {
 		db.clear();
 		// add one event
 		Name name = new Name("title");
@@ -65,11 +116,37 @@ public class DataBaseTest {
 		// check whether it is really deleted from the file
 		db.loadFromFile();
 		assertEquals(db.taskList.isEmpty(), expected);
-
 	}
-
+	
+	/**
+	 * test delete an (not existing) event from database
+	 */
 	@Test
-	public void testCheckExistence() {
+	public void testDelete2() {
+		db.clear();
+		//add an event to the database
+		Name name = new Name("title");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
+		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+		Task newEvent = new Task(name, start, end, null, null, false, false, null);
+		db.add(newEvent);
+		
+		//delete an event not in the database
+		name = new Name("title2");
+		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
+		end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+		newEvent = new Task(name, start, end, null, null, false, false, null);
+		
+		boolean expected = false;
+		assertEquals(db.delete(newEvent), expected);
+	}
+    /**
+     * test check existence for an event (existing) in the database
+     */
+	@Test
+	public void testCheckExistence1() {
 		db.clear();
 		// add one event
 		Name name = new Name("title");
@@ -82,6 +159,14 @@ public class DataBaseTest {
 		// check the existence
 		boolean expected = true;
 		assertEquals(db.checkExistence(newEvent), expected);
+	}
+	/**
+     * test check existence for an event (not existing) in the database
+     */
+	@Test
+	public void testCheckExistence2() {
+		db.clear();
+		
 	}
 
 	@Test
