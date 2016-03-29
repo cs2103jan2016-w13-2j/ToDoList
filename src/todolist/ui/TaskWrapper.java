@@ -10,6 +10,8 @@ import todolist.model.Category;
 import todolist.model.Reminder;
 import todolist.model.Task;
 
+// @@author Huang Lie Jun
+
 public class TaskWrapper {
 
     private Task task;

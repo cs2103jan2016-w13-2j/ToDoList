@@ -9,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import todolist.MainApp;
 
+//@@author Huang Lie Jun
+
 public class SideBarController {
 
     /*** TAB STYLES ***/

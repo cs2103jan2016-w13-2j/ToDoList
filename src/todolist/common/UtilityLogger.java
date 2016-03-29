@@ -17,15 +17,18 @@ import java.util.logging.SimpleFormatter;
  */
 public class UtilityLogger {
 
+    // Logger constants
     private static final int MAX_LOG_SIZE = 1048576;
     private static final int NUMBER_OF_LOGS = 1;
     private static final boolean IS_APPEND = false;
 
+    // Log variants
     private static final String ACTION = "ACTION >> ";
     private static final String ERROR = "ERROR >> ";
     private static final String EXCEPTION = "EXCEPTION >> ";
     private static final String COMPONENTCALL = "COMPONENT CALL >> ";
 
+    // Log components
     private static final String UI = "UI";
     private static final String LOGIC = "LOGIC";
     private static final String PARSER = "PARSER";
@@ -35,10 +38,12 @@ public class UtilityLogger {
     private static final String ERROR_CREATE_LOG = "Error accessing log file.";
     private static final String ERROR_GET_DEFAULT_PATH = "Error obtaining default application directory for file path.";
 
+    // Log file handler
     private static File logDirectory = null;
     private Logger logger = null;
     private static FileHandler fileHandler = null;
 
+    // Component types
     private static enum Component {
         UI, Logic, Parser, Storage
     };

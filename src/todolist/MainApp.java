@@ -164,6 +164,9 @@ public class MainApp extends Application {
 
     /*** VIEW LOADERS ***/
 
+    /*
+     * Load 
+     */
     private void loadRootView(Stage primaryStage) {
         try {
 
