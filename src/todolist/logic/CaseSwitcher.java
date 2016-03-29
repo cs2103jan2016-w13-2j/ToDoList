@@ -27,21 +27,31 @@ public class CaseSwitcher {
 
             switch (type) {
             case "event":
-                if (arg.length != 6) {
+                if (arg.length != 6 && arg.length != 5) {
                     logic.getUIHandler().sendMessage(
                             "Your command was incomplete! To add an event, try: add event [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day].");
                 } else {
-                    logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
-                    logic.stepForward(1);
+                	if(arg.length == 6) {
+                		logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
+                        logic.stepForward(1);
+                	} else {
+                		logic.addEventLess(arg[1], arg[2], arg[3], arg[4]);
+                        logic.stepForward(1);
+                	}
                 }
                 break;
             case "deadline":
-                if (arg.length != 4) {
+                if (arg.length != 4 && arg.length != 3) {
                     logic.getUIHandler().sendMessage(
                             "Your command was incomplete! To add a deadline, try: add deadline [title] [YYYY-MM-DD] [HH:MM]");
                 } else {
-                    logic.addDeadline(arg[1], arg[2], arg[3]);
-                    logic.stepForward(1);
+                	if(arg.length == 4) {
+                        logic.addDeadline(arg[1], arg[2], arg[3]);
+                        logic.stepForward(1);
+                	} else {
+                        logic.addDeadlineLess(arg[1], arg[2]);
+                        logic.stepForward(1);
+                	}
                 }
                 break;
             case "task":
@@ -56,21 +66,31 @@ public class CaseSwitcher {
             case "recurring":
                 switch (arg[1]) {
                 case "event":
-                    if (arg.length != 8) {
+                    if (arg.length != 8 && arg.length != 7 ) {
                         logic.getUIHandler().sendMessage(
                                 "Your command was incomplete! To add a recurring event, try: add recurring event [7-day] [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day]");
                     } else {
-                        logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
-                        logic.stepForward(3);
+                    	if(arg.length == 8) {
+                    		logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
+                            logic.stepForward(3);
+                    	} else {
+                    		logic.addRecurringEventLess(arg[2], arg[3], arg[4], arg[5], arg[6]);
+                            logic.stepForward(3);
+                    	}
                     }
                     break;
                 case "deadline":
-                    if (arg.length != 6) {
+                    if (arg.length != 6 && arg.length != 5) {
                         logic.getUIHandler().sendMessage(
                                 "Your command was incomplete! To add a recurring deadline, try: add recurring deadline [7-day] [title] [YYYY-MM-DD] [HH:MM]");
                     } else {
-                        logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
-                        logic.stepForward(3);
+                    	if(arg.length == 6) {
+                            logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
+                            logic.stepForward(3);
+                    	} else {
+                            logic.addRecurringDeadlineLess(arg[2], arg[3], arg[4]);
+                            logic.stepForward(3);
+                    	}
                     }
                     break;
                 default:
