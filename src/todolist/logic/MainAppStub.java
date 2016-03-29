@@ -17,7 +17,7 @@ public class MainAppStub extends MainApp{
 	}
 	
 	@Override
-	public void notifyWithText(String message) {
+	public void notifyWithText(String message, boolean isAutohide) {
 		
 	}
 }

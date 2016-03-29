@@ -6,12 +6,19 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 import todolist.model.Category;
 import todolist.model.Reminder;
 import todolist.model.Task;
 
 // @@author Huang Lie Jun
 
+/*
+ * TaskWrapper is the wrapper class for Task class. It wraps each attribute into a property for display.
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ * 
+ */
 public class TaskWrapper {
 
     private Task task;
@@ -24,6 +31,12 @@ public class TaskWrapper {
     private ObjectProperty<Boolean> isRecurring;
     private ObjectProperty<String> interval;
 
+    /*
+     * Constructor builds the TaskWrapper class with the given task.
+     * 
+     * @param Task task is the task being wrapped around
+     * 
+     */
     public TaskWrapper(Task task) {
         this.taskTitle = new SimpleStringProperty(task.getName().getName());
         this.startTime = new SimpleObjectProperty<LocalDateTime>(task.getStartTime());
@@ -36,6 +49,7 @@ public class TaskWrapper {
         this.task = task;
     }
 
+    
     public StringProperty taskTitleProperty() {
         return taskTitle;
     }
@@ -131,7 +145,7 @@ public class TaskWrapper {
     public String getInterval() {
         return interval.get();
     }
-    
+
     public Task getTaskObject() {
         return task;
     }

@@ -3,6 +3,8 @@ package todolist;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import todolist.common.UtilityLogger;
+import todolist.common.UtilityLogger.Component;
 import todolist.logic.Logic;
 import todolist.logic.UIHandler;
 import todolist.model.Task;
@@ -31,7 +33,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import org.controlsfx.control.NotificationPane;
-import com.sun.media.jfxmedia.logging.Logger;
 
 // @@author Huang Lie Jun
 
@@ -56,6 +57,16 @@ public class MainApp extends Application {
     private static final String MESSAGE_ERROR_LOAD_MAIN = "Error loading main view. Exiting now ...";
     private static final String MESSAGE_ERROR_LOAD_TITLEBAR = "Error loading title bar view. Exiting now ...";
     private static final String MESSAGE_ERROR_LOAD_SIDEBAR = "Error loading side bar view. Exiting now ...";
+    private static final String MESSAGE_ERROR_LOAD_OVERDUE = "Error loading overdue view.";
+    private static final String MESSAGE_ERROR_LOAD_TODAY = "Error loading today view.";
+    private static final String MESSAGE_ERROR_LOAD_WEEK = "Error loading week view.";
+    private static final String MESSAGE_ERROR_LOAD_ARCHIVE = "Error loading archive view.";
+    private static final String MESSAGE_ERROR_LOAD_SETTINGS = "Error loading settings view.";
+    private static final String MESSAGE_ERROR_LOAD_HELP = "Error loading help view.";
+    private static final String MESSAGE_ERROR_PAGE_INDEX = "Page index is out of bounds @ #";
+
+    // Action messages
+    private static final String ACTION_NOTIFICATION_TRIGGERED = "Notification triggered";
 
     // Notification messages and delay constant
     private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
@@ -71,6 +82,7 @@ public class MainApp extends Application {
     private static final String STYLE_CLASS_ROOT = "root-layout";
     private static final String STYLE_CLASS_TITLEBAR = "title-bar";
     private static final String STYLE_CLASS_SIDEBAR = "side-bar";
+    private static final String STYLE_NOTIFICATION = "-fx-font-size: 10px;";
 
     // Tab view directories
     private static final String DIRECTORY_MAIN = "ui/views/MainView.fxml";
@@ -106,6 +118,8 @@ public class MainApp extends Application {
     private static final int DONE_TAB = 5;
     private static final int OPTIONS_TAB = 6;
     private static final int HELP_TAB = 7;
+    private static final int SMALLEST_PAGE_INDEX = 1;
+    private static final int LARGEST_PAGE_INDEX = 7;
 
     // Controllers
     private MainViewController mainController;
@@ -124,19 +138,34 @@ public class MainApp extends Application {
     public PauseTransition delay = null;
     private boolean isFirstNotif = true;
 
-    
+    // Logger
+    private UtilityLogger logger = null;
+
     /*** CORE FUNCTIONS ***/
 
+    /*
+     * Empty constructor.
+     */
     public MainApp() {
-        
+
     }
-    
+
+    /*
+     * Starts the application with launch() command.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javafx.application.Application#start(javafx.stage.Stage)
+     */
     @Override
     public void start(Stage primaryStage) {
+
+        logger = new UtilityLogger();
 
         // Reference and link with Logic component
         logicUnit = new Logic(this);
@@ -151,10 +180,11 @@ public class MainApp extends Application {
     }
 
     /*
-     * setWindowDimensions initializes the window properties for application display.
+     * setWindowDimensions initializes the window properties for application
+     * display.
      * 
      * @param Stage primaryStage
-     *  
+     * 
      */
     private void setWindowDimensions(Stage primaryStage) {
         primaryStage.setTitle(WINDOW_TITLE);
@@ -165,7 +195,11 @@ public class MainApp extends Application {
     /*** VIEW LOADERS ***/
 
     /*
-     * Load 
+     * loadRootView wraps root view with notification pane and displays it
+     * within a preset window.
+     * 
+     * @param Stage primaryStage is the display window for mounting the root
+     * view
      */
     private void loadRootView(Stage primaryStage) {
         try {
@@ -184,21 +218,29 @@ public class MainApp extends Application {
             primaryStage.show();
 
             // Show Welcome Text
-            notifyWithText(NOTIFICATION_WELCOME);
+            notifyWithText(NOTIFICATION_WELCOME, true);
 
         } catch (IOException ioException) {
-            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_ROOT);
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_ROOT);
             ioException.printStackTrace();
             System.exit(1);
         }
     }
 
+    /*
+     * loadCommandLine embeds the command line in place in the root view and
+     * sets the callback function for text input.
+     * 
+     */
     private void loadCommandLine() {
         commandField = (TextField) mainView.getBottom();
-        //mainController.setCommandLineCallback(commandField);
-        mainController.setCommandLineCallbackDemo(commandField);
+        mainController.setCommandLineCallback(commandField);
+        // mainController.setCommandLineCallbackDemo(commandField);
     }
 
+    /*
+     * loadTitleBar embeds the title bar in place in the root view
+     */
     private void loadTitleBar() {
         try {
 
@@ -211,12 +253,16 @@ public class MainApp extends Application {
             rootView.setTop(titleBarView);
 
         } catch (IOException ioException) {
-            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_TITLEBAR);
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_TITLEBAR);
             ioException.printStackTrace();
             System.exit(1);
         }
     }
 
+    /*
+     * loadSideBar embeds the side bar in place in the root view and initializes
+     * the controller (logic) for the side bar
+     */
     private void loadSideBar() {
         try {
 
@@ -233,12 +279,20 @@ public class MainApp extends Application {
             sidebarController.setMainApp(this);
 
         } catch (IOException ioException) {
-            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_SIDEBAR);
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_SIDEBAR);
             ioException.printStackTrace();
             System.exit(1);
         }
     }
 
+    /*
+     * getView takes in a FXML loader and a FXML directory, loads and returns
+     * the JavaFX component object from the FXML file.
+     * 
+     * @param FXMLLoader loader, String directory
+     * 
+     * @return Node abstractView is the view initialized from the FXML file
+     */
     private Node getView(FXMLLoader loader, String directory) throws IOException {
         loader.setLocation(MainApp.class.getResource(directory));
         Node abstractView = loader.load();
@@ -246,6 +300,9 @@ public class MainApp extends Application {
         return abstractView;
     }
 
+    /*
+     * loadMainView loads the main page into the main display area
+     */
     private void loadMainView() {
         try {
 
@@ -261,12 +318,15 @@ public class MainApp extends Application {
             uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
-            Logger.logMsg(Logger.ERROR, MESSAGE_ERROR_LOAD_MAIN);
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_MAIN);
             ioException.printStackTrace();
             System.exit(1);
         }
     }
 
+    /*
+     * loadOverdueView loads the overdue page into the main display area
+     */
     private void loadOverdueView() {
 
         // Acquire FXML and CSS component for main view
@@ -282,12 +342,15 @@ public class MainApp extends Application {
 
             uiHandlerUnit.refresh();
 
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_OVERDUE);
+            ioException.printStackTrace();
         }
     }
 
+    /*
+     * loadTodayView loads the today page into the main display area
+     */
     private void loadTodayView() {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
@@ -302,12 +365,15 @@ public class MainApp extends Application {
 
             uiHandlerUnit.refresh();
 
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_TODAY);
+            ioException.printStackTrace();
         }
     }
 
+    /*
+     * loadWeekView loads the week page into the main display area
+     */
     private void loadWeekView() {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
@@ -321,12 +387,16 @@ public class MainApp extends Application {
             weekController.setMainApp(this);
 
             uiHandlerUnit.refresh();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
+        } catch (IOException ioException) {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_WEEK);
+            ioException.printStackTrace();
         }
     }
 
+    /*
+     * loadArchiveView loads the archive page into the main display area
+     */
     private void loadArchiveView() {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
@@ -340,12 +410,15 @@ public class MainApp extends Application {
             archiveController.setMainApp(this);
 
             uiHandlerUnit.refresh();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_ARCHIVE);
+            ioException.printStackTrace();
         }
     }
 
+    /*
+     * loadSettingsView loads the settings page into the main display area
+     */
     private void loadSettingsView() {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
@@ -353,12 +426,15 @@ public class MainApp extends Application {
             settingsView = (BorderPane) getView(loader, DIRECTORY_SETTINGS);
             loadMainView();
             mainView.setCenter(settingsView);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_SETTINGS);
+            ioException.printStackTrace();
         }
     }
 
+    /*
+     * loadHelpView loads the help page into the main display area
+     */
     private void loadHelpView() {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
@@ -366,16 +442,32 @@ public class MainApp extends Application {
             helpView = (BorderPane) getView(loader, DIRECTORY_HELP);
             loadMainView();
             mainView.setCenter(helpView);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_HELP);
+            ioException.printStackTrace();
         }
     }
 
+    /*
+     * loadPage sets the current page index to the given index
+     * 
+     * @param index is the given candidate index to navigate to
+     * 
+     */
     public void loadPage(int index) {
-        sidebarController.setIndex(index);
+        if (index >= SMALLEST_PAGE_INDEX && index <= LARGEST_PAGE_INDEX) {
+            sidebarController.setIndex(index);
+        } else {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_PAGE_INDEX + index);
+        }
     }
 
+    /*
+     * setPageView loads the corresponding page into the main display area
+     * 
+     * @param index is the page number to load
+     * 
+     */
     public void setPageView(int index) {
         switch (index) {
         case HOME_TAB:
@@ -404,7 +496,16 @@ public class MainApp extends Application {
         }
     }
 
+    public int getPage() {
+        return sidebarController.getIndex();
+    }
+
     /*** NOTIFICATION FUNCTIONS ***/
+
+    /*
+     * setupNotificationPane intializes the notification system and wraps it
+     * around the root display view
+     */
 
     private void setupNotificationPane() {
         Label label = new Label();
@@ -413,17 +514,26 @@ public class MainApp extends Application {
         BorderPane borderPane = new BorderPane(label);
         rootWithNotification = new NotificationPane(borderPane);
 
-        rootWithNotification.setStyle("-fx-font-size: 10px;");
+        rootWithNotification.setStyle(STYLE_NOTIFICATION);
 
         rootWithNotification.setShowFromTop(true);
         rootWithNotification.setContent(rootView);
     }
 
-    public void notifyWithText(String text) {
+    /*
+     * notifyWithText triggers a notification with or without autohide.
+     * 
+     * @param String text is the notification text, boolean isAutohide is the
+     * switch for autohiding notification after fixed delay.
+     */
+    public void notifyWithText(String text, boolean isAutohide) {
 
+        // Trigger and display notification
         rootWithNotification.setText(text);
         rootWithNotification.show();
+        logger.logAction(Component.UI, ACTION_NOTIFICATION_TRIGGERED + " = " + text);
 
+        // Play notification sound(s) accordingly
         if (!isFirstNotif) {
             AudioClip notificationSound = new AudioClip(
                     this.getClass().getResource(DIRECTORY_NOTIFICATION_SOUND).toExternalForm());
@@ -435,61 +545,120 @@ public class MainApp extends Application {
             isFirstNotif = !isFirstNotif;
         }
 
-        // Delay factor
-        delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
-        delay.setOnFinished(e -> rootWithNotification.hide());
-        delay.play();
+        // Set autohide with delay factor
+        if (isAutohide) {
+            delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
+            delay.setOnFinished(e -> rootWithNotification.hide());
+            delay.play();
+        }
     }
 
     /*** ACCESS FUNCTIONS FOR MODELS ***/
 
+    /*
+     * setDisplayTasks replaces and overwrites the current list of tasks to
+     * display
+     * 
+     * @param ArrayList<Task> listOfTasks is the candidate list of tasks
+     */
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
-        if (mainController != null) {
-            mainController.setTasks(listOfTasks);
+        switch (getPage()) {
+        case 1:
+            if (mainController != null) {
+                mainController.setTasks(listOfTasks);
+            }
+            break;
+        case 2:
+            if (overdueController != null) {
+                overdueController.setTasks(listOfTasks);
+            }
+            break;
+        case 3:
+            if (todayController != null) {
+                todayController.setTasks(listOfTasks);
+            }
+            break;
+        case 4:
+            if (weekController != null) {
+                weekController.setTasks(listOfTasks);
+            }
+            break;
+        case 5:
+            if (archiveController != null) {
+                archiveController.setTasks(listOfTasks);
+            }
+            break;
+        default:
+            if (mainController != null) {
+                mainController.setTasks(listOfTasks);
+            }
         }
 
-        if (overdueController != null) {
-            overdueController.setTasks(listOfTasks);
-        }
-
-        if (todayController != null) {
-            todayController.setTasks(listOfTasks);
-        }
-
-        if (weekController != null) {
-            weekController.setTasks(listOfTasks);
-        }
-
-        if (archiveController != null) {
-            archiveController.setTasks(listOfTasks);
-        }
     }
 
+    /*
+     * getDisplayTask returns the current displayed list of wrapped task
+     * 
+     * @return ObservableList<TaskWrapper> listOfDisplayedTasks
+     */
     public ObservableList<TaskWrapper> getDisplayTasks() {
-        return mainController.getTasks();
+        switch (getPage()) {
+        case 1:
+            return mainController.getTasks();
+        case 2:
+            return overdueController.getTasks();
+        case 3:
+            return todayController.getTasks();
+        case 4:
+            return weekController.getTasks();
+        case 5:
+            return archiveController.getTasks();
+        default:
+            return mainController.getTasks();
+        }
     }
 
     /*** HIGHLIGHTER ***/
 
-    public void highLight(Task task) {
-        if (mainController != null) {
-            mainController.highLight(task);
+    /*
+     * highlightItem sets the corresponding task item on focus.
+     * 
+     * @param Task task is the task to be highlighted
+     * 
+     */
+    public void highlightItem(Task task) {
+        switch (getPage()) {
+        case 1:
+            if (mainController != null) {
+                mainController.highlight(task);
+            }
+            break;
+        case 2:
+            if (overdueController != null) {
+                overdueController.highlight(task);
+            }
+            break;
+        case 3:
+            if (todayController != null) {
+                todayController.highlight(task);
+            }
+            break;
+        case 4:
+            if (weekController != null) {
+                weekController.highlight(task);
+            }
+            break;
+        case 5:
+            if (archiveController != null) {
+                archiveController.highlight(task);
+            }
+            break;
+        default:
+            if (mainController != null) {
+                mainController.highlight(task);
+            }
+            break;
         }
 
-        if (overdueController != null) {
-            overdueController.highLight(task);
-        }
-
-        if (todayController != null) {
-            todayController.highLight(task);
-        }
-
-        if (weekController != null) {
-            weekController.highLight(task);
-        }
-
-        if (archiveController != null) {
-            archiveController.highLight(task);
-        }
     }
 }

@@ -44,7 +44,7 @@ public class UtilityLogger {
     private static FileHandler fileHandler = null;
 
     // Component types
-    private static enum Component {
+    public static enum Component {
         UI, Logic, Parser, Storage
     };
 
