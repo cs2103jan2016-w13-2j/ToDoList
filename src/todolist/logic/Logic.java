@@ -828,6 +828,10 @@ public class Logic {
 		uiHandler.refresh();
 		return redoResponse;
 	}
+	
+	public boolean setNewFile(String path) {
+		return dataBase.setNewFile(path);
+	}
 
 	private TemporalUnit generateTimeUnit(String unit) {
 		switch (unit) {

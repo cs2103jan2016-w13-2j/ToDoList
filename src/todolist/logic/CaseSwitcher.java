@@ -277,6 +277,9 @@ public class CaseSwitcher {
         case "reset":
             logic.reset();
             break;
+        case "save":
+        	logic.setNewFile(arg[0]);
+        	break;
         case "tab":
             if (arg.length != 1) {
                 logic.getUIHandler().sendMessage(
