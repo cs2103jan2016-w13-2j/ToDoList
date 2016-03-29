@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import todolist.MainApp;
 
-//@@author Huang Lie Jun
+//@@author huangliejun
 
 public class SideBarController {
 

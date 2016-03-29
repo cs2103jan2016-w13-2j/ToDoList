@@ -26,7 +26,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-//@@author Huang Lie Jun
+//@@author huangliejun
 
 /* 
  * MainViewController controls and manipulates data for display on the main display area, for the main tab.
@@ -61,7 +61,7 @@ public class MainViewController {
     public String path = "demo.txt";
     public int demoCounter = 0;
 
-    // @@author Huang Lie Jun
+    // @@author huangliejun
     /*** Controller Functions ***/
 
     /*
@@ -209,7 +209,7 @@ public class MainViewController {
         commandField.setOnAction(commandHandler);
     }
 
-    // @@author Huang Lie Jun
+    // @@author huangliejun
     /*** View Access Functions ***/
 
     /*

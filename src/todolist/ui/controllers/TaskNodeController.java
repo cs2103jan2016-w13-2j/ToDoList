@@ -23,7 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-//@@author Huang Lie Jun
+//@@author huangliejun
 
 public class TaskNodeController {
 
