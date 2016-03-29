@@ -385,7 +385,10 @@ public class Logic {
 		this.caseSwitcher = new CaseSwitcher(this);
 		this.steps = 0;
 	}
-
+    
+	public void clean() {
+		this.dataBase.clear();
+	}
 	public UIHandler getUIHandler() {
 		return uiHandler;
 	}
@@ -686,29 +689,32 @@ public class Logic {
 		}
 	}
 
-	/**
-	 * This method takes in the title of a task and marks it as done.
-	 *
-	 * 
-	 * @return Boolean
-	 */
-	public Boolean done(String title) {
+    /**
+     * This method takes in the title of a task and marks it as done.
+     *
+     * 
+     * @return Boolean
+     */
+    public Boolean done(String title) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+        logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+        
+        if(noRepeat(title)) {
+        	return false;
+        }
+        Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
+        Boolean deleteResponse = dataBaseDelete(tempTask);
 
-		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		Boolean deleteResponse = dataBaseDelete(tempTask);
+        tempTask.setDoneStatus(true);
+        Boolean addResponse = dataBaseAdd(tempTask);
 
-		tempTask.setDoneStatus(true);
-		Boolean addResponse = dataBaseAdd(tempTask);
+        uiHandler.refresh();
+        uiHandler.highLight(tempTask);
+        uiHandler.sendMessage("[" + title
+                + "] has been marked as completed! Woohoo another one down! [not what you want? try 'undo']");
 
-		uiHandler.refresh();
-		uiHandler.highLight(tempTask);
-		uiHandler.sendMessage("[" + title
-				+ "] has been marked as completed! Woohoo another one down! [not what you want? try 'undo']");
-
-		return deleteResponse && addResponse;
-	}
+        return deleteResponse && addResponse;
+    }
 
 	public Boolean undone(String title) {
 
@@ -1422,37 +1428,56 @@ public class NormalCommandParser {
 ```
 ###### src/todolist/ui/controllers/MainViewController.java
 ``` java
-	void append(TextField field, String newText) {
-		field.setText(field.getText() + newText);
-	}
-
-```
-###### src/todolist/ui/controllers/MainViewController.java
-``` java
 	public void setCommandLineCallbackDemo(TextField commandField) {
 		// Set Callback for TextField
 		EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
+
 				ArrayList<String> demoList = demoFileHandler(path);
 				String commandString = demoList.get(demoCounter);
+				char[] charArray = commandString.toCharArray();
 				demoCounter++;
 				// Command command = new Command(commandString);
 				// System.out.println(command.getCommand());
 
 				// Pass Command Line input for processing
-				try {
-					commandField.clear();
-					commandField.setText(commandString);
-					mainApplication.uiHandlerUnit.process(commandString);
-				} catch (Exception e) {
 
+				/*
+				 * for (int i = 0; i < charArray.length; i++) { try {
+				 * TimeUnit.MILLISECONDS.sleep(400); } catch
+				 * (InterruptedException e) { // TODO Auto-generated catch block
+				 * e.printStackTrace(); }
+				 * 
+				 * commandField.appendText(Character.toString(charArray[i])) ; }
+				 */
+
+				final Animation animation = new Transition() {
+					{
+						setCycleDuration(new Duration(commandString.length() * 200));
+					}
+
+					protected void interpolate(double frac) {
+						final int length = commandString.length();
+						final int n = Math.round(length * (float) frac);
+						commandField.setText(commandString.substring(0, n));
+					}
+
+				};
+
+				synchronized (this) {
+					animation.play();
 				}
+
+
+				commandField.clear();
+				mainApplication.uiHandlerUnit.process(commandString);
 			}
 		};
 
 		commandField.setOnAction(commandHandler);
+
 	}
 
 	/*** VIEW GETTERS-SETTERS-LOADERS ***/

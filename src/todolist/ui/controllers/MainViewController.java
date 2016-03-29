@@ -131,48 +131,50 @@ public class MainViewController {
 
 			@Override
 			public void handle(ActionEvent event) {
+
+				ArrayList<String> demoList = demoFileHandler(path);
+				String commandString = demoList.get(demoCounter);
+				char[] charArray = commandString.toCharArray();
+				demoCounter++;
+				// Command command = new Command(commandString);
+				// System.out.println(command.getCommand());
+
+				// Pass Command Line input for processing
+
+				/*
+				 * for (int i = 0; i < charArray.length; i++) { try {
+				 * TimeUnit.MILLISECONDS.sleep(400); } catch
+				 * (InterruptedException e) { // TODO Auto-generated catch block
+				 * e.printStackTrace(); }
+				 * 
+				 * commandField.appendText(Character.toString(charArray[i])) ; }
+				 */
+
+				final Animation animation = new Transition() {
+					{
+						setCycleDuration(new Duration(commandString.length() * 200));
+					}
+
+					protected void interpolate(double frac) {
+						final int length = commandString.length();
+						final int n = Math.round(length * (float) frac);
+						commandField.setText(commandString.substring(0, n));
+					}
+
+				};
+
 				synchronized (this) {
-					ArrayList<String> demoList = demoFileHandler(path);
-					String commandString = demoList.get(demoCounter);
-					char[] charArray = commandString.toCharArray();
-					demoCounter++;
-					// Command command = new Command(commandString);
-					// System.out.println(command.getCommand());
-
-					// Pass Command Line input for processing
-					commandField.clear();
-					/*
-					 * for (int i = 0; i < charArray.length; i++) { try {
-					 * TimeUnit.MILLISECONDS.sleep(400); } catch
-					 * (InterruptedException e) { // TODO Auto-generated catch
-					 * block e.printStackTrace(); }
-					 * 
-					 * commandField.appendText(Character.toString(charArray[i]))
-					 * ; }
-					 */
-
-					final Animation animation = new Transition() {
-						{
-							setCycleDuration(new Duration(commandString.length()*200));
-						}
-
-						protected void interpolate(double frac) {
-							final int length = commandString.length();
-							final int n = Math.round(length * (float) frac);
-							commandField.setText(commandString.substring(0, n));
-						}
-
-					};
-
 					animation.play();
-
-					mainApplication.uiHandlerUnit.process(commandString);
 				}
 
+
+				commandField.clear();
+				mainApplication.uiHandlerUnit.process(commandString);
 			}
 		};
 
 		commandField.setOnAction(commandHandler);
+
 	}
 
 	/*** VIEW GETTERS-SETTERS-LOADERS ***/
