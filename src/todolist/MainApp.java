@@ -31,12 +31,16 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import org.controlsfx.control.NotificationPane;
-
 import com.sun.media.jfxmedia.logging.Logger;
 
+// @@author Huang Lie Jun
+
 /*
- * MainApp is the GUI class for the application.
+ * MainApp is the main running class for the application.
+ * It provides the user with the graphical user interface to control the application.
+ * 
  * @author Huang Lie Jun (A0123994W)
+ * 
  */
 public class MainApp extends Application {
 
@@ -47,28 +51,28 @@ public class MainApp extends Application {
     private static final double DEFAULT_WIDTH = 800;
     private static final String WINDOW_TITLE = "ToDoList by [w13-2j]";
 
-    // Error messages
+    // Error messages for loading views
     private static final String MESSAGE_ERROR_LOAD_ROOT = "Error loading root view. Exiting now ...";
     private static final String MESSAGE_ERROR_LOAD_MAIN = "Error loading main view. Exiting now ...";
     private static final String MESSAGE_ERROR_LOAD_TITLEBAR = "Error loading title bar view. Exiting now ...";
     private static final String MESSAGE_ERROR_LOAD_SIDEBAR = "Error loading side bar view. Exiting now ...";
-//    private static final String MESSAGE_ERROR_LOAD_EMPTY = "Error loading empty view. Exiting now ...";
 
-    // Notification messages and delay
+    // Notification messages and delay constant
     private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
     private static final int DELAY_PERIOD = 5;
 
-    // Directories and labels
+    // Root view directories
     private static final String DIRECTORY_ROOT = "ui/views/RootLayout.fxml";
     private static final String DIRECTORY_TITLEBAR = "ui/views/TitleBarView.fxml";
     private static final String DIRECTORY_SIDEBAR = "ui/views/SideBarView.fxml";
     public static final String DIRECTORY_TASKITEM = "ui/views/TaskNode.fxml";
 
+    // Class styles
     private static final String STYLE_CLASS_ROOT = "root-layout";
-//    private static final String STYLE_CLASS_MAIN = "main-view";
     private static final String STYLE_CLASS_TITLEBAR = "title-bar";
     private static final String STYLE_CLASS_SIDEBAR = "side-bar";
 
+    // Tab view directories
     private static final String DIRECTORY_MAIN = "ui/views/MainView.fxml";
     private static final String DIRECTORY_OVERDUE = "ui/views/OverdueView.fxml";
     private static final String DIRECTORY_TODAY = "ui/views/TodayView.fxml";
@@ -76,8 +80,8 @@ public class MainApp extends Application {
     private static final String DIRECTORY_ARCHIVE = "ui/views/ArchiveView.fxml";
     private static final String DIRECTORY_SETTINGS = "ui/views/SettingsView.fxml";
     private static final String DIRECTORY_HELP = "ui/views/HelpView.fxml";
-//    private static final String DIRECTORY_EMPTY = "ui/views/EmptyView.fxml";
 
+    // Sound file directories
     private static final String DIRECTORY_NOTIFICATION_SOUND = "ui/views/assets/notification-sound-flyff.wav";
     private static final String DIRECTORY_WELCOME_SOUND = "ui/views/assets/notification-sound-twitch.mp3";
 
@@ -87,7 +91,6 @@ public class MainApp extends Application {
     private TextField commandField;
     private HBox titleBarView;
     private VBox sideBarView;
-//    private BorderPane emptyView;
     private BorderPane overdueView;
     private BorderPane todayView;
     private BorderPane weekView;
@@ -112,21 +115,22 @@ public class MainApp extends Application {
     private WeekController weekController;
     private ArchiveController archiveController;
 
-    // Other Components
+    // Other components
     public Logic logicUnit = null;
     public UIHandler uiHandlerUnit = null;
 
-    // Notification System
+    // Notification system
     public NotificationPane rootWithNotification = null;
     public PauseTransition delay = null;
     private boolean isFirstNotif = true;
 
+    
     /*** CORE FUNCTIONS ***/
 
     public MainApp() {
-
+        
     }
-
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -146,6 +150,12 @@ public class MainApp extends Application {
 
     }
 
+    /*
+     * setWindowDimensions initializes the window properties for application display.
+     * 
+     * @param Stage primaryStage
+     *  
+     */
     private void setWindowDimensions(Stage primaryStage) {
         primaryStage.setTitle(WINDOW_TITLE);
         primaryStage.setMinHeight(MIN_HEIGHT);
@@ -161,13 +171,16 @@ public class MainApp extends Application {
             rootView = (BorderPane) FXMLLoader.load(MainApp.class.getResource(DIRECTORY_ROOT));
             rootView.getStyleClass().add(STYLE_CLASS_ROOT);
 
+            // Setup notification system
             setupNotificationPane();
             setWindowDimensions(primaryStage);
 
+            // Display wrapper notification scene
             Scene scene = new Scene(rootWithNotification, DEFAULT_WIDTH, DEFAULT_HEIGHT);
             primaryStage.setScene(scene);
             primaryStage.show();
 
+            // Show Welcome Text
             notifyWithText(NOTIFICATION_WELCOME);
 
         } catch (IOException ioException) {
