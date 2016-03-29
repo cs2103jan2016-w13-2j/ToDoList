@@ -21,7 +21,7 @@ public class CaseSwitcher {
             String type = "null";
             if (arg.length == 0) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To create a task, you will first need to specify the type of task that you wish to create.");
+                        "Your command was incomplete! To create a task, you will first need to specify the type of task that you wish to create.", true);
             } else {
                 type = arg[0];
             }
@@ -30,7 +30,7 @@ public class CaseSwitcher {
             case "event":
                 if (arg.length != 6 && arg.length != 5) {
                     logic.getUIHandler().sendMessage(
-                            "Your command was incomplete! To add an event, try: add event [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day].");
+                            "Your command was incomplete! To add an event, try: add event [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day].", true);
                 } else {
                 	if(arg.length == 6) {
                 		logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
@@ -44,7 +44,7 @@ public class CaseSwitcher {
             case "deadline":
                 if (arg.length != 4 && arg.length != 3) {
                     logic.getUIHandler().sendMessage(
-                            "Your command was incomplete! To add a deadline, try: add deadline [title] [YYYY-MM-DD] [HH:MM]");
+                            "Your command was incomplete! To add a deadline, try: add deadline [title] [YYYY-MM-DD] [HH:MM]", true);
                 } else {
                 	if(arg.length == 4) {
                         logic.addDeadline(arg[1], arg[2], arg[3]);
@@ -58,7 +58,7 @@ public class CaseSwitcher {
             case "task":
                 if (arg.length != 2) {
                     logic.getUIHandler()
-                            .sendMessage("Your command was incomplete! To add an un-dated task: add task [title]");
+                            .sendMessage("Your command was incomplete! To add an un-dated task: add task [title]", true);
                 } else {
                     logic.addTask(arg[1]);
                     logic.stepForward(1);
@@ -69,7 +69,7 @@ public class CaseSwitcher {
                 case "event":
                     if (arg.length != 8 && arg.length != 7 ) {
                         logic.getUIHandler().sendMessage(
-                                "Your command was incomplete! To add a recurring event, try: add recurring event [7-day] [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day]");
+                                "Your command was incomplete! To add a recurring event, try: add recurring event [7-day] [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day]", true);
                     } else {
                     	if(arg.length == 8) {
                     		logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
@@ -83,7 +83,7 @@ public class CaseSwitcher {
                 case "deadline":
                     if (arg.length != 6 && arg.length != 5) {
                         logic.getUIHandler().sendMessage(
-                                "Your command was incomplete! To add a recurring deadline, try: add recurring deadline [7-day] [title] [YYYY-MM-DD] [HH:MM]");
+                                "Your command was incomplete! To add a recurring deadline, try: add recurring deadline [7-day] [title] [YYYY-MM-DD] [HH:MM]", true);
                     } else {
                     	if(arg.length == 6) {
                             logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
@@ -95,18 +95,18 @@ public class CaseSwitcher {
                     }
                     break;
                 default:
-                    logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
+                    logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
 
                 }
                 break;
             default:
-                logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
+                logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
             }
             break;
         case "edit":
             if (arg.length != 3) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]");
+                        "Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]", true);
             } else {
                 logic.edit(arg[0], arg[1], arg[2]);
                 logic.stepForward(2);
@@ -114,7 +114,7 @@ public class CaseSwitcher {
             break;
         case "delete":
             if (arg.length != 1) {
-                logic.getUIHandler().sendMessage("Your command was incomplete! To delete a task, try: delete [title]");
+                logic.getUIHandler().sendMessage("Your command was incomplete! To delete a task, try: delete [title]", true);
             } else {
                 logic.delete(arg[0]);
                 logic.stepForward(1);
@@ -123,7 +123,7 @@ public class CaseSwitcher {
         case "search":
             if (arg.length != 1) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To search for something, try: search [search-term] (You are searching task names!)");
+                        "Your command was incomplete! To search for something, try: search [search-term] (You are searching task names!)", true);
             } else {
                 logic.search(arg[0]);
             }
@@ -131,7 +131,7 @@ public class CaseSwitcher {
         case "filter":
             if (arg.length != 1) {
                 logic.getUIHandler()
-                        .sendMessage("Your command was incomplete! To apply a filter, try: filter [category-name]");
+                        .sendMessage("Your command was incomplete! To apply a filter, try: filter [category-name]", true);
             } else {
                 logic.filter(arg[0]);
             }
@@ -139,7 +139,7 @@ public class CaseSwitcher {
         case "sort":
             if (arg.length != 2) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To sort, try: sort ['start' | 'end' | 'category' | 'name'] [ascending | descending]");
+                        "Your command was incomplete! To sort, try: sort ['start' | 'end' | 'category' | 'name'] [ascending | descending]", true);
             } else {
                 logic.sort(arg[0], arg[1]);
                 logic.stepForward(1);
@@ -154,7 +154,7 @@ public class CaseSwitcher {
         case "label":
             if (arg.length != 2) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To categorise or label a task, try: label [title] [category-name]");
+                        "Your command was incomplete! To categorise or label a task, try: label [title] [category-name]", true);
             } else {
                 logic.label(arg[0], arg[1]);
                 logic.stepForward(2);
@@ -163,7 +163,7 @@ public class CaseSwitcher {
         case "set-recurring":
             if (arg.length != 2) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]");
+                        "Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]", true);
             } else {
                 logic.setRecurring(arg[0], true, arg[1]);
                 logic.stepForward(2);
@@ -172,7 +172,7 @@ public class CaseSwitcher {
         case "remove-recurring":
             if (arg.length != 1) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]");
+                        "Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]", true);
             } else {
                 logic.setRecurring(arg[0], false, null);
                 logic.stepForward(2);
@@ -181,7 +181,7 @@ public class CaseSwitcher {
         case "postpone":
             if (arg.length != 3) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]");
+                        "Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]", true);
             } else {
                 logic.postpone(arg[0], arg[1], arg[2]);
                 logic.stepForward(2);
@@ -190,7 +190,7 @@ public class CaseSwitcher {
         case "forward":
             if (arg.length != 3) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]");
+                        "Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]", true);
             } else {
                 logic.forward(arg[0], arg[1], arg[2]);
                 logic.stepForward(2);
@@ -209,7 +209,7 @@ public class CaseSwitcher {
         case "remind":
             if (arg.length != 1) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]");
+                        "Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]", true);
             } else {
                 logic.remind(arg[0]);
                 logic.stepForward(2);
@@ -232,7 +232,7 @@ public class CaseSwitcher {
         case "remind-bef":
             if (arg.length != 3) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]");
+                        "Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]", true);
             } else {
                 logic.remindBef(arg[0], arg[1], arg[2]);
                 logic.stepForward(2);
@@ -241,7 +241,7 @@ public class CaseSwitcher {
         case "done":
             if (arg.length != 1) {
                 logic.getUIHandler()
-                        .sendMessage("Your command was incomplete! To archive a completed task, try: done [title]");
+                        .sendMessage("Your command was incomplete! To archive a completed task, try: done [title]", true);
             } else {
                 logic.done(arg[0]);
                 logic.stepForward(2);
@@ -250,7 +250,7 @@ public class CaseSwitcher {
         case "undone":
             if (arg.length != 1) {
                 logic.getUIHandler()
-                        .sendMessage("Your command was incomplete! To un-archive an ongoing task, try: undone [title]");
+                        .sendMessage("Your command was incomplete! To un-archive an ongoing task, try: undone [title]", true);
             } else {
                 logic.undone(arg[0]);
                 logic.stepForward(2);
@@ -262,7 +262,7 @@ public class CaseSwitcher {
         case "undo":
             if (arg.length != 1) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To undo a few action(s), try: undo [number-of-actions]");
+                        "Your command was incomplete! To undo a few action(s), try: undo [number-of-actions]", true);
             } else {
                 logic.undo(Integer.parseInt(arg[0]));
             }
@@ -270,7 +270,7 @@ public class CaseSwitcher {
         case "redo":
             if (arg.length != 1) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]");
+                        "Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]", true);
             } else {
                 logic.redo(Integer.parseInt(arg[0]));
             }
@@ -284,13 +284,13 @@ public class CaseSwitcher {
         case "tab":
             if (arg.length != 1) {
                 logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To navigate to a certain page, try: tab [page-name] (as reflected on the tab bar)");
+                        "Your command was incomplete! To navigate to a certain page, try: tab [page-name] (as reflected on the tab bar)", true);
             } else {
                 logic.tab(arg[0]);
             }
             break;
         default:
-            logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
+            logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
         }
     }
 }

@@ -27,12 +27,12 @@ public class UIHandler {
         mainApp.setDisplayTasks(dataBase.retrieveAll());
     }
 
-    public void sendMessage(String message) {
-        mainApp.notifyWithText(message);
+    public void sendMessage(String message, boolean autohide) {
+        mainApp.notifyWithText(message, autohide);
     }
 
     public void highLight(Task task) {
-        mainApp.highLight(task);
+        mainApp.highlightItem(task);
     }
 
     public void display(ArrayList<Task> taskList) {
