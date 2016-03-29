@@ -198,7 +198,7 @@ public class TaskNodeController {
         }
 
         // Archive Status
-        if (task.isCompleted()) {
+        if (task.getIsCompleted()) {
             statusBacking.setFill(Color.web(COLOR_COMPLETE));
             status.setText(DISPLAY_ITEM_ARCHIVED);
         } else {
@@ -207,7 +207,7 @@ public class TaskNodeController {
         }
 
         // Recurring Status
-        recurringIndicator.setVisible(task.isRecurring());
+        recurringIndicator.setVisible(task.getIsRecurring());
 
         // Reminder Status
         if (reminder == null) {
