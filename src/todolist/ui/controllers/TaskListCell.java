@@ -3,6 +3,8 @@ package todolist.ui.controllers;
 import javafx.scene.control.ListCell;
 import todolist.ui.TaskWrapper;
 
+//@@author Huang Lie Jun
+
 public class TaskListCell extends ListCell<TaskWrapper> {
 
     @Override

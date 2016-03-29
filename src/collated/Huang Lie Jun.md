@@ -5,19 +5,22 @@
 /*
  * UtilityLogger is a common logger to log all ToDoList activities at runtime.
  * 
- * @author Huang Lie Jun
+ * @author Huang Lie Jun (A0123994W)
  */
 public class UtilityLogger {
 
+    // Logger constants
     private static final int MAX_LOG_SIZE = 1048576;
     private static final int NUMBER_OF_LOGS = 1;
     private static final boolean IS_APPEND = false;
 
+    // Log variants
     private static final String ACTION = "ACTION >> ";
     private static final String ERROR = "ERROR >> ";
     private static final String EXCEPTION = "EXCEPTION >> ";
     private static final String COMPONENTCALL = "COMPONENT CALL >> ";
 
+    // Log components
     private static final String UI = "UI";
     private static final String LOGIC = "LOGIC";
     private static final String PARSER = "PARSER";
@@ -27,10 +30,12 @@ public class UtilityLogger {
     private static final String ERROR_CREATE_LOG = "Error accessing log file.";
     private static final String ERROR_GET_DEFAULT_PATH = "Error obtaining default application directory for file path.";
 
+    // Log file handler
     private static File logDirectory = null;
     private Logger logger = null;
     private static FileHandler fileHandler = null;
 
+    // Component types
     private static enum Component {
         UI, Logic, Parser, Storage
     };
@@ -779,6 +784,44 @@ public class MainApp extends Application {
     }
 }
 ```
+###### src/todolist/ui/controllers/ArchiveController.java
+``` java
+
+public class ArchiveController extends MainViewController {
+
+    public ArchiveController() {
+        // Initialise models
+        tasksToDisplay = FXCollections.observableArrayList();
+        listView = new ListView<TaskWrapper>();
+    }
+
+    @FXML
+    public void initialize() {
+        initTaskListView();
+    }
+
+    @Override
+    public void setTasks(ArrayList<Task> tasks) {
+
+        // List provided by logic must be valid
+        assert (tasks != null);
+
+        ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
+        listView.getItems().clear();
+
+        // Convert Task to TaskWrapper for display handling
+        for (int i = 0; i < tasks.size(); ++i) {
+            Task task = tasks.get(i);
+            if (task.getDoneStatus()) {
+                TaskWrapper wrappedTask = new TaskWrapper(task);
+                arrayOfWrappers.add(wrappedTask);
+            }
+        }
+
+        listView.getItems().addAll(arrayOfWrappers);
+    }
+}
+```
 ###### src/todolist/ui/controllers/MainViewController.java
 ``` java
 
@@ -906,6 +949,716 @@ public class MainViewController {
         return -1;
     }
 
+}
+```
+###### src/todolist/ui/controllers/OverdueController.java
+``` java
+
+public class OverdueController extends MainViewController {
+
+    public OverdueController() {
+        // Initialise models
+        tasksToDisplay = FXCollections.observableArrayList();
+        listView = new ListView<TaskWrapper>();
+    }
+    
+    @FXML
+    public void initialize() {
+        initTaskListView();
+    }
+    
+    @Override
+    public void setTasks(ArrayList<Task> tasks) {
+
+        // List provided by logic must be valid
+        assert (tasks != null);
+
+        ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
+        listView.getItems().clear();
+
+        // Convert Task to TaskWrapper for display handling
+        for (int i = 0; i < tasks.size(); ++i) {
+            Task task = tasks.get(i);
+            if (task.getEndTime() != null && task.getEndTime().isBefore(LocalDateTime.now())
+                    && !task.getDoneStatus()) {
+                TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
+                arrayOfWrappers.add(wrappedTask);
+            }
+        }
+
+        listView.getItems().addAll(arrayOfWrappers);
+    }
+}
+```
+###### src/todolist/ui/controllers/SideBarController.java
+``` java
+
+public class SideBarController {
+
+    /*** TAB STYLES ***/
+    private static final String STYLE_TAB_NORMAL = "-fx-background-color: transparent;";
+    private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #95E1D3;";
+//    private static final String STYLE_TAB_FOCUSED_DARK = "-fx-background-color: #EB586F;";
+    
+    
+    /*** VIEWS ***/
+    
+    // HOME TAB
+    @FXML
+    private Button home = null;
+    @FXML
+    private ImageView homeIcon = null;
+
+    // EXPIRED TAB
+    @FXML
+    private Button expired = null;
+    @FXML
+    private ImageView expiredIcon = null;
+    
+    // TODAY TAB
+    @FXML
+    private StackPane todayStack = null;
+    @FXML
+    private Label todayLabel = null;
+    @FXML
+    private Button today = null;
+    @FXML
+    private ImageView todayIcon = null;
+    private int todayDate = 0;
+    
+    // WEEK TAB
+    @FXML
+    private Button week = null;
+    @FXML
+    private ImageView weekIcon = null;
+
+    // DONE TAB
+    @FXML
+    private Button done = null;
+    @FXML
+    private ImageView doneIcon = null;
+
+    // OPTIONS TAB
+    @FXML
+    private Button options = null;
+    @FXML
+    private ImageView optionsIcon = null;
+
+    // HELP TAB
+    @FXML
+    private Button help = null;
+    @FXML
+    private ImageView helpIcon = null;
+
+    
+    /*** SIDEBAR AND PAGE PROPERTIES ***/
+    
+    private int index = 1;
+    private static int NUMBER_BUTTONS = 7;
+    private Button[] buttonArray;
+    
+    // Main Application reference
+    private MainApp mainApplication = null;
+
+    
+    /*** CORE FUNCTIONS ***/
+
+    public void setMainApp(MainApp mainApp) {
+        mainApplication = mainApp;
+    }
+
+    @FXML
+    public void initialize() {
+        setButtonArray();
+        setTodayDate();
+        colourTab();
+    }
+
+    private void setButtonArray() {
+        buttonArray = new Button[NUMBER_BUTTONS];
+        buttonArray[0] = home;
+        buttonArray[1] = expired;
+        buttonArray[2] = today;
+        buttonArray[3] = week;
+        buttonArray[4] = done;
+        buttonArray[5] = options;
+        buttonArray[6] = help;
+    }
+    
+    private void setTodayDate() {
+        todayDate = LocalDateTime.now().getDayOfMonth();
+        todayLabel.setText(Integer.toString(todayDate));
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+        colourTab();
+        mainApplication.setPageView(index);
+    }
+
+    private void colourTab() {
+        for (int i = 0; i < NUMBER_BUTTONS; ++i) {
+            Button currentButton = buttonArray[i];
+            currentButton.setStyle(STYLE_TAB_NORMAL);
+
+            // Highlight if focused
+            if (i == index - 1) {
+                currentButton.setStyle(STYLE_TAB_FOCUSED);
+//                currentButton.setStyle(STYLE_TAB_FOCUSED_DARK);
+
+            }
+            
+        }
+        
+    }
+
+    public MainApp getMainApplication() {
+        return mainApplication;
+    }
+
+}
+```
+###### src/todolist/ui/controllers/TaskListCell.java
+``` java
+
+public class TaskListCell extends ListCell<TaskWrapper> {
+
+    @Override
+    public void updateItem(TaskWrapper task, boolean empty) throws IllegalArgumentException {
+        if (task != null) {
+            super.updateItem(task, empty);
+            
+            try {
+            TaskNodeController taskNode = new TaskNodeController(task, this.getIndex());
+            setGraphic(taskNode.getNode());
+            } catch (IllegalArgumentException iae) {
+                iae.printStackTrace();
+                throw iae;
+            }
+        } else {
+            nullifyItem();
+        }
+    }
+
+    private void nullifyItem() {
+        setText(null);
+        setGraphic(null);
+    }
+}
+```
+###### src/todolist/ui/controllers/TaskNodeController.java
+``` java
+
+public class TaskNodeController {
+
+    /*** STATIC MESSAGES ***/
+
+    // ERRORS
+    private static final String ERROR_DISPLAY_ITEM_INDEX = "Task Display: Index number out of bounds.";
+    private static final String ERROR_DISPLAY_ITEM_TITLE = "Task Display: Task title invalid.";
+
+    // DEFAULTS
+    private static final String NULL_DISPLAY_ITEM_CATEGORY = "Category: Not Available";
+    private static final String DISPLAY_ITEM_UNARCHIVED = "ONGOING";
+    private static final String DISPLAY_ITEM_ARCHIVED = "DONE";
+
+    /*** STYLES ***/
+
+    // TASK TYPE STYLE
+    private static final String COLOR_FLOATING = "#3BB873";
+    private static final String COLOR_DEADLINE = "#FF6464";
+    private static final String COLOR_EVENT = "#F3825F";
+
+    // TASK OVERDUE STYLE
+    private static final String COLOR_OVERDUE = "#FF6464";
+    private static final String COLOR_TODAY = "#FAAC64";
+    private static final String COLOR_SPARE = "#5BAAEC";
+
+    // TASK COMPLETION STYLE
+    private static final String COLOR_COMPLETE = "#5BE7A9";
+    private static final String COLOR_INCOMPLETE = "#FAAC64";
+
+    // UNKNOWN STYLE
+    private static final String COLOR_UNKNOWN = "#748B9C";
+
+    /*** TASK ITEM COMPONENTS ***/
+
+    private TaskWrapper task = null;
+    private int index = -1;
+
+    private static enum TASK_TYPE {
+        FLOAT, DEADLINE, EVENT, OTHER
+    };
+
+    // Base
+    @FXML
+    private HBox root = null;
+
+    // Priority
+    @FXML
+    private Rectangle priorityLabel = null;
+
+    // Index
+    @FXML
+    private StackPane numberLabel = null;
+    @FXML
+    private Circle numLabelBase = null;
+    @FXML
+    private Label number = null;
+
+    // Content
+    @FXML
+    private VBox details = null;
+
+    // Content-TITLE+REMINDER
+    @FXML
+    private HBox titleBox = null;
+    @FXML
+    private Label title = null;
+    @FXML
+    private ImageView reminderIcon = null;
+
+    // Content-DATE(S)
+    @FXML
+    private HBox dateRangeBox = null;
+    @FXML
+    private Circle overdueFlag = null;
+    @FXML
+    private Label dateRange = null;
+
+    // Content-CATEGORY
+    @FXML
+    private HBox categoryBox = null;
+    @FXML
+    private Circle categorySprite = null;
+    @FXML
+    private Label category = null;
+
+    // Content-ARCHIVE
+    @FXML
+    private StackPane completeStatus = null;
+    @FXML
+    private Rectangle statusBacking = null;
+    @FXML
+    private Label status = null;
+
+    // Indicators
+    @FXML
+    private VBox indicatorsHolder = null;
+    @FXML
+    private ImageView recurringIndicator = null;
+    @FXML
+    private ImageView reminderIndicator = null;
+
+    public TaskNodeController(TaskWrapper task, int index) throws IllegalArgumentException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(MainApp.DIRECTORY_TASKITEM));
+        fxmlLoader.setController(this);
+
+        this.task = task;
+        this.index = index;
+
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Assignment TaskWrapper to HBox Layout
+        try {
+            validateAndFormatItem();
+        } catch (IllegalArgumentException iae) {
+            throw iae;
+        }
+
+    }
+
+    public void validateAndFormatItem() throws IllegalArgumentException {
+        int indexNumber = index + 1;
+
+        String taskTitle = task.getTaskTitle();
+        Category category = task.getCategory();
+        String categoryName = null;
+        Reminder reminder = task.getReminder();
+        LocalDateTime startDateTime = task.getStartTime();
+        LocalDateTime endDateTime = task.getEndTime();
+
+        /** Validation **/
+
+        // Ensure integrity of task object
+        assert (task != null);
+
+        // Index Number
+        if (indexNumber <= 0) {
+            Logger.logMsg(Logger.ERROR, ERROR_DISPLAY_ITEM_INDEX);
+            throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_INDEX);
+        } else {
+            number.setText(Integer.toString(indexNumber));
+        }
+
+        // Title
+        if (taskTitle == null) {
+            Logger.logMsg(Logger.ERROR, ERROR_DISPLAY_ITEM_TITLE);
+            throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_TITLE);
+        } else {
+            title.setText(taskTitle);
+        }
+
+        // Category
+        if (category == null) {
+            categoryName = new String(NULL_DISPLAY_ITEM_CATEGORY);
+        } else {
+            categoryName = category.getCategory();
+        }
+
+        this.category.setText(categoryName);
+        categorySprite.setFill(Color.web(COLOR_UNKNOWN));
+
+        // Dates
+        try {
+            String dateFieldOutput = formatDateField(task, startDateTime, endDateTime);
+            dateRange.setText(dateFieldOutput);
+        } catch (IllegalArgumentException iae) {
+            throw iae;
+        }
+
+        // Archive Status
+        if (task.isCompleted()) {
+            statusBacking.setFill(Color.web(COLOR_COMPLETE));
+            status.setText(DISPLAY_ITEM_ARCHIVED);
+        } else {
+            statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
+            status.setText(DISPLAY_ITEM_UNARCHIVED);
+        }
+
+        // Recurring Status
+        recurringIndicator.setVisible(task.isRecurring());
+
+        // Reminder Status
+        if (reminder == null) {
+            reminderIndicator.setVisible(false);
+        } else {
+            reminderIndicator.setVisible(reminder.getStatus());
+        }
+    }
+
+    public HBox getNode() {
+        return root;
+    }
+
+    public String formatDateField(TaskWrapper task, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        TASK_TYPE taskType = checkTaskType(startDateTime, endDateTime);
+
+        switch (taskType) {
+
+        case FLOAT:
+            styleFloatingTask();
+            return "Anytime";
+
+        case DEADLINE:
+            styleDeadline(endDateTime);
+            return formatDeadlineRange(endDateTime);
+
+        case EVENT:
+            styleEvent(startDateTime);
+
+            // Smart formatting of range
+            if (startDateTime.getDayOfYear() == endDateTime.getDayOfYear()
+                    && startDateTime.getYear() == endDateTime.getYear()) {
+                return formatEventRangeSameDay(startDateTime, endDateTime);
+            } else {
+                return formatEventRangeDiffDay(startDateTime, endDateTime);
+            }
+
+        default:
+            styleUnknown();
+            return "Not Available";
+        }
+    }
+
+    private TASK_TYPE checkTaskType(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        TASK_TYPE taskType;
+        if (startDateTime != null && endDateTime != null) {
+            taskType = TASK_TYPE.EVENT;
+        } else if (startDateTime == null && endDateTime != null) {
+            taskType = TASK_TYPE.DEADLINE;
+        } else if (startDateTime == null && endDateTime == null) {
+            taskType = TASK_TYPE.FLOAT;
+        } else {
+            taskType = TASK_TYPE.OTHER;
+        }
+
+        return taskType;
+    }
+
+    /** FORMATTING FUNCTIONS **/
+
+    private String formatEventRangeDiffDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return "From " + startDateTime.getDayOfWeek() + ", "
+                + startDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT))
+                + " to " + endDateTime.getDayOfWeek() + ", "
+                + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+    }
+
+    private String formatEventRangeSameDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) + ", from "
+                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
+                + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+    }
+
+    private String formatDeadlineRange(LocalDateTime endDateTime) {
+        return "Due: " + endDateTime.getDayOfWeek() + ", "
+                + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+    }
+
+    /** STYLING FUNCTIONS **/
+    private void styleUnknown() {
+        numLabelBase.setFill(Color.web(COLOR_UNKNOWN));
+        overdueFlag.setFill(Color.web(COLOR_UNKNOWN));
+    }
+
+    private void styleEvent(LocalDateTime startDateTime) {
+        numLabelBase.setFill(Color.web(COLOR_EVENT));
+
+        if (startDateTime.isBefore(LocalDateTime.now())) {
+            overdueFlag.setFill(Color.web(COLOR_OVERDUE));
+        } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), startDateTime) <= 24) {
+            overdueFlag.setFill(Color.web(COLOR_TODAY));
+        } else {
+            overdueFlag.setFill(Color.web(COLOR_SPARE));
+        }
+    }
+
+    private void styleDeadline(LocalDateTime endDateTime) {
+        numLabelBase.setFill(Color.web(COLOR_DEADLINE));
+
+        if (endDateTime.isBefore(LocalDateTime.now())) {
+            overdueFlag.setFill(Color.web(COLOR_OVERDUE));
+        } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24) {
+            overdueFlag.setFill(Color.web(COLOR_TODAY));
+        } else {
+            overdueFlag.setFill(Color.web(COLOR_SPARE));
+        }
+    }
+
+    private void styleFloatingTask() {
+        numLabelBase.setFill(Color.web(COLOR_FLOATING));
+        overdueFlag.setFill(Color.web(COLOR_SPARE));
+    }
+
+}
+```
+###### src/todolist/ui/controllers/TitleBarController.java
+``` java
+
+public class TitleBarController {
+    // Work In Progress ...
+}
+```
+###### src/todolist/ui/controllers/TodayController.java
+``` java
+
+public class TodayController extends MainViewController {
+
+    public TodayController() {
+        // Initialise models
+        tasksToDisplay = FXCollections.observableArrayList();
+        listView = new ListView<TaskWrapper>();
+    }
+
+    @FXML
+    public void initialize() {
+        initTaskListView();
+    }
+
+    @Override
+    public void setTasks(ArrayList<Task> tasks) {
+
+        // List provided by logic must be valid
+        assert (tasks != null);
+
+        ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
+        listView.getItems().clear();
+
+        // Convert Task to TaskWrapper for display handling
+        for (int i = 0; i < tasks.size(); ++i) {
+            Task task = tasks.get(i);
+            if (task.getEndTime() != null && task.getEndTime().getYear() == LocalDateTime.now().getYear()
+                    && task.getEndTime().getDayOfYear() == LocalDateTime.now().getDayOfYear()
+                    && !task.getDoneStatus()) {
+                TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
+                arrayOfWrappers.add(wrappedTask);
+            }
+        }
+
+        listView.getItems().addAll(arrayOfWrappers);
+    }
+}
+```
+###### src/todolist/ui/controllers/WeekController.java
+``` java
+
+public class WeekController extends MainViewController {
+
+    public WeekController() {
+        // Initialise models
+        tasksToDisplay = FXCollections.observableArrayList();
+        listView = new ListView<TaskWrapper>();
+    }
+
+    @FXML
+    public void initialize() {
+        initTaskListView();
+    }
+
+    @Override
+    public void setTasks(ArrayList<Task> tasks) {
+
+        // List provided by logic must be valid
+        assert (tasks != null);
+
+        ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
+        listView.getItems().clear();
+
+        // Convert Task to TaskWrapper for display handling
+        for (int i = 0; i < tasks.size(); ++i) {
+            Task task = tasks.get(i);
+            if (task.getEndTime() != null && LocalDateTime.now().until(task.getEndTime(), ChronoUnit.DAYS) <= 7
+                    && !task.getDoneStatus()) {
+                TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
+                arrayOfWrappers.add(wrappedTask);
+            }
+        }
+
+        listView.getItems().addAll(arrayOfWrappers);
+    }
+}
+```
+###### src/todolist/ui/TaskWrapper.java
+``` java
+
+public class TaskWrapper {
+
+    private Task task;
+    private StringProperty taskTitle;
+    private ObjectProperty<LocalDateTime> startTime;
+    private ObjectProperty<LocalDateTime> endTime;
+    private ObjectProperty<Category> category;
+    private ObjectProperty<Reminder> reminder;
+    private ObjectProperty<Boolean> isDone;
+    private ObjectProperty<Boolean> isRecurring;
+    private ObjectProperty<String> interval;
+
+    public TaskWrapper(Task task) {
+        this.taskTitle = new SimpleStringProperty(task.getName().getName());
+        this.startTime = new SimpleObjectProperty<LocalDateTime>(task.getStartTime());
+        this.endTime = new SimpleObjectProperty<LocalDateTime>(task.getEndTime());
+        this.category = new SimpleObjectProperty<Category>(task.getCategory());
+        this.reminder = new SimpleObjectProperty<Reminder>(task.getReminder());
+        this.isDone = new SimpleObjectProperty<Boolean>(task.getDoneStatus());
+        this.isRecurring = new SimpleObjectProperty<Boolean>(task.getRecurringStatus());
+        this.interval = new SimpleObjectProperty<String>(task.getInterval());
+        this.task = task;
+    }
+
+    public StringProperty taskTitleProperty() {
+        return taskTitle;
+    }
+
+    public void setTaskTitle(String taskTitle) {
+        this.taskTitle.set(taskTitle);
+    }
+
+    public String getTaskTitle() {
+        return taskTitle.get();
+    }
+
+    public ObjectProperty<LocalDateTime> startTimeProperty() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime.set(startTime);
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime.get();
+    }
+
+    public ObjectProperty<LocalDateTime> endTimeProperty() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime.set(endTime);
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime.get();
+    }
+
+    public ObjectProperty<Category> categoryProperty() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category.set(category);
+    }
+
+    public Category getCategory() {
+        return category.get();
+    }
+
+    public ObjectProperty<Reminder> reminderProperty() {
+        return reminder;
+    }
+
+    public void setReminder(Reminder reminder) {
+        this.reminder.set(reminder);
+    }
+
+    public Reminder getReminder() {
+        return reminder.get();
+    }
+
+    public ObjectProperty<Boolean> getIsDoneProperty() {
+        return isDone;
+    }
+
+    public void setIsDone(ObjectProperty<Boolean> isDone) {
+        this.isDone = isDone;
+    }
+
+    public Boolean isCompleted() {
+        return isDone.get();
+    }
+
+    public ObjectProperty<Boolean> getRecurringStatusProperty() {
+        return isRecurring;
+    }
+
+    public void setIsRecurring(ObjectProperty<Boolean> isRecurring) {
+        this.isRecurring = isRecurring;
+    }
+
+    public Boolean isRecurring() {
+        return isRecurring.get();
+    }
+
+    public ObjectProperty<String> getIntervalProperty() {
+        return interval;
+    }
+
+    public void setInterval(ObjectProperty<String> interval) {
+        this.interval = interval;
+    }
+
+    public String getInterval() {
+        return interval.get();
+    }
+    
+    public Task getTaskObject() {
+        return task;
+    }
 }
 ```
 ###### src/todolist/ui/views/ArchiveView.fxml
