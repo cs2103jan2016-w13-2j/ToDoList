@@ -119,7 +119,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]",
+                                true);
                     } else {
                         logic.edit(task.getName().getName(), arg[1], arg[2]);
                         logic.stepForward(2);
@@ -139,7 +141,8 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To delete a task, try: delete [title]", true);
                     } else {
                         logic.delete(task.getName().getName());
                         logic.stepForward(1);
@@ -195,7 +198,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To categorise or label a task, try: label [title] [category-name]",
+                                true);
                     } else {
                         logic.label(task.getName().getName(), arg[1]);
                         logic.stepForward(2);
@@ -217,7 +222,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]",
+                                true);
                     } else {
                         logic.setRecurring(task.getName().getName(), true, arg[1]);
                         logic.stepForward(2);
@@ -238,7 +245,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]",
+                                true);
                     } else {
                         logic.setRecurring(task.getName().getName(), false, null);
                         logic.stepForward(2);
@@ -259,7 +268,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]",
+                                true);
                     } else {
                         logic.postpone(task.getName().getName(), arg[1], arg[2]);
                         logic.stepForward(2);
@@ -281,7 +292,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]",
+                                true);
                     } else {
                         logic.forward(task.getName().getName(), arg[1], arg[2]);
                         logic.stepForward(2);
@@ -313,7 +326,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]",
+                                true);
                     } else {
                         logic.remind(task.getName().getName());
                         logic.stepForward(2);
@@ -348,7 +363,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]",
+                                true);
                     } else {
                         logic.remindBef(task.getName().getName(), arg[1], arg[2]);
                         logic.stepForward(2);
@@ -368,7 +385,8 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To archive a completed task, try: done [title]", true);
                     } else {
                         logic.done(task.getName().getName());
                         logic.stepForward(2);
@@ -389,7 +407,9 @@ public class CaseSwitcher {
                     int index = Integer.parseInt(arg[0]);
                     Task task = logic.getMainApp().getTaskAt(index);
                     if (task == null) {
-                        throw new NumberFormatException();
+                        logic.getUIHandler().sendMessage(
+                                "Your command was incomplete! To un-archive an ongoing task, try: undone [title]",
+                                true);
                     } else {
                         logic.undone(task.getName().getName());
                         logic.stepForward(2);
