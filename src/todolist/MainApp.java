@@ -27,6 +27,7 @@ import todolist.logic.UIHandler;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 import todolist.ui.controllers.ArchiveController;
+import todolist.ui.controllers.MainViewController;
 import todolist.ui.controllers.OverdueController;
 import todolist.ui.controllers.SideBarController;
 import todolist.ui.controllers.TodayController;
