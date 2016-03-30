@@ -3,18 +3,7 @@ package todolist;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import todolist.common.UtilityLogger;
-import todolist.common.UtilityLogger.Component;
-import todolist.logic.Logic;
-import todolist.logic.UIHandler;
-import todolist.model.Task;
-import todolist.ui.TaskWrapper;
-import todolist.ui.controllers.ArchiveController;
-import todolist.ui.controllers.MainViewController;
-import todolist.ui.controllers.OverdueController;
-import todolist.ui.controllers.SideBarController;
-import todolist.ui.controllers.TodayController;
-import todolist.ui.controllers.WeekController;
+import org.controlsfx.control.NotificationPane;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -31,8 +20,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import org.controlsfx.control.NotificationPane;
+import todolist.common.UtilityLogger;
+import todolist.common.UtilityLogger.Component;
+import todolist.logic.Logic;
+import todolist.logic.UIHandler;
+import todolist.model.Task;
+import todolist.ui.TaskWrapper;
+import todolist.ui.controllers.ArchiveController;
+import todolist.ui.controllers.OverdueController;
+import todolist.ui.controllers.SideBarController;
+import todolist.ui.controllers.TodayController;
+import todolist.ui.controllers.WeekController;
 
 //@@author huangliejun
 
