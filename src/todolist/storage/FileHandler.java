@@ -40,14 +40,15 @@ public class FileHandler {
 	public ArrayList<Task> read() {
 		ArrayList<Task> taskList = new ArrayList<Task>();
 		File filePath = new File(path + fileName);
+		
 		if(isFileReady(filePath) && !isFileEmpty(filePath)) {
 			try {
-				
+				System.out.println("kjkkkkkk" + filePath);
 				FileReader fr=new FileReader(path + fileName);
 				BufferedReader br=new BufferedReader(fr);
 				String input=null;
 				input=br.readLine();
-				System.out.println(input);
+				System.out.println("kjkkkkkk" + input);
 				
 				while(input != null && !input.equals("null")){
 					taskList.add(gson.fromJson(input, Task.class));
@@ -71,13 +72,15 @@ public class FileHandler {
 	 */
 	public boolean write(ArrayList<Task> taskList) {
 		    try{
+		    	
 				FileWriter fw=new FileWriter(path + fileName);
 				BufferedWriter bw=new BufferedWriter(fw);
 				for(Task eachTask: taskList) {	
-					System.out.println("writing into file: " +  gson.toJson(eachTask));
+					System.out.println("filehandler writing into file: " +  gson.toJson(eachTask));
 					bw.write(gson.toJson(eachTask) + "\n");
 				}
 				bw.close();
+				System.out.println("filehandler writing into file: successfully ");
 			}catch (Exception e) {
 				return false;
 			}			
@@ -108,18 +111,20 @@ public class FileHandler {
 	 */
 	public boolean setFile(String newFilePath) {
 		ArrayList<Task> existingTaskList = this.read();
+		
 		//set path 
 		String newPath = getPathOfNewFile(newFilePath.trim());
+		//System.out.println("in filehandler: -->newPath: "+newPath);
 		String newFileName = getNewFileName(newFilePath.trim());
 		
-		if(isPathCorrect(newFilePath)) {
+		if(isPathCorrect(newPath)) {
 			this.path = newPath;
 			this.fileName=newFileName + ".txt";
-			if(existingTaskList!=null) {
+			if(existingTaskList.size() != 0) {
 				this.write(existingTaskList);			
 			}				
 			try{
-				FileWriter fw=new FileWriter(path + fileName);
+				FileWriter fw=new FileWriter(PATH_UPDATEDDIRECTORY);
 				BufferedWriter bw=new BufferedWriter(fw);
 				bw.write(path + "\n");
 				bw.write(fileName + "\n");
@@ -173,7 +178,11 @@ public class FileHandler {
 	}
 	
 	private boolean isPathCorrect(String pathName) {
-		if(pathName.equals("")) {
+		System.out.println("in filehandler: -->is path correct?: "+pathName);
+		System.out.println("in filehandler: -->is path correct?: pathsize "+pathName.length());
+		
+		if(pathName.length() == 0) {
+			
 			return true;
 		}
 		File pathToCheck = new File(pathName);
