@@ -36,9 +36,9 @@ public class DataBase {
 	private static String MESSAGE_SUCCESSFULLY_ADD_TASK = "successfully add task: ";
 	private static String MESSAGE_DELETING_TASK = "tring to delete task: ";
 	private static String MESSAGE_SUCCESSFULLY_DELETE_TASK = "The task is deleted from database: ";
-	private static String MESSAGE_RETRIEVE_TASK = "trying to retrieve: ";
+//	private static String MESSAGE_RETRIEVE_TASK = "trying to retrieve: ";
 	private static String MESSAGE_SETTING_NEW_PATH = "trying to set new path: ";
-	private static String MESSAGE_SUCCESSFULLY_SET_PATH = "successfully set new path: ";
+//	private static String MESSAGE_SUCCESSFULLY_SET_PATH = "successfully set new path: ";
 	private static String ERROR_REPEATED_TASK = "The task has already existed: ";
 	private static String ERROR_TASK_NOT_EXIST = "The task to delete does not exist: ";
 
