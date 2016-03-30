@@ -665,4 +665,49 @@ public class MainApp extends Application {
         }
 
     }
+
+    /*
+     * getTaskAt returns the task at the position specified in the list view, or
+     * null if it is not found.
+     * 
+     * @param int pos
+     * 
+     * @return Task task
+     * 
+     */
+    public Task getTaskAt(int pos) {
+        switch (getPage()) {
+        case 1:
+            if (mainController != null) {
+                return mainController.getTaskAt(pos);
+            }
+            // Fallthrough
+        case 2:
+            if (overdueController != null) {
+                return overdueController.getTaskAt(pos);
+            }
+            // Fallthrough
+        case 3:
+            if (todayController != null) {
+                return todayController.getTaskAt(pos);
+            }
+            // Fallthrough
+        case 4:
+            if (weekController != null) {
+                return weekController.getTaskAt(pos);
+            }
+            // Fallthrough
+        case 5:
+            if (archiveController != null) {
+                return archiveController.getTaskAt(pos);
+            }
+            // Fallthrough
+        default:
+            if (mainController != null) {
+                return mainController.getTaskAt(pos);
+            } else {
+                return null;
+            }
+        }
+    }
 }
