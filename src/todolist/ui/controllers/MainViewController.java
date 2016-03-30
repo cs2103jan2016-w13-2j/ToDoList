@@ -319,4 +319,21 @@ public class MainViewController {
         return task.getDoneStatus();
     }
 
+    /*
+     * getTaskAt returns the task at the position specified in the list view, or null if
+     * it is not found.
+     * 
+     * @param int pos
+     * 
+     * @return Task task
+     * 
+     */
+    public Task getTaskAt(int pos) {
+        ObservableList<TaskWrapper> itemList = listView.getItems();
+        if (pos >= 1 && pos <= itemList.size()) {
+            return itemList.get(pos-1).getTaskObject();
+        } else {
+            return null;
+        }
+    }
 }
