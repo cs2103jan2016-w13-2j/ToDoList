@@ -8,7 +8,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-// @@author Huang Lie Jun
+//@@author huangliejun
 
 /*
  * UtilityLogger is a common logger to log all ToDoList activities at runtime.
@@ -123,7 +123,7 @@ public class UtilityLogger {
             handleDefaultPathError(exception);
         }
 
-        System.out.println(applicationFile.getParent());
+        // System.out.println(applicationFile.getParent());
 
         return file;
     }

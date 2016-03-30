@@ -1,6 +1,6 @@
 package todolist.ui.controllers;
 
-//@@author Huang Lie Jun
+//@@author huangliejun
 
 public class TitleBarController {
     // Work In Progress ...

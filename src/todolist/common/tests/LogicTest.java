@@ -17,7 +17,7 @@ import todolist.model.Name;
 import todolist.model.SearchCommand;
 import todolist.model.Task;
 import todolist.storage.DataBase;
-
+//@@author yuxin
 public class LogicTest {
 	
 	private MainApp mainAppStub;	

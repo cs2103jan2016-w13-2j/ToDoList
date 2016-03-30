@@ -6,12 +6,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 
-import com.sun.media.jfxmedia.logging.Logger;
-
 import todolist.MainApp;
+import todolist.common.UtilityLogger;
 import todolist.model.Category;
 import todolist.model.Reminder;
 import todolist.ui.TaskWrapper;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -23,8 +23,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-//@@author Huang Lie Jun
+//@@author huangliejun
 
+/*
+ * TaskNodeController controls and manipulates data for display in task view(s).
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ * 
+ */
 public class TaskNodeController {
 
     /*** STATIC MESSAGES ***/
@@ -37,6 +43,7 @@ public class TaskNodeController {
     private static final String NULL_DISPLAY_ITEM_CATEGORY = "Category: Not Available";
     private static final String DISPLAY_ITEM_UNARCHIVED = "ONGOING";
     private static final String DISPLAY_ITEM_ARCHIVED = "DONE";
+    private static final String DISPLAY_ITEM_OVERDUE = "OVERDUE";
 
     /*** STYLES ***/
 
@@ -56,6 +63,9 @@ public class TaskNodeController {
 
     // UNKNOWN STYLE
     private static final String COLOR_UNKNOWN = "#748B9C";
+
+    // Logger and Logger messages
+    UtilityLogger logger = null;
 
     /*** TASK ITEM COMPONENTS ***/
 
@@ -126,7 +136,11 @@ public class TaskNodeController {
     @FXML
     private ImageView reminderIndicator = null;
 
+    /*
+     * Constructor intializes task and index of task.
+     */
     public TaskNodeController(TaskWrapper task, int index) throws IllegalArgumentException {
+        logger = new UtilityLogger();
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(MainApp.DIRECTORY_TASKITEM));
         fxmlLoader.setController(this);
 
@@ -135,8 +149,8 @@ public class TaskNodeController {
 
         try {
             fxmlLoader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ioException) {
+            throw new RuntimeException(ioException);
         }
 
         // Assignment TaskWrapper to HBox Layout
@@ -148,6 +162,11 @@ public class TaskNodeController {
 
     }
 
+    /*
+     * validateAndFormatItem checks the validity of the display content and
+     * formats it for display.
+     * 
+     */
     public void validateAndFormatItem() throws IllegalArgumentException {
         int indexNumber = index + 1;
 
@@ -165,7 +184,7 @@ public class TaskNodeController {
 
         // Index Number
         if (indexNumber <= 0) {
-            Logger.logMsg(Logger.ERROR, ERROR_DISPLAY_ITEM_INDEX);
+            logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_INDEX);
             throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_INDEX);
         } else {
             number.setText(Integer.toString(indexNumber));
@@ -173,7 +192,7 @@ public class TaskNodeController {
 
         // Title
         if (taskTitle == null) {
-            Logger.logMsg(Logger.ERROR, ERROR_DISPLAY_ITEM_TITLE);
+            logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_TITLE);
             throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_TITLE);
         } else {
             title.setText(taskTitle);
@@ -198,16 +217,19 @@ public class TaskNodeController {
         }
 
         // Archive Status
-        if (task.isCompleted()) {
+        if (task.getIsCompleted()) {
             statusBacking.setFill(Color.web(COLOR_COMPLETE));
             status.setText(DISPLAY_ITEM_ARCHIVED);
+        } else if (task.getIsExpired()) {
+            statusBacking.setFill(Color.web(COLOR_OVERDUE));
+            status.setText(DISPLAY_ITEM_OVERDUE);
         } else {
             statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
             status.setText(DISPLAY_ITEM_UNARCHIVED);
         }
 
         // Recurring Status
-        recurringIndicator.setVisible(task.isRecurring());
+        recurringIndicator.setVisible(task.getIsRecurring());
 
         // Reminder Status
         if (reminder == null) {
@@ -217,10 +239,24 @@ public class TaskNodeController {
         }
     }
 
+    /*
+     * getNode returns the formatted task view for display.
+     * 
+     * @return HBox getNode
+     */
     public HBox getNode() {
         return root;
     }
 
+    /*
+     * formatDateField takes in a task, start date-time, end date-time to format
+     * date range field for display.
+     * 
+     * @param TaskWrapper task, LocalDateTime startDateTime, LocalDateTime
+     * endDateTime
+     * 
+     * @return String dateTimeField
+     */
     public String formatDateField(TaskWrapper task, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         TASK_TYPE taskType = checkTaskType(startDateTime, endDateTime);
 
@@ -251,6 +287,15 @@ public class TaskNodeController {
         }
     }
 
+    /*
+     * checkTaskType takes in the start date-time and end date-time to determine
+     * the task type.
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * 
+     * @return TASK_TYPE
+     * 
+     */
     private TASK_TYPE checkTaskType(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         TASK_TYPE taskType;
         if (startDateTime != null && endDateTime != null) {
@@ -268,6 +313,14 @@ public class TaskNodeController {
 
     /** FORMATTING FUNCTIONS **/
 
+    /*
+     * formatEventRangeDiffDay formats the date-time range for events with start
+     * and end date-times on different days
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * 
+     * @return String dateTimeRange
+     */
     private String formatEventRangeDiffDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return "From " + startDateTime.getDayOfWeek() + ", "
                 + startDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT))
@@ -275,23 +328,49 @@ public class TaskNodeController {
                 + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
     }
 
+    /*
+     * formatEventRangeSameDay formats the date-time range for events with start
+     * and end date-times on the same day
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * 
+     * @return String dateTimeRange
+     */
     private String formatEventRangeSameDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return startDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) + ", from "
                 + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
                 + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
+    /*
+     * formatDeadlineRange formats the date-time range for deadlines
+     * 
+     * @param LocalDateTime endDateTime
+     * 
+     * @return String dateTimeRange
+     */
     private String formatDeadlineRange(LocalDateTime endDateTime) {
         return "Due: " + endDateTime.getDayOfWeek() + ", "
                 + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
     }
 
     /** STYLING FUNCTIONS **/
+
+    /*
+     * Apply styles on unknown task type
+     * 
+     */
     private void styleUnknown() {
         numLabelBase.setFill(Color.web(COLOR_UNKNOWN));
         overdueFlag.setFill(Color.web(COLOR_UNKNOWN));
     }
 
+    /*
+     * Apply styles on event task type
+     * 
+     * @param LocalDateTime startDateTime
+     * 
+     */
     private void styleEvent(LocalDateTime startDateTime) {
         numLabelBase.setFill(Color.web(COLOR_EVENT));
 
@@ -304,6 +383,11 @@ public class TaskNodeController {
         }
     }
 
+    /*
+     * Apply styles on deadline task type
+     * 
+     * @param LocalDateTime endDateTime
+     */
     private void styleDeadline(LocalDateTime endDateTime) {
         numLabelBase.setFill(Color.web(COLOR_DEADLINE));
 
@@ -316,6 +400,9 @@ public class TaskNodeController {
         }
     }
 
+    /*
+     * Apply styles on floating task type
+     */
     private void styleFloatingTask() {
         numLabelBase.setFill(Color.web(COLOR_FLOATING));
         overdueFlag.setFill(Color.web(COLOR_SPARE));
