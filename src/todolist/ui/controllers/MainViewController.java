@@ -208,7 +208,7 @@ public class MainViewController {
 		listView.getItems().addAll(arrayOfWrappers);
 	}
 
-	public void highLight(Task task) {
+	public void highlight(Task task) {
 		// TODO Auto-generated method stub
 		int index = searchInList(task);
 

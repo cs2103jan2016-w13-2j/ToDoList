@@ -16,11 +16,11 @@ public class SideBarController {
     /*** TAB STYLES ***/
     private static final String STYLE_TAB_NORMAL = "-fx-background-color: transparent;";
     private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #95E1D3;";
-//    private static final String STYLE_TAB_FOCUSED_DARK = "-fx-background-color: #EB586F;";
-    
-    
+    // private static final String STYLE_TAB_FOCUSED_DARK =
+    // "-fx-background-color: #EB586F;";
+
     /*** VIEWS ***/
-    
+
     // HOME TAB
     @FXML
     private Button home = null;
@@ -32,7 +32,7 @@ public class SideBarController {
     private Button expired = null;
     @FXML
     private ImageView expiredIcon = null;
-    
+
     // TODAY TAB
     @FXML
     private StackPane todayStack = null;
@@ -43,7 +43,7 @@ public class SideBarController {
     @FXML
     private ImageView todayIcon = null;
     private int todayDate = 0;
-    
+
     // WEEK TAB
     @FXML
     private Button week = null;
@@ -68,17 +68,15 @@ public class SideBarController {
     @FXML
     private ImageView helpIcon = null;
 
-    
     /*** SIDEBAR AND PAGE PROPERTIES ***/
-    
+
     private int index = 1;
     private static int NUMBER_BUTTONS = 7;
     private Button[] buttonArray;
-    
+
     // Main Application reference
     private MainApp mainApplication = null;
 
-    
     /*** CORE FUNCTIONS ***/
 
     public void setMainApp(MainApp mainApp) {
@@ -102,7 +100,7 @@ public class SideBarController {
         buttonArray[5] = options;
         buttonArray[6] = help;
     }
-    
+
     private void setTodayDate() {
         todayDate = LocalDateTime.now().getDayOfMonth();
         todayLabel.setText(Integer.toString(todayDate));
@@ -122,16 +120,20 @@ public class SideBarController {
             // Highlight if focused
             if (i == index - 1) {
                 currentButton.setStyle(STYLE_TAB_FOCUSED);
-//                currentButton.setStyle(STYLE_TAB_FOCUSED_DARK);
+                // currentButton.setStyle(STYLE_TAB_FOCUSED_DARK);
 
             }
-            
+
         }
-        
+
     }
 
     public MainApp getMainApplication() {
         return mainApplication;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
 }
