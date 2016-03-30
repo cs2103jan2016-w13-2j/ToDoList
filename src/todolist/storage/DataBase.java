@@ -32,6 +32,7 @@ import todolist.model.Task;
  */
 public class DataBase {
 
+<<<<<<< HEAD
     private static String MESSAGE_ADDING_TASK = "tring to add task: ";
     private static String MESSAGE_SUCCESSFULLY_ADD_TASK = "successfully add task: ";
     private static String MESSAGE_DELETING_TASK = "tring to delete task: ";
@@ -40,6 +41,18 @@ public class DataBase {
     private static String ERROR_REPEATED_TASK = "The task has already existed: ";
     private static String ERROR_TASK_NOT_EXIST = "The task to delete does not exist: ";
 
+=======
+	private static String MESSAGE_ADDING_TASK = "tring to add task: ";
+	private static String MESSAGE_SUCCESSFULLY_ADD_TASK = "successfully add task: ";
+	private static String MESSAGE_DELETING_TASK = "tring to delete task: ";
+	private static String MESSAGE_SUCCESSFULLY_DELETE_TASK = "The task is deleted from database: ";
+	private static String MESSAGE_RETRIEVE_TASK = "trying to retrieve: ";
+	private static String MESSAGE_SETTING_NEW_PATH = "trying to set new path: ";
+	private static String MESSAGE_SUCCESSFULLY_SET_PATH = "successfully set new path: ";
+	private static String ERROR_REPEATED_TASK = "The task has already existed: ";
+	private static String ERROR_TASK_NOT_EXIST = "The task to delete does not exist: ";
+	
+>>>>>>> v0.3
     protected static Component COMPONENT_STORAGE = UtilityLogger.Component.Storage;
     // private static Logger dataBase_Logger = Logger.getLogger("Database
     // logger");
@@ -254,6 +267,7 @@ public class DataBase {
         return retriever.retrieveHandler(taskList, command);
     }
 
+<<<<<<< HEAD
     /**
      * This method is to set new file for the storage of data.
      * 
@@ -273,6 +287,29 @@ public class DataBase {
         this.loadFromFile();
         return isSet;
     }
+=======
+	/**
+	 * This method is to set new file for the storage of data.
+	 * 
+	 * @param newFile
+	 *            the string that contains the new path and file name
+	 * 
+	 * @return true if the directory exists and the new file is set.
+	 * @throw Exception if the path is invalid
+	 */
+	public boolean setNewFile(String newFilePath) {
+		assert(newFilePath != null);
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_SETTING_NEW_PATH + newFilePath);
+		boolean isSet = false;
+		isSet = fh.setFile(newFilePath);
+        
+		if (!isSet) {
+			return false;
+		}
+		this.loadFromFile();
+		return isSet;
+	}
+>>>>>>> v0.3
 
     /**
      * This method returns the path of the local text file that stores all the

@@ -274,5 +274,27 @@ public class DataBaseTest {
 		isEqual = db.taskList.get(0).getName().getName().equals(newEvent2.getName().getName());
 		assertEquals(expected, isEqual);
 	}
+	
+	/**
+	 * test change directory method
+	 */
+	@Test 
+	public void testChangeDir() {
+		db.clear();
+		//add one event
+		Name name = new Name("title");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
+		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+		Task newEvent = new Task(name, start, end, null, null, false, false, null);
+		db.add(newEvent);
+		//add another event
+		name = new Name("another-event");
+        newEvent = new Task(name, start, end, null, null, false, false, null);
+		db.add(newEvent);
+		
+		//change the directory
+		db.setNewFile("differentFile");
+	}
 
 }
