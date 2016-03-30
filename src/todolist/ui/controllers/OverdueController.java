@@ -12,11 +12,10 @@ import todolist.ui.TaskWrapper;
 
 //@@author huangliejun
 
-/*
- * OverdueController controls and formats data for display in the Overdue page.
+/* 
+ * OverdueController controls and manipulates data for display on the main display area, for the overdue tab.
  * 
  * @author Huang Lie Jun (A0123994W)
- * 
  */
 public class OverdueController extends MainViewController {
 

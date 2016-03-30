@@ -280,8 +280,7 @@ public class MainViewController {
             listView.getSelectionModel().select(index);
             listView.getFocusModel().focus(index);
             listView.scrollTo(index);
-            String.format(MESSAGE_HIGHLIGHT_ITEM, Integer.toString(index));
-            logger.logAction(Component.UI, MESSAGE_HIGHLIGHT_ITEM);
+            logger.logAction(Component.UI, String.format(MESSAGE_HIGHLIGHT_ITEM, Integer.toString(index)));
         }
     }
 
