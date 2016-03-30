@@ -14,34 +14,24 @@ import todolist.model.Task;
 /*
  * This class is the storage class, handling the read and write of local file with relative commands.
  * It will be called by the logic.
- * 
+ *
  * for the retrieve method, now can support 3 search command
  * 1:"category" + category
- * 2:"name" + keyword 
+ * 2:"name" + keyword
  * 3:"view"+view (overdue, archived)
- * 
+ *
  * for the sorting methods, can now sort by
  * 1:name
  * 2:end date
  * 3:start date
  * 4:category
  * but they are not integrated with the search method yet!!
- * 
- * 
+ *
+ *
  * @author yuxin
  */
 public class DataBase {
 
-<<<<<<< HEAD
-    private static String MESSAGE_ADDING_TASK = "tring to add task: ";
-    private static String MESSAGE_SUCCESSFULLY_ADD_TASK = "successfully add task: ";
-    private static String MESSAGE_DELETING_TASK = "tring to delete task: ";
-    private static String MESSAGE_SUCCESSFULLY_DELETE_TASK = "The task is deleted from database: ";
-    // private static String MESSAGE_RETRIEVE_TASK = "trying to retrieve: ";
-    private static String ERROR_REPEATED_TASK = "The task has already existed: ";
-    private static String ERROR_TASK_NOT_EXIST = "The task to delete does not exist: ";
-
-=======
 	private static String MESSAGE_ADDING_TASK = "tring to add task: ";
 	private static String MESSAGE_SUCCESSFULLY_ADD_TASK = "successfully add task: ";
 	private static String MESSAGE_DELETING_TASK = "tring to delete task: ";
@@ -51,8 +41,7 @@ public class DataBase {
 	private static String MESSAGE_SUCCESSFULLY_SET_PATH = "successfully set new path: ";
 	private static String ERROR_REPEATED_TASK = "The task has already existed: ";
 	private static String ERROR_TASK_NOT_EXIST = "The task to delete does not exist: ";
-	
->>>>>>> v0.3
+
     protected static Component COMPONENT_STORAGE = UtilityLogger.Component.Storage;
     // private static Logger dataBase_Logger = Logger.getLogger("Database
     // logger");
@@ -91,29 +80,29 @@ public class DataBase {
      * taskStr.split(" "); Name name = new Name(taskInfo[0]); LocalDateTime
      * startTime = null; LocalDateTime endTime = null; Category category = null;
      * Reminder reminder = null; Boolean isDone = null;
-     * 
+     *
      * if (!taskInfo[1].equals(new String("mynull"))) { startTime =
      * LocalDateTime.parse(taskInfo[1]); }
-     * 
+     *
      * if (!taskInfo[2].equals(new String("mynull"))) { endTime =
      * LocalDateTime.parse(taskInfo[2]); }
-     * 
+     *
      * if (!taskInfo[3].equals(new String("mynull"))) { category = new
      * Category(taskInfo[3]); }
-     * 
+     *
      * if (!taskInfo[4].equals(new String("mynull"))) { isDone =
      * Boolean.valueOf(taskInfo[4]); }
-     * 
+     *
      * if (!taskInfo[5].equals(new String("mynull+mynull"))) { if
      * (!taskInfo[4].split("+")[1].equals("mynull")) { reminder = new
      * Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), null); } else {
      * reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]),
      * LocalDateTime.parse(taskInfo[4].split("+")[1])); } }
-     * 
+     *
      * // Reminder reminder = new //
      * Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), //
      * LocalDateTime.parse(taskInfo[4].split("+")[1]));
-     * 
+     *
      * return new Task(name, startTime, endTime, category, reminder, isDone); }
      */
     // helper method
@@ -177,11 +166,11 @@ public class DataBase {
     /**
      * This method handles the writing into the text file with the add command.
      * It returns true if the task is successfully written into the file.
-     * 
+     *
      * @param Task
      *            the task to be added
      * @return TRUE whether the task is successfully added\
-     * 
+     *
      * @throws IOException
      *             when task already exist
      */
@@ -204,7 +193,7 @@ public class DataBase {
     /**
      * This method handles the updating of text file when the specified task is
      * to be deleted. Returns true if the task is successfully deleted.
-     * 
+     *
      * @param Task
      *            the task to be deleted
      * @return boolean true if the task is successfully deleted; false if the
@@ -235,7 +224,7 @@ public class DataBase {
 
     /**
      * This method returns whether a task is in the text file.
-     * 
+     *
      * @param Task
      *            task to search
      * @return boolean returns true if the task is found; false if not.
@@ -246,7 +235,7 @@ public class DataBase {
 
     /**
      * This method returns all the tasks in the database.
-     * 
+     *
      * @return an arraylist of all the tasks in database
      */
     public ArrayList<Task> retrieveAll() {
@@ -256,7 +245,7 @@ public class DataBase {
     /**
      * This method search for and then return tasks from the database according
      * to the command.
-     * 
+     *
      * @param command
      *            command to search for the tasks in the database
      * @return an arraylist of all the tasks in the search result; if the search
@@ -267,33 +256,32 @@ public class DataBase {
         return retriever.retrieveHandler(taskList, command);
     }
 
-<<<<<<< HEAD
-    /**
-     * This method is to set new file for the storage of data.
-     * 
-     * @param newFile
-     *            the string that contains the new path and file name
-     * 
-     * @return true if the directory exists and the new file is set.
-     * @throw Exception if the path is invalid
-     */
-    public boolean setNewFile(String newFilePath) {
-        boolean isSet = false;
-        isSet = fh.setFile(newFilePath);
+    // /**
+    //  * This method is to set new file for the storage of data.
+    //  *
+    //  * @param newFile
+    //  *            the string that contains the new path and file name
+    //  *
+    //  * @return true if the directory exists and the new file is set.
+    //  * @throw Exception if the path is invalid
+    //  */
+    // public boolean setNewFile(String newFilePath) {
+    //     boolean isSet = false;
+    //     isSet = fh.setFile(newFilePath);
+    //
+    //     if (!isSet) {
+    //         return false;
+    //     }
+    //     this.loadFromFile();
+    //     return isSet;
+    // }
 
-        if (!isSet) {
-            return false;
-        }
-        this.loadFromFile();
-        return isSet;
-    }
-=======
 	/**
 	 * This method is to set new file for the storage of data.
-	 * 
+	 *
 	 * @param newFile
 	 *            the string that contains the new path and file name
-	 * 
+	 *
 	 * @return true if the directory exists and the new file is set.
 	 * @throw Exception if the path is invalid
 	 */
@@ -302,19 +290,18 @@ public class DataBase {
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SETTING_NEW_PATH + newFilePath);
 		boolean isSet = false;
 		isSet = fh.setFile(newFilePath);
-        
+
 		if (!isSet) {
 			return false;
 		}
 		this.loadFromFile();
 		return isSet;
 	}
->>>>>>> v0.3
 
     /**
      * This method returns the path of the local text file that stores all the
      * tasks.
-     * 
+     *
      * @return a string that represents the path
      */
     public String getPath() {
@@ -324,7 +311,7 @@ public class DataBase {
     /**
      * This method returns the name of the local text file that stores all the
      * tasks.
-     * 
+     *
      * @return the file name in string representation
      */
     public String getFileName() {
@@ -334,7 +321,7 @@ public class DataBase {
     /**
      * Goes back to a number of steps ago according to the number of steps pass
      * in.
-     * 
+     *
      * @param steps
      *            the number of steps to go back
      */
@@ -347,7 +334,7 @@ public class DataBase {
     /**
      * Sort the tasks in the text file in the specific order of the specific
      * field.
-     * 
+     *
      * @param fieldName
      *            the name of the field to sort on
      * @param order
