@@ -8,7 +8,7 @@ import javafx.scene.control.ListView;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 
-//@@author Huang Lie Jun
+//@@author huangliejun
 
 public class ArchiveController extends MainViewController {
 

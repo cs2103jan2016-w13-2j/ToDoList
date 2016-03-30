@@ -11,7 +11,7 @@ import todolist.model.Category;
 import todolist.model.Reminder;
 import todolist.model.Task;
 
-// @@author Huang Lie Jun
+//@@author huangliejun
 
 /*
  * TaskWrapper is the wrapper class for Task class. It wraps each attribute into a property for display.

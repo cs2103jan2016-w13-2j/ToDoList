@@ -1,4 +1,4 @@
-/*@@author Huang Lie Jun*/
+/*@@author huangliejun*/
 
 /* Color Template */
 
@@ -8,6 +8,7 @@
  * accent: #4AA0D5;
  * accent-two: #A9EEE6;
  * accent-three: #95E1D3;
+ * accent-four: #069A8E;
  * content: #F8F3D4;
  * content-two: #FEFAEC;
  * focus: #EB586F;
@@ -104,7 +105,7 @@
 
 .list-cell:filled:selected:focused > #task-hbox-item {
     -fx-background-color: #EB586F;
-    -fx-background-color: #95E1D3;
+    -fx-background-color: #069A8E;
     -fx-text-fill: #FEFAEC;
 	-fx-fill: #FEFAEC;
 }

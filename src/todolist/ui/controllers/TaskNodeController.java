@@ -12,6 +12,7 @@ import todolist.MainApp;
 import todolist.model.Category;
 import todolist.model.Reminder;
 import todolist.ui.TaskWrapper;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -23,7 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-//@@author Huang Lie Jun
+//@@author huangliejun
 
 public class TaskNodeController {
 

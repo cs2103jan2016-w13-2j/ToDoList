@@ -10,7 +10,7 @@ import javafx.scene.control.ListView;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 
-//@@author Huang Lie Jun
+//@@author huangliejun
 
 public class WeekController extends MainViewController {
 
@@ -37,13 +37,16 @@ public class WeekController extends MainViewController {
         // Convert Task to TaskWrapper for display handling
         for (int i = 0; i < tasks.size(); ++i) {
             Task task = tasks.get(i);
-            if (task.getEndTime() != null && LocalDateTime.now().until(task.getEndTime(), ChronoUnit.DAYS) <= 7
-                    && !task.getDoneStatus()) {
+            if (isWithinWeek(task) && !isCompleted(task)) {
                 TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
                 arrayOfWrappers.add(wrappedTask);
             }
         }
 
         listView.getItems().addAll(arrayOfWrappers);
+    }
+
+    private boolean isWithinWeek(Task task) {
+        return task.getEndTime() != null && LocalDateTime.now().until(task.getEndTime(), ChronoUnit.DAYS) <= 7;
     }
 }

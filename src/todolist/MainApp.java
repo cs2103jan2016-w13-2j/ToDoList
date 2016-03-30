@@ -34,7 +34,7 @@ import javafx.util.Duration;
 
 import org.controlsfx.control.NotificationPane;
 
-// @@author Huang Lie Jun
+//@@author huangliejun
 
 /*
  * MainApp is the main running class for the application.

@@ -16,7 +16,6 @@ import todolist.logic.MainAppStub;
 import todolist.model.Name;
 import todolist.model.SearchCommand;
 import todolist.model.Task;
-import todolist.storage.DataBase;
 
 public class LogicTest {
 	
