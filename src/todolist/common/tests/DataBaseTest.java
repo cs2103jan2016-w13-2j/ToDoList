@@ -294,7 +294,7 @@ public class DataBaseTest {
 		db.add(newEvent);
 		
 		//change the directory
-		db.setNewFile("differentFile");
+		System.out.println(db.setNewFile("/Users/Xyx/Desktop/jim"));
 	}
 
 }

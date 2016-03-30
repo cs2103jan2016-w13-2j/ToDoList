@@ -12,6 +12,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 //@@author yuxin
 /*
@@ -41,10 +46,10 @@ public class FileHandler {
 	public ArrayList<Task> read() {
 		ArrayList<Task> taskList = new ArrayList<Task>();
 		File path = new File(filePath);
-		
+		System.out.println(filePath);
 		if(isFileReady(path) && !isFileEmpty(path)) {
 			try {
-				System.out.println("kjkkkkkk" + filePath);
+				//System.out.println("kjkkkkkk" + filePath);
 				FileReader fr=new FileReader(filePath);
 				BufferedReader br=new BufferedReader(fr);
 				String input=null;
@@ -72,7 +77,6 @@ public class FileHandler {
 	 */
 	public boolean write(ArrayList<Task> taskList) {
 		    try{
-		    	System.out.println("whyyy" + filePath);
 				FileWriter fw=new FileWriter(filePath);
 				BufferedWriter bw=new BufferedWriter(fw);
 				for(Task eachTask: taskList) {	
@@ -110,22 +114,45 @@ public class FileHandler {
 	 * @return              true if the file is set; false if the path is not a correct path  
 	 */
 	public boolean setFile(String newFilePath) {
-		ArrayList<Task> existingTaskList = this.read();
-		File file = new File(newFilePath);
-		  try {
-	            newFilePath = file.getCanonicalPath();
-	           System.out.println(newFilePath);
-	        } catch (IOException e) {
-	            return false;
-	        }
+		newFilePath = newFilePath + "/taskStorage.txt";
+		Path from = Paths.get(filePath);
+		Path to = Paths.get(newFilePath);
+		CopyOption[] options = new CopyOption[] {
+				StandardCopyOption.REPLACE_EXISTING,
+				StandardCopyOption.COPY_ATTRIBUTES
+		};
 		
+		try {
+			Files.copy(from, to, options);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		filePath = newFilePath;
+		
+		
+		
+		
+		
+		/*
+		ArrayList<Task> existingTaskList = this.read();
+		File file = new File(newFilePath + ".txt");
+		  //try {
+	           newFilePath = file.getAbsolutePath();
+	           System.out.println("jsfdsfjlsdf" + newFilePath);
+	       // } catch (IOException e) {
+	       //    return false;
+	       // }
+		//newFilePath = file.getPath();
+		//System.out.println(newFilePath);
 		//set path 
-		String newPath = getPathOfNewFile(newFilePath.trim());
+		String newPath = getPathOfNewFile(newFilePath.trim()+"/");
 		String newFileName = getNewFileName(newFilePath.trim());
-		System.out.println("newPath:  " + newPath);
-		System.out.println("newFileName: " + newFileName);
+	    file = new File(newPath);
+		System.out.println("storageeeeeeee : " + file.isDirectory());
 		if(true) {
-			this.filePath = newFilePath + ".txt";
+			this.filePath = newFilePath;
 			this.path = newPath;
 			this.fileName=newFileName + ".txt";
 			if(existingTaskList.size() != 0) {
@@ -142,10 +169,10 @@ public class FileHandler {
 			}
 		    return true;
 		}
-		
+		System.out.println("not directory");
 	    return false;
-		  	
-		
+	    */
+		return true;
 	}
 	
 	public String getPath() {

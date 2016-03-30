@@ -248,6 +248,7 @@ public class DataBase {
 	 */
 	public ArrayList<Task> retrieve(SearchCommand command) {
 		assert (command != null );
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_RETRIEVE_TASK + command.getType());
 		return retriever.retrieveHandler(taskList, command);
 	}
 
@@ -269,6 +270,7 @@ public class DataBase {
 		if (!isSet) {
 			return false;
 		}
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_SET_PATH + newFilePath);
 		this.loadFromFile();
 		return isSet;
 	}
