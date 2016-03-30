@@ -775,7 +775,7 @@ public class Logic {
                 reminderTime = tempTask.getEndTime();
             }
         } else {
-            if (tempTask.getStartTime() == null) {
+            if (tempTask.getStartTime() != null) {
                 reminderTime = tempTask.getStartTime().minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
             } else {
                 reminderTime = tempTask.getEndTime().minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
