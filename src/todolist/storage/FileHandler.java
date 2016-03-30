@@ -125,12 +125,19 @@ public class FileHandler {
 		try {
 			Files.copy(from, to, options);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
 		filePath = newFilePath;
 		
+		try{
+			FileWriter fw=new FileWriter(PATH_UPDATEDDIRECTORY);
+			BufferedWriter bw=new BufferedWriter(fw);
+			bw.write(filePath + "\n");//store the new path in the local file
+			bw.close();
+		}catch (Exception e) {
+			return false;
+		}
 		
 		
 		
@@ -158,15 +165,7 @@ public class FileHandler {
 			if(existingTaskList.size() != 0) {
 				this.write(existingTaskList);			
 			}				
-			try{
-				FileWriter fw=new FileWriter(PATH_UPDATEDDIRECTORY);
-				BufferedWriter bw=new BufferedWriter(fw);
-				bw.write(path + "\n");
-				bw.write(fileName + "\n");
-				bw.close();
-			}catch (Exception e) {
-				return false;
-			}
+			
 		    return true;
 		}
 		System.out.println("not directory");

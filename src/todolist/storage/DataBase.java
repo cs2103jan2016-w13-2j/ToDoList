@@ -257,8 +257,17 @@ public class DataBase {
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_RETRIEVE_TASK + command.getType());
 		return retriever.retrieveHandler(taskList, command);
 	}
-
-
+    
+	/**
+	 * search for tasks whose names containing the passed in string as a substring
+	 * @param command       
+	 * @return  arraylist   list of result tasks 
+	 */
+    public ArrayList<Task> smartSearch(SearchCommand command) {
+    	assert(command != null);
+    	logger.logAction(COMPONENT_STORAGE, MESSAGE_RETRIEVE_TASK + command.getType());
+    	return retriever.smartRetrieve(taskList, command);
+    }
 
 	/**
 	 * This method is to set new file for the storage of data.

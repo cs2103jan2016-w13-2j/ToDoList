@@ -147,6 +147,18 @@ public class TaskRetriever {
         ArrayList<Task> resultList = new ArrayList<Task>();
         String requiredName = command.getContent();
         for (Task eachTask : taskList) {
+            if (eachTask.getName().getName().equalsIgnoreCase(requiredName)) {
+                resultList.add(eachTask);
+            }
+        }
+        System.out.println(Arrays.toString(resultList.toArray()));
+        return resultList;
+    }
+    
+    protected ArrayList<Task> smartRetrieve(ArrayList<Task> taskList, SearchCommand command) {
+    	ArrayList<Task> resultList = new ArrayList<Task>();
+        String requiredName = command.getContent();
+        for (Task eachTask : taskList) {
             if (isSubstring(eachTask.getName().getName(), requiredName)) {
                 resultList.add(eachTask);
             }
@@ -160,7 +172,9 @@ public class TaskRetriever {
     }
 
     private boolean isSubstring(String str1, String str2) {
-        return str1.equalsIgnoreCase(str2);
+    	str1 = str1.toLowerCase();
+    	str2 = str2.toLowerCase();
+        return str1.contains(str2);
     }
 
     private ArrayList<Task> retrieve_Category(SearchCommand command) {
