@@ -12,9 +12,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import todolist.MainApp;
+import todolist.common.UtilityLogger;
+import todolist.common.UtilityLogger.Component;
 
 //@@author huangliejun
 
+/*
+ * SideBarController controls the interface for the sidebar or tabs
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ */
 public class SideBarController {
 
     /*** TAB STYLES ***/
@@ -82,20 +89,35 @@ public class SideBarController {
     // Main Application reference
     private MainApp mainApplication = null;
 
+    // Logger and Logger messages
+    UtilityLogger logger = null;
+    private static final String MESSAGE_CHANGED_PAGE = "Switched tab to %1$s";
+
     /*** CORE FUNCTIONS ***/
 
+    /*
+     * setMainApp sets the reference to link back to main application.
+     * 
+     * @param MainApp mainApp
+     * 
+     */
     public void setMainApp(MainApp mainApp) {
         mainApplication = mainApp;
     }
 
     @FXML
     public void initialize() {
+        logger = new UtilityLogger();
         setButtonArray();
         setButtonHash();
+        setClickTabLogic();
         setTodayDate();
         colourTab();
     }
 
+    /*
+     * setButtonArray initializes the array of buttons
+     */
     private void setButtonArray() {
         buttonArray = new Button[NUMBER_BUTTONS];
         buttonArray[0] = home;
@@ -105,11 +127,11 @@ public class SideBarController {
         buttonArray[4] = done;
         buttonArray[5] = options;
         buttonArray[6] = help;
-        
-        setClickTabLogic();
-        
     }
 
+    /*
+     * setClickTabLogic sets the on-click event for tabs
+     */
     private void setClickTabLogic() {
         for (int i = 0; i < buttonArray.length; ++i) {
             Button button = buttonArray[i];
@@ -120,7 +142,7 @@ public class SideBarController {
                 }
             });
         }
-        
+
         todayLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -129,6 +151,9 @@ public class SideBarController {
         });
     }
 
+    /*
+     * setButtonHash maps each button to its index or sequence on the sidebar
+     */
     private void setButtonHash() {
         buttonHash = new HashMap<Button, Integer>();
         buttonHash.put(home, 1);
@@ -140,17 +165,31 @@ public class SideBarController {
         buttonHash.put(help, 7);
     }
 
+    /*
+     * setTodayDate sets the date display label on the Today tab button
+     */
     private void setTodayDate() {
         todayDate = LocalDateTime.now().getDayOfMonth();
         todayLabel.setText(Integer.toString(todayDate));
     }
 
+    /*
+     * setIndex takes in a page / tab number and navigates to it if valid.
+     * 
+     * @param int index
+     * 
+     */
     public void setIndex(int index) {
         this.index = index;
         colourTab();
         mainApplication.setPageView(index);
+        logger.logAction(Component.UI, String.format(MESSAGE_CHANGED_PAGE, getTabName(index)));
     }
 
+    /*
+     * colourTab sets the highlight logic for the tab buttons, based on the
+     * current tab in focus
+     */
     private void colourTab() {
         for (int i = 0; i < NUMBER_BUTTONS; ++i) {
             Button currentButton = buttonArray[i];
@@ -160,21 +199,37 @@ public class SideBarController {
             if (i == index - 1) {
                 currentButton.setStyle(STYLE_TAB_FOCUSED);
                 // currentButton.setStyle(STYLE_TAB_FOCUSED_DARK);
-
             }
-
         }
-
     }
 
+    /*
+     * getMainApplication is an access function for the reference to main
+     * application
+     */
     public MainApp getMainApplication() {
         return mainApplication;
     }
 
+    /*
+     * getIndex returns the current tab number
+     * 
+     * @return int tabNumber
+     * 
+     */
     public int getIndex() {
         return index;
     }
 
+    /*
+     * getButtonIndex takes in a button and returns its position / page /
+     * sequence number in the sidebar.
+     * 
+     * @param Button button
+     * 
+     * @return int index
+     * 
+     */
     private int getButtonIndex(Button button) {
         if (buttonHash.get(button) != null) {
             return buttonHash.get(button);
@@ -183,10 +238,46 @@ public class SideBarController {
         }
     }
 
+    /*
+     * paging is a callback function that is called when a button is clicked. It
+     * navigates to the page / tab that the button is mapped to.
+     * 
+     * @param Button button
+     * 
+     */
     private void paging(Button button) {
         int index = getButtonIndex(button);
         if (index >= 1 && index <= 7) {
             setIndex(index);
+        }
+    }
+
+    /*
+     * getTabName returns the tab name given its sequence or index number
+     * 
+     * @param int indexNumber
+     * 
+     * @return String tabName
+     * 
+     */
+    public String getTabName(int indexNumber) {
+        switch (indexNumber) {
+        case 1:
+            return "HOME";
+        case 2:
+            return "EXPIRED";
+        case 3:
+            return "TODAY";
+        case 4:
+            return "WEEK";
+        case 5:
+            return "DONE";
+        case 6:
+            return "OPTIONS";
+        case 7:
+            return "HELP";
+        default:
+            return "UNKNOWN";
         }
     }
 }

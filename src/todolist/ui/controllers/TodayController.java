@@ -6,18 +6,26 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-
+import todolist.common.UtilityLogger.Component;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 
 //@@author huangliejun
 
+/* 
+ * TodayController controls and manipulates data for display on the main display area, for the today tab.
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ */
 public class TodayController extends MainViewController {
 
+    // Logger messages
+    private static final String MESSAGE_UPDATED_TODAY_TASKLIST = "Updated display task list [TODAY].";
+
     /*
-     * TodayController controls and formats data for the Today page
+     * Constructor overrides super constructor and intializes the display task
+     * list and list view.
      * 
-     * @author Huang Lie Jun A0123994W
      */
     public TodayController() {
         // Initialise models
@@ -60,6 +68,8 @@ public class TodayController extends MainViewController {
         }
 
         listView.getItems().addAll(arrayOfWrappers);
+        logger.logAction(Component.UI, MESSAGE_UPDATED_TODAY_TASKLIST);
+
     }
 
     /*

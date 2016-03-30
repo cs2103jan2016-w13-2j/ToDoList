@@ -123,7 +123,7 @@ public class UtilityLogger {
             handleDefaultPathError(exception);
         }
 
-        System.out.println(applicationFile.getParent());
+        // System.out.println(applicationFile.getParent());
 
         return file;
     }

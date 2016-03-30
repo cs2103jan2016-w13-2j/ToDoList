@@ -285,4 +285,8 @@ public class TaskWrapper {
     public Task getTaskObject() {
         return task;
     }
+
+    public boolean getIsExpired() {
+        return getEndTime() != null && getEndTime().isBefore(LocalDateTime.now());
+    }
 }
