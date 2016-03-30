@@ -226,12 +226,15 @@ public class CaseSwitcher {
                                 "Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]",
                                 true);
                     } else {
+//                        System.out.println("HELLO WORLD");
                         logic.setRecurring(task.getName().getName(), true, arg[1]);
                         logic.stepForward(2);
                     }
                 } catch (NumberFormatException nfe) {
                     logic.setRecurring(arg[0], true, arg[1]);
                     logic.stepForward(2);
+                } catch (RuntimeException e) {
+//                    System.out.println("DO NOTHING");
                 }
             }
             break;

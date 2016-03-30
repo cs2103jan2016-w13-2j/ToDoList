@@ -589,7 +589,9 @@ public class Logic {
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBaseDelete(tempTask);
-
+        if (tempTask.getEndTime() == null) {
+            throw new RuntimeException();
+        }
         tempTask.setRecurring(status);
         tempTask.setInterval(interval);
         Boolean addResponse = dataBaseAdd(tempTask);
