@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import todolist.common.UtilityLogger;
+import todolist.common.UtilityLogger.Component;
 import todolist.model.SearchCommand;
 import todolist.model.Task;
 //@@author yuxin
@@ -29,14 +31,16 @@ import todolist.model.Task;
  */
 public class DataBase {
 
-	public static String LOGGING_ADDING_TASK = "tring to add task: ";
-	public static String LOGGING_DELETING_TASK = "tring to delete task: ";
-	public static String LOGGING_RETRIEVE_TASK = "trying to retrieve: ";
-	public static String LOGGING_REPEATED_TASK = "The task has already existed: ";
-	public static String LOGGING_TASK_NOTEXIST = "The task to delete does not exist: ";
-	public static String LOGGING_TASK_DELETED = "The task is deleted from database: ";
-
-	private static Logger dataBase_Logger = Logger.getLogger("Database logger");
+	private static String MESSAGE_ADDING_TASK = "tring to add task: ";
+	private static String MESSAGE_SUCCESSFULLY_ADD_TASK = "successfully add task: ";
+	private static String MESSAGE_DELETING_TASK = "tring to delete task: ";
+	private static String MESSAGE_SUCCESSFULLY_DELETE_TASK = "The task is deleted from database: ";
+	private static String MESSAGE_RETRIEVE_TASK = "trying to retrieve: ";
+	private static String ERROR_REPEATED_TASK = "The task has already existed: ";
+	private static String ERROR_TASK_NOT_EXIST = "The task to delete does not exist: ";
+	
+    protected static Component COMPONENT_STORAGE = UtilityLogger.Component.Storage;
+	//private static Logger dataBase_Logger = Logger.getLogger("Database logger");
 
 	private FileHandler fh;
 	public ArrayList<Task> taskList;
@@ -44,7 +48,8 @@ public class DataBase {
 	private TaskRetriever retriever;
 	private TaskSorter sorter;
 	private DatabaseModifier modifier;
-
+	private UtilityLogger logger = null;
+	
 	public DataBase() {
 		// taskList = null;
 		fh = new FileHandler();
@@ -53,7 +58,7 @@ public class DataBase {
 		modifier = new DatabaseModifier();
 		loadFromFile();
 		snapshot = new ArrayList<ArrayList<Task>>();
-
+        logger = new UtilityLogger();
 	}
 
 	private void writeToFile() {
@@ -166,14 +171,18 @@ public class DataBase {
 	 *             when task already exist
 	 */
 	public boolean add(Task task) {
+		assert(task != null);
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_ADDING_TASK + task.getName().getName());
 		try {
 			taskList = modifier.addTask(taskList, task);
 		} catch (IOException e) {
+			logger.logError(COMPONENT_STORAGE, ERROR_REPEATED_TASK + task.getName().getName());
 			return false;
 		}
 		ArrayList<Task> temp = fh.read();
 		snapshot.add(temp);
 		writeToFile();
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_ADD_TASK + task.getName().getName());
 		return true;
 	}
 
@@ -186,20 +195,23 @@ public class DataBase {
 	 * @return boolean true if the task is successfully deleted; false if the task to delete does not exist
 	 */
 	public boolean delete(Task taskToDelete) {
-		assert (taskToDelete instanceof Task);
+		assert (taskToDelete != null);
 		loadFromFile();
 
-		dataBase_Logger.log(Level.INFO, LOGGING_DELETING_TASK + taskToDelete.getName().getName());
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_DELETING_TASK + taskToDelete.getName().getName());
+		//dataBase_Logger.log(Level.INFO, LOGGING_DELETING_TASK + taskToDelete.getName().getName());
 		try {
 			taskList = modifier.deleteTask(taskList, taskToDelete);
 		} catch (IOException e) {
+			logger.logError(COMPONENT_STORAGE, ERROR_TASK_NOT_EXIST + taskToDelete.getName().getName());
 			return false;
 		}
 
-		dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED + taskToDelete.getName().getName());
+		//dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED + taskToDelete.getName().getName());
 		ArrayList<Task> temp = fh.read();
 		snapshot.add(temp);
 		writeToFile();
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_DELETE_TASK + taskToDelete.getName().getName());
 		return true;
 	}
 
@@ -233,7 +245,7 @@ public class DataBase {
 	 *         result is empty, returns an empty arraylist
 	 */
 	public ArrayList<Task> retrieve(SearchCommand command) {
-		assert (command instanceof SearchCommand);
+		assert (command != null );
 		return retriever.retrieveHandler(taskList, command);
 	}
 
