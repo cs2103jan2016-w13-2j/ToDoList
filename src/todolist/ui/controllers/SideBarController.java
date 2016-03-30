@@ -1,11 +1,15 @@
 package todolist.ui.controllers;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import todolist.MainApp;
 
@@ -15,7 +19,7 @@ public class SideBarController {
 
     /*** TAB STYLES ***/
     private static final String STYLE_TAB_NORMAL = "-fx-background-color: transparent;";
-    private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #95E1D3;";
+    private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #069A8E;";
     // private static final String STYLE_TAB_FOCUSED_DARK =
     // "-fx-background-color: #EB586F;";
 
@@ -72,7 +76,8 @@ public class SideBarController {
 
     private int index = 1;
     private static int NUMBER_BUTTONS = 7;
-    private Button[] buttonArray;
+    private Button[] buttonArray = null;
+    private HashMap<Button, Integer> buttonHash = null;
 
     // Main Application reference
     private MainApp mainApplication = null;
@@ -86,6 +91,7 @@ public class SideBarController {
     @FXML
     public void initialize() {
         setButtonArray();
+        setButtonHash();
         setTodayDate();
         colourTab();
     }
@@ -99,6 +105,39 @@ public class SideBarController {
         buttonArray[4] = done;
         buttonArray[5] = options;
         buttonArray[6] = help;
+        
+        setClickTabLogic();
+        
+    }
+
+    private void setClickTabLogic() {
+        for (int i = 0; i < buttonArray.length; ++i) {
+            Button button = buttonArray[i];
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    paging(button);
+                }
+            });
+        }
+        
+        todayLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                paging(today);
+            }
+        });
+    }
+
+    private void setButtonHash() {
+        buttonHash = new HashMap<Button, Integer>();
+        buttonHash.put(home, 1);
+        buttonHash.put(expired, 2);
+        buttonHash.put(today, 3);
+        buttonHash.put(week, 4);
+        buttonHash.put(done, 5);
+        buttonHash.put(options, 6);
+        buttonHash.put(help, 7);
     }
 
     private void setTodayDate() {
@@ -136,4 +175,18 @@ public class SideBarController {
         return index;
     }
 
+    private int getButtonIndex(Button button) {
+        if (buttonHash.get(button) != null) {
+            return buttonHash.get(button);
+        } else {
+            return -1;
+        }
+    }
+
+    private void paging(Button button) {
+        int index = getButtonIndex(button);
+        if (index >= 1 && index <= 7) {
+            setIndex(index);
+        }
+    }
 }

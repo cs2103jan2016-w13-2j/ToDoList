@@ -40,8 +40,8 @@ public class MainViewController {
     private static final String MESSAGE_CLEAR_TEXTFIELD = "Text field cleared for next input.";
     private static final String ERROR_PROCESSING_USER_INPUT = "Error processing user input.";
     private static final String MESSAGE_UPDATED_MAIN_TASKLIST = "Updated display task list [HOME].";
-    private static final String MESSAGE_HIGHLIGHT_ITEM = "Item #%1$s in display task list [HOME] highlighted.";
-    private static final String MESSAGE_HIGHLIGHT_ITEM_NOT_FOUND = "Item to be highlighted cannot be found in display task list [HOME].";
+    private static final String MESSAGE_HIGHLIGHT_ITEM = "Item #%1$s in display task list highlighted.";
+    private static final String MESSAGE_HIGHLIGHT_ITEM_NOT_FOUND = "Item to be highlighted cannot be found in display task list.";
 
     // Model data
     protected ObservableList<TaskWrapper> tasksToDisplay = null;
@@ -263,6 +263,8 @@ public class MainViewController {
         logger.logAction(Component.UI, MESSAGE_UPDATED_MAIN_TASKLIST);
     }
 
+    /*** Utility Functions ***/
+
     /*
      * highlight gets the index of the task to highlight and put that index item
      * on focus.
@@ -304,6 +306,18 @@ public class MainViewController {
         // Otherwise, denote as cannot be found by -1
         logger.logAction(Component.UI, MESSAGE_HIGHLIGHT_ITEM_NOT_FOUND);
         return -1;
+    }
+
+    /*
+     * isCompleted checks if a given task has already been completed.
+     * 
+     * @param Task task is the given task to check for completion
+     * 
+     * @return boolean isCompleted
+     * 
+     */
+    protected Boolean isCompleted(Task task) {
+        return task.getDoneStatus();
     }
 
 }

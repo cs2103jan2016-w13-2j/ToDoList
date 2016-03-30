@@ -11,20 +11,14 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
-	maxWidth="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="60.0"
-	spacing="20.0" styleClass="side-bar" stylesheets="@DefaultTheme.css"
-	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="todolist.ui.controllers.SideBarController">
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="60.0" spacing="20.0" styleClass="side-bar" stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.SideBarController">
 	<children>
-		<Button fx:id="home" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="HOME">
+		<Button fx:id="home" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="HOME">
 			<VBox.margin>
 				<Insets top="20.0" />
 			</VBox.margin>
 			<graphic>
-				<ImageView id="home-icon" fx:id="homeIcon" fitHeight="30.0"
-					fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="home-icon" fx:id="homeIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -34,11 +28,9 @@
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button fx:id="expired" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="EXPIRED">
+		<Button fx:id="expired" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="EXPIRED">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="expiredIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="expiredIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -50,12 +42,9 @@
 		</Button>
 		<StackPane fx:id="todayStack" prefHeight="50.0" prefWidth="50.0">
 			<children>
-				<Button fx:id="today" contentDisplay="TOP" mnemonicParsing="false"
-					prefHeight="50.0" prefWidth="50.0" text="TODAY">
+				<Button fx:id="today" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="TODAY">
 					<graphic>
-						<ImageView id="button-graphics" fx:id="todayIcon"
-							fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
-							preserveRatio="true">
+						<ImageView id="button-graphics" fx:id="todayIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 							<viewport>
 								<Rectangle2D />
 							</viewport>
@@ -65,15 +54,12 @@
 						</ImageView>
 					</graphic>
 				</Button>
-				<Label id="today-label" fx:id="todayLabel" contentDisplay="CENTER"
-					stylesheets="@DefaultTheme.css" text="00" />
+				<Label id="today-label" fx:id="todayLabel" contentDisplay="CENTER" stylesheets="@DefaultTheme.css" text="00" />
 			</children>
 		</StackPane>
-		<Button fx:id="week" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="WEEK">
+		<Button fx:id="week" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="WEEK">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="weekIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="weekIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -83,11 +69,9 @@
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button fx:id="done" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="DONE">
+		<Button fx:id="done" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="DONE">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="doneIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="doneIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -97,11 +81,9 @@
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button fx:id="options" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="OPTIONS">
+		<Button fx:id="options" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="OPTIONS">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="optionsIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="optionsIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -111,11 +93,9 @@
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button fx:id="help" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="HELP">
+		<Button fx:id="help" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="HELP">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="helpIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="helpIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
