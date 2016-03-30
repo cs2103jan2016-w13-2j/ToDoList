@@ -1,6 +1,5 @@
 package todolist.storage;
 
-
 import java.io.BufferedReader;
 import com.google.gson.Gson;
 
@@ -18,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+
 //@@author yuxin
 /*
  * This class is to read and write from the file directly. It will be called by the database.
@@ -27,11 +27,11 @@ import java.util.ArrayList;
  *
  */
 public class FileHandler {
-	private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
-	private String fileName = "taskStorage.txt";
+    private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
+    private String fileName = "taskStorage.txt";
     private String path = "";
     private String filePath = "taskStorage.txt";
-    
+
     private Gson gson = new Gson();
     
 	public FileHandler() {
@@ -249,4 +249,5 @@ public class FileHandler {
 	private String[] getSplitedPath(String newFilePath) {
 		return newFilePath.split("/");
 	}
+
 }
