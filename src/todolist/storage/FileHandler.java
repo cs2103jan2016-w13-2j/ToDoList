@@ -25,6 +25,7 @@ public class FileHandler {
 	private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
 	private String fileName = "taskStorage.txt";
     private String path = "";
+    private String filePath = "taskStorage.txt";
     
     private Gson gson = new Gson();
     
@@ -39,16 +40,15 @@ public class FileHandler {
 	 */
 	public ArrayList<Task> read() {
 		ArrayList<Task> taskList = new ArrayList<Task>();
-		File filePath = new File(path + fileName);
+		File path = new File(filePath);
 		
-		if(isFileReady(filePath) && !isFileEmpty(filePath)) {
+		if(isFileReady(path) && !isFileEmpty(path)) {
 			try {
 				System.out.println("kjkkkkkk" + filePath);
-				FileReader fr=new FileReader(path + fileName);
+				FileReader fr=new FileReader(filePath);
 				BufferedReader br=new BufferedReader(fr);
 				String input=null;
 				input=br.readLine();
-				System.out.println("kjkkkkkk" + input);
 				
 				while(input != null && !input.equals("null")){
 					taskList.add(gson.fromJson(input, Task.class));
@@ -72,8 +72,8 @@ public class FileHandler {
 	 */
 	public boolean write(ArrayList<Task> taskList) {
 		    try{
-		    	
-				FileWriter fw=new FileWriter(path + fileName);
+		    	System.out.println("whyyy" + filePath);
+				FileWriter fw=new FileWriter(filePath);
 				BufferedWriter bw=new BufferedWriter(fw);
 				for(Task eachTask: taskList) {	
 					System.out.println("filehandler writing into file: " +  gson.toJson(eachTask));
@@ -111,13 +111,21 @@ public class FileHandler {
 	 */
 	public boolean setFile(String newFilePath) {
 		ArrayList<Task> existingTaskList = this.read();
+		File file = new File(newFilePath);
+		  try {
+	            newFilePath = file.getCanonicalPath();
+	           System.out.println(newFilePath);
+	        } catch (IOException e) {
+	            return false;
+	        }
 		
 		//set path 
 		String newPath = getPathOfNewFile(newFilePath.trim());
-		//System.out.println("in filehandler: -->newPath: "+newPath);
 		String newFileName = getNewFileName(newFilePath.trim());
-		
-		if(isPathCorrect(newPath)) {
+		System.out.println("newPath:  " + newPath);
+		System.out.println("newFileName: " + newFileName);
+		if(true) {
+			this.filePath = newFilePath + ".txt";
 			this.path = newPath;
 			this.fileName=newFileName + ".txt";
 			if(existingTaskList.size() != 0) {
@@ -178,9 +186,6 @@ public class FileHandler {
 	}
 	
 	private boolean isPathCorrect(String pathName) {
-		System.out.println("in filehandler: -->is path correct?: "+pathName);
-		System.out.println("in filehandler: -->is path correct?: pathsize "+pathName.length());
-		
 		if(pathName.length() == 0) {
 			
 			return true;

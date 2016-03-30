@@ -267,7 +267,6 @@ public class DataBase {
 		isSet = fh.setFile(newFilePath);
         
 		if (!isSet) {
-			//System.out.println("not setttttttting" );
 			return false;
 		}
 		this.loadFromFile();
