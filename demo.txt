@@ -1,6 +1,19 @@
-reset
-add task 123456
-add event myhahaha 2016-03-29 12:45 1 hour
-done 123456
-add task "ha ha ha ha ha"
-reset
+add task "sell missiles to earn money!"
+add deadline "fly to Afghanistan" 2016-05-01 15:00
+add event "meet Ms.Pepper for lunch" 2016-05-03 12:00 3 hour
+delete "sell missiles to earn money!"
+done "fly to Afghanistan"
+add deadline "save myself" 2016-05-05
+edit "save myself" title "invent arc reactor"
+postpone "meet Ms.Pepper for lunch" 1 week
+open "/Users/Xyx/Desktop/Avengers/"
+label "Meet Natasha for supper" personal
+label "Bring Janice out for a drink" personal
+label "Host a pool party for Calista" personal
+label "Bring Stella out for a ride" personal
+label "Discuss with Dr. Bruce Banner about A.I project" Avengers
+label "Read on Astrophysics" Avengers
+filter Avengers
+sort end ascend
+tab today
+exit

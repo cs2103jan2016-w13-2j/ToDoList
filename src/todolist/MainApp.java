@@ -233,8 +233,8 @@ public class MainApp extends Application {
      */
     private void loadCommandLine() {
         commandField = (TextField) mainView.getBottom();
-        mainController.setCommandLineCallback(commandField);
-        // mainController.setCommandLineCallbackDemo(commandField);
+        //mainController.setCommandLineCallback(commandField);
+        mainController.setCommandLineCallbackDemo(commandField);
     }
 
     /*
