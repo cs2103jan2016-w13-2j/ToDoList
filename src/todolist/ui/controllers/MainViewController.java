@@ -170,39 +170,73 @@ public class MainViewController {
         }
         return myList;
     }
+    
+    Boolean isDemoing = false;
 
     public void setCommandLineCallbackDemo(TextField commandField) {
         // Set Callback for TextField
+
         EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-                synchronized (this) {
-                    ArrayList<String> demoList = demoFileHandler(path);
-                    String commandString = demoList.get(demoCounter);
-                    demoCounter++;
+                if(!isDemoing) {
+                    String commandString = commandField.getText();
+                    // Command command = new Command(commandString);
+                    // System.out.println(command.getCommand());
 
                     // Pass command line input for processing
-                    commandField.clear();
+                    try {
 
-                    final Animation animation = new Transition() {
-                        {
-                            setCycleDuration(new Duration(commandString.length() * 50));
+                        commandField.clear();
+                        logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
+                        if(commandString.equals("Start demo")) {
+                            isDemoing = true;
+                        } else {
+                            mainApplication.uiHandlerUnit.process(commandString);
+                            logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
                         }
+                    } catch (Exception exception) {
+                        logger.logError(Component.UI, ERROR_PROCESSING_USER_INPUT);
+                        exception.printStackTrace();
+                    }
+                } else {
+                    synchronized (this) {
+                        ArrayList<String> demoList = demoFileHandler(path);
+                        String commandString = demoList.get(demoCounter);
+                        demoCounter++;
+                        if(commandString.equals("exit")) {
+                            isDemoing = false;
+                        } else {
+                         // System.out.println(event.getEventType());
 
-                        protected void interpolate(double frac) {
-                            final int length = commandString.length();
-                            final int n = Math.round(length * (float) frac);
-                            commandField.setText(commandString.substring(0, n));
+                            // Pass command line input for processing
+                            commandField.clear();
+
+                            final Animation animation = new Transition() {
+                                {
+                                    setCycleDuration(new Duration(commandString.length() * 50));
+                                }
+
+                                protected void interpolate(double frac) {
+                                    final int length = commandString.length();
+                                    final int n = Math.round(length * (float) frac);
+                                    commandField.setText(commandString.substring(0, n));
+                                }
+
+                            };
+
+                            animation.setOnFinished(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    mainApplication.uiHandlerUnit.process(commandString);
+                                }
+                            });
+
+                            animation.play();
                         }
-
-                    };
-
-                    animation.play();
-
-                    mainApplication.uiHandlerUnit.process(commandString);
+                    }
                 }
-
             }
         };
 
@@ -320,8 +354,8 @@ public class MainViewController {
     }
 
     /*
-     * getTaskAt returns the task at the position specified in the list view, or null if
-     * it is not found.
+     * getTaskAt returns the task at the position specified in the list view, or
+     * null if it is not found.
      * 
      * @param int pos
      * 
@@ -331,7 +365,7 @@ public class MainViewController {
     public Task getTaskAt(int pos) {
         ObservableList<TaskWrapper> itemList = listView.getItems();
         if (pos >= 1 && pos <= itemList.size()) {
-            return itemList.get(pos-1).getTaskObject();
+            return itemList.get(pos - 1).getTaskObject();
         } else {
             return null;
         }

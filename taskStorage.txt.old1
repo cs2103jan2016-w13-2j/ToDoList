@@ -1,0 +1,6 @@
+{"name":{"name":"Chill out with Pepper"},"category":{"category":"Personal"},"isDone":true,"isRecurring":false}
+{"name":{"name":"Meeting with Board of Directors"},"startTime":{"date":{"year":2016,"month":4,"day":1},"time":{"hour":13,"minute":0,"second":0,"nano":0}},"endTime":{"date":{"year":2016,"month":4,"day":1},"time":{"hour":15,"minute":0,"second":0,"nano":0}},"category":{"category":"Stark Industries"},"isDone":false,"isRecurring":false}
+{"name":{"name":"Fix bug in J.A.R.V.I.S"},"category":{"category":"Hobby"},"isDone":false,"isRecurring":false}
+{"name":{"name":"Sign Contract"},"endTime":{"date":{"year":2016,"month":3,"day":20},"time":{"hour":12,"minute":0,"second":0,"nano":0}},"category":{"category":"Stark Industries"},"isDone":false,"isRecurring":false}
+{"name":{"name":"Prepare for Pool Party"},"endTime":{"date":{"year":2016,"month":4,"day":2},"time":{"hour":20,"minute":0,"second":0,"nano":0}},"category":{"category":"Chores"},"isDone":false,"isRecurring":false}
+{"name":{"name":"Pool Party!"},"startTime":{"date":{"year":2016,"month":4,"day":2},"time":{"hour":21,"minute":0,"second":0,"nano":0}},"endTime":{"date":{"year":2016,"month":4,"day":2},"time":{"hour":23,"minute":0,"second":0,"nano":0}},"category":{"category":"Fun"},"isDone":false,"isRecurring":true,"interval":"7-day"}

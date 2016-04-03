@@ -505,7 +505,7 @@ public class Logic {
 
 		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + title);
 
-		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
+		ArrayList<Task> tempTaskList = dataBase.smartSearch(new SearchCommand("NAME", title));
 
 		uiHandler.display(tempTaskList);
 		uiHandler.sendMessage("Here are your search results for '" + title + "'! [to clear this search, type 'reset']",
