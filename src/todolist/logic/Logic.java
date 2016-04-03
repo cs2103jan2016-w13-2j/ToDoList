@@ -79,8 +79,10 @@ public class Logic {
 	 * @return void
 	 */
 	public void stepForward(int increment) {
-		this.steps++;
+		
 		dataBase.takeSnapshot();
+		this.steps++;
+		
 	}
 
 	/**
@@ -184,7 +186,7 @@ public class Logic {
 			LocalDateTime start = LocalDateTime.parse(fuzzyParseDate(startDate) + " " + startTime, formatter);
 			LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
-			System.out.println(start);
+			//System.out.println(start);
 
 			if (!start.isAfter(LocalDateTime.now())) {
 				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
@@ -833,12 +835,16 @@ public class Logic {
 	 */
 	public Boolean undo(int undostep) {
 
-		if (steps <= 0) {
+		if (steps - undostep < 0) {
 			uiHandler.sendMessage("Undo was unsuccessful. No actions to undo!", true);
 		}
 
 		Boolean undoResponse = dataBase.retrieveHistory(steps - undostep);
+		System.out.println("retrieveHistory::::" + undoResponse);
+		//System.out.println("undo now at " + steps);
 		steps = steps - undostep;
+		
+		System.out.println("logic" + steps);
 
 		if (undoResponse) {
 			uiHandler.sendMessage("Undo #" + undostep + " step(s) successfully!", true);
@@ -898,7 +904,7 @@ public class Logic {
 
 	private Boolean noRepeat(String title) {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
-		System.out.println(tempTaskList.size());
+		//System.out.println(tempTaskList.size());
 
 		if (tempTaskList.size() > 0) {
 			logger.log(Level.INFO, LOGGING_REPEATED_TASK + title);

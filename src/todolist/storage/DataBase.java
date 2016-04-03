@@ -48,11 +48,13 @@ public class DataBase {
 
 	private FileHandler fh;
 	public ArrayList<Task> taskList;
-	private ArrayList<ArrayList<Task>> snapshot;
+	//private ArrayList<ArrayList<Task>> snapshot;
+	ArrayList<Task>[] snapshot;
 	private TaskRetriever retriever;
 	private TaskSorter sorter;
 	private DatabaseModifier modifier;
 	private UtilityLogger logger = null;
+	private int counter;
 
 	public DataBase() {
 		// taskList = null;
@@ -61,7 +63,10 @@ public class DataBase {
 		sorter = new TaskSorter();
 		modifier = new DatabaseModifier();
 		loadFromFile();
-		snapshot = new ArrayList<ArrayList<Task>>();
+		//snapshot = new ArrayList<ArrayList<Task>>();
+		snapshot = new ArrayList[1000];
+		snapshot[0] = fh.read();
+		counter = 0;
 		logger = new UtilityLogger();
 	}
 
@@ -208,6 +213,7 @@ public class DataBase {
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_DELETING_TASK + taskToDelete.getName().getName());
 		// dataBase_Logger.log(Level.INFO, LOGGING_DELETING_TASK +
 		// taskToDelete.getName().getName());
+		//ArrayList<Task> temptemp = taskList;
 		try {
 			taskList = modifier.deleteTask(taskList, taskToDelete);
 		} catch (IOException e) {
@@ -218,6 +224,7 @@ public class DataBase {
 		// dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED +
 		// taskToDelete.getName().getName());
 		ArrayList<Task> temp = fh.read();
+		//ArrayList<Task> temp = temptemp;
 		//snapshot.add(temp);
 		writeToFile();
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_DELETE_TASK + taskToDelete.getName().getName());
@@ -225,7 +232,13 @@ public class DataBase {
 	}
  	
 	public boolean takeSnapshot() {
-		snapshot.add(fh.read());
+	    counter++;
+	    System.out.println("snapshot" + counter);
+		snapshot[counter] = fh.read();
+		for(Task each: snapshot[counter-1]) {
+		    System.out.println(each.getName().getName());
+		}
+		//System.out.println("hello" + snapshot.length);
 		return true;
 	}
 
@@ -339,8 +352,12 @@ public class DataBase {
 	 *            the number of steps to go back
 	 */
 	public Boolean retrieveHistory(int steps) {
-		taskList = snapshot.get(steps);
+		taskList = snapshot[steps];
+		System.out.println("database" + counter);
+		this.counter = steps;
+		//System.out.println("goodbye" + steps);
 		writeToFile();
+		System.out.println("size:::::::" + taskList.size() + "step:::" + steps);
 		return true;
 	}
 
@@ -356,7 +373,7 @@ public class DataBase {
 	 */
 	public void sort(String fieldName, String order) {
 		taskList = sorter.sortHandler(taskList, fieldName, order);
-		ArrayList<Task> temp = fh.read();
-		snapshot.add(temp);
+		//ArrayList<Task> temp = fh.read();
+		//snapshot.add(temp);
 	}
 }

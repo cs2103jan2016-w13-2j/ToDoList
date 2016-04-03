@@ -5,15 +5,11 @@ delete "sell missiles to earn money!"
 done "fly to Afghanistan"
 add deadline "save myself" 2016-05-05
 edit "save myself" title "invest arc reactor"
-undo 2
+undo 1
 edit "save myself" title "invent arc reactor"
 postpone "meet Ms.Pepper for lunch" 1 week
 open "/Users/Larry/Desktop/Avengers/"
 reset
-label "Meet Natasha for supper" personal
-label "Bring Janice out for a drink" personal
-label "Host a pool party for Calista" personal
-label "Bring Stella out for a ride" personal
 label "Discuss with Dr. Bruce Banner about A.I project" Avengers
 label "Read on Astrophysics" Avengers
 filter Avengers
