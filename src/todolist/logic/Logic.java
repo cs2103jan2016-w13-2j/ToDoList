@@ -79,7 +79,8 @@ public class Logic {
 	 * @return void
 	 */
 	public void stepForward(int increment) {
-		this.steps = steps + increment;
+		this.steps++;
+		dataBase.takeSnapshot();
 	}
 
 	/**

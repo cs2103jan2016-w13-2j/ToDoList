@@ -107,6 +107,7 @@ public class DataBase {
 	 */
 	// helper method
 
+/*
 	public String convert_TaskToString(Task currentTask) {
 		String task_str = "";
 		task_str += currentTask.getName().getName() + " ";
@@ -158,6 +159,7 @@ public class DataBase {
 
 		return task_str;
 	}
+	*/
 
 	public void loadFromFile() {
 		taskList = fh.read();
@@ -184,7 +186,7 @@ public class DataBase {
 			return false;
 		}
 		ArrayList<Task> temp = fh.read();
-		snapshot.add(temp);
+		//snapshot.add(temp);
 		writeToFile();
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_ADD_TASK + task.getName().getName());
 		return true;
@@ -216,9 +218,14 @@ public class DataBase {
 		// dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED +
 		// taskToDelete.getName().getName());
 		ArrayList<Task> temp = fh.read();
-		snapshot.add(temp);
+		//snapshot.add(temp);
 		writeToFile();
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_DELETE_TASK + taskToDelete.getName().getName());
+		return true;
+	}
+ 	
+	public boolean takeSnapshot() {
+		snapshot.add(fh.read());
 		return true;
 	}
 

@@ -124,8 +124,9 @@ public class FileHandler {
 
 		try {
 			Files.copy(from, to, options);
+			
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			return false;
 		}
 
 		filePath = newFilePath;
@@ -164,8 +165,7 @@ public class FileHandler {
 	}
 
 	public String getPath() {
-		File pathOfFile = new File(path);
-		return pathOfFile.getAbsolutePath();
+		return filePath;
 	}
 
 	public String getFileName() {
@@ -180,8 +180,7 @@ public class FileHandler {
 			if (!isFileEmpty(updatedDirectory)) {
 				FileReader fr = new FileReader(updatedDirectory);
 				BufferedReader br = new BufferedReader(fr);
-				path = br.readLine();
-				fileName = br.readLine();
+				filePath = br.readLine();
 				br.close();
 			}
 		} catch (Exception e) {
