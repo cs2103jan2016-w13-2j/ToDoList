@@ -78,6 +78,38 @@ public class NormalCommandParser {
          * for(int i=0; i<temp.length-1; i++) { args[i] = temp[i + 1]; }
          */
 
-        return new TokenizedCommand(action, args);
+        return new TokenizedCommand(convert(action), args);
+    }
+    
+    
+    private String convert(String input) {
+    	if(input.equals("add") || input.equals("schedule")||input.equals("create")) {
+    		return "add";
+    	}
+    	if(input.equals("delete") || input.equals("cancel")||input.equals("remove")) {
+    		return "delete";
+    	}
+    	if(input.equals("edit") || input.equals("modify")||input.equals("change")||input.equals("replace")) {
+    		return "edit";
+    	}
+    	if(input.equals("archive") || input.equals("done")||input.equals("complete") || input.equals("shelf") || input.equals("finish")) {
+    		return "done";
+    	}
+    	if(input.equals("unarchive") || input.equals("undone")||input.equals("incomplete") || input.equals("unshelf") || input.equals("unfinish")) {
+    		return "undone";
+    	}
+    	if(input.equals("postpone") || input.equals("delay")) {
+    		return "postpone";
+    	}
+    	if(input.equals("forward") || input.equals("advance")) {
+    		return "forward";
+    	}
+    	if(input.equals("label") || input.equals("categorize")||input.equals("tag")) {
+    		return "label";
+    	}
+    	if(input.equals("open") || input.equals("load")) {
+    		return "open";
+    	}
+    	return input;
     }
 }
