@@ -73,19 +73,20 @@ public class FlexiCommandParser {
 		
 		String result = null;
 		
-		if(column[1] == 0) {
-			System.out.println(input.substring(0, column[0] - 1));
-			System.out.println(input.substring(column[0] + length[0] -1));
 		
-			
-			result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0] -1);
-		} else {
-			result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0], column[1] - 1) + input.substring(column[1] + length[1] - 1);
-		}
-		
-		if(dates.size() == 0) {
+		if(dates == null || dates.size() == 0) {
 			return new TokenizedCommand("add", new String[]{"task", input});
 		} else {
+			if(column[1] == 0) {
+				System.out.println(input.substring(0, column[0] - 1));
+				System.out.println(input.substring(column[0] + length[0] -1));
+			
+				
+				result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0] -1);
+			} else {
+				result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0], column[1] - 1) + input.substring(column[1] + length[1] - 1);
+			}
+			
 			if(dates.size() == 1) {
 				Date deadline = dates.get(0);
 				
