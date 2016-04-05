@@ -26,9 +26,14 @@ public class FlexiCommandParser {
 					|| temp[i].equals("switchposition") || temp[i].equals("label") || temp[i].equals("postpone")
 					|| temp[i].equals("forward") || temp[i].equals("add-remind") || temp[i].equals("remind")
 					|| temp[i].equals("add-remind-bef") || temp[i].equals("remind-bef") || temp[i].equals("done")
-					|| temp[i].equals("undone") || temp[i].equals("exit") || temp[i].equals("undo")
-					|| temp[i].equals("redo") || temp[i].equals("reset") || temp[i].equals("tab")
-					|| temp[i].equals("set-recurring") || temp[i].equals("remove-recurring")) {
+					|| temp[i].equals("undone") || temp[i].equals("exit") || temp[i].equals("undo") || temp[i].equals("redo")
+					|| temp[i].equals("reset") || temp[i].equals("tab") || temp[i].equals("set-recurring")
+					|| temp[i].equals("remove-recurring") || temp[i].equals("create") || temp[i].equals("schedule")
+					|| temp[i].equals("cancel") || temp[i].equals("remove") || temp[i].equals("modify") || temp[i].equals("change")
+					|| temp[i].equals("replace") || temp[i].equals("archive") || temp[i].equals("complete") || temp[i].equals("finish")
+					|| temp[i].equals("shelf") || temp[i].equals("unarchive") || temp[i].equals("incomplete")
+					|| temp[i].equals("unfinish") || temp[i].equals("unshelf") || temp[i].equals("delay") || temp[i].equals("advance")
+					|| temp[i].equals("categorize") || temp[i].equals("tag") || temp[i].equals("load")) {
 
 				return new TokenizedCommand("invalid", temp);
 			}
