@@ -104,6 +104,7 @@ public class FileHandler {
 	 * @return true if the file is set; false if the path is not a correct path
 	 */
 	public boolean setFile(String newFilePath) {
+		//check whether the directory is valid
 		if(!isPathCorrect(newFilePath)) {
 			return false;
 		}
@@ -132,22 +133,7 @@ public class FileHandler {
 		} catch (Exception e) {
 			return false;
 		}
-
-		/*
-		 * ArrayList<Task> existingTaskList = this.read(); File file = new
-		 * File(newFilePath + ".txt"); //try { newFilePath =
-		 * file.getAbsolutePath(); System.out.println("jsfdsfjlsdf" +
-		 * newFilePath); // } catch (IOException e) { // return false; // }
-		 * //newFilePath = file.getPath(); //System.out.println(newFilePath);
-		 * //set path String newPath = getPathOfNewFile(newFilePath.trim()+"/");
-		 * String newFileName = getNewFileName(newFilePath.trim()); file = new
-		 * File(newPath); System.out.println("storageeeeeeee : " +
-		 * file.isDirectory()); if(true) { this.filePath = newFilePath;
-		 * this.path = newPath; this.fileName=newFileName + ".txt";
-		 * if(existingTaskList.size() != 0) { this.write(existingTaskList); }
-		 * 
-		 * return true; } System.out.println("not directory"); return false;
-		 */
+		
 		return true;
 	}
 

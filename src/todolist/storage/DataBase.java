@@ -43,8 +43,6 @@ public class DataBase {
 	private static String ERROR_TASK_NOT_EXIST = "The task to delete does not exist: ";
 
 	protected static Component COMPONENT_STORAGE = UtilityLogger.Component.Storage;
-	// private static Logger dataBase_Logger = Logger.getLogger("Database
-	// logger");
 
 	private FileHandler fh;
 	public ArrayList<Task> taskList;
@@ -79,93 +77,6 @@ public class DataBase {
 		taskList = new ArrayList<Task>();
 		writeToFile();
 	}
-
-	// helper method
-	/*
-	 * public Task convert_StringToTask(String taskStr) { String[] taskInfo =
-	 * taskStr.split(" "); Name name = new Name(taskInfo[0]); LocalDateTime
-	 * startTime = null; LocalDateTime endTime = null; Category category = null;
-	 * Reminder reminder = null; Boolean isDone = null;
-	 *
-	 * if (!taskInfo[1].equals(new String("mynull"))) { startTime =
-	 * LocalDateTime.parse(taskInfo[1]); }
-	 *
-	 * if (!taskInfo[2].equals(new String("mynull"))) { endTime =
-	 * LocalDateTime.parse(taskInfo[2]); }
-	 *
-	 * if (!taskInfo[3].equals(new String("mynull"))) { category = new
-	 * Category(taskInfo[3]); }
-	 *
-	 * if (!taskInfo[4].equals(new String("mynull"))) { isDone =
-	 * Boolean.valueOf(taskInfo[4]); }
-	 *
-	 * if (!taskInfo[5].equals(new String("mynull+mynull"))) { if
-	 * (!taskInfo[4].split("+")[1].equals("mynull")) { reminder = new
-	 * Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), null); } else {
-	 * reminder = new Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]),
-	 * LocalDateTime.parse(taskInfo[4].split("+")[1])); } }
-	 *
-	 * // Reminder reminder = new //
-	 * Reminder(Boolean.valueOf(taskInfo[4].split("+")[0]), //
-	 * LocalDateTime.parse(taskInfo[4].split("+")[1]));
-	 *
-	 * return new Task(name, startTime, endTime, category, reminder, isDone); }
-	 */
-	// helper method
-
-/*
-	public String convert_TaskToString(Task currentTask) {
-		String task_str = "";
-		task_str += currentTask.getName().getName() + " ";
-
-		if (currentTask.getStartTime() == null) {
-			task_str += "mynull" + " ";
-		} else {
-			task_str += currentTask.getStartTime().toString() + " ";
-		}
-
-		if (currentTask.getEndTime() == null) {
-			task_str += "mynull" + " ";
-		} else {
-			task_str += currentTask.getEndTime().toString() + " ";
-		}
-
-		if (currentTask.getCategory() == null) {
-			task_str += "mynull" + " ";
-		} else {
-			task_str += currentTask.getCategory().getCategory() + " ";
-		}
-
-		if (currentTask.getDoneStatus() == null) {
-			task_str += "mynull" + " ";
-		} else {
-			task_str += currentTask.getDoneStatus().toString() + " ";
-		}
-
-		if (currentTask.getReminder() == null) {
-			task_str += "mynull" + "+";
-			task_str += "mynull";
-		} else {
-			if (currentTask.getReminder().getStatus() == null) {
-				task_str += "mynull" + "+";
-				if (currentTask.getReminder().getTime() == null) {
-					task_str += "mynull";
-				} else {
-					task_str += currentTask.getReminder().getTime().toString();
-				}
-			} else {
-				task_str += currentTask.getReminder().getStatus().toString() + "+";
-				if (currentTask.getReminder().getTime() == null) {
-					task_str += "mynull";
-				} else {
-					task_str += currentTask.getReminder().getTime().toString();
-				}
-			}
-		}
-
-		return task_str;
-	}
-	*/
 
 	public void loadFromFile() {
 		taskList = fh.read();
@@ -315,7 +226,12 @@ public class DataBase {
 		this.loadFromFile();
 		return isSet;
 	}
-
+    
+	/**
+	 * load 
+	 * @param newFilePath
+	 * @return
+	 */
 	public boolean openNewFile(String newFilePath) {
 		assert (newFilePath != null);
 		boolean isOpen = false;
