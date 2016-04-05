@@ -152,8 +152,17 @@ public class FileHandler {
 	}
 
 	public boolean openFile(String newFilePath) {
-		newFilePath = newFilePath + fileName;
-		filePath = newFilePath;
+		//check whether the directory exist		
+		String tempFilePath = newFilePath + fileName;
+		if(!isPathCorrect(tempFilePath)) {
+			return false;
+		}
+		//check whether the txt file contains the correct format (gson format)
+		if(read() == null) {			
+			return false;
+		}
+		
+		filePath = tempFilePath;
 		return true;
 	}
 
