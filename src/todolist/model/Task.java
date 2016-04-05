@@ -66,6 +66,7 @@ public class Task {
 	}
 
 	public LocalDateTime getStartTime() {
+		/*
 		if (isRecurring && startTime != null) {
 			String temp[] = interval.split("-");
 			String length = temp[0];
@@ -76,11 +77,13 @@ public class Task {
 			}
 			return startTime;
 		} else {
+		*/
 			return startTime;
-		}
+		//}
 	}
 
 	public LocalDateTime getEndTime() {
+		/*
 		if (isRecurring) {
 			String temp[] = interval.split("-");
 			String length = temp[0];
@@ -104,8 +107,9 @@ public class Task {
 				return endTime;
 			}
 		} else {
+		*/
 			return endTime;
-		}
+		//}
 	}
 
 	public Category getCategory() {

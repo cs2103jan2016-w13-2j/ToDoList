@@ -1,11 +1,13 @@
 package todolist.logic;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,7 +53,7 @@ public class Logic {
 	public void clean() {
 		this.dataBase.clear();
 	}
-	
+
 	public void invalid() {
 		uiHandler.sendMessage("invalid input", true);
 	}
@@ -83,10 +85,10 @@ public class Logic {
 	 * @return void
 	 */
 	public void stepForward(int increment) {
-		
+
 		dataBase.takeSnapshot();
 		this.steps++;
-		
+
 	}
 
 	/**
@@ -190,7 +192,7 @@ public class Logic {
 			LocalDateTime start = LocalDateTime.parse(fuzzyParseDate(startDate) + " " + startTime, formatter);
 			LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
-			//System.out.println(start);
+			// System.out.println(start);
 
 			if (!start.isAfter(LocalDateTime.now())) {
 				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
@@ -367,6 +369,13 @@ public class Logic {
 		}
 	}
 
+	private String getCurrentTimeStamp() {
+		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// dd/MM/yyyy
+		Date now = new Date();
+		String strDate = sdfDate.format(now);
+		return strDate;
+	}
+
 	/**
 	 * This method takes in the title of a task and marks it as done.
 	 *
@@ -388,7 +397,31 @@ public class Logic {
 		Boolean deleteResponse = dataBaseDelete(tempTask);
 
 		tempTask.setDoneStatus(true);
+		String tempName = tempTask.getName().getName();
+		tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
+
 		Boolean addResponse = dataBaseAdd(tempTask);
+
+		if (tempTask.getRecurringStatus()) {
+
+			String interval = tempTask.getInterval();
+			String temp[] = interval.split("-");
+			String length = temp[0];
+			String unit = temp[1];
+
+			LocalDateTime oldEndTime = tempTask.getEndTime();
+			LocalDateTime newEndTime = oldEndTime.plus(Long.parseLong(length), generateTimeUnit(unit));
+			LocalDateTime newStartTime = null;
+			if (tempTask.getStartTime() != null) {
+				LocalDateTime oldStartTime = tempTask.getStartTime();
+				newStartTime = oldStartTime.plus(Long.parseLong(length), generateTimeUnit(unit));
+			}
+
+			Task newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
+					tempTask.getReminder(), false, true, interval);
+			addResponse = dataBaseAdd(newTempTask);
+
+		}
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
@@ -845,9 +878,9 @@ public class Logic {
 
 		Boolean undoResponse = dataBase.retrieveHistory(steps - undostep);
 		System.out.println("retrieveHistory::::" + undoResponse);
-		//System.out.println("undo now at " + steps);
+		// System.out.println("undo now at " + steps);
 		steps = steps - undostep;
-		
+
 		System.out.println("logic" + steps);
 
 		if (undoResponse) {
@@ -908,7 +941,7 @@ public class Logic {
 
 	private Boolean noRepeat(String title) {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
-		//System.out.println(tempTaskList.size());
+		// System.out.println(tempTaskList.size());
 
 		if (tempTaskList.size() > 0) {
 			logger.log(Level.INFO, LOGGING_REPEATED_TASK + title);
