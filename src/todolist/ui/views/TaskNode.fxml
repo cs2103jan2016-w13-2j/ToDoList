@@ -13,16 +13,18 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <HBox id="task-hbox-item" fx:id="root" alignment="CENTER_LEFT"
 	maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	minHeight="-Infinity" prefHeight="85.0" prefWidth="200.0" stylesheets="@DefaultTheme.css"
-	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
+	xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity"
-			minWidth="-Infinity" prefHeight="85.0" prefWidth="5.0">
+			minWidth="-Infinity" prefWidth="5.0">
 			<children>
-				<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="85.0"
+				<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="80.0"
 					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
 			</children>
 		</AnchorPane>
@@ -42,18 +44,20 @@
 			</children>
 		</StackPane>
 		<VBox fx:id="details" maxHeight="1.7976931348623157E308"
-			maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="100.0"
+			maxWidth="1.7976931348623157E308" prefHeight="80.0" prefWidth="100.0"
 			HBox.hgrow="ALWAYS">
 			<children>
 				<HBox fx:id="titleBox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308"
-					prefHeight="100.0">
+					prefHeight="20.0">
 					<children>
-						<Label fx:id="title" maxHeight="1.7976931348623157E308"
-							text="Title" textFill="WHITE" wrapText="true">
-							<font>
-								<Font name="System Bold" size="16.0" />
-							</font>
-						</Label>
+						<TextFlow id="titleFlow" fx:id="titleFlow" maxHeight="1.7976931348623157E308"
+							maxWidth="1.7976931348623157E308" prefHeight="20.0">
+							<children>
+								<Text id="title" fx:id="title" fontSmoothingType="LCD"
+									strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
+									text="Text" />
+							</children>
+						</TextFlow>
 					</children>
 					<VBox.margin>
 						<Insets />
@@ -63,7 +67,8 @@
 					</padding>
 				</HBox>
 				<HBox fx:id="relativeRangeBox" alignment="CENTER_LEFT"
-					prefHeight="100.0" prefWidth="200.0">
+					maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0"
+					prefWidth="20.0">
 					<children>
 						<Label fx:id="relativeRange" text="Relative Range" textFill="WHITE">
 							<font>
@@ -76,17 +81,19 @@
 					</VBox.margin>
 				</HBox>
 				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" layoutX="10.0"
-					layoutY="40.0" prefHeight="100.0" prefWidth="200.0">
+					layoutY="40.0" maxHeight="-Infinity" minHeight="-Infinity"
+					prefHeight="20.0" prefWidth="200.0">
 					<children>
-						<Label fx:id="dateRange" text="Date Range" textFill="WHITE">
+						<Label fx:id="dateRange" maxHeight="-Infinity" minHeight="-Infinity"
+							prefHeight="20.0" text="Date Range" textFill="WHITE">
 							<font>
 								<Font size="10.0" />
 							</font>
 						</Label>
 					</children>
 				</HBox>
-				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" prefHeight="100.0"
-					prefWidth="200.0">
+				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" maxHeight="-Infinity"
+					minHeight="-Infinity" prefHeight="20.0" prefWidth="200.0">
 					<children>
 						<Circle fx:id="categorySprite" fill="#ababab" radius="4.0"
 							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
@@ -106,7 +113,8 @@
 				</HBox>
 			</children>
 		</VBox>
-		<StackPane fx:id="completeStatus" stylesheets="@DefaultTheme.css">
+		<StackPane fx:id="completeStatus" maxHeight="-Infinity"
+			minHeight="-Infinity" prefHeight="20.0" stylesheets="@DefaultTheme.css">
 			<children>
 				<Rectangle fx:id="statusBacking" arcHeight="10.0"
 					arcWidth="10.0" fill="#ffeb1f" height="25.0" stroke="BLACK"

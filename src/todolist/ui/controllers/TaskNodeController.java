@@ -20,6 +20,7 @@ import todolist.ui.TaskWrapper;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ObservableNumberValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -34,6 +35,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 //@@author huangliejun
 
@@ -45,7 +48,6 @@ import javafx.scene.text.FontPosture;
  */
 public class TaskNodeController {
 
-    private static final String DISPLAY_ITEM_HEADER_DUE = "Due: ";
     /*** STATIC MESSAGES ***/
 
     // ERRORS
@@ -125,7 +127,9 @@ public class TaskNodeController {
     @FXML
     private HBox titleBox = null;
     @FXML
-    private Label title = null;
+    private Text title = null;
+    @FXML
+    private TextFlow titleFlow = null;
 
     // Content-RELATIVE TIME
     @FXML
@@ -210,6 +214,13 @@ public class TaskNodeController {
         LocalDateTime startDateTime = task.getStartTime();
         LocalDateTime endDateTime = task.getEndTime();
 
+        // Scale label height
+        ObservableNumberValue diff = relativeRangeBox.heightProperty()
+                .add(dateRangeBox.heightProperty().add(categoryBox.heightProperty().add(16)));
+        priorityLabel.heightProperty().bind(titleFlow.heightProperty().add(diff));
+        
+        title.fillProperty().bind(number.textFillProperty());
+        
         /** Validation **/
 
         // Ensure integrity of task object
@@ -235,13 +246,10 @@ public class TaskNodeController {
         if (category == null) {
             categoryName = new String(NULL_DISPLAY_ITEM_CATEGORY);
             categorySprite.setFill(Color.web(COLOR_UNKNOWN));
-            // numLabelBase.setFill(Color.web(COLOR_UNKNOWN));
         } else {
             categoryName = DISPLAY_ITEM_HEADER_CATEGORY + category.getCategory();
             Color catColor = Color.web(colorsHex[Math.abs(categoryName.hashCode()) % colorsHex.length]);
             categorySprite.setFill(catColor);
-            // numLabelBase.setFill(catColor);
-
         }
 
         this.category.setText(categoryName);
