@@ -157,25 +157,53 @@ public class TaskRetriever {
     
     protected ArrayList<Task> smartRetrieve(ArrayList<Task> taskList, SearchCommand command) {
     	ArrayList<Task> resultList = new ArrayList<Task>();
-        String requiredName = command.getContent();
+        String requiredName = command.getContent().trim();
+        
         for (Task eachTask : taskList) {
-            if (isSubstring(eachTask.getName().getName(), requiredName)) {
+        	boolean isMatching = false;
+        	String eachName = eachTask.getName().getName();
+        	String temp[] = eachName.split(" ");
+        	if(temp.length == 1) {
+        		isMatching = retrieveByInitial(requiredName, eachName);
+        	}else {
+        		isMatching = retrieveByTokenizedString(requiredName, temp);
+        	}
+        	
+            if (isMatching) {
                 resultList.add(eachTask);
             }
         }
+        
         System.out.println(Arrays.toString(resultList.toArray()));
         return resultList;
     }
 
-    private boolean isSame(String str1, String str2) {
+    private boolean retrieveByTokenizedString(String requiredName, String[] temp) {
+		boolean isMatching = false;
+		for(int i = 0; i< temp.length; i++) {
+			if(temp[i].equalsIgnoreCase(requiredName)) {
+				isMatching = true;
+			}
+		}
+		return isMatching;
+	}
+
+	private boolean retrieveByInitial(String requiredName, String eachName) {
+		boolean isMatching = false;
+		int length = requiredName.length();
+		if(length > eachName.length()) {
+			isMatching = false;
+		} else {
+			String initialPart = eachName.substring(0, length);
+			isMatching = initialPart.equalsIgnoreCase(requiredName);
+		}
+		return isMatching;
+	}
+
+	private boolean isSame(String str1, String str2) {
         return str1.equalsIgnoreCase(str2);
     }
 
-    private boolean isSubstring(String str1, String str2) {
-    	str1 = str1.toLowerCase();
-    	str2 = str2.toLowerCase();
-        return str1.contains(str2);
-    }
 
     private ArrayList<Task> retrieve_Category(SearchCommand command) {
         ArrayList<Task> resultList = new ArrayList<Task>();
