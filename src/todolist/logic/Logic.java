@@ -51,6 +51,10 @@ public class Logic {
 	public void clean() {
 		this.dataBase.clear();
 	}
+	
+	public void invalid() {
+		uiHandler.sendMessage("invalid input", true);
+	}
 
 	public UIHandler getUIHandler() {
 		return uiHandler;

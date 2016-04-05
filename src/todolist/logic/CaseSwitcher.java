@@ -460,6 +460,9 @@ public class CaseSwitcher {
 				logic.tab(arg[0]);
 			}
 			break;
+		case "invalid":
+			logic.invalid();
+			break;
 		default:
 			logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
 		}
