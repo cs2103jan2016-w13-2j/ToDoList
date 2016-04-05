@@ -31,33 +31,25 @@ public class FlexiCommandParser {
             || temp[i].equals("remove-recurring")) {
         		return new TokenizedCommand("invalid", temp);
         	} else {
-        		
+        		Parser parser = new Parser(TimeZone.getDefault());
+                List<DateGroup> groups = parser.parse(input);
+                for (DateGroup group : groups) {
+                    List<Date> dates = group.getDates();
+//                    int line = group.getLine();
+//                    int column = group.getPosition();
+//                    String matchingValue = group.getText();
+//                    String syntaxTree = group.getSyntaxTree().toStringTree();
+//                    Map parseMap = group.getParseLocations();
+//                    boolean isRecurreing = group.isRecurring();
+//                    Date recursUntil = group.getRecursUntil();
+                    System.out.println(dates);
+
+                }
+
+                String action = null;
+                String args[] = null;
+                return new TokenizedCommand(action, args);
         	}
         }
-    	
-    	
-    	
-    	
-    	
-    	
-
-        Parser parser = new Parser(TimeZone.getDefault());
-        List<DateGroup> groups = parser.parse(input);
-        for (DateGroup group : groups) {
-            List<Date> dates = group.getDates();
-//            int line = group.getLine();
-//            int column = group.getPosition();
-//            String matchingValue = group.getText();
-//            String syntaxTree = group.getSyntaxTree().toStringTree();
-//            Map parseMap = group.getParseLocations();
-//            boolean isRecurreing = group.isRecurring();
-//            Date recursUntil = group.getRecursUntil();
-            System.out.println(dates);
-
-        }
-
-        String action = null;
-        String args[] = null;
-        return new TokenizedCommand(action, args);
     }
 }
