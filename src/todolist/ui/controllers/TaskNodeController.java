@@ -3,11 +3,14 @@ package todolist.ui.controllers;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -387,12 +390,16 @@ public class TaskNodeController {
         String startOutput = null;
         String durationOutput = null;
 
+        ZoneId defaultZoneId = ZoneId.of(ZoneOffset.systemDefault().getId());
+        ZonedDateTime zoneDateTime = LocalDateTime.now().atZone(defaultZoneId);
+        ZoneOffset zoneOffset = zoneDateTime.getOffset();
+        
         PrettyTime prettyParser = new PrettyTime();
-        Instant startInstant = startDateTime.toInstant(ZoneOffset.ofHours(ZONE_OFFSET));
+        Instant startInstant = startDateTime.toInstant(zoneOffset);
         Date start = Date.from(startInstant);
-        Instant endInstant = endDateTime.toInstant(ZoneOffset.ofHours(ZONE_OFFSET));
+        Instant endInstant = endDateTime.toInstant(zoneOffset);
         Date end = Date.from(endInstant);
-        Instant nowInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(ZONE_OFFSET));
+        Instant nowInstant = LocalDateTime.now().toInstant(zoneOffset);
         Date now = Date.from(nowInstant);
 
         // Set output for the start of event

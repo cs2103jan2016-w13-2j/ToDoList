@@ -233,7 +233,7 @@ public class MainApp extends Application {
      */
     private void loadCommandLine() {
         commandField = (TextField) mainView.getBottom();
-        //mainController.setCommandLineCallback(commandField);
+        // mainController.setCommandLineCallback(commandField);
         mainController.setCommandLineCallbackDemo(commandField);
     }
 
@@ -488,11 +488,16 @@ public class MainApp extends Application {
             loadSettingsView();
             break;
         case HELP_TAB:
-            loadHelpView();
+            // loadHelpView();
+            triggerHelpPopup();
             break;
         default:
             loadMainView();
         }
+    }
+
+    private void triggerHelpPopup() {
+
     }
 
     public int getPage() {

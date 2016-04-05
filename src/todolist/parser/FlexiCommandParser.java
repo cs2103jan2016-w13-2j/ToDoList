@@ -47,7 +47,7 @@ public class FlexiCommandParser {
 		}
 		
 		
-		Parser parser = new Parser(TimeZone.getDefault());
+		Parser parser = new Parser(TimeZone.getTimeZone(ZoneOffset.systemDefault()));
 		List<DateGroup> groups = parser.parse(input);
 		List<Date> dates = null;
 		int[] column = new int[] {0, 0};
@@ -92,7 +92,7 @@ public class FlexiCommandParser {
 				
 				
 				Instant instant = Instant.ofEpochMilli(deadline.getTime());
-			    LocalDateTime end = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+			    LocalDateTime end = LocalDateTime.ofInstant(instant, ZoneOffset.systemDefault());
 			    
 			    DecimalFormat decimalFormatter = new DecimalFormat("00");
 			    String deadlineDate = end.getYear() + "-"
