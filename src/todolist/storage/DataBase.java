@@ -338,16 +338,6 @@ public class DataBase {
 	}
 
 	/**
-	 * This method returns the name of the local text file that stores all the
-	 * tasks.
-	 *
-	 * @return the file name in string representation
-	 */
-	public String getFileName() {
-		return fh.getFileName();
-	}
-
-	/**
 	 * Goes back to a number of steps ago according to the number of steps pass
 	 * in.
 	 *

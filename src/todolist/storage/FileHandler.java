@@ -28,9 +28,7 @@ import java.util.ArrayList;
  */
 public class FileHandler {
 	private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
-	private String fileName = "taskStorage.txt";
-	@SuppressWarnings("unused")
-    private String path = "";
+	private String fileName = "/taskStorage.txt";
 	private String filePath = "taskStorage.txt";
 
 	private Gson gson = new Gson();
@@ -97,17 +95,6 @@ public class FileHandler {
 	}
 
 	/**
-	 * The method is to set the path to store the storage file.
-	 * 
-	 * @param path
-	 *            the path that is going to store the file.
-	 * @return true if the path exists and is able to store the file
-	 */
-	/*
-	 * public boolean setPath(String path) { if(path.equals("")) { return true;
-	 * }else if(isPathCorrect(path+"/")) { this.path=path+"/"; } return true; }
-	 */
-	/**
 	 * The method is to set a new direction to store the tasks in the defined
 	 * path.
 	 * 
@@ -117,7 +104,11 @@ public class FileHandler {
 	 * @return true if the file is set; false if the path is not a correct path
 	 */
 	public boolean setFile(String newFilePath) {
-		newFilePath = newFilePath + "/taskStorage.txt";
+		if(!isPathCorrect(newFilePath)) {
+			return false;
+		}
+		
+		newFilePath = newFilePath + fileName;
 		Path from = Paths.get(filePath);
 		Path to = Paths.get(newFilePath);
 		CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING,
@@ -131,7 +122,8 @@ public class FileHandler {
 		}
 
 		filePath = newFilePath;
-
+        
+		//write the new file path into local txt file
 		try {
 			FileWriter fw = new FileWriter(PATH_UPDATEDDIRECTORY);
 			BufferedWriter bw = new BufferedWriter(fw);
@@ -160,17 +152,13 @@ public class FileHandler {
 	}
 
 	public boolean openFile(String newFilePath) {
-		newFilePath = newFilePath + "/taskStorage.txt";
+		newFilePath = newFilePath + fileName;
 		filePath = newFilePath;
 		return true;
 	}
 
 	public String getPath() {
 		return filePath;
-	}
-
-	public String getFileName() {
-		return fileName;
 	}
 
 	// helper methods
@@ -200,49 +188,19 @@ public class FileHandler {
 		return true;
 	}
 
-	@SuppressWarnings("unused")
     private boolean isPathCorrect(String pathName) {
 		if (pathName.length() == 0) {
 
 			return true;
 		}
 		File pathToCheck = new File(pathName);
-		if (pathToCheck.isDirectory()) {
+		if (pathToCheck.isDirectory() || pathToCheck.isFile()) {
 			return true;
 		}
 		return false;
 	}
 
-	@SuppressWarnings("unused")
-    private String getPathOfNewFile(String newFilePath) {
-		String[] splitedPath = getSplitedPath(newFilePath);
-		String newPath = "";
 
-		if (splitedPath.length == 1) {
-			return newPath;
-		}
 
-		for (int i = 0; i < splitedPath.length - 1; i++) {
-			newPath = newPath + splitedPath[i] + "/";
-		}
-		return newPath.substring(0, newPath.length() - 1);
-	}
-
-	@SuppressWarnings("unused")
-    private String getNewFileName(String newFilePath) {
-		String[] splitedPath = getSplitedPath(newFilePath);
-		if (splitedPath.length == 1) {
-			return newFilePath;
-		}
-		return splitedPath[splitedPath.length - 1];
-	}
-
-	private String[] getSplitedPath(String newFilePath) {
-		return newFilePath.split("/");
-	}
-
-    public void setPath(String path) {
-        this.path = path;
-    }
 
 }
