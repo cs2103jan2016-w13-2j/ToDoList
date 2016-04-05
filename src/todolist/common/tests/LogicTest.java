@@ -35,7 +35,6 @@ public class LogicTest {
     @Test
     public void testProcess1() {
         logic.clean();
-        boolean expected = true;
 
         String name = "title";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -47,16 +46,16 @@ public class LogicTest {
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
-        assertEquals(isEqual, expected);
+        assertTrue(isEqual);
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
-        assertEquals(isEqual, expected);
+        assertTrue(isEqual);
         // check start time
         isEqual = taskList.get(0).getStartTime().isEqual(start);
-        assertEquals(isEqual, expected);
+        assertTrue(isEqual);
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
-        assertEquals(isEqual, expected);
+        assertTrue(isEqual);
     }
 
     /**
@@ -65,7 +64,6 @@ public class LogicTest {
     @Test
     public void testProcess2() {
         logic.clean();
-        boolean expected = true;
 
         String name = "title";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -77,13 +75,13 @@ public class LogicTest {
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
-        assertEquals(isEqual, expected);
+        assertTrue(isEqual);
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
-        assertEquals(isEqual, expected);
+        assertTrue(isEqual);
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
-        assertEquals(isEqual, expected);
+        assertTrue(isEqual);
     }
 
     /**
@@ -151,10 +149,10 @@ public class LogicTest {
 
         String name = "title";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime end = LocalDateTime.parse("2016-04-01" + " " + "12:00", formatter);
+        LocalDateTime end = LocalDateTime.parse("2016-04-08" + " " + "12:00", formatter);
 
         // pass in the command to add a new deadline
-        logic.addRecurringDeadline("7-day", "title", "2016-03-25", "12:00");
+        logic.addRecurringDeadline("7-day", "title", "2016-04-01", "12:00");
 
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
@@ -179,7 +177,7 @@ public class LogicTest {
     @Test
     public void testDone1() {
         logic.clean();
-        boolean expected = true;
+
         // add a new event
         Name name = new Name("title");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -189,11 +187,11 @@ public class LogicTest {
         logic.dataBase.add(newEvent);
 
         // archive this event
-        assertEquals(logic.done("title"), expected);
+        assertTrue(logic.done("title"));
         // check the status of the task
         newEvent = logic.dataBase.retrieve(new SearchCommand("name", "title")).get(0);
         Boolean isEqual = newEvent.getDoneStatus().equals(true);
-        assertEquals(isEqual, expected);
+        assertTrue(isEqual);
     }
 
     /**
@@ -202,7 +200,6 @@ public class LogicTest {
     @Test
     public void testDone2() {
         logic.clean();
-        boolean expected = true;
         // add a new event
         Name name = new Name("title");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -212,8 +209,7 @@ public class LogicTest {
         logic.dataBase.add(newEvent);
 
         // archive a non-existing event
-        expected = false;
-        assertEquals(logic.done("non-existing-task"), expected);
+        assertFalse(logic.done("non-existing-task"));
     }
 
     @Test
@@ -231,14 +227,65 @@ public class LogicTest {
         Name name = new Name("title");
         Task newEvent = new Task(name, null, null, null, null, false, false, null);
         logic.addTask("title");
+        
         Boolean isEqual = logic.dataBase.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
-        assert (isEqual);
+        assertTrue (isEqual);
     }
-
-    public void testEdit() {
-        fail("Not yet implemented");
+    
+    /*
+     * test edit function--to edit title of a floating task
+     */
+    @Test
+    public void testEditTitle() {
+    	logic.clean();
+    	//add a task and then edit its name
+    	boolean result = true;
+    	result = logic.addTask("title");
+    	assertTrue(result);
+    	result = logic.edit("title", "title", "newTitle");
+    	assertTrue(result);
+        
+        result = logic.dataBase.taskList.get(0).getName().getName().equals("newTitle");
+        assertTrue (result);
     }
-
+    
+    /*
+     * test edit function--to 'done' a floating task
+     */
+    @Test
+    public void testEditDone() {
+    	logic.clean();
+    	//add a task and then edit its name
+    	boolean result = true;
+    	result = logic.addTask("title");
+    	assertTrue(result);
+    	result = logic.edit("title", "done",null);
+    	assertTrue(result);
+        
+        result = logic.dataBase.taskList.get(0).getDoneStatus();
+        assertTrue(result);
+    }
+   
+    /*
+     * test edit function--to edit end date of a deadline
+     */
+    @Test
+    public void testEditEnddate() {
+    	logic.clean();
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime end = LocalDateTime.parse("2016-04-01" + " " + "14:00", formatter);
+    	//add a task and then edit its name
+    	boolean result = true;
+    	result = logic.addDeadline("title","2016-03-31","13:00");
+    	assertTrue(result);
+    	result = logic.edit("title", "end-time", "2016-04-01-14:00");
+    	assertTrue(result);
+        
+        result = logic.dataBase.taskList.get(0).getName().getName().equals("title");
+        assertTrue (result);
+        result = logic.dataBase.taskList.get(0).getEndTime().equals(end);
+        assertTrue(result);
+    }
     public void testDelete() {
         fail("Not yet implemented");
     }

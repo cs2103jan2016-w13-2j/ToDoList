@@ -29,7 +29,6 @@ import java.util.ArrayList;
 public class FileHandler {
 	private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
 	private String fileName = "taskStorage.txt";
-	private String path = "";
 	private String filePath = "taskStorage.txt";
 
 	private Gson gson = new Gson();
@@ -166,10 +165,6 @@ public class FileHandler {
 
 	public String getPath() {
 		return filePath;
-	}
-
-	public String getFileName() {
-		return fileName;
 	}
 
 	// helper methods
