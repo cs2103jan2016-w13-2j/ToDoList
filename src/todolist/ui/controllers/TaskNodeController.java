@@ -1,12 +1,8 @@
 package todolist.ui.controllers;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Period;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -20,6 +16,7 @@ import todolist.common.UtilityLogger;
 import todolist.model.Category;
 import todolist.model.Reminder;
 import todolist.ui.TaskWrapper;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -48,8 +45,6 @@ import javafx.scene.text.FontPosture;
  */
 public class TaskNodeController {
 
-    private static final int SECONDS_IN_MINUTE = 60;
-    private static final int SECONDS_IN_HOURS = 3600;
     private static final String DISPLAY_ITEM_HEADER_DUE = "Due: ";
     /*** STATIC MESSAGES ***/
 
@@ -65,6 +60,10 @@ public class TaskNodeController {
     private static final String DISPLAY_ITEM_HEADER_CATEGORY = "";
 
     /*** STYLES ***/
+
+    // MONTHS
+    private static final String[] months = { "", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+            "Nov", "Dec" };
 
     // COLORS
     private static final String[] colorsHex = { "#27E1CE", "#D6EC78", "#FF98DA", "#FA7E0A", "#7A8CF0", "#A45FE6",
@@ -380,26 +379,13 @@ public class TaskNodeController {
         String startOutput = null;
         String durationOutput = null;
 
-        LocalDate startDate = startDateTime.toLocalDate();
-        LocalTime startTime = startDateTime.toLocalTime();
-        LocalDate endDate = endDateTime.toLocalDate();
-        LocalTime endTime = endDateTime.toLocalTime();
-        LocalDate nowDate = LocalDateTime.now().toLocalDate();
-        LocalTime nowTime = LocalDateTime.now().toLocalTime();
-
-        Period dateDifference = null;
-        Duration timeDifference = null;
-        String yearDiff = "";
-        String monthDiff = "";
-        String dayDiff = "";
-        String hourDiff = "";
-        String minDiff = "";
-
         PrettyTime prettyParser = new PrettyTime();
         Instant startInstant = startDateTime.toInstant(ZoneOffset.ofHours(ZONE_OFFSET));
         Date start = Date.from(startInstant);
         Instant endInstant = endDateTime.toInstant(ZoneOffset.ofHours(ZONE_OFFSET));
         Date end = Date.from(endInstant);
+        Instant nowInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(ZONE_OFFSET));
+        Date now = Date.from(nowInstant);
 
         // Set output for the start of event
         startOutput = prettyParser.format(start);
@@ -409,83 +395,21 @@ public class TaskNodeController {
 
         // Start reference date varies, depending if event has already begun
         if (hasStarted(startDateTime)) {
-            dateDifference = Period.between(nowDate, endDate);
-            timeDifference = Duration.between(nowTime, endTime);
+            prettyParser.setReference(now);
             relativeStart = "event started ";
             relativeEnd = "ends in %1$s";
 
         } else {
-            dateDifference = Period.between(startDate, endDate);
-            timeDifference = Duration.between(startTime, endTime);
-        }
-
-        // Check years left
-        if (dateDifference.getYears() > 1) {
-            yearDiff = Integer.toString(dateDifference.getYears()) + " yrs ";
-        } else if (dateDifference.getYears() == 1) {
-            yearDiff = "1 yr ";
-
-        }
-
-        // Check months left
-        if (dateDifference.getMonths() > 1) {
-            monthDiff = Integer.toString(dateDifference.getMonths()) + " mths ";
-        } else if (dateDifference.getMonths() == 1) {
-            monthDiff = "1 mth ";
-
-        }
-
-        // Check days left
-        if (dateDifference.getDays() > 1) {
-            dayDiff = Integer.toString(dateDifference.getDays()) + " days ";
-        } else if (dateDifference.getDays() == 1) {
-            dayDiff = "1 day ";
-        }
-
-        // Check hours left
-        if (timeDifference.getSeconds() >= 2 * SECONDS_IN_HOURS) {
-            hourDiff = Long.toString(timeDifference.getSeconds() / SECONDS_IN_HOURS) + " hrs ";
-        } else if (timeDifference.getSeconds() >= SECONDS_IN_HOURS) {
-            hourDiff = "1 hr ";
-        }
-
-        // Check minutes left
-        if ((timeDifference.getSeconds() % SECONDS_IN_HOURS) / SECONDS_IN_MINUTE > 1) {
-            minDiff = Long.toString((timeDifference.getSeconds() % SECONDS_IN_HOURS) / SECONDS_IN_MINUTE) + " mins ";
-        } else if ((timeDifference.getSeconds() % SECONDS_IN_HOURS) / SECONDS_IN_MINUTE == 1) {
-            minDiff = "1 min ";
+            prettyParser.setReference(start);
         }
 
         if (endDateTime.isBefore(LocalDateTime.now())) {
             relativeEnd = "ended " + prettyParser.format(end);
         }
 
-        durationOutput = yearDiff + monthDiff + dayDiff + hourDiff + minDiff;
+        durationOutput = prettyParser.format(end).replace("from now", "");
 
         return relativeStart + startOutput + ", " + String.format(relativeEnd, durationOutput);
-
-        // if (startDate.equals(endDate)) {
-        // return
-        // startDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-        // + " "
-        // +
-        // startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-        // + " to "
-        // +
-        // endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
-        // } else {
-        // return
-        // startDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))
-        // + " "
-        // +
-        // startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-        // + " to "
-        // +
-        // endDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))
-        // + " "
-        // +
-        // endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
-        // }
     }
 
     /*
@@ -525,10 +449,11 @@ public class TaskNodeController {
      * @return String dateTimeRange
      */
     private String formatEventRangeDiffDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return "From " + startDateTime.getDayOfWeek() + ", "
-                + startDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT))
-                + " to " + endDateTime.getDayOfWeek() + ", "
-                + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+        return startDateTime.getDayOfMonth() + "-" + months[startDateTime.getMonthValue()] + "-"
+                + startDateTime.getYear() + ", "
+                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
+                + endDateTime.getDayOfMonth() + "-" + months[endDateTime.getMonthValue()] + "-" + endDateTime.getYear()
+                + ", " + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     /*
@@ -540,7 +465,8 @@ public class TaskNodeController {
      * @return String dateTimeRange
      */
     private String formatEventRangeSameDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) + " from "
+        return startDateTime.getDayOfMonth() + "-" + months[startDateTime.getMonthValue()] + "-"
+                + startDateTime.getYear() + ", "
                 + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
                 + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
@@ -553,8 +479,8 @@ public class TaskNodeController {
      * @return String dateTimeRange
      */
     private String formatDeadlineRange(LocalDateTime endDateTime) {
-        return DISPLAY_ITEM_HEADER_DUE + endDateTime.getDayOfWeek() + ", "
-                + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+        return endDateTime.getDayOfMonth() + "-" + months[endDateTime.getMonthValue()] + "-" + endDateTime.getYear()
+                + ", " + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     /** STYLING FUNCTIONS **/
@@ -617,7 +543,8 @@ public class TaskNodeController {
     /*
      * Apply styles on task
      * 
-     * @param LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isCompleted
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime, boolean
+     * isCompleted
      * 
      */
     private void setStyle(LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isCompleted) {
@@ -626,7 +553,8 @@ public class TaskNodeController {
             numLabelBase.setFill(Color.web(COLOR_OVERDUE));
             priorityLabel.setFill(Color.web(COLOR_OVERDUE));
             // dateRangeSprite.setFill(Color.web(COLOR_OVERDUE));
-        } else if (endDateTime != null && ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24 && !isCompleted) {
+        } else if (endDateTime != null && ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24
+                && !isCompleted) {
             numLabelBase.setFill(Color.web(COLOR_TODAY));
             priorityLabel.setFill(Color.web(COLOR_TODAY));
             // dateRangeSprite.setFill(Color.web(COLOR_TODAY));
