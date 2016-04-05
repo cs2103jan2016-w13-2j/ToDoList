@@ -1,5 +1,12 @@
 package todolist.parser;
 
+import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 import java.util.List;
 //import java.util.Map;
@@ -38,11 +45,16 @@ public class FlexiCommandParser {
 				return new TokenizedCommand("invalid", temp);
 			}
 		}
-
+		
+		
 		Parser parser = new Parser(TimeZone.getDefault());
 		List<DateGroup> groups = parser.parse(input);
+		List<Date> dates = null;
+		int[] column = new int[] {0, 0};
+		int[] length = new int[] {0, 0};
+		int counter = 0;
 		for (DateGroup group : groups) {
-			List<Date> dates = group.getDates();
+			dates = group.getDates();
 			// int line = group.getLine();
 			// int column = group.getPosition();
 			// String matchingValue = group.getText();
@@ -50,13 +62,89 @@ public class FlexiCommandParser {
 			// Map parseMap = group.getParseLocations();
 			// boolean isRecurreing = group.isRecurring();
 			// Date recursUntil = group.getRecursUntil();
-			System.out.println(dates);
-
+			column[counter] = group.getPosition();
+			length[counter] = group.getText().length();
+			counter++;
 		}
+		
+		System.out.println(dates);
+		System.out.println(column[0] + " " + length[0]);
+		System.out.println(column[1] + " " + length[1]);
+		
+		String result = null;
+		
+		if(column[1] == 0) {
+			System.out.println(input.substring(0, column[0] - 1));
+			System.out.println(input.substring(column[0] + length[0] -1));
+		
+			
+			result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0] -1);
+		} else {
+			result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0], column[1] - 1) + input.substring(column[1] + length[1] - 1);
+		}
+		
+		if(dates.size() == 0) {
+			return new TokenizedCommand("add", new String[]{"task", input});
+		} else {
+			if(dates.size() == 1) {
+				Date deadline = dates.get(0);
+				
+				
+				Instant instant = Instant.ofEpochMilli(deadline.getTime());
+			    LocalDateTime end = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
+			    
+			    DecimalFormat decimalFormatter = new DecimalFormat("00");
+			    String deadlineDate = end.getYear() + "-"
+						+ decimalFormatter.format(end.getMonthValue()) + "-"
+						+ decimalFormatter.format(end.getDayOfMonth());
+			    
+			    String deadlineTime = decimalFormatter.format(end.getHour()) + ":" + decimalFormatter.format(end.getMinute());
+			    /*
+				String endDate = deadline.getYear() + "-" + deadline.getMonth() + "-" + deadline.getDay();
+				String endTime = deadline.getHours() + ":" + deadline.getMinutes();
+				return new TokenizedCommand("add", new String[]{"deadline", input, endDate, endTime});
+				*/
+			    
+				return new TokenizedCommand("add", new String[]{"deadline", deadlineDate, deadlineTime});
 
-		String action = null;
-		String args[] = null;
-		return new TokenizedCommand("haha", temp);
+			} else {
+			    DecimalFormat decimalFormatter = new DecimalFormat("00");
 
+			    
+				Date startTimeOriginal = dates.get(0);
+				Date endTimeOriginal = dates.get(1);
+				
+				Instant startInstant = Instant.ofEpochMilli(startTimeOriginal.getTime());
+			    LocalDateTime start = LocalDateTime.ofInstant(startInstant, ZoneOffset.UTC);
+			    
+			    Instant endInstant = Instant.ofEpochMilli(endTimeOriginal.getTime());
+			    LocalDateTime end = LocalDateTime.ofInstant(endInstant, ZoneOffset.UTC);
+			    
+			    String startDate = start.getYear() + "-"
+						+ decimalFormatter.format(start.getMonthValue()) + "-"
+						+ decimalFormatter.format(start.getDayOfMonth());
+			    
+			    String startTime = decimalFormatter.format(start.getHour()) + ":" + decimalFormatter.format(start.getMinute());
+			    
+			    int interval = (int) getDateDiff(startTimeOriginal, endTimeOriginal)/1000/60;
+			    
+				/*
+				String startDate = start.getYear() + "-" + start.getMonth() + "-" + start.getDay();
+				String startTime = start.getHours() + ":" + start.getMinutes();
+				
+				String endDate = end.getYear() + "-" + end.getMonth() + "-" + end.getDay();
+				String endTime = end.getHours() + ":" + end.getMinutes();
+				*/
+			    
+				//return new TokenizedCommand("add", new String[]{"event", input, startDate, startTime, endDate, endTime});
+
+				return new TokenizedCommand("add", new String[]{"event", input, startDate, startTime, Integer.toString(interval), "minute"});
+			}
+		}
+	}
+
+	private static long getDateDiff(Date date1, Date date2) {
+		long diffInMillies = date2.getTime() - date1.getTime();
+		return diffInMillies;
 	}
 }
