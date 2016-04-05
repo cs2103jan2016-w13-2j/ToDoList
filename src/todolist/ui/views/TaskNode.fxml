@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -15,11 +16,16 @@
 
 <HBox id="task-hbox-item" fx:id="root" alignment="CENTER_LEFT"
 	maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	prefHeight="60.0" prefWidth="200.0" stylesheets="@DefaultTheme.css"
+	minHeight="-Infinity" prefHeight="85.0" prefWidth="200.0" stylesheets="@DefaultTheme.css"
 	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="70.0"
-			stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
+		<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity"
+			minWidth="-Infinity" prefHeight="85.0" prefWidth="5.0">
+			<children>
+				<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="85.0"
+					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
+			</children>
+		</AnchorPane>
 		<StackPane fx:id="numberLabel" prefWidth="50.0">
 			<children>
 				<Circle fx:id="numLabelBase" fill="DODGERBLUE" radius="25.0"
@@ -48,12 +54,6 @@
 								<Font name="System Bold" size="16.0" />
 							</font>
 						</Label>
-						<ImageView fx:id="reminderIcon" fitHeight="15.0"
-							fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-							<HBox.margin>
-								<Insets left="5.0" right="5.0" />
-							</HBox.margin>
-						</ImageView>
 					</children>
 					<VBox.margin>
 						<Insets />
@@ -62,15 +62,22 @@
 						<Insets top="10.0" />
 					</padding>
 				</HBox>
-				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" prefHeight="100.0"
-					prefWidth="200.0">
+				<HBox fx:id="relativeRangeBox" alignment="CENTER_LEFT"
+					prefHeight="100.0" prefWidth="200.0">
 					<children>
-						<Circle fx:id="overdueFlag" fill="DODGERBLUE" radius="3.0"
-							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
-							<HBox.margin>
-								<Insets right="2.0" />
-							</HBox.margin>
-						</Circle>
+						<Label fx:id="relativeRange" text="Relative Range" textFill="WHITE">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+					</children>
+					<VBox.margin>
+						<Insets bottom="6.0" />
+					</VBox.margin>
+				</HBox>
+				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" layoutX="10.0"
+					layoutY="40.0" prefHeight="100.0" prefWidth="200.0">
+					<children>
 						<Label fx:id="dateRange" text="Date Range" textFill="WHITE">
 							<font>
 								<Font size="10.0" />
@@ -81,10 +88,10 @@
 				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" prefHeight="100.0"
 					prefWidth="200.0">
 					<children>
-						<Circle fx:id="categorySprite" fill="DODGERBLUE" radius="3.0"
+						<Circle fx:id="categorySprite" fill="#ababab" radius="4.0"
 							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
 							<HBox.margin>
-								<Insets right="2.0" />
+								<Insets right="3.0" />
 							</HBox.margin>
 						</Circle>
 						<Label fx:id="category" text="Category" textFill="WHITE">
