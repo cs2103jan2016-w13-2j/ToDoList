@@ -50,7 +50,7 @@
 						<Label style="-fx-font-weight: bold;" text="not sure how to use me? enter 'tab help' !" />
 					</placeholder>
 					<opaqueInsets>
-						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+						<Insets left="5.0" right="5.0" top="5.0" />
 					</opaqueInsets>
 					<padding>
 						<Insets bottom="5.0" />
