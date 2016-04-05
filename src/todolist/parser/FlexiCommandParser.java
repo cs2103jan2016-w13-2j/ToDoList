@@ -105,7 +105,7 @@ public class FlexiCommandParser {
 				return new TokenizedCommand("add", new String[]{"deadline", input, endDate, endTime});
 				*/
 			    
-				return new TokenizedCommand("add", new String[]{"deadline", deadlineDate, deadlineTime});
+				return new TokenizedCommand("add", new String[]{"deadline", result, deadlineDate, deadlineTime});
 
 			} else {
 			    DecimalFormat decimalFormatter = new DecimalFormat("00");
@@ -115,10 +115,10 @@ public class FlexiCommandParser {
 				Date endTimeOriginal = dates.get(1);
 				
 				Instant startInstant = Instant.ofEpochMilli(startTimeOriginal.getTime());
-			    LocalDateTime start = LocalDateTime.ofInstant(startInstant, ZoneOffset.UTC);
+			    LocalDateTime start = LocalDateTime.ofInstant(startInstant, ZoneId.systemDefault());
 			    
-			    Instant endInstant = Instant.ofEpochMilli(endTimeOriginal.getTime());
-			    LocalDateTime end = LocalDateTime.ofInstant(endInstant, ZoneOffset.UTC);
+			    //Instant endInstant = Instant.ofEpochMilli(endTimeOriginal.getTime());
+			    //LocalDateTime end = LocalDateTime.ofInstant(endInstant, ZoneId.systemDefault());
 			    
 			    String startDate = start.getYear() + "-"
 						+ decimalFormatter.format(start.getMonthValue()) + "-"
@@ -138,7 +138,7 @@ public class FlexiCommandParser {
 			    
 				//return new TokenizedCommand("add", new String[]{"event", input, startDate, startTime, endDate, endTime});
 
-				return new TokenizedCommand("add", new String[]{"event", input, startDate, startTime, Integer.toString(interval), "minute"});
+				return new TokenizedCommand("add", new String[]{"event", result, startDate, startTime, Integer.toString(interval), "minute"});
 			}
 		}
 	}
