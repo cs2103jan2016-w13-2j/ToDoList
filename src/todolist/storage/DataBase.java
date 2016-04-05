@@ -56,7 +56,8 @@ public class DataBase {
 	private UtilityLogger logger = null;
 	private int counter;
 
-	public DataBase() {
+	@SuppressWarnings("unchecked")
+    public DataBase() {
 		// taskList = null;
 		fh = new FileHandler();
 		retriever = new TaskRetriever();
@@ -190,7 +191,8 @@ public class DataBase {
 			logger.logError(COMPONENT_STORAGE, ERROR_REPEATED_TASK + task.getName().getName());
 			return false;
 		}
-		ArrayList<Task> temp = fh.read();
+		@SuppressWarnings("unused")
+        ArrayList<Task> temp = fh.read();
 		//snapshot.add(temp);
 		writeToFile();
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_ADD_TASK + task.getName().getName());
@@ -223,7 +225,8 @@ public class DataBase {
 
 		// dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED +
 		// taskToDelete.getName().getName());
-		ArrayList<Task> temp = fh.read();
+		@SuppressWarnings("unused")
+        ArrayList<Task> temp = fh.read();
 		//ArrayList<Task> temp = temptemp;
 		//snapshot.add(temp);
 		writeToFile();

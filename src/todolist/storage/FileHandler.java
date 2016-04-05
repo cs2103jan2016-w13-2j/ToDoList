@@ -29,7 +29,8 @@ import java.util.ArrayList;
 public class FileHandler {
 	private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
 	private String fileName = "taskStorage.txt";
-	private String path = "";
+	@SuppressWarnings("unused")
+    private String path = "";
 	private String filePath = "taskStorage.txt";
 
 	private Gson gson = new Gson();
@@ -199,7 +200,8 @@ public class FileHandler {
 		return true;
 	}
 
-	private boolean isPathCorrect(String pathName) {
+	@SuppressWarnings("unused")
+    private boolean isPathCorrect(String pathName) {
 		if (pathName.length() == 0) {
 
 			return true;
@@ -211,7 +213,8 @@ public class FileHandler {
 		return false;
 	}
 
-	private String getPathOfNewFile(String newFilePath) {
+	@SuppressWarnings("unused")
+    private String getPathOfNewFile(String newFilePath) {
 		String[] splitedPath = getSplitedPath(newFilePath);
 		String newPath = "";
 
@@ -225,7 +228,8 @@ public class FileHandler {
 		return newPath.substring(0, newPath.length() - 1);
 	}
 
-	private String getNewFileName(String newFilePath) {
+	@SuppressWarnings("unused")
+    private String getNewFileName(String newFilePath) {
 		String[] splitedPath = getSplitedPath(newFilePath);
 		if (splitedPath.length == 1) {
 			return newFilePath;
@@ -236,5 +240,9 @@ public class FileHandler {
 	private String[] getSplitedPath(String newFilePath) {
 		return newFilePath.split("/");
 	}
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
 }
