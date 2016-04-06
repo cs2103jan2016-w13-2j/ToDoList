@@ -18,8 +18,7 @@
 
 <HBox id="task-hbox-item" fx:id="root" alignment="CENTER_LEFT"
 	maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
-	xmlns:fx="http://javafx.com/fxml/1">
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 		<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity"
 			minWidth="-Infinity" prefWidth="5.0">
@@ -114,7 +113,7 @@
 			</children>
 		</VBox>
 		<StackPane fx:id="completeStatus" maxHeight="-Infinity"
-			minHeight="-Infinity" prefHeight="20.0" stylesheets="@DefaultTheme.css">
+			minHeight="-Infinity" prefHeight="20.0">
 			<children>
 				<Rectangle fx:id="statusBacking" arcHeight="10.0"
 					arcWidth="10.0" fill="#ffeb1f" height="25.0" stroke="BLACK"

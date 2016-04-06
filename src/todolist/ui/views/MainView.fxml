@@ -8,16 +8,19 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0" stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.MainViewController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+	minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0"
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="todolist.ui.controllers.MainViewController">
 	<bottom>
-		<TextField prefHeight="40.0" prefWidth="720.0" promptText="enter your command here ..." styleClass="text-field" stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_LEFT">
+		<TextField prefHeight="40.0" prefWidth="720.0"
+			promptText="enter your command here ..." styleClass="text-field"
+			BorderPane.alignment="TOP_LEFT">
 			<font>
 				<Font size="14.0" />
 			</font>
@@ -35,9 +38,12 @@
 		<String fx:value="split-pane-divider" />
 	</styleClass>
 	<center>
-		<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_CENTER">
+		<TitledPane alignment="CENTER" animated="false"
+	collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+	BorderPane.alignment="TOP_CENTER">
 			<content>
-				<ListView fx:id="listView" editable="true" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" stylesheets="@DefaultTheme.css">
+				<ListView fx:id="listView" editable="true"
+					maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0">
 					<placeholder>
 						<Label style="-fx-font-weight: bold;" text="not sure how to use me? enter 'tab help' !" />
 					</placeholder>
@@ -50,17 +56,12 @@
 				</ListView>
 			</content>
 			<graphic>
-				<HBox id="titled-pane-hbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" stylesheets="@DefaultTheme.css">
+				<HBox id="titled-pane-hbox" alignment="CENTER" maxHeight="1.7976931348623157E308"
+					maxWidth="1.7976931348623157E308" spacing="10.0">
 					<children>
-						<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-							<image>
-								<Image url="@assets/pen.png" />
-							</image>
-							<HBox.margin>
-								<Insets />
-							</HBox.margin>
-						</ImageView>
-						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="tasks" textAlignment="CENTER" />
+						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD"
+							strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
+							text="all ongoing tasks" textAlignment="CENTER" />
 					</children>
 				</HBox>
 			</graphic>

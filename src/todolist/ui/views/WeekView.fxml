@@ -14,15 +14,14 @@
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
 	minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0"
-	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.WeekController">
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="todolist.ui.controllers.WeekController">
 	<center>
-		<TitledPane animated="false" collapsible="false"
-			maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-			stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_CENTER">
+		<TitledPane alignment="CENTER" animated="false"
+			collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+			BorderPane.alignment="TOP_CENTER">
 			<content>
-				<ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0"
-					stylesheets="@DefaultTheme.css">
+				<ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0">
 					<placeholder>
 						<Label style="-fx-font-weight: bold;" text="wow! your week is free! congratulations!" />
 					</placeholder>
@@ -35,21 +34,12 @@
 				</ListView>
 			</content>
 			<graphic>
-				<HBox id="titled-pane-hbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
-					maxWidth="1.7976931348623157E308" spacing="10.0" stylesheets="@DefaultTheme.css">
+				<HBox id="titled-pane-hbox" alignment="CENTER" maxHeight="1.7976931348623157E308"
+					maxWidth="1.7976931348623157E308" spacing="10.0">
 					<children>
-						<ImageView fitHeight="20.0" fitWidth="20.0" opacity="100.0"
-							pickOnBounds="true" preserveRatio="true">
-							<image>
-								<Image url="@assets/pen.png" />
-							</image>
-							<HBox.margin>
-								<Insets />
-							</HBox.margin>
-						</ImageView>
 						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD"
 							strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
-							text="week" textAlignment="CENTER" />
+							text="next 7 days" textAlignment="CENTER" />
 					</children>
 				</HBox>
 			</graphic>

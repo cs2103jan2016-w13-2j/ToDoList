@@ -46,9 +46,6 @@ public class MainViewController {
     private static final String NIGHT_MODE = "night-mode";
     private static final String DAY_MODE = "day-mode";
 
-    private String nightModeTheme = null;
-    private String dayModeTheme = null;
-
     // Model data
     protected ObservableList<TaskWrapper> tasksToDisplay = null;
 
@@ -80,8 +77,6 @@ public class MainViewController {
         listView = new ListView<TaskWrapper>();
         logger = new UtilityLogger();
 
-        nightModeTheme = MainApp.class.getResource("ui/views/DarkTheme.css").toExternalForm();
-        dayModeTheme = MainApp.class.getResource("ui/views/DefaultTheme.css").toExternalForm();
     }
 
     /*
@@ -150,19 +145,15 @@ public class MainViewController {
 
                     if (commandString.equals(NIGHT_MODE)) {
                         Scene scene = mainApplication.getPrimaryStage().getScene();
-                        scene.getStylesheets().remove(dayModeTheme);
-                        // scene.setUserAgentStylesheet(null);
-                        scene.getStylesheets().add(nightModeTheme);
-                        // scene.setUserAgentStylesheet(nightModeTheme);
+                        scene.getStylesheets().remove(mainApplication.dayModeTheme);
+                        scene.getStylesheets().add(mainApplication.nightModeTheme);
                         mainApplication.getPrimaryStage().setScene(scene);
                         mainApplication.getPrimaryStage().show();
 
                     } else if (commandString.equals(DAY_MODE)) {
                         Scene scene = mainApplication.getPrimaryStage().getScene();
-                        scene.getStylesheets().remove(nightModeTheme);
-                        // scene.setUserAgentStylesheet(null);
-                        scene.getStylesheets().add(dayModeTheme);
-                        // scene.setUserAgentStylesheet(dayModeTheme);
+                        scene.getStylesheets().remove(mainApplication.nightModeTheme);
+                        scene.getStylesheets().add(mainApplication.dayModeTheme);
                         mainApplication.getPrimaryStage().setScene(scene);
                         mainApplication.getPrimaryStage().show();
 
