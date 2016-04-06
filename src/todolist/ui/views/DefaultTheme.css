@@ -79,6 +79,10 @@
     -fx-font-weight: bold;
 }
 
+.table-view {
+    
+}
+
 .titled-pane:focused > .title {
 	-fx-color: #4AA0D5;
     -fx-text-fill: #FEFAEC;
@@ -144,6 +148,12 @@
     -fx-font-family: "System Font";
     -fx-text-fill: #454553;
     -fx-prompt-text-fill: #7A9EAF;
+}
+
+#table-view {
+    -fx-border-color: transparent;
+    -fx-border-width: 0.0;
+    -fx-focus-color: white;
 }
 
 .title-bar {

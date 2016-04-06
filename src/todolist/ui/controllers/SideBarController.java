@@ -75,7 +75,7 @@ public class SideBarController {
 
     // HELP TAB
     @FXML
-    private Button help = null;
+    public Button help = null;
     @FXML
     private ImageView helpIcon = null;
 
@@ -180,8 +180,11 @@ public class SideBarController {
      * 
      */
     public void setIndex(int index) {
-        this.index = index;
-        colourTab();
+        if (index != MainApp.HELP_TAB) {
+            this.index = index;
+            colourTab();
+        }
+
         mainApplication.setPageView(index);
         logger.logAction(Component.UI, String.format(MESSAGE_CHANGED_PAGE, getTabName(index)));
     }

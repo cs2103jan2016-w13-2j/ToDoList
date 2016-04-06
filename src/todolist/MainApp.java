@@ -20,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
 import todolist.logic.Logic;
@@ -27,6 +28,7 @@ import todolist.logic.UIHandler;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 import todolist.ui.controllers.ArchiveController;
+import todolist.ui.controllers.HelpModalController;
 import todolist.ui.controllers.MainViewController;
 import todolist.ui.controllers.OverdueController;
 import todolist.ui.controllers.SideBarController;
@@ -61,8 +63,8 @@ public class MainApp extends Application {
     private static final String MESSAGE_ERROR_LOAD_WEEK = "Error loading week view.";
     private static final String MESSAGE_ERROR_LOAD_ARCHIVE = "Error loading archive view.";
     private static final String MESSAGE_ERROR_LOAD_SETTINGS = "Error loading settings view.";
-    private static final String MESSAGE_ERROR_LOAD_HELP = "Error loading help view.";
     private static final String MESSAGE_ERROR_PAGE_INDEX = "Page index is out of bounds @ #";
+    private static final String MESSAGE_ERROR_LOAD_HELP = "Error loading help view.";
 
     // Action messages
     private static final String ACTION_NOTIFICATION_TRIGGERED = "Notification triggered";
@@ -97,6 +99,7 @@ public class MainApp extends Application {
     private static final String DIRECTORY_WELCOME_SOUND = "ui/views/assets/notification-sound-twitch.mp3";
 
     // Views: Display and UI components
+    private Stage primaryStage;
     private BorderPane rootView;
     private BorderPane mainView;
     private TextField commandField;
@@ -107,7 +110,6 @@ public class MainApp extends Application {
     private BorderPane weekView;
     private BorderPane archiveView;
     private BorderPane settingsView;
-    private BorderPane helpView;
 
     // Page view index
     private static final int HOME_TAB = 1;
@@ -116,7 +118,7 @@ public class MainApp extends Application {
     private static final int WEEK_TAB = 4;
     private static final int DONE_TAB = 5;
     private static final int OPTIONS_TAB = 6;
-    private static final int HELP_TAB = 7;
+    public static final int HELP_TAB = 7;
     private static final int SMALLEST_PAGE_INDEX = 1;
     private static final int LARGEST_PAGE_INDEX = 7;
 
@@ -127,6 +129,7 @@ public class MainApp extends Application {
     private TodayController todayController;
     private WeekController weekController;
     private ArchiveController archiveController;
+    private HelpModalController helpModal;
 
     // Other components
     public Logic logicUnit = null;
@@ -203,6 +206,7 @@ public class MainApp extends Application {
     private void loadRootView(Stage primaryStage) {
         try {
 
+            this.setPrimaryStage(primaryStage);
             // Acquire FXML and CSS component for root layout
             rootView = (BorderPane) FXMLLoader.load(MainApp.class.getResource(DIRECTORY_ROOT));
             rootView.getStyleClass().add(STYLE_CLASS_ROOT);
@@ -434,18 +438,18 @@ public class MainApp extends Application {
     /*
      * loadHelpView loads the help page into the main display area
      */
-    private void loadHelpView() {
-        // Acquire FXML and CSS component for main view
-        FXMLLoader loader = new FXMLLoader();
-        try {
-            helpView = (BorderPane) getView(loader, DIRECTORY_HELP);
-            loadMainView();
-            mainView.setCenter(helpView);
-        } catch (IOException ioException) {
-            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_HELP);
-            ioException.printStackTrace();
-        }
-    }
+    // private void loadHelpView() {
+    // // Acquire FXML and CSS component for main view
+    // FXMLLoader loader = new FXMLLoader();
+    // try {
+    // helpView = (BorderPane) getView(loader, DIRECTORY_HELP);
+    // loadMainView();
+    // mainView.setCenter(helpView);
+    // } catch (IOException ioException) {
+    // logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_HELP);
+    // ioException.printStackTrace();
+    // }
+    // }
 
     /*
      * loadPage sets the current page index to the given index
@@ -489,14 +493,34 @@ public class MainApp extends Application {
             break;
         case HELP_TAB:
             // loadHelpView();
-            triggerHelpPopup();
+            loadHelpPopup();
+            setPageView(sidebarController.getIndex());
             break;
         default:
             loadMainView();
         }
     }
 
-    private void triggerHelpPopup() {
+    private void loadHelpPopup() {
+        // Notifications.create()
+        // .title("Title Text")
+        // .text("Hello World 0!")
+        // .showWarning();
+
+        // Acquire FXML and CSS component for main view
+        FXMLLoader loader = new FXMLLoader();
+        try {
+            BorderPane helpView = (BorderPane) getView(loader, DIRECTORY_HELP);
+            helpModal = loader.getController();
+            helpModal.setMainApp(this, helpView);
+        } catch (IOException ioException) {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_HELP);
+            ioException.printStackTrace();
+        }
+
+        if (helpModal.initializeHelpModal()) {
+            helpModal.displayPopup(sidebarController.help);
+        }
 
     }
 
@@ -713,5 +737,21 @@ public class MainApp extends Application {
                 return null;
             }
         }
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    public HelpModalController getHelpModal() {
+        return helpModal;
+    }
+
+    public void setHelpModal(HelpModalController helpModal) {
+        this.helpModal = helpModal;
     }
 }
