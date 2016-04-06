@@ -8,7 +8,6 @@ import org.controlsfx.control.NotificationPane;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -212,7 +211,6 @@ public class MainApp extends Application {
      * @param Stage primaryStage is the display window for mounting the root
      * view
      */
-    @SuppressWarnings("unchecked")
     private void loadRootView(Stage primaryStage) {
         try {
 
@@ -233,8 +231,8 @@ public class MainApp extends Application {
             // Show Welcome Text
             notifyWithText(NOTIFICATION_WELCOME, true);
 
-            KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.SHIFT_ANY);
-            KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.SHIFT_ANY);
+            KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.SHIFT_DOWN);
+            KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.SHIFT_DOWN);
 
             scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
                 @Override
@@ -242,7 +240,15 @@ public class MainApp extends Application {
                     if (focusOnCommand.match(event)) {
                         commandField.requestFocus();
                         logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
-                    } else if (focusOnList.match(event)) {
+                    }
+                }
+            });
+
+            
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                  if (focusOnList.match(event)) {
                         int page = sidebarController.getIndex();
                         switch (page) {
                         case HOME_TAB:
@@ -272,7 +278,7 @@ public class MainApp extends Application {
                     }
                 }
             });
-
+            
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_ROOT);
             ioException.printStackTrace();
@@ -287,8 +293,8 @@ public class MainApp extends Application {
      */
     private void loadCommandLine() {
         commandField = (TextField) mainView.getBottom();
-        // mainController.setCommandLineCallback(commandField);
-        mainController.setCommandLineCallbackDemo(commandField);
+         mainController.setCommandLineCallback(commandField);
+//        mainController.setCommandLineCallbackDemo(commandField);
     }
 
     /*

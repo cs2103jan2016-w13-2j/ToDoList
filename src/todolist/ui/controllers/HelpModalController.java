@@ -198,7 +198,7 @@ public class HelpModalController {
         actionFormatTable.put("[keyboard shortcut] closing popups for help and reminders", "[ESC]");
         actionFormatTable.put("[keyboard shortcut] browsing tabs or pages", "[TAB] | [F1 | F2 | ... | F7]");
         actionFormatTable.put("[keyboard shortcut] change context between command field and task list",
-                "[SHIFT + SPACE]");
+                "[SHIFT + K] for command and [SHIFT + L] for list");
 
         for (Entry<String, String> entry : actionFormatTable.entrySet()) {
             entries.add(new CommandPair(entry.getKey(), entry.getValue()));

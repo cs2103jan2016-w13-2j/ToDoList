@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -42,6 +43,11 @@ public class MainViewController {
     private static final String MESSAGE_UPDATED_MAIN_TASKLIST = "Updated display task list [HOME].";
     private static final String MESSAGE_HIGHLIGHT_ITEM = "Item #%1$s in display task list highlighted.";
     private static final String MESSAGE_HIGHLIGHT_ITEM_NOT_FOUND = "Item to be highlighted cannot be found in display task list.";
+    private static final String NIGHT_MODE = "night-mode";
+    private static final String DAY_MODE = "day-mode";
+
+    private String nightModeTheme = null;
+    private String dayModeTheme = null;
 
     // Model data
     protected ObservableList<TaskWrapper> tasksToDisplay = null;
@@ -73,6 +79,9 @@ public class MainViewController {
         tasksToDisplay = FXCollections.observableArrayList();
         listView = new ListView<TaskWrapper>();
         logger = new UtilityLogger();
+
+        nightModeTheme = MainApp.class.getResource("ui/views/DarkTheme.css").toExternalForm();
+        dayModeTheme = MainApp.class.getResource("ui/views/DefaultTheme.css").toExternalForm();
     }
 
     /*
@@ -137,8 +146,30 @@ public class MainViewController {
                     commandField.clear();
                     logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
 
-                    mainApplication.uiHandlerUnit.process(commandString);
-                    logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
+                    // System.out.println(commandString);
+
+                    if (commandString.equals(NIGHT_MODE)) {
+                        Scene scene = mainApplication.getPrimaryStage().getScene();
+                        scene.getStylesheets().remove(dayModeTheme);
+                        // scene.setUserAgentStylesheet(null);
+                        scene.getStylesheets().add(nightModeTheme);
+                        // scene.setUserAgentStylesheet(nightModeTheme);
+                        mainApplication.getPrimaryStage().setScene(scene);
+                        mainApplication.getPrimaryStage().show();
+
+                    } else if (commandString.equals(DAY_MODE)) {
+                        Scene scene = mainApplication.getPrimaryStage().getScene();
+                        scene.getStylesheets().remove(nightModeTheme);
+                        // scene.setUserAgentStylesheet(null);
+                        scene.getStylesheets().add(dayModeTheme);
+                        // scene.setUserAgentStylesheet(dayModeTheme);
+                        mainApplication.getPrimaryStage().setScene(scene);
+                        mainApplication.getPrimaryStage().show();
+
+                    } else {
+                        mainApplication.uiHandlerUnit.process(commandString);
+                        logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
+                    }
 
                 } catch (Exception exception) {
                     logger.logError(Component.UI, ERROR_PROCESSING_USER_INPUT);
@@ -170,7 +201,7 @@ public class MainViewController {
         }
         return myList;
     }
-    
+
     Boolean isDemoing = false;
 
     public void setCommandLineCallbackDemo(TextField commandField) {
@@ -180,7 +211,7 @@ public class MainViewController {
 
             @Override
             public void handle(ActionEvent event) {
-                if(!isDemoing) {
+                if (!isDemoing) {
                     String commandString = commandField.getText();
                     // Command command = new Command(commandString);
                     // System.out.println(command.getCommand());
@@ -190,7 +221,7 @@ public class MainViewController {
 
                         commandField.clear();
                         logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
-                        if(commandString.equals("Start demo")) {
+                        if (commandString.equals("Start demo")) {
                             isDemoing = true;
                         } else {
                             mainApplication.uiHandlerUnit.process(commandString);
@@ -205,10 +236,10 @@ public class MainViewController {
                         ArrayList<String> demoList = demoFileHandler(path);
                         String commandString = demoList.get(demoCounter);
                         demoCounter++;
-                        if(commandString.equals("exit")) {
+                        if (commandString.equals("exit")) {
                             isDemoing = false;
                         } else {
-                         // System.out.println(event.getEventType());
+                            // System.out.println(event.getEventType());
 
                             // Pass command line input for processing
                             commandField.clear();
@@ -370,7 +401,7 @@ public class MainViewController {
             return null;
         }
     }
-    
+
     public ListView<TaskWrapper> getListView() {
         return listView;
     }
