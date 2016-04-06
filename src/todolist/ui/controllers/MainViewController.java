@@ -370,4 +370,8 @@ public class MainViewController {
             return null;
         }
     }
+    
+    public ListView<TaskWrapper> getListView() {
+        return listView;
+    }
 }

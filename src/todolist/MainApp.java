@@ -8,12 +8,18 @@ import org.controlsfx.control.NotificationPane;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -68,6 +74,9 @@ public class MainApp extends Application {
 
     // Action messages
     private static final String ACTION_NOTIFICATION_TRIGGERED = "Notification triggered";
+    protected static final String FOCUS_COMMAND = "Command field is toggled into focus";
+    protected static final String FOCUS_LIST = "Current list is toggled into focus";
+
 
     // Notification messages and delay constant
     private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
@@ -203,6 +212,7 @@ public class MainApp extends Application {
      * @param Stage primaryStage is the display window for mounting the root
      * view
      */
+    @SuppressWarnings("unchecked")
     private void loadRootView(Stage primaryStage) {
         try {
 
@@ -222,6 +232,46 @@ public class MainApp extends Application {
 
             // Show Welcome Text
             notifyWithText(NOTIFICATION_WELCOME, true);
+
+            KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.SHIFT_ANY);
+            KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.SHIFT_ANY);
+
+            scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    if (focusOnCommand.match(event)) {
+                        commandField.requestFocus();
+                        logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
+                    } else if (focusOnList.match(event)) {
+                        int page = sidebarController.getIndex();
+                        switch (page) {
+                        case HOME_TAB:
+                            mainController.getListView().requestFocus();
+                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                            break;
+                        case EXPIRED_TAB:
+                            overdueController.getListView().requestFocus();
+                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                            break;
+                        case TODAY_TAB:
+                            todayController.getListView().requestFocus();
+                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                            break;
+                        case WEEK_TAB:
+                            weekController.getListView().requestFocus();
+                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                            break;
+                        case DONE_TAB:
+                            archiveController.getListView().requestFocus();
+                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                            break;
+                        default:
+                            commandField.requestFocus();
+                            logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
+                        }
+                    }
+                }
+            });
 
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_ROOT);

@@ -95,10 +95,36 @@
 	-fx-background-radius: 0.0 0.0 6.5 6.5;
 }
 
-.list-view .scroll-bar:vertical {
-    -fx-opacity: 0.0;
-    -fx-padding: -12.0;
+.list-view .scroll-bar:vertical .track {
+    /*-fx-opacity: 0.0;*/
+    /*-fx-padding: -12.0;*/
+    -fx-background-color:transparent;
+    -fx-border-color:transparent;
+    -fx-background-radius: 0.0em;
+    -fx-border-radius:2.0em;
 }
+
+.list-view .scroll-bar:vertical .increment-button ,
+.list-view .scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0.0em;
+    -fx-padding:0.0 10.0 0.0 0.0;
+}
+
+.list-view  .scroll-bar .increment-arrow,
+.list-view  .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding:0.0;
+}
+
+.mylistview .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90.0%);
+   	-fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
+}
+
+
+
 
 .list-cell {
     -fx-background-color: transparent;
