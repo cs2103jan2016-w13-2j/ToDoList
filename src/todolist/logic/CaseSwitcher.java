@@ -3,7 +3,7 @@ package todolist.logic;
 import todolist.model.Task;
 import todolist.model.TokenizedCommand;
 
-//@@author zhangjiyi
+//@@author A0130620B
 public class CaseSwitcher {
 
 	private Logic logic;

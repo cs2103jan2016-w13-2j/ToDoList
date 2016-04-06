@@ -3,7 +3,7 @@ package todolist.ui.controllers;
 import javafx.scene.control.ListCell;
 import todolist.ui.TaskWrapper;
 
-//@@author huangliejun
+//@@author A0123994W
 
 /*
  * TaskListCell formats task views by assigning every task node to a controller.

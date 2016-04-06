@@ -1,6 +1,6 @@
 package todolist.model;
 
-//@@author zhangjiyi
+//@@author A0130620B
 public class TokenizedCommand {
 	
   private String action = null;

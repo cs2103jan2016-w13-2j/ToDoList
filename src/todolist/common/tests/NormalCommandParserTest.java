@@ -8,7 +8,7 @@ import org.junit.Test;
 import todolist.model.TokenizedCommand;
 import todolist.parser.NormalCommandParser;
 
-//@@author huangliejun
+//@@author A0123994W
 
 public class NormalCommandParserTest {
     NormalCommandParser normalCommandParser = null;

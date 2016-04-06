@@ -40,7 +40,7 @@ import todolist.ui.controllers.SideBarController;
 import todolist.ui.controllers.TodayController;
 import todolist.ui.controllers.WeekController;
 
-//@@author huangliejun
+//@@author A0123994W
 
 /*
  * MainApp is the main running class for the application.

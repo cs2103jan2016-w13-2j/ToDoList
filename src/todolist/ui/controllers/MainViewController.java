@@ -27,7 +27,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-//@@author huangliejun
+//@@author A0123994W
 
 /* 
  * MainViewController controls and manipulates data for display on the main display area, for the main tab.
@@ -62,12 +62,12 @@ public class MainViewController {
     // Logger
     UtilityLogger logger = null;
 
-    // @@author zhangjiyi
+    // @@author A0130620B
     // Temporary attributes for testing
     public String path = "demo.txt";
     public int demoCounter = 0;
 
-    // @@author huangliejun
+    // @@author A0123994W
     /*** Controller Functions ***/
 
     /*
@@ -181,7 +181,7 @@ public class MainViewController {
         commandField.setOnAction(commandHandler);
     }
 
-    // @@author zhangjiyi
+    // @@author A0130620B
     /*** Temporary Functions for Testing ***/
 
     public ArrayList<String> demoFileHandler(String path) {
@@ -274,7 +274,7 @@ public class MainViewController {
         commandField.setOnAction(commandHandler);
     }
 
-    // @@author huangliejun
+    // @@author A0123994W
     /*** View Access Functions ***/
 
     /*

@@ -40,7 +40,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-//@@author huangliejun
+//@@author A0123994W
 
 /*
  * TaskNodeController controls and manipulates data for display in task view(s).

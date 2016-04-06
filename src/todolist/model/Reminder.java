@@ -2,7 +2,7 @@ package todolist.model;
 
 import java.time.LocalDateTime;
 
-//@@author zhangjiyi
+//@@author A0130620B
 public class Reminder {
     
     private Boolean switcher = null;

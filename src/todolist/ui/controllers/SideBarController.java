@@ -15,7 +15,7 @@ import todolist.MainApp;
 import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
 
-//@@author huangliejun
+//@@author A0123994W
 
 /*
  * SideBarController controls the interface for the sidebar or tabs
