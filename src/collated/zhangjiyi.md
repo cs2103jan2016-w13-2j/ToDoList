@@ -1,362 +1,472 @@
 # zhangjiyi
-###### src/todolist/logic/Sorter.java
-``` java
-public class Sorter {
-    
-}
-```
-###### src/todolist/logic/CaseSwitcher.java
+###### \todolist\logic\CaseSwitcher.java
 ``` java
 public class CaseSwitcher {
 
-    private Logic logic;
+	private Logic logic;
 
-    public CaseSwitcher(Logic logic) {
-        this.logic = logic;
-    }
+	public CaseSwitcher(Logic logic) {
+		this.logic = logic;
+	}
 
-    public void execute(TokenizedCommand command) {
-        String action = command.getAction();
-        String arg[] = command.getArgs();
+	public void execute(TokenizedCommand command) {
+		String action = command.getAction();
+		String arg[] = command.getArgs();
 
-        switch (action) {
+		switch (action) {
 
-        case "add":
-            String type = "null";
-            if (arg.length == 0) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To create a task, you will first need to specify the type of task that you wish to create.");
-            } else {
-                type = arg[0];
-            }
+		case "add":
+			String type = "null";
+			if (arg.length == 0) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To create a task, you will first need to specify the type of task that you wish to create.",
+						true);
+			} else {
+				type = arg[0];
+			}
 
-            switch (type) {
-            case "event":
-                if (arg.length != 6 && arg.length != 5) {
-                    logic.getUIHandler().sendMessage(
-                            "Your command was incomplete! To add an event, try: add event [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day].");
-                } else {
-                	if(arg.length == 6) {
-                		logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
-                        logic.stepForward(1);
-                	} else {
-                		logic.addEventLess(arg[1], arg[2], arg[3], arg[4]);
-                        logic.stepForward(1);
-                	}
-                }
-                break;
-            case "deadline":
-                if (arg.length != 4 && arg.length != 3) {
-                    logic.getUIHandler().sendMessage(
-                            "Your command was incomplete! To add a deadline, try: add deadline [title] [YYYY-MM-DD] [HH:MM]");
-                } else {
-                	if(arg.length == 4) {
-                        logic.addDeadline(arg[1], arg[2], arg[3]);
-                        logic.stepForward(1);
-                	} else {
-                        logic.addDeadlineLess(arg[1], arg[2]);
-                        logic.stepForward(1);
-                	}
-                }
-                break;
-            case "task":
-                if (arg.length != 2) {
-                    logic.getUIHandler()
-                            .sendMessage("Your command was incomplete! To add an un-dated task: add task [title]");
-                } else {
-                    logic.addTask(arg[1]);
-                    logic.stepForward(1);
-                }
-                break;
-            case "recurring":
-                switch (arg[1]) {
-                case "event":
-                    if (arg.length != 8 && arg.length != 7 ) {
-                        logic.getUIHandler().sendMessage(
-                                "Your command was incomplete! To add a recurring event, try: add recurring event [7-day] [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day]");
-                    } else {
-                    	if(arg.length == 8) {
-                    		logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
-                            logic.stepForward(3);
-                    	} else {
-                    		logic.addRecurringEventLess(arg[2], arg[3], arg[4], arg[5], arg[6]);
-                            logic.stepForward(3);
-                    	}
-                    }
-                    break;
-                case "deadline":
-                    if (arg.length != 6 && arg.length != 5) {
-                        logic.getUIHandler().sendMessage(
-                                "Your command was incomplete! To add a recurring deadline, try: add recurring deadline [7-day] [title] [YYYY-MM-DD] [HH:MM]");
-                    } else {
-                    	if(arg.length == 6) {
-                            logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
-                            logic.stepForward(3);
-                    	} else {
-                            logic.addRecurringDeadlineLess(arg[2], arg[3], arg[4]);
-                            logic.stepForward(3);
-                    	}
-                    }
-                    break;
-                default:
-                    logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
+			switch (type) {
+			case "event":
+				if (arg.length != 6 && arg.length != 5) {
+					logic.getUIHandler().sendMessage(
+							"Your command was incomplete! To add an event, try: add event [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day].",
+							true);
+				} else {
+					if (arg.length == 6) {
+						logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
+						logic.stepForward(1);
+					} else {
+						logic.addEventLess(arg[1], arg[2], arg[3], arg[4]);
+						logic.stepForward(1);
+					}
+				}
+				break;
+			case "deadline":
+				if (arg.length != 4 && arg.length != 3) {
+					logic.getUIHandler().sendMessage(
+							"Your command was incomplete! To add a deadline, try: add deadline [title] [YYYY-MM-DD] [HH:MM]",
+							true);
+				} else {
+					if (arg.length == 4) {
+						logic.addDeadline(arg[1], arg[2], arg[3]);
+						logic.stepForward(1);
+					} else {
+						logic.addDeadlineLess(arg[1], arg[2]);
+						logic.stepForward(1);
+					}
+				}
+				break;
+			case "task":
+				if (arg.length != 2) {
+					logic.getUIHandler().sendMessage(
+							"Your command was incomplete! To add an un-dated task: add task [title]", true);
+				} else {
+					logic.addTask(arg[1]);
+					logic.stepForward(1);
+				}
+				break;
+			case "recurring":
+				switch (arg[1]) {
+				case "event":
+					if (arg.length != 8 && arg.length != 7) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To add a recurring event, try: add recurring event [7-day] [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day]",
+								true);
+					} else {
+						if (arg.length == 8) {
+							logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
+							logic.stepForward(3);
+						} else {
+							logic.addRecurringEventLess(arg[2], arg[3], arg[4], arg[5], arg[6]);
+							logic.stepForward(3);
+						}
+					}
+					break;
+				case "deadline":
+					if (arg.length != 6 && arg.length != 5) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To add a recurring deadline, try: add recurring deadline [7-day] [title] [YYYY-MM-DD] [HH:MM]",
+								true);
+					} else {
+						if (arg.length == 6) {
+							logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
+							logic.stepForward(3);
+						} else {
+							logic.addRecurringDeadlineLess(arg[2], arg[3], arg[4]);
+							logic.stepForward(3);
+						}
+					}
+					break;
+				default:
+					logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
 
-                }
-                break;
-            default:
-                logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
-            }
-            break;
-        case "edit":
-            if (arg.length != 3) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]");
-            } else {
-                logic.edit(arg[0], arg[1], arg[2]);
-                logic.stepForward(2);
-            }
-            break;
-        case "delete":
-            if (arg.length != 1) {
-                logic.getUIHandler().sendMessage("Your command was incomplete! To delete a task, try: delete [title]");
-            } else {
-                logic.delete(arg[0]);
-                logic.stepForward(1);
-            }
-            break;
-        case "search":
-            if (arg.length != 1) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To search for something, try: search [search-term] (You are searching task names!)");
-            } else {
-                logic.search(arg[0]);
-            }
-            break;
-        case "filter":
-            if (arg.length != 1) {
-                logic.getUIHandler()
-                        .sendMessage("Your command was incomplete! To apply a filter, try: filter [category-name]");
-            } else {
-                logic.filter(arg[0]);
-            }
-            break;
-        case "sort":
-            if (arg.length != 2) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To sort, try: sort ['start' | 'end' | 'category' | 'name'] [ascending | descending]");
-            } else {
-                logic.sort(arg[0], arg[1]);
-                logic.stepForward(1);
-            }
-            break;
-        case "insert":
-            // logic.insert(arg[0], arg[1], arg[2]);
-            break;
-        case "switchPosition":
-            // logic.switchPosition(arg[0], arg[1]);
-            break;
-        case "label":
-            if (arg.length != 2) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To categorise or label a task, try: label [title] [category-name]");
-            } else {
-                logic.label(arg[0], arg[1]);
-                logic.stepForward(2);
-            }
-            break;
-        case "set-recurring":
-            if (arg.length != 2) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]");
-            } else {
-                logic.setRecurring(arg[0], true, arg[1]);
-                logic.stepForward(2);
-            }
-            break;
-        case "remove-recurring":
-            if (arg.length != 1) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]");
-            } else {
-                logic.setRecurring(arg[0], false, null);
-                logic.stepForward(2);
-            }
-            break;
-        case "postpone":
-            if (arg.length != 3) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]");
-            } else {
-                logic.postpone(arg[0], arg[1], arg[2]);
-                logic.stepForward(2);
-            }
-            break;
-        case "forward":
-            if (arg.length != 3) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]");
-            } else {
-                logic.forward(arg[0], arg[1], arg[2]);
-                logic.stepForward(2);
-            }
-            break;
-        case "add-remind":
-            try {
-                // need to handle exceptions here
-                logic.addRemind(arg);
-                logic.stepForward(3);
-            } catch (Exception e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-            break;
-        case "remind":
-            if (arg.length != 1) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]");
-            } else {
-                logic.remind(arg[0]);
-                logic.stepForward(2);
-            }
-            break;
-        case "add-remind-bef":
-            // need to handle exceptions here
-            String[] restOfArgs = new String[arg.length - 2];
-            for (int i = 0; i < arg.length; i++) {
-                restOfArgs[i] = arg[i + 2];
-            }
-            try {
-                logic.addRemindBef(arg[0], arg[1], restOfArgs);
-                logic.stepForward(3);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            break;
-        case "remind-bef":
-            if (arg.length != 3) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]");
-            } else {
-                logic.remindBef(arg[0], arg[1], arg[2]);
-                logic.stepForward(2);
-            }
-            break;
-        case "done":
-            if (arg.length != 1) {
-                logic.getUIHandler()
-                        .sendMessage("Your command was incomplete! To archive a completed task, try: done [title]");
-            } else {
-                logic.done(arg[0]);
-                logic.stepForward(2);
-            }
-            break;
-        case "undone":
-            if (arg.length != 1) {
-                logic.getUIHandler()
-                        .sendMessage("Your command was incomplete! To un-archive an ongoing task, try: undone [title]");
-            } else {
-                logic.undone(arg[0]);
-                logic.stepForward(2);
-            }
-            break;
-        case "exit":
-            logic.exit();
-            break;
-        case "undo":
-            if (arg.length != 1) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To undo a few action(s), try: undo [number-of-actions]");
-            } else {
-                logic.undo(Integer.parseInt(arg[0]));
-            }
-            break;
-        case "redo":
-            if (arg.length != 1) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]");
-            } else {
-                logic.redo(Integer.parseInt(arg[0]));
-            }
-            break;
-        case "reset":
-            logic.reset();
-            break;
-        case "save":
-        	logic.setNewFile(arg[0]);
-        	break;
-        case "tab":
-            if (arg.length != 1) {
-                logic.getUIHandler().sendMessage(
-                        "Your command was incomplete! To navigate to a certain page, try: tab [page-name] (as reflected on the tab bar)");
-            } else {
-                logic.tab(arg[0]);
-            }
-            break;
-        default:
-            logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.");
-        }
-    }
+				}
+				break;
+			default:
+				logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
+			}
+			break;
+		case "edit":
+			if (arg.length != 3) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]",
+								true);
+					} else {
+						logic.edit(task.getName().getName(), arg[1], arg[2]);
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.edit(arg[0], arg[1], arg[2]);
+					logic.stepForward(2);
+				}
+			}
+			break;
+		case "delete":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage("Your command was incomplete! To delete a task, try: delete [title]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To delete a task, try: delete [title]", true);
+					} else {
+						logic.delete(task.getName().getName());
+						logic.stepForward(1);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.delete(arg[0]);
+					logic.stepForward(1);
+				}
+			}
+			break;
+		case "search":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To search for something, try: search [search-term] (You are searching task names!)",
+						true);
+			} else {
+				logic.search(arg[0]);
+			}
+			break;
+		case "filter":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To apply a filter, try: filter [category-name]", true);
+			} else {
+				logic.filter(arg[0]);
+			}
+			break;
+		case "sort":
+			if (arg.length != 2) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To sort, try: sort ['start' | 'end' | 'category' | 'name'] [ascending | descending]",
+						true);
+			} else {
+				logic.sort(arg[0], arg[1]);
+				logic.stepForward(1);
+			}
+			break;
+		case "insert":
+			// logic.insert(arg[0], arg[1], arg[2]);
+			logic.getUIHandler().sendMessage("Sorry! This command is not yet supported!", true);
+			break;
+		case "switchPosition":
+			// logic.switchPosition(arg[0], arg[1]);
+			logic.getUIHandler().sendMessage("Sorry! This command is not yet supported!", true);
+			break;
+		case "label":
+			if (arg.length != 2) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To categorise or label a task, try: label [title] [category-name]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To categorise or label a task, try: label [title] [category-name]",
+								true);
+					} else {
+						logic.label(task.getName().getName(), arg[1]);
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.label(arg[0], arg[1]);
+					logic.stepForward(2);
+				}
+
+			}
+			break;
+		case "set-recurring":
+			if (arg.length != 2) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]",
+								true);
+					} else {
+						// System.out.println("HELLO WORLD");
+						logic.setRecurring(task.getName().getName(), true, arg[1]);
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.setRecurring(arg[0], true, arg[1]);
+					logic.stepForward(2);
+				} catch (RuntimeException e) {
+					// System.out.println("DO NOTHING");
+				}
+			}
+			break;
+		case "remove-recurring":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]",
+								true);
+					} else {
+						logic.setRecurring(task.getName().getName(), false, null);
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.setRecurring(arg[0], false, null);
+					logic.stepForward(2);
+				}
+			}
+			break;
+		case "postpone":
+			if (arg.length != 3) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]",
+								true);
+					} else {
+						logic.postpone(task.getName().getName(), arg[1], arg[2]);
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.postpone(arg[0], arg[1], arg[2]);
+					logic.stepForward(2);
+				}
+
+			}
+			break;
+		case "forward":
+			if (arg.length != 3) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]",
+								true);
+					} else {
+						logic.forward(task.getName().getName(), arg[1], arg[2]);
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.forward(arg[0], arg[1], arg[2]);
+					logic.stepForward(2);
+				}
+
+			}
+			break;
+		case "add-remind":
+			try {
+				// need to handle exceptions here
+				logic.addRemind(arg);
+				logic.stepForward(3);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			break;
+		case "remind":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]",
+								true);
+					} else {
+						logic.remind(task.getName().getName());
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.remind(arg[0]);
+					logic.stepForward(2);
+				}
+			}
+			break;
+		case "add-remind-bef":
+			// need to handle exceptions here
+			String[] restOfArgs = new String[arg.length - 2];
+			for (int i = 0; i < arg.length; i++) {
+				restOfArgs[i] = arg[i + 2];
+			}
+			try {
+				logic.addRemindBef(arg[0], arg[1], restOfArgs);
+				logic.stepForward(3);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "remind-bef":
+			if (arg.length != 3) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]",
+						true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]",
+								true);
+					} else {
+						logic.remindBef(task.getName().getName(), arg[1], arg[2]);
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.remindBef(arg[0], arg[1], arg[2]);
+					logic.stepForward(2);
+				}
+			}
+			break;
+		case "done":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To archive a completed task, try: done [title]", true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To archive a completed task, try: done [title]", true);
+					} else {
+						logic.done(task.getName().getName());
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.done(arg[0]);
+					logic.stepForward(2);
+				}
+
+			}
+			break;
+		case "undone":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To un-archive an ongoing task, try: undone [title]", true);
+			} else {
+				try {
+					int index = Integer.parseInt(arg[0]);
+					Task task = logic.getMainApp().getTaskAt(index);
+					if (task == null) {
+						logic.getUIHandler().sendMessage(
+								"Your command was incomplete! To un-archive an ongoing task, try: undone [title]",
+								true);
+					} else {
+						logic.undone(task.getName().getName());
+						logic.stepForward(2);
+					}
+				} catch (NumberFormatException nfe) {
+					logic.undone(arg[0]);
+					logic.stepForward(2);
+				}
+			}
+			break;
+		case "exit":
+			logic.exit();
+			break;
+		case "undo":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To undo a few action(s), try: undo [number-of-actions]", true);
+			} else {
+				logic.undo(Integer.parseInt(arg[0]));
+			}
+			break;
+		case "redo":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]", true);
+			} else {
+				logic.redo(Integer.parseInt(arg[0]));
+			}
+			break;
+		case "reset":
+			logic.reset();
+			break;
+		case "save":
+			logic.setNewFile(arg[0]);
+			break;
+		case "open":
+			logic.openNewFile(arg[0]);
+			break;
+		case "tab":
+			if (arg.length != 1) {
+				logic.getUIHandler().sendMessage(
+						"Your command was incomplete! To navigate to a certain page, try: tab [page-name] (as reflected on the tab bar)",
+						true);
+			} else {
+				logic.tab(arg[0]);
+			}
+			break;
+		case "invalid":
+			logic.invalid();
+			break;
+		default:
+			logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
+		}
+	}
 }
 ```
-###### src/todolist/logic/MainAppStub.java
-``` java
-public class MainAppStub extends MainApp{
-	public MainAppStub() {
-		super();
-	}
-	
-	@Override
-	public void setDisplayTasks(ArrayList<Task> listOfTasks) {
-		
-	}
-	
-	@Override
-	public void notifyWithText(String message) {
-		
-	}
-}
-```
-###### src/todolist/logic/UIHandler.java
-``` java
-public class UIHandler {
-
-    private DataBase dataBase;
-    private MainApp mainApp;
-    private Logic logic;
-
-    public UIHandler(DataBase dataBase, MainApp mainApp, Logic logic) {
-        this.dataBase = dataBase;
-        this.mainApp = mainApp;
-        this.logic = logic;
-    }
-
-    public void process(String input) {
-        logic.process(input);
-    }
-
-    public void refresh() {
-        mainApp.setDisplayTasks(dataBase.retrieveAll());
-    }
-
-    public void sendMessage(String message) {
-        mainApp.notifyWithText(message);
-    }
-
-    public void highLight(Task task) {
-        mainApp.highLight(task);
-    }
-
-    public void display(ArrayList<Task> taskList) {
-        mainApp.setDisplayTasks(taskList);
-    }
-
-    public void tab(int index) {
-        mainApp.loadPage(index);
-    }
-}
-```
-###### src/todolist/logic/Logic.java
+###### \todolist\logic\Logic.java
 ``` java
 public class Logic {
 
@@ -385,10 +495,15 @@ public class Logic {
 		this.caseSwitcher = new CaseSwitcher(this);
 		this.steps = 0;
 	}
-    
+
 	public void clean() {
 		this.dataBase.clear();
 	}
+
+	public void invalid() {
+		uiHandler.sendMessage("invalid input", true);
+	}
+
 	public UIHandler getUIHandler() {
 		return uiHandler;
 	}
@@ -405,6 +520,10 @@ public class Logic {
 		caseSwitcher.execute(tokenizedCommand);
 	}
 
+	public Boolean openNewFile(String path) {
+		return dataBase.openNewFile(path);
+	}
+
 	/**
 	 * This method takes in an integer and increment the internal step counter
 	 *
@@ -412,7 +531,10 @@ public class Logic {
 	 * @return void
 	 */
 	public void stepForward(int increment) {
-		this.steps = steps + increment;
+
+		dataBase.takeSnapshot();
+		this.steps++;
+
 	}
 
 	/**
@@ -459,7 +581,7 @@ public class Logic {
 	 */
 	public void reset() {
 		uiHandler.refresh();
-		uiHandler.sendMessage("View refreshed. All search and filter results are cleared!");
+		uiHandler.sendMessage("View refreshed. All search and filter results are cleared!", true);
 	}
 
 	/**
@@ -468,7 +590,8 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public Boolean addRecurringEvent(String interval, String title, String startDate, String startTime, String quantity, String timeUnit) {
+	public Boolean addRecurringEvent(String interval, String title, String startDate, String startTime, String quantity,
+			String timeUnit) {
 		Boolean addResponse = addEvent(title, startDate, startTime, quantity, timeUnit);
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
@@ -486,7 +609,8 @@ public class Logic {
 		return addResponse && setRecurringResponse;
 	}
 
-	public Boolean addRecurringEventLess(String interval, String title, String fuzzyTime, String quantity, String timeUnit) {
+	public Boolean addRecurringEventLess(String interval, String title, String fuzzyTime, String quantity,
+			String timeUnit) {
 		Boolean addResponse = addEventLess(title, fuzzyTime, quantity, timeUnit);
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
@@ -514,12 +638,12 @@ public class Logic {
 			LocalDateTime start = LocalDateTime.parse(fuzzyParseDate(startDate) + " " + startTime, formatter);
 			LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
-			System.out.println(start);
+			// System.out.println(start);
 
 			if (!start.isAfter(LocalDateTime.now())) {
 				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
 				uiHandler.sendMessage(
-						"Oh no! [" + title + "] is currently ongoing! Please attend it before it's too late!");
+						"Oh no! [" + title + "] is currently ongoing! Please attend it before it's too late!", true);
 			}
 
 			Task newEvent = new Task(name, start, end, null, null, false, false, null);
@@ -528,7 +652,7 @@ public class Logic {
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
 			uiHandler.sendMessage("A new event [" + newEvent.getName().getName()
-					+ "] has been created successfully! [not what you want? try 'undo']");
+					+ "] has been created successfully! [not what you want? try 'undo']", true);
 			return addResponse;
 		} else {
 			return false;
@@ -570,7 +694,7 @@ public class Logic {
 						+ decimalFormatter.format(LocalDateTime.now().getDayOfMonth()) + " " + fuzzyTime;
 				// System.out.println(myTime);
 			} else {
-				uiHandler.sendMessage("no time or date detected");
+				uiHandler.sendMessage("no time or date detected", true);
 			}
 		}
 		return LocalDateTime.parse(myTime, formatter);
@@ -589,7 +713,7 @@ public class Logic {
 			if (!start.isAfter(LocalDateTime.now())) {
 				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
 				uiHandler.sendMessage(
-						"Oh no! [" + title + "] is currently ongoing! Please attend it before it's too late!");
+						"Oh no! [" + title + "] is currently ongoing! Please attend it before it's too late!", true);
 			}
 
 			Task newEvent = new Task(name, start, end, null, null, false, false, null);
@@ -598,7 +722,7 @@ public class Logic {
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
 			uiHandler.sendMessage("A new event [" + newEvent.getName().getName()
-					+ "] has been created successfully! [not what you want? try 'undo']");
+					+ "] has been created successfully! [not what you want? try 'undo']", true);
 			return addResponse;
 		} else {
 			return false;
@@ -624,14 +748,15 @@ public class Logic {
 			if (!end.isAfter(LocalDateTime.now())) {
 				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
 				uiHandler.sendMessage(
-						"Oh no! ToDoList currently does not support time travelling! Try creating a task that is due after now.");
+						"Oh no! ToDoList currently does not support time travelling! Try creating a task that is due after now.",
+						true);
 			}
 
 			Boolean addResponse = dataBaseAdd(newEvent);
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
 			uiHandler.sendMessage("A new deadline [" + newEvent.getName().getName()
-					+ "] has been created successfully. [not what you want? try 'undo']");
+					+ "] has been created successfully. [not what you want? try 'undo']", true);
 			return addResponse;
 		} else {
 			return false;
@@ -650,14 +775,15 @@ public class Logic {
 			if (!end.isAfter(LocalDateTime.now())) {
 				logger.log(Level.INFO, LOGGING_TIME_ERROR + title);
 				uiHandler.sendMessage(
-						"Oh no! ToDoList currently does not support time travelling! Try creating a task that is due after now.");
+						"Oh no! ToDoList currently does not support time travelling! Try creating a task that is due after now.",
+						true);
 			}
 
 			Boolean addResponse = dataBaseAdd(newEvent);
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
 			uiHandler.sendMessage("A new deadline [" + newEvent.getName().getName()
-					+ "] has been created successfully. [not what you want? try 'undo']");
+					+ "] has been created successfully. [not what you want? try 'undo']", true);
 			return addResponse;
 		} else {
 			return false;
@@ -682,39 +808,83 @@ public class Logic {
 			uiHandler.refresh();
 			uiHandler.highLight(newEvent);
 			uiHandler.sendMessage("A new un-dated task [" + title
-					+ "] has been created successfully. [not what you want? try 'undo']");
+					+ "] has been created successfully. [not what you want? try 'undo']", true);
 			return addResponse;
 		} else {
 			return false;
 		}
 	}
 
-    /**
-     * This method takes in the title of a task and marks it as done.
-     *
-     * 
-     * @return Boolean
-     */
-    public Boolean done(String title) {
+	private String getCurrentTimeStamp() {
+		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// dd/MM/yyyy
+		Date now = new Date();
+		String strDate = sdfDate.format(now);
+		return strDate;
+	}
 
-        logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
-        
-        if(noRepeat(title)) {
-        	return false;
-        }
-        Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-        Boolean deleteResponse = dataBaseDelete(tempTask);
+	/**
+	 * This method takes in the title of a task and marks it as done.
+	 *
+	 * 
+	 * @return Boolean
+	 */
+	public Boolean done(String title) {
 
-        tempTask.setDoneStatus(true);
-        Boolean addResponse = dataBaseAdd(tempTask);
+		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		// <<<<<<< Updated upstream
 
-        uiHandler.refresh();
-        uiHandler.highLight(tempTask);
-        uiHandler.sendMessage("[" + title
-                + "] has been marked as completed! Woohoo another one down! [not what you want? try 'undo']");
+		if (noRepeat(title)) {
+			return false;
+		}
+		// =======
 
-        return deleteResponse && addResponse;
-    }
+		// >>>>>>> Stashed changes
+		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
+		Boolean deleteResponse = dataBaseDelete(tempTask);
+
+		tempTask.setDoneStatus(true);
+		String tempName = tempTask.getName().getName();
+		tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
+
+		Boolean addResponse = dataBaseAdd(tempTask);
+
+		if (tempTask.getRecurringStatus()) {
+
+			String interval = tempTask.getInterval();
+			String temp[] = interval.split("-");
+			String length = temp[0];
+			String unit = temp[1];
+
+			LocalDateTime oldEndTime = tempTask.getEndTime();
+			LocalDateTime newEndTime = oldEndTime.plus(Long.parseLong(length), generateTimeUnit(unit));
+			LocalDateTime newStartTime = null;
+			if (tempTask.getStartTime() != null) {
+				LocalDateTime oldStartTime = tempTask.getStartTime();
+				newStartTime = oldStartTime.plus(Long.parseLong(length), generateTimeUnit(unit));
+			}
+
+			Task newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
+					tempTask.getReminder(), false, true, interval);
+			addResponse = dataBaseAdd(newTempTask);
+
+		}
+
+		uiHandler.refresh();
+		uiHandler.highLight(tempTask);
+		// <<<<<<< Updated upstream
+		uiHandler.sendMessage(
+				"[" + title
+						+ "] has been marked as completed! Woohoo another one down! [not what you want? try 'undo']",
+				true);
+		// =======
+		uiHandler.sendMessage(
+				"[" + title
+						+ "] has been marked as completed! Woohoo another one down! [not what you want? try 'undo']",
+				true);
+		// >>>>>>> Stashed changes
+
+		return deleteResponse && addResponse;
+	}
 
 	public Boolean undone(String title) {
 
@@ -729,7 +899,7 @@ public class Logic {
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
 		uiHandler.sendMessage(
-				"[" + title + "] has been marked as ongoing! Go get it TIGER! [not what you want? try 'undo']");
+				"[" + title + "] has been marked as ongoing! Go get it TIGER! [not what you want? try 'undo']", true);
 
 		return deleteResponse && addResponse;
 	}
@@ -785,7 +955,7 @@ public class Logic {
 
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
-		uiHandler.sendMessage("[" + title + "] has been edited successfully! [not what you want? try 'undo']");
+		uiHandler.sendMessage("[" + title + "] has been edited successfully! [not what you want? try 'undo']", true);
 
 		return deleteResponse && addResponse;
 
@@ -805,7 +975,7 @@ public class Logic {
 		Boolean deleteResponse = dataBaseDelete(tempTask);
 
 		uiHandler.refresh();
-		uiHandler.sendMessage("[" + title + "] has been deleted successfully! [not what you want? try 'undo']");
+		uiHandler.sendMessage("[" + title + "] has been deleted successfully! [not what you want? try 'undo']", true);
 
 		return deleteResponse;
 	}
@@ -820,10 +990,11 @@ public class Logic {
 
 		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + title);
 
-		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
+		ArrayList<Task> tempTaskList = dataBase.smartSearch(new SearchCommand("NAME", title));
 
 		uiHandler.display(tempTaskList);
-		uiHandler.sendMessage("Here are your search results for '" + title + "'! [to clear this search, type 'reset']");
+		uiHandler.sendMessage("Here are your search results for '" + title + "'! [to clear this search, type 'reset']",
+				true);
 	}
 
 	/**
@@ -840,8 +1011,9 @@ public class Logic {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("CATEGORY", category));
 
 		uiHandler.display(tempTaskList);
-		uiHandler.sendMessage("Here are the related tasks under " + category.toUpperCase()
-				+ "! [to clear this filter, type 'reset']");
+		uiHandler.sendMessage(
+				"Here are the related tasks under " + category.toUpperCase() + "! [to clear this filter, type 'reset']",
+				true);
 	}
 
 	/**
@@ -853,12 +1025,13 @@ public class Logic {
 	public void sort(String fieldName, String order) {
 		if (fieldName.isEmpty()) {
 			uiHandler.sendMessage(
-					"Please specify a sorting order! Try sort ['start' | 'end' | 'category' | 'name'], followed by [ascending | descending].");
+					"Please specify a sorting order! Try sort ['start' | 'end' | 'category' | 'name'], followed by [ascending | descending].",
+					true);
 		}
 		dataBase.sort(fieldName, order);
 		uiHandler.refresh();
 		uiHandler.sendMessage(
-				"Ta-da! Your tasks have been sorted by " + fieldName + "! [not what you want? try 'undo']");
+				"Ta-da! Your tasks have been sorted by " + fieldName + "! [not what you want? try 'undo']", true);
 	}
 	//
 	// public void insert(String title, String befaft, String title) {
@@ -890,7 +1063,7 @@ public class Logic {
 		uiHandler.refresh();
 		uiHandler.highLight(tempTask);
 		uiHandler.sendMessage("You have categorised [" + title + "] under " + category.toUpperCase()
-				+ " ! [not what you want? try 'undo']");
+				+ " ! [not what you want? try 'undo']", true);
 
 		return deleteResponse && addResponse;
 	}
@@ -906,7 +1079,9 @@ public class Logic {
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBaseDelete(tempTask);
-
+		if (tempTask.getEndTime() == null) {
+			throw new RuntimeException();
+		}
 		tempTask.setRecurring(status);
 		tempTask.setInterval(interval);
 		Boolean addResponse = dataBaseAdd(tempTask);
@@ -915,9 +1090,9 @@ public class Logic {
 		uiHandler.highLight(tempTask);
 
 		if (status) {
-			uiHandler.sendMessage("[" + title + "] is now a recurring task! [not what you want? try 'undo']");
+			uiHandler.sendMessage("[" + title + "] is now a recurring task! [not what you want? try 'undo']", true);
 		} else {
-			uiHandler.sendMessage("[" + title + "] is now an ad-hoc task! [not what you want? try 'undo']");
+			uiHandler.sendMessage("[" + title + "] is now an ad-hoc task! [not what you want? try 'undo']", true);
 		}
 
 		return deleteResponse && addResponse;
@@ -960,7 +1135,7 @@ public class Logic {
 
 			uiHandler.refresh();
 			uiHandler.highLight(tempTask);
-			uiHandler.sendMessage("[" + title + "] has been postponed! [not what you want? try 'undo']");
+			uiHandler.sendMessage("[" + title + "] has been postponed! [not what you want? try 'undo']", true);
 		}
 
 		return deleteResponse && addResponse;
@@ -1003,7 +1178,8 @@ public class Logic {
 
 			uiHandler.refresh();
 			uiHandler.highLight(tempTask);
-			uiHandler.sendMessage("[" + title + "] has been rescheduled forward! [not what you want? try 'undo']");
+			uiHandler.sendMessage("[" + title + "] has been rescheduled forward! [not what you want? try 'undo']",
+					true);
 		}
 
 		return deleteResponse && addResponse;
@@ -1089,7 +1265,7 @@ public class Logic {
 				reminderTime = tempTask.getEndTime();
 			}
 		} else {
-			if (tempTask.getStartTime() == null) {
+			if (tempTask.getStartTime() != null) {
 				reminderTime = tempTask.getStartTime().minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 			} else {
 				reminderTime = tempTask.getEndTime().minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
@@ -1142,17 +1318,21 @@ public class Logic {
 	 */
 	public Boolean undo(int undostep) {
 
-		if (steps <= 0) {
-			uiHandler.sendMessage("Undo was unsuccessful. No actions to undo!");
+		if (steps - undostep < 0) {
+			uiHandler.sendMessage("Undo was unsuccessful. No actions to undo!", true);
 		}
 
 		Boolean undoResponse = dataBase.retrieveHistory(steps - undostep);
+		System.out.println("retrieveHistory::::" + undoResponse);
+		// System.out.println("undo now at " + steps);
 		steps = steps - undostep;
 
+		System.out.println("logic" + steps);
+
 		if (undoResponse) {
-			uiHandler.sendMessage("Undo #" + undostep + " step(s) successfully!");
+			uiHandler.sendMessage("Undo #" + undostep + " step(s) successfully!", true);
 		} else {
-			uiHandler.sendMessage("Undo was unsuccessful. Try again!");
+			uiHandler.sendMessage("Undo was unsuccessful. Try again!", true);
 		}
 
 		uiHandler.refresh();
@@ -1207,14 +1387,14 @@ public class Logic {
 
 	private Boolean noRepeat(String title) {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
-		System.out.println(tempTaskList.size());
-		
-		if (tempTaskList.size() > 0) {	
+		// System.out.println(tempTaskList.size());
+
+		if (tempTaskList.size() > 0) {
 			logger.log(Level.INFO, LOGGING_REPEATED_TASK + title);
-			uiHandler.sendMessage("You have added a task with same name before! Try another name!");
+			uiHandler.sendMessage("You have added a task with same name before! Try another name!", true);
 			return false;
-		} else {	
-			return true;	
+		} else {
+			return true;
 		}
 	}
 
@@ -1227,314 +1407,108 @@ public class Logic {
 	}
 }
 ```
-###### src/todolist/parser/FlexiCommandParser.java
+###### \todolist\logic\MainAppStub.java
 ``` java
-public class FlexiCommandParser {
-
-    public FlexiCommandParser() {
-
-    }
-
-    public TokenizedCommand parse(String input) {
-
-        Parser parser = new Parser(TimeZone.getDefault());
-        List<DateGroup> groups = parser.parse(input);
-        for (DateGroup group : groups) {
-            List<Date> dates = group.getDates();
-//            int line = group.getLine();
-//            int column = group.getPosition();
-//            String matchingValue = group.getText();
-//            String syntaxTree = group.getSyntaxTree().toStringTree();
-//            Map parseMap = group.getParseLocations();
-//            boolean isRecurreing = group.isRecurring();
-//            Date recursUntil = group.getRecursUntil();
-            System.out.println(dates);
-
-        }
-
-        String action = null;
-        String args[] = null;
-        return new TokenizedCommand(action, args);
-    }
-}
-```
-###### src/todolist/parser/MainParser.java
-``` java
-public class MainParser {
-
-    private FlexiCommandParser flexiCommandParser;
-    private NormalCommandParser normalCommandParser;
-
-    public MainParser() {
-        this.setFlexiCommandParser(new FlexiCommandParser());
-        this.normalCommandParser = new NormalCommandParser();
-    }
-
-    /**
-     * This method takes in a string and parse it.
-     *
-     * 
-     * @return TokenizedCommand
-     */
-    public TokenizedCommand parse(String input) {
-        if (checkType(input)) {
-            return normalCommandParser.parse(input);
-        } else {
-            return normalCommandParser.parse(input);
-            // return flexiCommandParser.parse(input);
-        }
-    }
-
-    /**
-     * This method takes in a string and check whether it is a flexi command.
-     *
-     * 
-     * @return Boolean
-     */
-    private Boolean checkType(String input) {
-        String temp[] = input.split(" ");
-        String head = temp[0];
-        Boolean type = head.equals("add") || head.equals("edit") || head.equals("delete") || head.equals("search")
-                || head.equals("filter") || head.equals("sort") || head.equals("insert")
-                || head.equals("switchposition") || head.equals("label") || head.equals("postpone")
-                || head.equals("forward") || head.equals("add-remind") || head.equals("remind")
-                || head.equals("add-remind-bef") || head.equals("remind-bef") || head.equals("done")
-                || head.equals("undone") || head.equals("exit") || head.equals("undo") || head.equals("redo")
-                || head.equals("reset") || head.equals("tab") || head.equals("set-recurring")
-                || head.equals("remove-recurring");
-        return type;
-    }
-
-    public FlexiCommandParser getFlexiCommandParser() {
-        return flexiCommandParser;
-    }
-
-    public void setFlexiCommandParser(FlexiCommandParser flexiCommandParser) {
-        this.flexiCommandParser = flexiCommandParser;
-    }
-}
-```
-###### src/todolist/parser/NormalCommandParser.java
-``` java
-public class NormalCommandParser {
-
-	public NormalCommandParser() {
-
+public class MainAppStub extends MainApp{
+	public MainAppStub() {
+		super();
 	}
-
-	public TokenizedCommand parse(String input) {
-
-		String temp[] = input.split(" ");
-		String action = temp[0];
-		
-		ArrayList<String> myList = new ArrayList<String>();
-
-		String name = null;
-		Boolean generateName = false;
-		for (int i = 0; i < temp.length - 1; i++) {
 	
-			
-			if (generateName == true) {
-;
-				if (temp[i+1].contains("\"")) {
-					name = name + " " + temp[i+1].replace("\"", "");
-					generateName = false;
-					myList.add(name);
-					//args[counter] = name;
-					//counter++;
-					name = null;
-
-				} else {
-					name = name + " " + temp[i+1];
-				}
-			} else {
-				if (temp[i+1].contains("\"")) {
-					name = temp[i+1].replace("\"", "");
-					generateName = true;
-					int count = temp[i+1].length() - temp[i+1].replace("\"", "").length();
-					if(count == 2) {
-						generateName = false;
-						myList.add(name);
-						//args[counter] = name;
-						//counter++;
-						name = null;
-					}
-				} else {
-					myList.add(temp[i+1]);
-					//args[counter] = temp[i+1];
-					//counter++;
-				}
-			}
-		}
+	@Override
+	public void setDisplayTasks(ArrayList<Task> listOfTasks) {
 		
-		String [] args = myList.toArray(new String[0]); 
-
-		/*
-		 * String temp0[] = input.split("\" "); String temp1[] = temp0[1].split(
-		 * " \"");
-		 * 
-		 * String first[] = temp0[0].split(" "); String third[] =
-		 * temp1[1].split(" ");
-		 * 
-		 * String second = temp1[0];
-		 * 
-		 * int length = first.length + third.length + 1;
-		 * 
-		 * 
-		 * String temp[] = new String[length];
-		 * 
-		 * for(int i=0; i< length;i++) { if(i < first.length) { temp[i] =
-		 * first[i]; } else { if(i > first.length) { temp[i] = third[i -
-		 * first.length - 1]; } else { temp[i] = second; } } }
-		 * 
-		 * String action = temp[0]; String args[] = new String[temp.length - 1];
-		 * for(int i=0; i<temp.length-1; i++) { args[i] = temp[i + 1]; }
-		 */
-
-		return new TokenizedCommand(action, args);
+	}
+	
+	@Override
+	public void notifyWithText(String message, boolean isAutohide) {
+		
 	}
 }
 ```
-###### src/todolist/ui/controllers/MainViewController.java
+###### \todolist\logic\Sorter.java
 ``` java
-	public String path = "demo.txt";
-
+public class Sorter {
+    
+}
 ```
-###### src/todolist/ui/controllers/MainViewController.java
+###### \todolist\logic\UIHandler.java
 ``` java
-	public int demoCounter = 0;
+public class UIHandler {
 
+    private DataBase dataBase;
+    private MainApp mainApp;
+    private Logic logic;
+
+    public UIHandler(DataBase dataBase, MainApp mainApp, Logic logic) {
+        this.dataBase = dataBase;
+        this.mainApp = mainApp;
+        this.logic = logic;
+    }
+
+    public void process(String input) {
+        logic.process(input);
+    }
+
+    public void refresh() {
+        mainApp.setDisplayTasks(dataBase.retrieveAll());
+    }
+
+    public void sendMessage(String message, boolean autohide) {
+        mainApp.notifyWithText(message, autohide);
+    }
+
+    public void highLight(Task task) {
+        mainApp.highlightItem(task);
+    }
+
+    public void display(ArrayList<Task> taskList) {
+        mainApp.setDisplayTasks(taskList);
+    }
+
+    public void tab(int index) {
+        mainApp.loadPage(index);
+    }
+}
 ```
-###### src/todolist/ui/controllers/MainViewController.java
+###### \todolist\model\Category.java
 ``` java
-	public ArrayList<String> demoFileHandler(String path) {
-		ArrayList<String> myList = new ArrayList<String>();
-		try {
-
-			File file = new File(path);
-			Scanner scr = new Scanner(file);
-			while (scr.hasNextLine()) {
-				String temp = scr.nextLine();
-				myList.add(temp);
-				System.out.println(temp);
-			}
-			scr.close();
-		} catch (Exception e) {
-
-		}
-		return myList;
+public class Category implements Comparable<Category>{
+    private String category;
+	public Category(String category) {
+    	this.category = category;
+    }
+	@Override
+	public int compareTo(Category o) {
+		return this.category.compareToIgnoreCase(o.getCategory());
 	}
-
+	
+	public String getCategory() {
+		return category;
+	}
+}
 ```
-###### src/todolist/ui/controllers/MainViewController.java
+###### \todolist\model\Name.java
 ``` java
-	public void setCommandLineCallbackDemo(TextField commandField) {
-		// Set Callback for TextField
-		EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
+public class Name implements Comparable<Name>{
 
-			@Override
-			public void handle(ActionEvent event) {
-
-				ArrayList<String> demoList = demoFileHandler(path);
-				String commandString = demoList.get(demoCounter);
-				char[] charArray = commandString.toCharArray();
-				demoCounter++;
-				// Command command = new Command(commandString);
-				// System.out.println(command.getCommand());
-
-				// Pass Command Line input for processing
-
-				/*
-				 * for (int i = 0; i < charArray.length; i++) { try {
-				 * TimeUnit.MILLISECONDS.sleep(400); } catch
-				 * (InterruptedException e) { // TODO Auto-generated catch block
-				 * e.printStackTrace(); }
-				 * 
-				 * commandField.appendText(Character.toString(charArray[i])) ; }
-				 */
-
-				final Animation animation = new Transition() {
-					{
-						setCycleDuration(new Duration(commandString.length() * 200));
-					}
-
-					protected void interpolate(double frac) {
-						final int length = commandString.length();
-						final int n = Math.round(length * (float) frac);
-						commandField.setText(commandString.substring(0, n));
-					}
-
-				};
-
-				synchronized (this) {
-					animation.play();
-				}
-
-
-				commandField.clear();
-				mainApplication.uiHandlerUnit.process(commandString);
-			}
-		};
-
-		commandField.setOnAction(commandHandler);
-
+	private String name;
+	
+	public Name(String name) {
+	    this.name = name;
 	}
-
-	/*** VIEW GETTERS-SETTERS-LOADERS ***/
-
-	public ListView<TaskWrapper> getTaskListView() {
-		return listView;
-	}
-
-	/*** MODEL GETTERS-SETTERS-RELOADERS ***/
-
-	public ObservableList<TaskWrapper> getTasks() {
-		return tasksToDisplay;
-	}
-
-	public void setTasks(ArrayList<Task> tasks) {
-
-		// List provided by logic must be valid
-		assert (tasks != null);
-
-		ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
-		listView.getItems().clear();
-
-		// Convert Task to TaskWrapper for display handling
-		for (int i = 0; i < tasks.size(); ++i) {
-			if (!tasks.get(i).getDoneStatus()) {
-				TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
-				arrayOfWrappers.add(wrappedTask);
-			}
-		}
-
-		listView.getItems().addAll(arrayOfWrappers);
-	}
-
-	public void highLight(Task task) {
+	
+	@Override
+	public int compareTo(Name o) {
 		// TODO Auto-generated method stub
-		int index = searchInList(task);
-
-		if (index != -1) {
-			listView.getSelectionModel().select(index);
-			listView.getFocusModel().focus(index);
-			listView.scrollTo(index);
-		}
+		return 0;
 	}
-
-	private int searchInList(Task task) {
-
-		for (int i = 0; i < listView.getItems().size(); ++i) {
-			if (listView.getItems().get(i).getTaskObject().equals(task)) {
-				return i;
-			}
-		}
-		return -1;
+	
+	public String getName() {
+	    return name;
 	}
-
 }
 ```
-###### src/todolist/model/Reminder.java
+###### \todolist\model\Reminder.java
 ``` java
 public class Reminder {
     
@@ -1555,7 +1529,28 @@ public class Reminder {
     }
 }
 ```
-###### src/todolist/model/Task.java
+###### \todolist\model\SearchCommand.java
+``` java
+public class SearchCommand {
+	private String type = null;
+	private String content = null;
+	
+	public SearchCommand(String type, String content) {
+		this.type = type;
+		this.content = content;
+	}
+
+    public String getType() {
+    	return type;
+    }
+    
+    public String getContent() {
+    	return content;
+    }
+
+}
+```
+###### \todolist\model\Task.java
 ``` java
 public class Task {
 	private Name name = null;
@@ -1618,6 +1613,7 @@ public class Task {
 	}
 
 	public LocalDateTime getStartTime() {
+		/*
 		if (isRecurring && startTime != null) {
 			String temp[] = interval.split("-");
 			String length = temp[0];
@@ -1628,16 +1624,22 @@ public class Task {
 			}
 			return startTime;
 		} else {
+		*/
 			return startTime;
-		}
+		//}
 	}
 
 	public LocalDateTime getEndTime() {
+		/*
 		if (isRecurring) {
 			String temp[] = interval.split("-");
 			String length = temp[0];
 			String unit = temp[1];
 
+			if (endTime == null) {
+                throw new RuntimeException();
+            }
+			
 			if (startTime != null) {
 				while (startTime.isAfter(endTime)) {
 					endTime = endTime.plus(Long.parseLong(length), generateTimeUnit(unit));
@@ -1645,14 +1647,16 @@ public class Task {
 				return endTime;
 			} else {
 				LocalDateTime now = LocalDateTime.now();
+			
 				while (now.isAfter(endTime)) {
 					endTime = endTime.plus(Long.parseLong(length), generateTimeUnit(unit));
 				}
 				return endTime;
 			}
 		} else {
+		*/
 			return endTime;
-		}
+		//}
 	}
 
 	public Category getCategory() {
@@ -1695,28 +1699,7 @@ public class Task {
 	}
 }
 ```
-###### src/todolist/model/SearchCommand.java
-``` java
-public class SearchCommand {
-	private String type = null;
-	private String content = null;
-	
-	public SearchCommand(String type, String content) {
-		this.type = type;
-		this.content = content;
-	}
-
-    public String getType() {
-    	return type;
-    }
-    
-    public String getContent() {
-    	return content;
-    }
-
-}
-```
-###### src/todolist/model/TokenizedCommand.java
+###### \todolist\model\TokenizedCommand.java
 ``` java
 public class TokenizedCommand {
 	
@@ -1737,41 +1720,411 @@ public class TokenizedCommand {
   }
 }
 ```
-###### src/todolist/model/Category.java
+###### \todolist\parser\FlexiCommandParser.java
 ``` java
-public class Category implements Comparable<Category>{
-    private String category;
-	public Category(String category) {
-    	this.category = category;
-    }
-	@Override
-	public int compareTo(Category o) {
-		return this.category.compareToIgnoreCase(o.getCategory());
+public class FlexiCommandParser {
+
+	public FlexiCommandParser() {
+
 	}
-	
-	public String getCategory() {
-		return category;
+
+	public TokenizedCommand parse(String input) {
+
+		String temp[] = input.split(" ");
+		for (int i = 0; i < temp.length; i++) {
+			if (temp[i].equals("add") || temp[i].equals("edit") || temp[i].equals("delete") || temp[i].equals("search")
+					|| temp[i].equals("filter") || temp[i].equals("sort") || temp[i].equals("insert")
+					|| temp[i].equals("switchposition") || temp[i].equals("label") || temp[i].equals("postpone")
+					|| temp[i].equals("forward") || temp[i].equals("add-remind") || temp[i].equals("remind")
+					|| temp[i].equals("add-remind-bef") || temp[i].equals("remind-bef") || temp[i].equals("done")
+					|| temp[i].equals("undone") || temp[i].equals("exit") || temp[i].equals("undo") || temp[i].equals("redo")
+					|| temp[i].equals("reset") || temp[i].equals("tab") || temp[i].equals("set-recurring")
+					|| temp[i].equals("remove-recurring") || temp[i].equals("create") || temp[i].equals("schedule")
+					|| temp[i].equals("cancel") || temp[i].equals("remove") || temp[i].equals("modify") || temp[i].equals("change")
+					|| temp[i].equals("replace") || temp[i].equals("archive") || temp[i].equals("complete") || temp[i].equals("finish")
+					|| temp[i].equals("shelf") || temp[i].equals("unarchive") || temp[i].equals("incomplete")
+					|| temp[i].equals("unfinish") || temp[i].equals("unshelf") || temp[i].equals("delay") || temp[i].equals("advance")
+					|| temp[i].equals("categorize") || temp[i].equals("tag") || temp[i].equals("load")) {
+
+				return new TokenizedCommand("invalid", temp);
+			}
+		}
+		
+		
+		Parser parser = new Parser(TimeZone.getTimeZone(ZoneOffset.systemDefault()));
+		List<DateGroup> groups = parser.parse(input);
+		List<Date> dates = null;
+		int[] column = new int[] {0, 0};
+		int[] length = new int[] {0, 0};
+		int counter = 0;
+		for (DateGroup group : groups) {
+			dates = group.getDates();
+			// int line = group.getLine();
+			// int column = group.getPosition();
+			// String matchingValue = group.getText();
+			// String syntaxTree = group.getSyntaxTree().toStringTree();
+			// Map parseMap = group.getParseLocations();
+			// boolean isRecurreing = group.isRecurring();
+			// Date recursUntil = group.getRecursUntil();
+			column[counter] = group.getPosition();
+			length[counter] = group.getText().length();
+			counter++;
+		}
+		
+		System.out.println(dates);
+		System.out.println(column[0] + " " + length[0]);
+		System.out.println(column[1] + " " + length[1]);
+		
+		String result = null;
+		
+		
+		if(dates == null || dates.size() == 0) {
+			return new TokenizedCommand("add", new String[]{"task", input});
+		} else {
+			if(column[1] == 0) {
+				System.out.println(input.substring(0, column[0] - 1));
+				System.out.println(input.substring(column[0] + length[0] -1));
+			
+				
+				result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0] -1);
+			} else {
+				result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0], column[1] - 1) + input.substring(column[1] + length[1] - 1);
+			}
+			
+			if(dates.size() == 1) {
+				Date deadline = dates.get(0);
+				
+				
+				Instant instant = Instant.ofEpochMilli(deadline.getTime());
+			    LocalDateTime end = LocalDateTime.ofInstant(instant, ZoneOffset.systemDefault());
+			    
+			    DecimalFormat decimalFormatter = new DecimalFormat("00");
+			    String deadlineDate = end.getYear() + "-"
+						+ decimalFormatter.format(end.getMonthValue()) + "-"
+						+ decimalFormatter.format(end.getDayOfMonth());
+			    
+			    String deadlineTime = decimalFormatter.format(end.getHour()) + ":" + decimalFormatter.format(end.getMinute());
+			    /*
+				String endDate = deadline.getYear() + "-" + deadline.getMonth() + "-" + deadline.getDay();
+				String endTime = deadline.getHours() + ":" + deadline.getMinutes();
+				return new TokenizedCommand("add", new String[]{"deadline", input, endDate, endTime});
+				*/
+			    
+				return new TokenizedCommand("add", new String[]{"deadline", result, deadlineDate, deadlineTime});
+
+			} else {
+			    DecimalFormat decimalFormatter = new DecimalFormat("00");
+
+			    
+				Date startTimeOriginal = dates.get(0);
+				Date endTimeOriginal = dates.get(1);
+				
+				Instant startInstant = Instant.ofEpochMilli(startTimeOriginal.getTime());
+			    LocalDateTime start = LocalDateTime.ofInstant(startInstant, ZoneId.systemDefault());
+			    
+			    //Instant endInstant = Instant.ofEpochMilli(endTimeOriginal.getTime());
+			    //LocalDateTime end = LocalDateTime.ofInstant(endInstant, ZoneId.systemDefault());
+			    
+			    String startDate = start.getYear() + "-"
+						+ decimalFormatter.format(start.getMonthValue()) + "-"
+						+ decimalFormatter.format(start.getDayOfMonth());
+			    
+			    String startTime = decimalFormatter.format(start.getHour()) + ":" + decimalFormatter.format(start.getMinute());
+			    
+			    int interval = (int) getDateDiff(startTimeOriginal, endTimeOriginal)/1000/60;
+			    
+				/*
+				String startDate = start.getYear() + "-" + start.getMonth() + "-" + start.getDay();
+				String startTime = start.getHours() + ":" + start.getMinutes();
+				
+				String endDate = end.getYear() + "-" + end.getMonth() + "-" + end.getDay();
+				String endTime = end.getHours() + ":" + end.getMinutes();
+				*/
+			    
+				//return new TokenizedCommand("add", new String[]{"event", input, startDate, startTime, endDate, endTime});
+
+				return new TokenizedCommand("add", new String[]{"event", result, startDate, startTime, Integer.toString(interval), "minute"});
+			}
+		}
+	}
+
+	private static long getDateDiff(Date date1, Date date2) {
+		long diffInMillies = date2.getTime() - date1.getTime();
+		return diffInMillies;
 	}
 }
 ```
-###### src/todolist/model/Name.java
+###### \todolist\parser\MainParser.java
 ``` java
-public class Name implements Comparable<Name>{
+public class MainParser {
 
-	private String name;
-	
-	public Name(String name) {
-	    this.name = name;
+	private FlexiCommandParser flexiCommandParser;
+	private NormalCommandParser normalCommandParser;
+
+	public MainParser() {
+		this.setFlexiCommandParser(new FlexiCommandParser());
+		this.normalCommandParser = new NormalCommandParser();
 	}
-	
-	@Override
-	public int compareTo(Name o) {
-		// TODO Auto-generated method stub
-		return 0;
+
+	/**
+	 * This method takes in a string and parse it.
+	 *
+	 * 
+	 * @return TokenizedCommand
+	 */
+	public TokenizedCommand parse(String input) {
+		if (checkType(input)) {
+			return normalCommandParser.parse(input);
+		} else {
+			// return normalCommandParser.parse(input);
+			return flexiCommandParser.parse(input);
+		}
 	}
-	
-	public String getName() {
-	    return name;
+
+	/**
+	 * This method takes in a string and check whether it is a flexi command.
+	 *
+	 * 
+	 * @return Boolean
+	 */
+	private Boolean checkType(String input) {
+		String temp[] = input.split(" ");
+		String head = temp[0];
+		Boolean type = head.equals("add") || head.equals("edit") || head.equals("delete") || head.equals("search")
+				|| head.equals("filter") || head.equals("sort") || head.equals("insert")
+				|| head.equals("switchposition") || head.equals("label") || head.equals("postpone")
+				|| head.equals("forward") || head.equals("add-remind") || head.equals("remind")
+				|| head.equals("add-remind-bef") || head.equals("remind-bef") || head.equals("done")
+				|| head.equals("undone") || head.equals("exit") || head.equals("undo") || head.equals("redo")
+				|| head.equals("reset") || head.equals("tab") || head.equals("set-recurring")
+				|| head.equals("remove-recurring") || head.equals("create") || head.equals("schedule")
+				|| head.equals("cancel") || head.equals("remove") || head.equals("modify") || head.equals("change")
+				|| head.equals("replace") || head.equals("archive") || head.equals("complete") || head.equals("finish")
+				|| head.equals("shelf") || head.equals("unarchive") || head.equals("incomplete")
+				|| head.equals("unfinish") || head.equals("unshelf") || head.equals("delay") || head.equals("advance")
+				|| head.equals("categorize") || head.equals("tag") || head.equals("load");
+		return type;
+	}
+
+	public FlexiCommandParser getFlexiCommandParser() {
+		return flexiCommandParser;
+	}
+
+	public void setFlexiCommandParser(FlexiCommandParser flexiCommandParser) {
+		this.flexiCommandParser = flexiCommandParser;
 	}
 }
+```
+###### \todolist\parser\NormalCommandParser.java
+``` java
+public class NormalCommandParser {
+
+    public NormalCommandParser() {
+
+    }
+
+    public TokenizedCommand parse(String input) {
+
+        String temp[] = input.split(" ");
+        String action = temp[0];
+
+        ArrayList<String> myList = new ArrayList<String>();
+
+        String name = null;
+        Boolean generateName = false;
+        for (int i = 0; i < temp.length - 1; i++) {
+
+            if (generateName == true) {
+                if (temp[i + 1].contains("\"")) {
+                    name = name + " " + temp[i + 1].replace("\"", "");
+                    generateName = false;
+                    myList.add(name);
+                    // args[counter] = name;
+                    // counter++;
+                    name = null;
+
+                } else {
+                    name = name + " " + temp[i + 1];
+                }
+            } else {
+                if (temp[i + 1].contains("\"")) {
+                    name = temp[i + 1].replace("\"", "");
+                    generateName = true;
+                    int count = temp[i + 1].length() - temp[i + 1].replace("\"", "").length();
+                    if (count == 2) {
+                        generateName = false;
+                        myList.add(name);
+                        // args[counter] = name;
+                        // counter++;
+                        name = null;
+                    }
+                } else {
+                    myList.add(temp[i + 1]);
+                    // args[counter] = temp[i+1];
+                    // counter++;
+                }
+            }
+        }
+
+        String[] args = myList.toArray(new String[0]);
+
+        /*
+         * String temp0[] = input.split("\" "); String temp1[] = temp0[1].split(
+         * " \"");
+         * 
+         * String first[] = temp0[0].split(" "); String third[] =
+         * temp1[1].split(" ");
+         * 
+         * String second = temp1[0];
+         * 
+         * int length = first.length + third.length + 1;
+         * 
+         * 
+         * String temp[] = new String[length];
+         * 
+         * for(int i=0; i< length;i++) { if(i < first.length) { temp[i] =
+         * first[i]; } else { if(i > first.length) { temp[i] = third[i -
+         * first.length - 1]; } else { temp[i] = second; } } }
+         * 
+         * String action = temp[0]; String args[] = new String[temp.length - 1];
+         * for(int i=0; i<temp.length-1; i++) { args[i] = temp[i + 1]; }
+         */
+
+        return new TokenizedCommand(convert(action), args);
+    }
+    
+    
+    private String convert(String input) {
+    	if(input.equals("add") || input.equals("schedule")||input.equals("create")) {
+    		return "add";
+    	}
+    	if(input.equals("delete") || input.equals("cancel")||input.equals("remove")) {
+    		return "delete";
+    	}
+    	if(input.equals("edit") || input.equals("modify")||input.equals("change")||input.equals("replace")) {
+    		return "edit";
+    	}
+    	if(input.equals("archive") || input.equals("done")||input.equals("complete") || input.equals("shelf") || input.equals("finish")) {
+    		return "done";
+    	}
+    	if(input.equals("unarchive") || input.equals("undone")||input.equals("incomplete") || input.equals("unshelf") || input.equals("unfinish")) {
+    		return "undone";
+    	}
+    	if(input.equals("postpone") || input.equals("delay")) {
+    		return "postpone";
+    	}
+    	if(input.equals("forward") || input.equals("advance")) {
+    		return "forward";
+    	}
+    	if(input.equals("label") || input.equals("categorize")||input.equals("tag")) {
+    		return "label";
+    	}
+    	if(input.equals("open") || input.equals("load")) {
+    		return "open";
+    	}
+    	return input;
+    }
+}
+```
+###### \todolist\ui\controllers\MainViewController.java
+``` java
+    // Temporary attributes for testing
+    public String path = "demo.txt";
+    public int demoCounter = 0;
+
+```
+###### \todolist\ui\controllers\MainViewController.java
+``` java
+    /*** Temporary Functions for Testing ***/
+
+    public ArrayList<String> demoFileHandler(String path) {
+        ArrayList<String> myList = new ArrayList<String>();
+        try {
+
+            File file = new File(path);
+            Scanner scr = new Scanner(file);
+            while (scr.hasNextLine()) {
+                String temp = scr.nextLine();
+                myList.add(temp);
+                System.out.println(temp);
+            }
+            scr.close();
+        } catch (Exception e) {
+
+        }
+        return myList;
+    }
+    
+    Boolean isDemoing = false;
+
+    public void setCommandLineCallbackDemo(TextField commandField) {
+        // Set Callback for TextField
+
+        EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                if(!isDemoing) {
+                    String commandString = commandField.getText();
+                    // Command command = new Command(commandString);
+                    // System.out.println(command.getCommand());
+
+                    // Pass command line input for processing
+                    try {
+
+                        commandField.clear();
+                        logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
+                        if(commandString.equals("Start demo")) {
+                            isDemoing = true;
+                        } else {
+                            mainApplication.uiHandlerUnit.process(commandString);
+                            logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
+                        }
+                    } catch (Exception exception) {
+                        logger.logError(Component.UI, ERROR_PROCESSING_USER_INPUT);
+                        exception.printStackTrace();
+                    }
+                } else {
+                    synchronized (this) {
+                        ArrayList<String> demoList = demoFileHandler(path);
+                        String commandString = demoList.get(demoCounter);
+                        demoCounter++;
+                        if(commandString.equals("exit")) {
+                            isDemoing = false;
+                        } else {
+                         // System.out.println(event.getEventType());
+
+                            // Pass command line input for processing
+                            commandField.clear();
+
+                            final Animation animation = new Transition() {
+                                {
+                                    setCycleDuration(new Duration(commandString.length() * 50));
+                                }
+
+                                protected void interpolate(double frac) {
+                                    final int length = commandString.length();
+                                    final int n = Math.round(length * (float) frac);
+                                    commandField.setText(commandString.substring(0, n));
+                                }
+
+                            };
+
+                            animation.setOnFinished(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    mainApplication.uiHandlerUnit.process(commandString);
+                                }
+                            });
+
+                            animation.play();
+                        }
+                    }
+                }
+            }
+        };
+
+        commandField.setOnAction(commandHandler);
+    }
+
 ```

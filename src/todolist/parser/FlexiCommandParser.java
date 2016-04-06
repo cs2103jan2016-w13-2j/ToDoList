@@ -37,7 +37,7 @@ public class FlexiCommandParser {
 					|| temp[i].equals("replace") || temp[i].equals("archive") || temp[i].equals("complete") || temp[i].equals("finish")
 					|| temp[i].equals("shelf") || temp[i].equals("unarchive") || temp[i].equals("incomplete")
 					|| temp[i].equals("unfinish") || temp[i].equals("unshelf") || temp[i].equals("delay") || temp[i].equals("advance")
-					|| temp[i].equals("categorize") || temp[i].equals("tag") || temp[i].equals("load")) {
+					|| temp[i].equals("categorize") || temp[i].equals("tag") || temp[i].equals("load") || temp[i].equals("save") ||temp[i].equals("open")) {
 
 				return new TokenizedCommand("invalid", temp);
 			}

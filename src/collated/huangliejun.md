@@ -1,5 +1,5 @@
 # huangliejun
-###### src/todolist/common/tests/NormalCommandParserTest.java
+###### \todolist\common\tests\NormalCommandParserTest.java
 ``` java
 
 public class NormalCommandParserTest {
@@ -37,14 +37,14 @@ public class NormalCommandParserTest {
     }
 }
 ```
-###### src/todolist/common/tests/UIHandlerTest.java
+###### \todolist\common\tests\UIHandlerTest.java
 ``` java
 
 public class UIHandlerTest {
 
 }
 ```
-###### src/todolist/common/UtilityLogger.java
+###### \todolist\common\UtilityLogger.java
 ``` java
 
 /*
@@ -160,7 +160,7 @@ public class UtilityLogger {
             handleDefaultPathError(exception);
         }
 
-        System.out.println(applicationFile.getParent());
+        // System.out.println(applicationFile.getParent());
 
         return file;
     }
@@ -371,7 +371,7 @@ public class UtilityLogger {
     // }
 }
 ```
-###### src/todolist/MainApp.java
+###### \todolist\MainApp.java
 ``` java
 
 /*
@@ -572,8 +572,8 @@ public class MainApp extends Application {
      */
     private void loadCommandLine() {
         commandField = (TextField) mainView.getBottom();
-        mainController.setCommandLineCallback(commandField);
-        // mainController.setCommandLineCallbackDemo(commandField);
+        // mainController.setCommandLineCallback(commandField);
+        mainController.setCommandLineCallbackDemo(commandField);
     }
 
     /*
@@ -827,11 +827,16 @@ public class MainApp extends Application {
             loadSettingsView();
             break;
         case HELP_TAB:
-            loadHelpView();
+            // loadHelpView();
+            triggerHelpPopup();
             break;
         default:
             loadMainView();
         }
+    }
+
+    private void triggerHelpPopup() {
+
     }
 
     public int getPage() {
@@ -1003,24 +1008,90 @@ public class MainApp extends Application {
         }
 
     }
+
+    /*
+     * getTaskAt returns the task at the position specified in the list view, or
+     * null if it is not found.
+     * 
+     * @param int pos
+     * 
+     * @return Task task
+     * 
+     */
+    public Task getTaskAt(int pos) {
+        switch (getPage()) {
+        case 1:
+            if (mainController != null) {
+                return mainController.getTaskAt(pos);
+            }
+            // Fallthrough
+        case 2:
+            if (overdueController != null) {
+                return overdueController.getTaskAt(pos);
+            }
+            // Fallthrough
+        case 3:
+            if (todayController != null) {
+                return todayController.getTaskAt(pos);
+            }
+            // Fallthrough
+        case 4:
+            if (weekController != null) {
+                return weekController.getTaskAt(pos);
+            }
+            // Fallthrough
+        case 5:
+            if (archiveController != null) {
+                return archiveController.getTaskAt(pos);
+            }
+            // Fallthrough
+        default:
+            if (mainController != null) {
+                return mainController.getTaskAt(pos);
+            } else {
+                return null;
+            }
+        }
+    }
 }
 ```
-###### src/todolist/ui/controllers/ArchiveController.java
+###### \todolist\ui\controllers\ArchiveController.java
 ``` java
 
+/* 
+ * ArchiveController controls and manipulates data for display on the main display area, for the archive tab.
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ */
 public class ArchiveController extends MainViewController {
 
+    // Logger messages
+    private static final String MESSAGE_UPDATED_ARCHIVED_TASKLIST = "Updated display task list [DONE].";
+
+    /*
+     * Constructor overrides super constructor and intializes the display task
+     * list and list view.
+     * 
+     */
     public ArchiveController() {
         // Initialise models
         tasksToDisplay = FXCollections.observableArrayList();
         listView = new ListView<TaskWrapper>();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see todolist.ui.controllers.MainViewController#initialize()
+     */
     @FXML
     public void initialize() {
         initTaskListView();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
+     */
     @Override
     public void setTasks(ArrayList<Task> tasks) {
 
@@ -1040,10 +1111,11 @@ public class ArchiveController extends MainViewController {
         }
 
         listView.getItems().addAll(arrayOfWrappers);
+        logger.logAction(Component.UI, MESSAGE_UPDATED_ARCHIVED_TASKLIST);
     }
 }
 ```
-###### src/todolist/ui/controllers/MainViewController.java
+###### \todolist\ui\controllers\MainViewController.java
 ``` java
 
 /* 
@@ -1058,8 +1130,8 @@ public class MainViewController {
     private static final String MESSAGE_CLEAR_TEXTFIELD = "Text field cleared for next input.";
     private static final String ERROR_PROCESSING_USER_INPUT = "Error processing user input.";
     private static final String MESSAGE_UPDATED_MAIN_TASKLIST = "Updated display task list [HOME].";
-    private static final String MESSAGE_HIGHLIGHT_ITEM = "Item #%1$s in display task list [HOME] highlighted.";
-    private static final String MESSAGE_HIGHLIGHT_ITEM_NOT_FOUND = "Item to be highlighted cannot be found in display task list [HOME].";
+    private static final String MESSAGE_HIGHLIGHT_ITEM = "Item #%1$s in display task list highlighted.";
+    private static final String MESSAGE_HIGHLIGHT_ITEM_NOT_FOUND = "Item to be highlighted cannot be found in display task list.";
 
     // Model data
     protected ObservableList<TaskWrapper> tasksToDisplay = null;
@@ -1075,7 +1147,7 @@ public class MainViewController {
     UtilityLogger logger = null;
 
 ```
-###### src/todolist/ui/controllers/MainViewController.java
+###### \todolist\ui\controllers\MainViewController.java
 ``` java
     /*** Controller Functions ***/
 
@@ -1166,7 +1238,7 @@ public class MainViewController {
     }
 
 ```
-###### src/todolist/ui/controllers/MainViewController.java
+###### \todolist\ui\controllers\MainViewController.java
 ``` java
     /*** View Access Functions ***/
 
@@ -1221,6 +1293,8 @@ public class MainViewController {
         logger.logAction(Component.UI, MESSAGE_UPDATED_MAIN_TASKLIST);
     }
 
+    /*** Utility Functions ***/
+
     /*
      * highlight gets the index of the task to highlight and put that index item
      * on focus.
@@ -1236,8 +1310,7 @@ public class MainViewController {
             listView.getSelectionModel().select(index);
             listView.getFocusModel().focus(index);
             listView.scrollTo(index);
-            String.format(MESSAGE_HIGHLIGHT_ITEM, Integer.toString(index));
-            logger.logAction(Component.UI, MESSAGE_HIGHLIGHT_ITEM);
+            logger.logAction(Component.UI, String.format(MESSAGE_HIGHLIGHT_ITEM, Integer.toString(index)));
         }
     }
 
@@ -1264,24 +1337,77 @@ public class MainViewController {
         return -1;
     }
 
+    /*
+     * isCompleted checks if a given task has already been completed.
+     * 
+     * @param Task task is the given task to check for completion
+     * 
+     * @return boolean isCompleted
+     * 
+     */
+    protected Boolean isCompleted(Task task) {
+        return task.getDoneStatus();
+    }
+
+    /*
+     * getTaskAt returns the task at the position specified in the list view, or
+     * null if it is not found.
+     * 
+     * @param int pos
+     * 
+     * @return Task task
+     * 
+     */
+    public Task getTaskAt(int pos) {
+        ObservableList<TaskWrapper> itemList = listView.getItems();
+        if (pos >= 1 && pos <= itemList.size()) {
+            return itemList.get(pos - 1).getTaskObject();
+        } else {
+            return null;
+        }
+    }
 }
 ```
-###### src/todolist/ui/controllers/OverdueController.java
+###### \todolist\ui\controllers\OverdueController.java
 ``` java
 
+/* 
+ * OverdueController controls and manipulates data for display on the main display area, for the overdue tab.
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ */
 public class OverdueController extends MainViewController {
 
+    // Logger messages
+    private static final String MESSAGE_UPDATED_OVERDUE_TASKLIST = "Updated display task list [OVERDUE].";
+
+    /*
+     * Constructor overrides super constructor and intializes the display task
+     * list and list view.
+     * 
+     */
     public OverdueController() {
         // Initialise models
         tasksToDisplay = FXCollections.observableArrayList();
         listView = new ListView<TaskWrapper>();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see todolist.ui.controllers.MainViewController#initialize()
+     */
     @FXML
     public void initialize() {
         initTaskListView();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
+     */
     @Override
     public void setTasks(ArrayList<Task> tasks) {
 
@@ -1294,24 +1420,44 @@ public class OverdueController extends MainViewController {
         // Convert Task to TaskWrapper for display handling
         for (int i = 0; i < tasks.size(); ++i) {
             Task task = tasks.get(i);
-            if (task.getEndTime() != null && task.getEndTime().isBefore(LocalDateTime.now()) && !task.getDoneStatus()) {
+            // Only display overdue tasks that are not yet completed
+            if (isOverdue(task) && !isCompleted(task)) {
                 TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
                 arrayOfWrappers.add(wrappedTask);
             }
         }
 
         listView.getItems().addAll(arrayOfWrappers);
+        logger.logAction(Component.UI, MESSAGE_UPDATED_OVERDUE_TASKLIST);
+    }
+
+    /*
+     * isOverdue is a utility function that checks if a given task is expired by
+     * checking that the end date-time is not past yet.
+     * 
+     * @param Task task is the task to check for expiry
+     * 
+     * @return boolean isOverdue is overdue flag
+     * 
+     */
+    private boolean isOverdue(Task task) {
+        return task.getEndTime() != null && task.getEndTime().isBefore(LocalDateTime.now());
     }
 }
 ```
-###### src/todolist/ui/controllers/SideBarController.java
+###### \todolist\ui\controllers\SideBarController.java
 ``` java
 
+/*
+ * SideBarController controls the interface for the sidebar or tabs
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ */
 public class SideBarController {
 
     /*** TAB STYLES ***/
     private static final String STYLE_TAB_NORMAL = "-fx-background-color: transparent;";
-    private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #95E1D3;";
+    private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #069A8E;";
     // private static final String STYLE_TAB_FOCUSED_DARK =
     // "-fx-background-color: #EB586F;";
 
@@ -1368,24 +1514,41 @@ public class SideBarController {
 
     private int index = 1;
     private static int NUMBER_BUTTONS = 7;
-    private Button[] buttonArray;
+    private Button[] buttonArray = null;
+    private HashMap<Button, Integer> buttonHash = null;
 
     // Main Application reference
     private MainApp mainApplication = null;
 
+    // Logger and Logger messages
+    UtilityLogger logger = null;
+    private static final String MESSAGE_CHANGED_PAGE = "Switched tab to %1$s";
+
     /*** CORE FUNCTIONS ***/
 
+    /*
+     * setMainApp sets the reference to link back to main application.
+     * 
+     * @param MainApp mainApp
+     * 
+     */
     public void setMainApp(MainApp mainApp) {
         mainApplication = mainApp;
     }
 
     @FXML
     public void initialize() {
+        logger = new UtilityLogger();
         setButtonArray();
+        setButtonHash();
+        setClickTabLogic();
         setTodayDate();
         colourTab();
     }
 
+    /*
+     * setButtonArray initializes the array of buttons
+     */
     private void setButtonArray() {
         buttonArray = new Button[NUMBER_BUTTONS];
         buttonArray[0] = home;
@@ -1397,17 +1560,67 @@ public class SideBarController {
         buttonArray[6] = help;
     }
 
+    /*
+     * setClickTabLogic sets the on-click event for tabs
+     */
+    private void setClickTabLogic() {
+        for (int i = 0; i < buttonArray.length; ++i) {
+            Button button = buttonArray[i];
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    paging(button);
+                }
+            });
+        }
+
+        todayLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                paging(today);
+            }
+        });
+    }
+
+    /*
+     * setButtonHash maps each button to its index or sequence on the sidebar
+     */
+    private void setButtonHash() {
+        buttonHash = new HashMap<Button, Integer>();
+        buttonHash.put(home, 1);
+        buttonHash.put(expired, 2);
+        buttonHash.put(today, 3);
+        buttonHash.put(week, 4);
+        buttonHash.put(done, 5);
+        buttonHash.put(options, 6);
+        buttonHash.put(help, 7);
+    }
+
+    /*
+     * setTodayDate sets the date display label on the Today tab button
+     */
     private void setTodayDate() {
         todayDate = LocalDateTime.now().getDayOfMonth();
         todayLabel.setText(Integer.toString(todayDate));
     }
 
+    /*
+     * setIndex takes in a page / tab number and navigates to it if valid.
+     * 
+     * @param int index
+     * 
+     */
     public void setIndex(int index) {
         this.index = index;
         colourTab();
         mainApplication.setPageView(index);
+        logger.logAction(Component.UI, String.format(MESSAGE_CHANGED_PAGE, getTabName(index)));
     }
 
+    /*
+     * colourTab sets the highlight logic for the tab buttons, based on the
+     * current tab in focus
+     */
     private void colourTab() {
         for (int i = 0; i < NUMBER_BUTTONS; ++i) {
             Button currentButton = buttonArray[i];
@@ -1417,24 +1630,90 @@ public class SideBarController {
             if (i == index - 1) {
                 currentButton.setStyle(STYLE_TAB_FOCUSED);
                 // currentButton.setStyle(STYLE_TAB_FOCUSED_DARK);
-
             }
-
         }
-
     }
 
+    /*
+     * getMainApplication is an access function for the reference to main
+     * application
+     */
     public MainApp getMainApplication() {
         return mainApplication;
     }
 
+    /*
+     * getIndex returns the current tab number
+     * 
+     * @return int tabNumber
+     * 
+     */
     public int getIndex() {
         return index;
     }
 
+    /*
+     * getButtonIndex takes in a button and returns its position / page /
+     * sequence number in the sidebar.
+     * 
+     * @param Button button
+     * 
+     * @return int index
+     * 
+     */
+    private int getButtonIndex(Button button) {
+        if (buttonHash.get(button) != null) {
+            return buttonHash.get(button);
+        } else {
+            return -1;
+        }
+    }
+
+    /*
+     * paging is a callback function that is called when a button is clicked. It
+     * navigates to the page / tab that the button is mapped to.
+     * 
+     * @param Button button
+     * 
+     */
+    private void paging(Button button) {
+        int index = getButtonIndex(button);
+        if (index >= 1 && index <= 7) {
+            setIndex(index);
+        }
+    }
+
+    /*
+     * getTabName returns the tab name given its sequence or index number
+     * 
+     * @param int indexNumber
+     * 
+     * @return String tabName
+     * 
+     */
+    public String getTabName(int indexNumber) {
+        switch (indexNumber) {
+        case 1:
+            return "HOME";
+        case 2:
+            return "EXPIRED";
+        case 3:
+            return "TODAY";
+        case 4:
+            return "WEEK";
+        case 5:
+            return "DONE";
+        case 6:
+            return "OPTIONS";
+        case 7:
+            return "HELP";
+        default:
+            return "UNKNOWN";
+        }
+    }
 }
 ```
-###### src/todolist/ui/controllers/TaskListCell.java
+###### \todolist\ui\controllers\TaskListCell.java
 ``` java
 
 /*
@@ -1478,9 +1757,15 @@ public class TaskListCell extends ListCell<TaskWrapper> {
     }
 }
 ```
-###### src/todolist/ui/controllers/TaskNodeController.java
+###### \todolist\ui\controllers\TaskNodeController.java
 ``` java
 
+/*
+ * TaskNodeController controls and manipulates data for display in task view(s).
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ * 
+ */
 public class TaskNodeController {
 
     /*** STATIC MESSAGES ***/
@@ -1490,11 +1775,24 @@ public class TaskNodeController {
     private static final String ERROR_DISPLAY_ITEM_TITLE = "Task Display: Task title invalid.";
 
     // DEFAULTS
-    private static final String NULL_DISPLAY_ITEM_CATEGORY = "Category: Not Available";
+    private static final String NULL_DISPLAY_ITEM_CATEGORY = "uncategorised";
     private static final String DISPLAY_ITEM_UNARCHIVED = "ONGOING";
     private static final String DISPLAY_ITEM_ARCHIVED = "DONE";
+    private static final String DISPLAY_ITEM_OVERDUE = "OVERDUE";
+    private static final String DISPLAY_ITEM_HEADER_CATEGORY = "";
 
     /*** STYLES ***/
+
+    // MONTHS
+    private static final String[] months = { "", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+            "Nov", "Dec" };
+
+    // COLORS
+    private static final String[] colorsHex = { "#27E1CE", "#D6EC78", "#FF98DA", "#FA7E0A", "#7A8CF0", "#A45FE6",
+            "#F4722B", "#B3A78C", "#AA3763", "#6078EA", "#FA5555", "#F7FB76", "#F98B60", "#FFC057", "#B64926",
+            "#468966", "#7BC74D", "#A97555", "#6639A6", "#F6C90E", "#BEEB9F", "#FCC29A", "#C83B3B", "#537780",
+            "#88304E", "#7AA5D2", "#A75265", "#57385C", "#F66095", "#D6C8FF", "#C79ECF", "#7E6BC4", "#ABD4C1",
+            "#7E858B" };
 
     // TASK TYPE STYLE
     private static final String COLOR_FLOATING = "#3BB873";
@@ -1504,7 +1802,7 @@ public class TaskNodeController {
     // TASK OVERDUE STYLE
     private static final String COLOR_OVERDUE = "#FF6464";
     private static final String COLOR_TODAY = "#FAAC64";
-    private static final String COLOR_SPARE = "#5BAAEC";
+    private static final String COLOR_SPARE = "#A4D792";
 
     // TASK COMPLETION STYLE
     private static final String COLOR_COMPLETE = "#5BE7A9";
@@ -1512,6 +1810,9 @@ public class TaskNodeController {
 
     // UNKNOWN STYLE
     private static final String COLOR_UNKNOWN = "#748B9C";
+
+    // Logger and Logger messages
+    UtilityLogger logger = null;
 
     /*** TASK ITEM COMPONENTS ***/
 
@@ -1546,15 +1847,21 @@ public class TaskNodeController {
     @FXML
     private HBox titleBox = null;
     @FXML
-    private Label title = null;
+    private Text title = null;
     @FXML
-    private ImageView reminderIcon = null;
+    private TextFlow titleFlow = null;
+
+    // Content-RELATIVE TIME
+    @FXML
+    private HBox relativeRangeBox = null;
+    @FXML
+    private Label relativeRange = null;
 
     // Content-DATE(S)
     @FXML
     private HBox dateRangeBox = null;
     @FXML
-    private Circle overdueFlag = null;
+    private Circle dateRangeSprite = null;
     @FXML
     private Label dateRange = null;
 
@@ -1582,7 +1889,15 @@ public class TaskNodeController {
     @FXML
     private ImageView reminderIndicator = null;
 
+    // Date-Time Field Live Update Interval (in seconds)
+    private static final int UPDATE_INTERVAL = 1;
+    private static final int ZONE_OFFSET = 8;
+
+    /*
+     * Constructor intializes task and index of task.
+     */
     public TaskNodeController(TaskWrapper task, int index) throws IllegalArgumentException {
+        logger = new UtilityLogger();
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(MainApp.DIRECTORY_TASKITEM));
         fxmlLoader.setController(this);
 
@@ -1591,8 +1906,8 @@ public class TaskNodeController {
 
         try {
             fxmlLoader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ioException) {
+            throw new RuntimeException(ioException);
         }
 
         // Assignment TaskWrapper to HBox Layout
@@ -1604,6 +1919,11 @@ public class TaskNodeController {
 
     }
 
+    /*
+     * validateAndFormatItem checks the validity of the display content and
+     * formats it for display.
+     * 
+     */
     public void validateAndFormatItem() throws IllegalArgumentException {
         int indexNumber = index + 1;
 
@@ -1614,6 +1934,13 @@ public class TaskNodeController {
         LocalDateTime startDateTime = task.getStartTime();
         LocalDateTime endDateTime = task.getEndTime();
 
+        // Scale label height
+        ObservableNumberValue diff = relativeRangeBox.heightProperty()
+                .add(dateRangeBox.heightProperty().add(categoryBox.heightProperty().add(16)));
+        priorityLabel.heightProperty().bind(titleFlow.heightProperty().add(diff));
+        
+        title.fillProperty().bind(number.textFillProperty());
+        
         /** Validation **/
 
         // Ensure integrity of task object
@@ -1621,7 +1948,7 @@ public class TaskNodeController {
 
         // Index Number
         if (indexNumber <= 0) {
-            Logger.logMsg(Logger.ERROR, ERROR_DISPLAY_ITEM_INDEX);
+            logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_INDEX);
             throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_INDEX);
         } else {
             number.setText(Integer.toString(indexNumber));
@@ -1629,7 +1956,7 @@ public class TaskNodeController {
 
         // Title
         if (taskTitle == null) {
-            Logger.logMsg(Logger.ERROR, ERROR_DISPLAY_ITEM_TITLE);
+            logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_TITLE);
             throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_TITLE);
         } else {
             title.setText(taskTitle);
@@ -1638,17 +1965,28 @@ public class TaskNodeController {
         // Category
         if (category == null) {
             categoryName = new String(NULL_DISPLAY_ITEM_CATEGORY);
+            categorySprite.setFill(Color.web(COLOR_UNKNOWN));
         } else {
-            categoryName = category.getCategory();
+            categoryName = DISPLAY_ITEM_HEADER_CATEGORY + category.getCategory();
+            Color catColor = Color.web(colorsHex[Math.abs(categoryName.hashCode()) % colorsHex.length]);
+            categorySprite.setFill(catColor);
         }
 
         this.category.setText(categoryName);
-        categorySprite.setFill(Color.web(COLOR_UNKNOWN));
 
         // Dates
         try {
-            String dateFieldOutput = formatDateField(task, startDateTime, endDateTime);
-            dateRange.setText(dateFieldOutput);
+            final Timeline timeline = new Timeline(
+                    new KeyFrame(javafx.util.Duration.ZERO, new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            formatDateField(task, startDateTime, endDateTime);
+                        }
+                    }), new KeyFrame(javafx.util.Duration.seconds(UPDATE_INTERVAL)));
+
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
+
         } catch (IllegalArgumentException iae) {
             throw iae;
         }
@@ -1657,6 +1995,9 @@ public class TaskNodeController {
         if (task.getIsCompleted()) {
             statusBacking.setFill(Color.web(COLOR_COMPLETE));
             status.setText(DISPLAY_ITEM_ARCHIVED);
+        } else if (task.getIsExpired()) {
+            statusBacking.setFill(Color.web(COLOR_OVERDUE));
+            status.setText(DISPLAY_ITEM_OVERDUE);
         } else {
             statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
             status.setText(DISPLAY_ITEM_UNARCHIVED);
@@ -1673,40 +2014,68 @@ public class TaskNodeController {
         }
     }
 
+    /*
+     * getNode returns the formatted task view for display.
+     * 
+     * @return HBox getNode
+     */
     public HBox getNode() {
         return root;
     }
 
-    public String formatDateField(TaskWrapper task, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    /*
+     * formatDateField takes in a task, start date-time, end date-time to format
+     * date range field for display.
+     * 
+     * @param TaskWrapper task, LocalDateTime startDateTime, LocalDateTime
+     * endDateTime
+     * 
+     * @return String dateTimeField
+     */
+    public void formatDateField(TaskWrapper task, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         TASK_TYPE taskType = checkTaskType(startDateTime, endDateTime);
+        String outputDate = "";
+        String relativeText = "ad-hoc task";
 
         switch (taskType) {
 
         case FLOAT:
-            styleFloatingTask();
-            return "Anytime";
-
+            outputDate = "Anytime";
+            break;
         case DEADLINE:
-            styleDeadline(endDateTime);
-            return formatDeadlineRange(endDateTime);
-
+            outputDate = formatDeadlineRange(endDateTime);
+            relativeText = formatDeadlineRelativeText(endDateTime);
+            break;
         case EVENT:
-            styleEvent(startDateTime);
-
             // Smart formatting of range
             if (startDateTime.getDayOfYear() == endDateTime.getDayOfYear()
                     && startDateTime.getYear() == endDateTime.getYear()) {
-                return formatEventRangeSameDay(startDateTime, endDateTime);
+                outputDate = formatEventRangeSameDay(startDateTime, endDateTime);
             } else {
-                return formatEventRangeDiffDay(startDateTime, endDateTime);
+                outputDate = formatEventRangeDiffDay(startDateTime, endDateTime);
             }
-
+            relativeText = formatEventRelativeText(startDateTime, endDateTime);
+            break;
         default:
-            styleUnknown();
-            return "Not Available";
+            outputDate = "Not Available";
         }
+
+        setStyle(startDateTime, endDateTime, task.getIsCompleted());
+
+        this.relativeRange.setText(relativeText);
+        dateRange.setText(outputDate);
+        this.relativeRange.setFont(Font.font("Calibri", FontPosture.ITALIC, 14));
     }
 
+    /*
+     * checkTaskType takes in the start date-time and end date-time to determine
+     * the task type.
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * 
+     * @return TASK_TYPE
+     * 
+     */
     private TASK_TYPE checkTaskType(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         TASK_TYPE taskType;
         if (startDateTime != null && endDateTime != null) {
@@ -1724,84 +2093,259 @@ public class TaskNodeController {
 
     /** FORMATTING FUNCTIONS **/
 
-    private String formatEventRangeDiffDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return "From " + startDateTime.getDayOfWeek() + ", "
-                + startDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT))
-                + " to " + endDateTime.getDayOfWeek() + ", "
-                + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+    /*
+     * formatEventRange
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * 
+     * @return String eventRange
+     */
+    private String formatEventRelativeText(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+
+        // Output will consists of two parts: [start time reference] and
+        // remaining time left
+        String startOutput = null;
+        String durationOutput = null;
+
+        ZoneId defaultZoneId = ZoneId.of(ZoneOffset.systemDefault().getId());
+        ZonedDateTime zoneDateTime = LocalDateTime.now().atZone(defaultZoneId);
+        ZoneOffset zoneOffset = zoneDateTime.getOffset();
+        
+        PrettyTime prettyParser = new PrettyTime();
+        Instant startInstant = startDateTime.toInstant(zoneOffset);
+        Date start = Date.from(startInstant);
+        Instant endInstant = endDateTime.toInstant(zoneOffset);
+        Date end = Date.from(endInstant);
+        Instant nowInstant = LocalDateTime.now().toInstant(zoneOffset);
+        Date now = Date.from(nowInstant);
+
+        // Set output for the start of event
+        startOutput = prettyParser.format(start);
+
+        String relativeStart = "event starts ";
+        String relativeEnd = "%1$slong";
+
+        // Start reference date varies, depending if event has already begun
+        if (hasStarted(startDateTime)) {
+            prettyParser.setReference(now);
+            relativeStart = "event started ";
+            relativeEnd = "ends in %1$s";
+
+        } else {
+            prettyParser.setReference(start);
+        }
+
+        if (endDateTime.isBefore(LocalDateTime.now())) {
+            relativeEnd = "ended " + prettyParser.format(end);
+        }
+
+        durationOutput = prettyParser.format(end).replace("from now", "");
+
+        return relativeStart + startOutput + ", " + String.format(relativeEnd, durationOutput);
     }
 
+    /*
+     * formatDeadlineRange
+     * 
+     * @param LocalDateTime endDateTime
+     * 
+     * @return String deadlineRange
+     */
+    private String formatDeadlineRelativeText(LocalDateTime endDateTime) {
+
+        PrettyTime prettyParser = new PrettyTime();
+
+        Instant endInstant = endDateTime.toInstant(ZoneOffset.ofHours(ZONE_OFFSET));
+        Date end = Date.from(endInstant);
+
+        return "deadline due " + prettyParser.format(end);
+    }
+
+    /*
+     * hasStarted checks if an event has already begun.
+     * 
+     * @param LocalDateTime startDateTime
+     * 
+     * @return boolean hasStarted
+     */
+    private boolean hasStarted(LocalDateTime startDateTime) {
+        return LocalDateTime.now().isAfter(startDateTime);
+    }
+
+    /*
+     * formatEventRangeDiffDay formats the date-time range for events with start
+     * and end date-times on different days
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * 
+     * @return String dateTimeRange
+     */
+    private String formatEventRangeDiffDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.getDayOfMonth() + "-" + months[startDateTime.getMonthValue()] + "-"
+                + startDateTime.getYear() + ", "
+                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
+                + endDateTime.getDayOfMonth() + "-" + months[endDateTime.getMonthValue()] + "-" + endDateTime.getYear()
+                + ", " + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+    }
+
+    /*
+     * formatEventRangeSameDay formats the date-time range for events with start
+     * and end date-times on the same day
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * 
+     * @return String dateTimeRange
+     */
     private String formatEventRangeSameDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) + ", from "
+        return startDateTime.getDayOfMonth() + "-" + months[startDateTime.getMonthValue()] + "-"
+                + startDateTime.getYear() + ", "
                 + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
                 + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
+    /*
+     * formatDeadlineRange formats the date-time range for deadlines
+     * 
+     * @param LocalDateTime endDateTime
+     * 
+     * @return String dateTimeRange
+     */
     private String formatDeadlineRange(LocalDateTime endDateTime) {
-        return "Due: " + endDateTime.getDayOfWeek() + ", "
-                + endDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT));
+        return endDateTime.getDayOfMonth() + "-" + months[endDateTime.getMonthValue()] + "-" + endDateTime.getYear()
+                + ", " + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     /** STYLING FUNCTIONS **/
+
+    /*
+     * Apply styles on unknown task type
+     * 
+     */
+    @SuppressWarnings("unused")
     private void styleUnknown() {
         numLabelBase.setFill(Color.web(COLOR_UNKNOWN));
-        overdueFlag.setFill(Color.web(COLOR_UNKNOWN));
     }
 
+    /*
+     * Apply styles on event task type
+     * 
+     * @param LocalDateTime startDateTime
+     * 
+     */
+    @SuppressWarnings("unused")
     private void styleEvent(LocalDateTime startDateTime) {
         numLabelBase.setFill(Color.web(COLOR_EVENT));
 
         if (startDateTime.isBefore(LocalDateTime.now())) {
-            overdueFlag.setFill(Color.web(COLOR_OVERDUE));
+            priorityLabel.setFill(Color.web(COLOR_OVERDUE));
         } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), startDateTime) <= 24) {
-            overdueFlag.setFill(Color.web(COLOR_TODAY));
+            priorityLabel.setFill(Color.web(COLOR_TODAY));
         } else {
-            overdueFlag.setFill(Color.web(COLOR_SPARE));
+            priorityLabel.setFill(Color.web(COLOR_SPARE));
         }
     }
 
+    /*
+     * Apply styles on deadline task type
+     * 
+     * @param LocalDateTime endDateTime
+     */
+    @SuppressWarnings("unused")
     private void styleDeadline(LocalDateTime endDateTime) {
         numLabelBase.setFill(Color.web(COLOR_DEADLINE));
 
         if (endDateTime.isBefore(LocalDateTime.now())) {
-            overdueFlag.setFill(Color.web(COLOR_OVERDUE));
+            priorityLabel.setFill(Color.web(COLOR_OVERDUE));
         } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24) {
-            overdueFlag.setFill(Color.web(COLOR_TODAY));
+            priorityLabel.setFill(Color.web(COLOR_TODAY));
         } else {
-            overdueFlag.setFill(Color.web(COLOR_SPARE));
+            priorityLabel.setFill(Color.web(COLOR_SPARE));
         }
     }
 
+    /*
+     * Apply styles on floating task type
+     */
+    @SuppressWarnings("unused")
     private void styleFloatingTask() {
         numLabelBase.setFill(Color.web(COLOR_FLOATING));
-        overdueFlag.setFill(Color.web(COLOR_SPARE));
+        priorityLabel.setFill(Color.web(COLOR_SPARE));
     }
 
+    /*
+     * Apply styles on task
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime, boolean
+     * isCompleted
+     * 
+     */
+    private void setStyle(LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isCompleted) {
+
+        if (endDateTime != null && endDateTime.isBefore(LocalDateTime.now()) && !isCompleted) {
+            numLabelBase.setFill(Color.web(COLOR_OVERDUE));
+            priorityLabel.setFill(Color.web(COLOR_OVERDUE));
+            // dateRangeSprite.setFill(Color.web(COLOR_OVERDUE));
+        } else if (endDateTime != null && ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24
+                && !isCompleted) {
+            numLabelBase.setFill(Color.web(COLOR_TODAY));
+            priorityLabel.setFill(Color.web(COLOR_TODAY));
+            // dateRangeSprite.setFill(Color.web(COLOR_TODAY));
+        } else {
+            numLabelBase.setFill(Color.web(COLOR_SPARE));
+            priorityLabel.setFill(Color.web(COLOR_SPARE));
+            // dateRangeSprite.setFill(Color.web(COLOR_SPARE));
+        }
+
+    }
 }
 ```
-###### src/todolist/ui/controllers/TitleBarController.java
+###### \todolist\ui\controllers\TitleBarController.java
 ``` java
 
 public class TitleBarController {
     // Work In Progress ...
 }
 ```
-###### src/todolist/ui/controllers/TodayController.java
+###### \todolist\ui\controllers\TodayController.java
 ``` java
 
+/* 
+ * TodayController controls and manipulates data for display on the main display area, for the today tab.
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ */
 public class TodayController extends MainViewController {
 
+    // Logger messages
+    private static final String MESSAGE_UPDATED_TODAY_TASKLIST = "Updated display task list [TODAY].";
+
+    /*
+     * Constructor overrides super constructor and intializes the display task
+     * list and list view.
+     * 
+     */
     public TodayController() {
         // Initialise models
         tasksToDisplay = FXCollections.observableArrayList();
         listView = new ListView<TaskWrapper>();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see todolist.ui.controllers.MainViewController#initialize()
+     */
     @FXML
     public void initialize() {
         initTaskListView();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
+     */
     @Override
     public void setTasks(ArrayList<Task> tasks) {
 
@@ -1814,34 +2358,71 @@ public class TodayController extends MainViewController {
         // Convert Task to TaskWrapper for display handling
         for (int i = 0; i < tasks.size(); ++i) {
             Task task = tasks.get(i);
-            if (task.getEndTime() != null && task.getEndTime().getYear() == LocalDateTime.now().getYear()
-                    && task.getEndTime().getDayOfYear() == LocalDateTime.now().getDayOfYear()
-                    && !task.getDoneStatus()) {
+            if (isToday(task) && !isCompleted(task)) {
                 TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
                 arrayOfWrappers.add(wrappedTask);
             }
         }
 
         listView.getItems().addAll(arrayOfWrappers);
+        logger.logAction(Component.UI, MESSAGE_UPDATED_TODAY_TASKLIST);
+
+    }
+
+    /*
+     * isToday is a utility function that checks if a given task is due today.
+     * 
+     * @param Task task is the given task to check
+     * 
+     * @return boolean isToday
+     * 
+     */
+    private boolean isToday(Task task) {
+        return task.getEndTime() != null && task.getEndTime().getYear() == LocalDateTime.now().getYear()
+                && task.getEndTime().getDayOfYear() == LocalDateTime.now().getDayOfYear();
     }
 }
 ```
-###### src/todolist/ui/controllers/WeekController.java
+###### \todolist\ui\controllers\WeekController.java
 ``` java
 
+/* 
+ * WeekController controls and manipulates data for display on the main display area, for the week tab.
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ */
 public class WeekController extends MainViewController {
 
+    // Logger messages
+    private static final String MESSAGE_UPDATED_WEEK_TASKLIST = "Updated display task list [WEEK].";
+
+    /*
+     * Constructor overrides super constructor and intializes the display task
+     * list and list view.
+     * 
+     */
     public WeekController() {
         // Initialise models
         tasksToDisplay = FXCollections.observableArrayList();
         listView = new ListView<TaskWrapper>();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see todolist.ui.controllers.MainViewController#initialize()
+     */
     @FXML
     public void initialize() {
         initTaskListView();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
+     */
     @Override
     public void setTasks(ArrayList<Task> tasks) {
 
@@ -1854,18 +2435,30 @@ public class WeekController extends MainViewController {
         // Convert Task to TaskWrapper for display handling
         for (int i = 0; i < tasks.size(); ++i) {
             Task task = tasks.get(i);
-            if (task.getEndTime() != null && LocalDateTime.now().until(task.getEndTime(), ChronoUnit.DAYS) <= 7
-                    && !task.getDoneStatus()) {
+            if (isWithinWeek(task) && !isCompleted(task)) {
                 TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
                 arrayOfWrappers.add(wrappedTask);
             }
         }
 
         listView.getItems().addAll(arrayOfWrappers);
+        logger.logAction(Component.UI, MESSAGE_UPDATED_WEEK_TASKLIST);
+    }
+
+    /*
+     * isWithinWeek takes in a task to determine if the end date-time of the
+     * task is within 7-days from today
+     * 
+     * @param Task task is the task provided for checking
+     * 
+     * @return boolean isWithinWeek
+     */
+    private boolean isWithinWeek(Task task) {
+        return task.getEndTime() != null && LocalDateTime.now().until(task.getEndTime(), ChronoUnit.DAYS) <= 7;
     }
 }
 ```
-###### src/todolist/ui/TaskWrapper.java
+###### \todolist\ui\TaskWrapper.java
 ``` java
 
 /*
@@ -2140,9 +2733,13 @@ public class TaskWrapper {
     public Task getTaskObject() {
         return task;
     }
+
+    public boolean getIsExpired() {
+        return getEndTime() != null && getEndTime().isBefore(LocalDateTime.now());
+    }
 }
 ```
-###### src/todolist/ui/views/ArchiveView.fxml
+###### \todolist\ui\views\ArchiveView.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -2200,7 +2797,7 @@ public class TaskWrapper {
 	</center>
 </BorderPane>
 ```
-###### src/todolist/ui/views/DefaultTheme.css
+###### \todolist\ui\views\DefaultTheme.css
 ``` css
 
 /* Color Template */
@@ -2211,6 +2808,7 @@ public class TaskWrapper {
  * accent: #4AA0D5;
  * accent-two: #A9EEE6;
  * accent-three: #95E1D3;
+ * accent-four: #069A8E;
  * content: #F8F3D4;
  * content-two: #FEFAEC;
  * focus: #EB586F;
@@ -2259,13 +2857,13 @@ public class TaskWrapper {
 
 .titled-pane {
     -fx-padding: 0.0 0.0 6.0 0.0;
-	-fx-text-fill: white;
+	/*-fx-text-fill: white;*/
     -fx-font-size: 12.0pt;
     -fx-font-family: "System Font";
 }
 
 .titled-pane:focused {
-	-fx-text-fill: white;
+	/*-fx-text-fill: white;*/
 }
 
 #titled-pane-hbox-text {
@@ -2300,90 +2898,43 @@ public class TaskWrapper {
 
 .list-cell {
     -fx-background-color: transparent;
-    -fx-padding: 10.0px;
+    -fx-padding: 6.5 6.5 0.0 6.5;
     -fx-background-color: transparent;
     -fx-background-insets: 0.0px, 10.0px;
 }
 
 .list-cell:filled:selected:focused > #task-hbox-item {
     -fx-background-color: #EB586F;
-    -fx-background-color: #95E1D3;
-    -fx-text-fill: #FEFAEC;
-	-fx-fill: #FEFAEC;
+    -fx-background-color: #069A8E;
+    /*-fx-text-fill: #FEFAEC;*/
 }
 
 .list-cell:filled:selected:focused > #task-hbox-item .label {
     -fx-text-fill: #FEFAEC;
 }
 
+.list-cell:filled:selected:focused > #task-hbox-item .text {
+	-fx-fill: #FEFAEC;
+}
+
 .list-cell:filled > #task-hbox-item {
     -fx-background-color: #506F86;
     -fx-background-color: #D8E9F0;
-    -fx-text-fill: #FEFAEC;
-	-fx-fill: #FEFAEC;
+    /*-fx-text-fill: #FEFAEC;*/
 }
 
 .list-cell:filled > #task-hbox-item .label {
-    -fx-text-fill: #FEFAEC;
+    /*-fx-text-fill: #FEFAEC;*/
     -fx-text-fill: #454553;
 }
 
-
-.list-cell:filled:hover > #task-hbox-item {
-    -fx-text-fill: #FEFAEC;
-	-fx-fill: #FEFAEC;
+.list-cell:filled > #task-hbox-item .text {
+    -fx-fill: #454553;
 }
 
 #task-hbox-item {
     -fx-border-color: transparent;
     -fx-border-width: 0.0;
-}
-
-.table-view .column-header-background {
-    -fx-background-color: transparent;
-}
-
-.table-view .column-header-background .label {
-    -fx-background-color: transparent;
-    -fx-text-fill: #454553;
-    -fx-font-size: 10.0pt;
-    -fx-font-family: "System Font";
-    -fx-alignment: center-left;
-}
-
-.table-view .column-header {
-    -fx-background-color: transparent;
-    -fx-text-fill: #454553;
-    -fx-font-size: 10.0pt;
-    -fx-font-family: "System Font";
-}
-
-.table-view .table-cell {
-    -fx-font-size: 10.0pt;
-    -fx-font-family: "System Font";
-  	-fx-border-width: 0.0;
-}
-
-.table-row-cell {
-    -fx-background-color: transparent;
-  	-fx-border-color: transparent;
-    -fx-text-fill: #454553;
-}
-
-.table-row-cell:odd {
-    -fx-background-color: transparent;
-    -fx-text-fill: #454553;
-}
-
-.table-row-cell:selected {
-    -fx-background-color: #EB586F;
-    -fx-text-fill: white;
-}
-
-.table-column-cell:empty { 
-	-fx-background-color: transparent;
-    -fx-border-style: solid;
-    -fx-border-color: #454553;
 }
 
 .text-field {
@@ -2424,18 +2975,6 @@ public class TaskWrapper {
     -fx-font-weight: bold;
 }
 
-#new-button {
-    -fx-background-color: 
-        #000000,
-        linear-gradient(#7ebcea, #2f4b8f),
-        linear-gradient(#426ab7, #263e75),
-        linear-gradient(#395cab, #223768);
-    -fx-background-insets: 0.0,1.0,2.0,3.0;
-    -fx-background-radius: 3.0,2.0,2.0,2.0;
-    -fx-text-fill: white;
-    -fx-font-size: 12.0px;
-}
-
 #today-label {
     -fx-text-fill: #FEFAEC;
     -fx-font-size: 12.0px;
@@ -2444,7 +2983,7 @@ public class TaskWrapper {
     -fx-padding: 0.0 0.0 8.0 0.0;
 }
 ```
-###### src/todolist/ui/views/EmptyView.fxml
+###### \todolist\ui\views\EmptyView.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -2502,7 +3041,7 @@ public class TaskWrapper {
 	</center>
 </BorderPane>
 ```
-###### src/todolist/ui/views/HelpView.fxml
+###### \todolist\ui\views\HelpView.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -2560,7 +3099,7 @@ public class TaskWrapper {
 	</center>
 </BorderPane>
 ```
-###### src/todolist/ui/views/MainView.fxml
+###### \todolist\ui\views\MainView.fxml
 ``` fxml
 
 <?import java.lang.String?>
@@ -2576,14 +3115,9 @@ public class TaskWrapper {
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0"
-	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.MainViewController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0" stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.MainViewController">
 	<bottom>
-		<TextField prefHeight="40.0" prefWidth="720.0"
-			promptText="enter your command here ..." styleClass="text-field"
-			stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_LEFT">
+		<TextField prefHeight="40.0" prefWidth="720.0" promptText="enter your command here ..." styleClass="text-field" stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_LEFT">
 			<font>
 				<Font size="14.0" />
 			</font>
@@ -2601,17 +3135,14 @@ public class TaskWrapper {
 		<String fx:value="split-pane-divider" />
 	</styleClass>
 	<center>
-		<TitledPane animated="false" collapsible="false"
-			maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-			stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_CENTER">
+		<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@DefaultTheme.css" BorderPane.alignment="TOP_CENTER">
 			<content>
-				<ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0"
-					stylesheets="@DefaultTheme.css">
+				<ListView fx:id="listView" editable="true" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" stylesheets="@DefaultTheme.css">
 					<placeholder>
-						<Label text="not sure how to use me? try 'tab help' !" />
+						<Label style="-fx-font-weight: bold;" text="not sure how to use me? enter 'tab help' !" />
 					</placeholder>
 					<opaqueInsets>
-						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+						<Insets left="5.0" right="5.0" top="5.0" />
 					</opaqueInsets>
 					<padding>
 						<Insets bottom="5.0" />
@@ -2619,11 +3150,9 @@ public class TaskWrapper {
 				</ListView>
 			</content>
 			<graphic>
-				<HBox id="titled-pane-hbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
-					maxWidth="1.7976931348623157E308" spacing="10.0" stylesheets="@DefaultTheme.css">
+				<HBox id="titled-pane-hbox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" stylesheets="@DefaultTheme.css">
 					<children>
-						<ImageView fitHeight="20.0" fitWidth="20.0"
-							pickOnBounds="true" preserveRatio="true">
+						<ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
 							<image>
 								<Image url="@assets/pen.png" />
 							</image>
@@ -2631,9 +3160,7 @@ public class TaskWrapper {
 								<Insets />
 							</HBox.margin>
 						</ImageView>
-						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD"
-							strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
-							text="tasks" textAlignment="CENTER" />
+						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="tasks" textAlignment="CENTER" />
 					</children>
 				</HBox>
 			</graphic>
@@ -2641,7 +3168,7 @@ public class TaskWrapper {
 	</center>
 </BorderPane>
 ```
-###### src/todolist/ui/views/OverdueView.fxml
+###### \todolist\ui\views\OverdueView.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -2700,7 +3227,7 @@ public class TaskWrapper {
 	</center>
 </BorderPane>
 ```
-###### src/todolist/ui/views/RootLayout.fxml
+###### \todolist\ui\views\RootLayout.fxml
 ``` fxml
 
 <?import javafx.scene.layout.BorderPane?>
@@ -2724,7 +3251,7 @@ public class TaskWrapper {
 	</top>
 </BorderPane>
 ```
-###### src/todolist/ui/views/SettingsView.fxml
+###### \todolist\ui\views\SettingsView.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -2782,7 +3309,7 @@ public class TaskWrapper {
 	</center>
 </BorderPane>
 ```
-###### src/todolist/ui/views/SideBarView.fxml
+###### \todolist\ui\views\SideBarView.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -2794,20 +3321,14 @@ public class TaskWrapper {
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
-	maxWidth="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="60.0"
-	spacing="20.0" styleClass="side-bar" stylesheets="@DefaultTheme.css"
-	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="todolist.ui.controllers.SideBarController">
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="60.0" spacing="20.0" styleClass="side-bar" stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.SideBarController">
 	<children>
-		<Button fx:id="home" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="HOME">
+		<Button fx:id="home" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="HOME">
 			<VBox.margin>
 				<Insets top="20.0" />
 			</VBox.margin>
 			<graphic>
-				<ImageView id="home-icon" fx:id="homeIcon" fitHeight="30.0"
-					fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="home-icon" fx:id="homeIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -2817,11 +3338,9 @@ public class TaskWrapper {
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button fx:id="expired" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="EXPIRED">
+		<Button fx:id="expired" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="EXPIRED">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="expiredIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="expiredIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -2833,12 +3352,9 @@ public class TaskWrapper {
 		</Button>
 		<StackPane fx:id="todayStack" prefHeight="50.0" prefWidth="50.0">
 			<children>
-				<Button fx:id="today" contentDisplay="TOP" mnemonicParsing="false"
-					prefHeight="50.0" prefWidth="50.0" text="TODAY">
+				<Button fx:id="today" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="TODAY">
 					<graphic>
-						<ImageView id="button-graphics" fx:id="todayIcon"
-							fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
-							preserveRatio="true">
+						<ImageView id="button-graphics" fx:id="todayIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 							<viewport>
 								<Rectangle2D />
 							</viewport>
@@ -2848,15 +3364,12 @@ public class TaskWrapper {
 						</ImageView>
 					</graphic>
 				</Button>
-				<Label id="today-label" fx:id="todayLabel" contentDisplay="CENTER"
-					stylesheets="@DefaultTheme.css" text="00" />
+				<Label id="today-label" fx:id="todayLabel" contentDisplay="CENTER" stylesheets="@DefaultTheme.css" text="00" />
 			</children>
 		</StackPane>
-		<Button fx:id="week" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="WEEK">
+		<Button fx:id="week" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="WEEK">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="weekIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="weekIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -2866,11 +3379,9 @@ public class TaskWrapper {
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button fx:id="done" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="DONE">
+		<Button fx:id="done" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="DONE">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="doneIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="doneIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -2880,11 +3391,9 @@ public class TaskWrapper {
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button fx:id="options" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="OPTIONS">
+		<Button fx:id="options" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="OPTIONS">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="optionsIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="optionsIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -2894,11 +3403,9 @@ public class TaskWrapper {
 				</ImageView>
 			</graphic>
 		</Button>
-		<Button fx:id="help" contentDisplay="TOP" mnemonicParsing="false"
-			prefHeight="50.0" prefWidth="50.0" text="HELP">
+		<Button fx:id="help" contentDisplay="TOP" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="HELP">
 			<graphic>
-				<ImageView id="button-graphics" fx:id="helpIcon"
-					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+				<ImageView id="button-graphics" fx:id="helpIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 					<viewport>
 						<Rectangle2D />
 					</viewport>
@@ -2911,27 +3418,35 @@ public class TaskWrapper {
 	</children>
 </VBox>
 ```
-###### src/todolist/ui/views/TaskNode.fxml
+###### \todolist\ui\views\TaskNode.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <HBox id="task-hbox-item" fx:id="root" alignment="CENTER_LEFT"
 	maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	prefHeight="60.0" prefWidth="200.0" stylesheets="@DefaultTheme.css"
-	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+	stylesheets="@DefaultTheme.css" xmlns="http://javafx.com/javafx/8.0.65"
+	xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="70.0"
-			stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
+		<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity"
+			minWidth="-Infinity" prefWidth="5.0">
+			<children>
+				<Rectangle fx:id="priorityLabel" fill="DODGERBLUE" height="80.0"
+					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
+			</children>
+		</AnchorPane>
 		<StackPane fx:id="numberLabel" prefWidth="50.0">
 			<children>
 				<Circle fx:id="numLabelBase" fill="DODGERBLUE" radius="25.0"
@@ -2948,24 +3463,20 @@ public class TaskWrapper {
 			</children>
 		</StackPane>
 		<VBox fx:id="details" maxHeight="1.7976931348623157E308"
-			maxWidth="1.7976931348623157E308" prefHeight="60.0" prefWidth="100.0"
+			maxWidth="1.7976931348623157E308" prefHeight="80.0" prefWidth="100.0"
 			HBox.hgrow="ALWAYS">
 			<children>
 				<HBox fx:id="titleBox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308"
-					prefHeight="100.0">
+					prefHeight="20.0">
 					<children>
-						<Label fx:id="title" maxHeight="1.7976931348623157E308"
-							text="Title" textFill="WHITE" wrapText="true">
-							<font>
-								<Font name="System Bold" size="16.0" />
-							</font>
-						</Label>
-						<ImageView fx:id="reminderIcon" fitHeight="15.0"
-							fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-							<HBox.margin>
-								<Insets left="5.0" right="5.0" />
-							</HBox.margin>
-						</ImageView>
+						<TextFlow id="titleFlow" fx:id="titleFlow" maxHeight="1.7976931348623157E308"
+							maxWidth="1.7976931348623157E308" prefHeight="20.0">
+							<children>
+								<Text id="title" fx:id="title" fontSmoothingType="LCD"
+									strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
+									text="Text" />
+							</children>
+						</TextFlow>
 					</children>
 					<VBox.margin>
 						<Insets />
@@ -2974,29 +3485,39 @@ public class TaskWrapper {
 						<Insets top="10.0" />
 					</padding>
 				</HBox>
-				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" prefHeight="100.0"
-					prefWidth="200.0">
+				<HBox fx:id="relativeRangeBox" alignment="CENTER_LEFT"
+					maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0"
+					prefWidth="20.0">
 					<children>
-						<Circle fx:id="overdueFlag" fill="DODGERBLUE" radius="3.0"
-							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
-							<HBox.margin>
-								<Insets right="2.0" />
-							</HBox.margin>
-						</Circle>
-						<Label fx:id="dateRange" text="Date Range" textFill="WHITE">
+						<Label fx:id="relativeRange" text="Relative Range" textFill="WHITE">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+					</children>
+					<VBox.margin>
+						<Insets bottom="6.0" />
+					</VBox.margin>
+				</HBox>
+				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" layoutX="10.0"
+					layoutY="40.0" maxHeight="-Infinity" minHeight="-Infinity"
+					prefHeight="20.0" prefWidth="200.0">
+					<children>
+						<Label fx:id="dateRange" maxHeight="-Infinity" minHeight="-Infinity"
+							prefHeight="20.0" text="Date Range" textFill="WHITE">
 							<font>
 								<Font size="10.0" />
 							</font>
 						</Label>
 					</children>
 				</HBox>
-				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" prefHeight="100.0"
-					prefWidth="200.0">
+				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" maxHeight="-Infinity"
+					minHeight="-Infinity" prefHeight="20.0" prefWidth="200.0">
 					<children>
-						<Circle fx:id="categorySprite" fill="DODGERBLUE" radius="3.0"
+						<Circle fx:id="categorySprite" fill="#ababab" radius="4.0"
 							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
 							<HBox.margin>
-								<Insets right="2.0" />
+								<Insets right="3.0" />
 							</HBox.margin>
 						</Circle>
 						<Label fx:id="category" text="Category" textFill="WHITE">
@@ -3011,7 +3532,8 @@ public class TaskWrapper {
 				</HBox>
 			</children>
 		</VBox>
-		<StackPane fx:id="completeStatus" stylesheets="@DefaultTheme.css">
+		<StackPane fx:id="completeStatus" maxHeight="-Infinity"
+			minHeight="-Infinity" prefHeight="20.0" stylesheets="@DefaultTheme.css">
 			<children>
 				<Rectangle fx:id="statusBacking" arcHeight="10.0"
 					arcWidth="10.0" fill="#ffeb1f" height="25.0" stroke="BLACK"
@@ -3053,7 +3575,7 @@ public class TaskWrapper {
 	</opaqueInsets>
 </HBox>
 ```
-###### src/todolist/ui/views/TitleBarView.fxml
+###### \todolist\ui\views\TitleBarView.fxml
 ``` fxml
 
 <?import java.lang.String?>
@@ -3083,7 +3605,7 @@ public class TaskWrapper {
 	</styleClass>
 </HBox>
 ```
-###### src/todolist/ui/views/TodayView.fxml
+###### \todolist\ui\views\TodayView.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -3141,7 +3663,7 @@ public class TaskWrapper {
 	</center>
 </BorderPane>
 ```
-###### src/todolist/ui/views/WeekView.fxml
+###### \todolist\ui\views\WeekView.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
