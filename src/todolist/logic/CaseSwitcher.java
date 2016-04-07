@@ -155,13 +155,17 @@ public class CaseSwitcher {
 			}
 			break;
 		case "search":
+			/*
 			if (arg.length != 1) {
 				logic.getUIHandler().sendMessage(
 						"Your command was incomplete! To search for something, try: search [search-term] (You are searching task names!)",
 						true);
 			} else {
+			*/
 				logic.search(arg);
+			/*
 			}
+			*/
 			break;
 		case "filter":
 			if (arg.length != 1) {
