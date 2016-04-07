@@ -43,11 +43,16 @@ public class ErrorBase {
 				"Your command was incomplete! To archive a completed task, try: done [title]");
 		errorBase.put(new Pair<String, String>("UNDONE", "INCOMPLETE"),
 				"Your command was incomplete! To un-archive an ongoing task, try: undone [title]");
-		
-		errorBase.put(new Pair<String, String>("REMIND-BEF", "INCOMPLETE"),
-				"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]");
-		errorBase.put(new Pair<String, String>("REMIND-BEF", "INCOMPLETE"),
-				"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]");
+		errorBase.put(new Pair<String, String>("UNDO", "INCOMPLETE"),
+				"Your command was incomplete! To undo a few action(s), try: undo [number-of-actions]");
+		errorBase.put(new Pair<String, String>("REDO", "INCOMPLETE"),
+				"Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]");
+		errorBase.put(new Pair<String, String>("TAB", "INCOMPLETE"),
+				"Your command was incomplete! To navigate to a certain page, try: tab [page-name] (as reflected on the tab bar)");
+		errorBase.put(new Pair<String, String>("REDO", "INCOMPLETE"),
+				"Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]");
+		errorBase.put(new Pair<String, String>("REDO", "INCOMPLETE"),
+				"Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]");
 	}
 
 	public static String getErrorMessage(String commandType, String errorType) {
