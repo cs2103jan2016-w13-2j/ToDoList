@@ -3,6 +3,8 @@ package todolist.ui.controllers;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
+import javafx.beans.binding.Bindings;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import todolist.MainApp;
 import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
+import todolist.ui.TaskWrapper;
 
 //@@author A0123994W
 
@@ -37,12 +40,16 @@ public class SideBarController {
     private Button home = null;
     @FXML
     private ImageView homeIcon = null;
+    @FXML
+    private Label homeBubble = null;
 
     // EXPIRED TAB
     @FXML
     private Button expired = null;
     @FXML
     private ImageView expiredIcon = null;
+    @FXML
+    private Label expiredBubble = null;
 
     // TODAY TAB
     @FXML
@@ -54,18 +61,24 @@ public class SideBarController {
     @FXML
     private ImageView todayIcon = null;
     private int todayDate = 0;
+    @FXML
+    private Label todayBubble = null;
 
     // WEEK TAB
     @FXML
     private Button week = null;
     @FXML
     private ImageView weekIcon = null;
+    @FXML
+    private Label weekBubble = null;
 
     // DONE TAB
     @FXML
     private Button done = null;
     @FXML
     private ImageView doneIcon = null;
+    @FXML
+    private Label doneBubble = null;
 
     // OPTIONS TAB
     @FXML
@@ -281,6 +294,28 @@ public class SideBarController {
             return "HELP";
         default:
             return "UNKNOWN";
+        }
+    }
+
+    public void linkBubbles(MainViewController[] controllers) {
+        // Bubble Array
+        Label[] bubbles = { homeBubble, expiredBubble, todayBubble, weekBubble, doneBubble };
+
+        for (int i = 0; i < controllers.length; ++i) {
+            MainViewController controller = controllers[i];
+
+            if (controller != null) {
+                FilteredList<TaskWrapper> incomplete = new FilteredList<TaskWrapper>(
+                        controller.getTaskListView().getItems(), task -> !task.getIsCompleted());
+                bubbles[i].textProperty().bind(Bindings.format("%d", Bindings.size(incomplete)));
+                
+            }
+            
+            if (Integer.parseInt(bubbles[i].getText()) == 0) {
+                bubbles[i].setVisible(false);
+            } else {
+                bubbles[i].setVisible(true);
+            }
         }
     }
 }

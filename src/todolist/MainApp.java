@@ -192,6 +192,19 @@ public class MainApp extends Application {
         loadTitleBar();
         loadSideBar();
 
+        for (int i = 1; i < 6; ++i) {
+            setPageView(i);
+        }
+
+        setPageView(HOME_TAB);
+
+        MainViewController[] controllers = { mainController, overdueController, todayController, weekController,
+                archiveController };
+
+        sidebarController.linkBubbles(controllers);
+        
+        commandField.requestFocus();
+
     }
 
     /*
@@ -275,23 +288,23 @@ public class MainApp extends Application {
                     int page = sidebarController.getIndex();
                     switch (page) {
                     case HOME_TAB:
-                        mainController.getListView().requestFocus();
+                        mainController.getTaskListView().requestFocus();
                         logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
                         break;
                     case EXPIRED_TAB:
-                        overdueController.getListView().requestFocus();
+                        overdueController.getTaskListView().requestFocus();
                         logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
                         break;
                     case TODAY_TAB:
-                        todayController.getListView().requestFocus();
+                        todayController.getTaskListView().requestFocus();
                         logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
                         break;
                     case WEEK_TAB:
-                        weekController.getListView().requestFocus();
+                        weekController.getTaskListView().requestFocus();
                         logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
                         break;
                     case DONE_TAB:
-                        archiveController.getListView().requestFocus();
+                        archiveController.getTaskListView().requestFocus();
                         logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
                         break;
                     default:
@@ -389,7 +402,7 @@ public class MainApp extends Application {
             // Set up display logic for main view
             mainController = loader.getController();
             mainController.setMainApp(this);
-
+            mainController.setPageIndex(HOME_TAB);
             loadCommandLine();
             uiHandlerUnit.refresh();
 
@@ -415,6 +428,7 @@ public class MainApp extends Application {
             // Set up display logic for main view
             overdueController = loader.getController();
             overdueController.setMainApp(this);
+            overdueController.setPageIndex(EXPIRED_TAB);
 
             uiHandlerUnit.refresh();
 
@@ -438,6 +452,7 @@ public class MainApp extends Application {
             // Set up display logic for main view
             todayController = loader.getController();
             todayController.setMainApp(this);
+            todayController.setPageIndex(TODAY_TAB);
 
             uiHandlerUnit.refresh();
 
@@ -461,6 +476,7 @@ public class MainApp extends Application {
             // Set up display logic for main view
             weekController = loader.getController();
             weekController.setMainApp(this);
+            weekController.setPageIndex(WEEK_TAB);
 
             uiHandlerUnit.refresh();
 
@@ -484,6 +500,7 @@ public class MainApp extends Application {
             // Set up display logic for main view
             archiveController = loader.getController();
             archiveController.setMainApp(this);
+            archiveController.setPageIndex(DONE_TAB);
 
             uiHandlerUnit.refresh();
         } catch (IOException ioException) {
@@ -667,36 +684,59 @@ public class MainApp extends Application {
      * @param ArrayList<Task> listOfTasks is the candidate list of tasks
      */
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
-        switch (getPage()) {
-        case 1:
-            if (mainController != null) {
-                mainController.setTasks(listOfTasks);
-            }
-            break;
-        case 2:
-            if (overdueController != null) {
-                overdueController.setTasks(listOfTasks);
-            }
-            break;
-        case 3:
-            if (todayController != null) {
-                todayController.setTasks(listOfTasks);
-            }
-            break;
-        case 4:
-            if (weekController != null) {
-                weekController.setTasks(listOfTasks);
-            }
-            break;
-        case 5:
-            if (archiveController != null) {
-                archiveController.setTasks(listOfTasks);
-            }
-            break;
-        default:
-            if (mainController != null) {
-                mainController.setTasks(listOfTasks);
-            }
+
+        MainViewController[] controllers = { mainController, overdueController, todayController, weekController,
+                archiveController };
+
+        // switch (getPage()) {
+        // case 1:
+        // if (mainController != null) {
+        // mainController.setTasks(listOfTasks);
+        // }
+        // break;
+        // case 2:
+        // if (overdueController != null) {
+        // overdueController.setTasks(listOfTasks);
+        // }
+        // break;
+        // case 3:
+        // if (todayController != null) {
+        // todayController.setTasks(listOfTasks);
+        // }
+        // break;
+        // case 4:
+        // if (weekController != null) {
+        // weekController.setTasks(listOfTasks);
+        // }
+        // break;
+        // case 5:
+        // if (archiveController != null) {
+        // archiveController.setTasks(listOfTasks);
+        // }
+        // break;
+        // default:
+        // if (mainController != null) {
+        // mainController.setTasks(listOfTasks);
+        // }
+        // }
+        if (mainController != null) {
+            mainController.setTasks(listOfTasks);
+        }
+        if (overdueController != null) {
+            overdueController.setTasks(listOfTasks);
+        }
+        if (todayController != null) {
+            todayController.setTasks(listOfTasks);
+        }
+        if (weekController != null) {
+            weekController.setTasks(listOfTasks);
+        }
+        if (archiveController != null) {
+            archiveController.setTasks(listOfTasks);
+        }
+
+        if (sidebarController != null) {
+            sidebarController.linkBubbles(controllers);
         }
 
     }
@@ -826,5 +866,9 @@ public class MainApp extends Application {
 
     public void setHelpModal(HelpModalController helpModal) {
         this.helpModal = helpModal;
+    }
+
+    public SideBarController getSideBarController() {
+        return sidebarController;
     }
 }
