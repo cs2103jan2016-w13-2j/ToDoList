@@ -106,6 +106,41 @@ public class LogicTest {
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
     }
+    
+    /**
+     * test add event function ( a future event)
+     */
+    @Test
+    public void testAddEvent() {
+        logic.clean();
+
+        String name = "title";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
+        LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+        // add in the command to add a new event
+        logic.addRecurringEvent("7-day", "title", "2017-01-01", "14:00", "1", "day");
+
+        // check size of database
+        ArrayList<Task> taskList = logic.dataBase.retrieveAll();
+        Boolean isEqual = taskList.size() == 1;
+        assertTrue(isEqual);
+        // check name of the task
+        isEqual = taskList.get(0).getName().getName().equals(name);
+        assertTrue(isEqual);
+        // check start time
+        isEqual = taskList.get(0).getStartTime().isEqual(start);
+        assertTrue(isEqual);
+        // check end time
+        isEqual = taskList.get(0).getEndTime().isEqual(end);
+        assertTrue(isEqual);
+        // check whether it is set to be recurring
+        isEqual = taskList.get(0).getRecurringStatus();
+        assertTrue(taskList.get(0).getRecurringStatus());
+        // check the interval of recurring
+        isEqual = taskList.get(0).getInterval().equals("7-day");
+        assertTrue(isEqual);
+    }
 
     /**
      * test add recurring event function

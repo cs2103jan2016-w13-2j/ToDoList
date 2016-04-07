@@ -1,3 +1,4 @@
+//@@author A0131334W
 package todolist.common.tests;
 
 import static org.junit.Assert.*;
@@ -45,7 +46,129 @@ public class FlexiCommandParserTest {
 		//check the title of the task
 		assertTrue(tokonizedCommand[1].trim().equals("sumbit proposal".trim()));
 		//check the date
-		assertTrue(tokonizedCommand[2].trim().equals(deadlineDate));		
+		assertTrue(tokonizedCommand[2].trim().equals(deadlineDate));
+		//check the time
+		assertTrue(tokonizedCommand[3].trim().equals("23:59"));
+	}
+	
+	/*
+	 * test flexi-command for add deadline (with key word today)
+	 */
+	@Test
+	public void test_ParseDeadline2() {
+		//parse the command
+		String input = "sumbit proposal by today";//should be by 2359 today
+		LocalDateTime date = LocalDateTime.now();
+		DecimalFormat decimalFormatter = new DecimalFormat("00");
+	    String deadlineDate = date.getYear() + "-"
+				+ decimalFormatter.format(date.getMonthValue()) + "-"
+				+ decimalFormatter.format(date.getDayOfMonth());
+	    
+		TokenizedCommand command = flexiParser.parse(input);
+		
+		//check the action
+		boolean isEqual = command.getAction().equals("add");
+		assertTrue(isEqual);
+		//check the array of string
+		String[] tokonizedCommand = command.getArgs();
+		//check the type of the task
+		assertTrue(tokonizedCommand[0].equals("deadline"));
+		//check the title of the task
+		assertTrue(tokonizedCommand[1].trim().equals("sumbit proposal".trim()));
+		//check the date
+		assertTrue(tokonizedCommand[2].trim().equals(deadlineDate));
+		//check the time
+		assertTrue(tokonizedCommand[2].trim().equals("23:59"));
+	}
+	
+	/*
+	 * test flexi-command for add deadline (with key word 'lunch')
+	 */
+	@Test
+	public void test_ParseDeadline3() {
+		//parse the command
+		String input = "i want to eat lunch tmr";//should be by 1300 tmr
+		LocalDateTime date = LocalDateTime.now();
+		DecimalFormat decimalFormatter = new DecimalFormat("00");
+	    String deadlineDate = date.getYear() + "-"
+				+ decimalFormatter.format(date.getMonthValue()) + "-"
+				+ decimalFormatter.format(date.getDayOfMonth()+1);
+	    
+		TokenizedCommand command = flexiParser.parse(input);
+		
+		//check the action
+		boolean isEqual = command.getAction().equals("add");
+		assertTrue(isEqual);
+		//check the array of string
+		String[] tokonizedCommand = command.getArgs();
+		//check the type of the task
+		assertTrue(tokonizedCommand[0].equals("deadline"));
+		//check the title of the task
+		assertTrue(tokonizedCommand[1].trim().equals("i want to eat lunch".trim()));
+		//check the date
+		assertTrue(tokonizedCommand[2].trim().equals(deadlineDate));
+		//check the time
+		assertTrue(tokonizedCommand[2].trim().equals("13:00"));
+	}
+	
+	/*
+	 * test flexi-command for add deadline (with key word 'dinner')
+	 */
+	@Test
+	public void test_ParseDeadline4() {
+		//parse the command
+		String input = "i want to eat dinner tmr";//should be by 1900 tmr
+		LocalDateTime date = LocalDateTime.now();
+		DecimalFormat decimalFormatter = new DecimalFormat("00");
+	    String deadlineDate = date.getYear() + "-"
+				+ decimalFormatter.format(date.getMonthValue()) + "-"
+				+ decimalFormatter.format(date.getDayOfMonth()+1);
+	    
+		TokenizedCommand command = flexiParser.parse(input);
+		
+		//check the action
+		boolean isEqual = command.getAction().equals("add");
+		assertTrue(isEqual);
+		//check the array of string
+		String[] tokonizedCommand = command.getArgs();
+		//check the type of the task
+		assertTrue(tokonizedCommand[0].equals("deadline"));
+		//check the title of the task
+		assertTrue(tokonizedCommand[1].trim().equals("i want to eat dinner".trim()));
+		//check the date
+		assertTrue(tokonizedCommand[2].trim().equals(deadlineDate));
+		//check the time
+		assertTrue(tokonizedCommand[2].trim().equals("19:00"));
+	}
+	
+	/*
+	 * test flexi-command for add deadline (with key word 'breakfast')
+	 */
+	@Test
+	public void test_ParseDeadline5() {
+		//parse the command
+		String input = "i want to eat dinner tmr";//should be by 0900 tmr
+		LocalDateTime date = LocalDateTime.now();
+		DecimalFormat decimalFormatter = new DecimalFormat("00");
+	    String deadlineDate = date.getYear() + "-"
+				+ decimalFormatter.format(date.getMonthValue()) + "-"
+				+ decimalFormatter.format(date.getDayOfMonth()+1);
+	    
+		TokenizedCommand command = flexiParser.parse(input);
+		
+		//check the action
+		boolean isEqual = command.getAction().equals("add");
+		assertTrue(isEqual);
+		//check the array of string
+		String[] tokonizedCommand = command.getArgs();
+		//check the type of the task
+		assertTrue(tokonizedCommand[0].equals("deadline"));
+		//check the title of the task
+		assertTrue(tokonizedCommand[1].trim().equals("i want to eat breakfast".trim()));
+		//check the date
+		assertTrue(tokonizedCommand[2].trim().equals(deadlineDate));
+		//check the time
+		assertTrue(tokonizedCommand[2].trim().equals("09:00"));
 	}
 	
 	/*
@@ -101,6 +224,8 @@ public class FlexiCommandParserTest {
 		//check the title of the task
 		assertTrue(tokonizedCommand[1].trim().equals("attend lecture".trim()));
 	}
+	
+	
 	
 
 }
