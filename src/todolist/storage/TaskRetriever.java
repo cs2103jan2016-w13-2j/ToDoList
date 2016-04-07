@@ -174,12 +174,13 @@ public class TaskRetriever {
 
     private ArrayList<Task> retrieveByTokenizedName(ArrayList<Task> taskList2, String[] keywords) {
 		ArrayList<Task> resultList = new ArrayList<Task>();
-		int[] numMatch = new int[taskList.size()];
-		for (int i = 0; i < taskList.size(); i++) {
-        	Task eachTask = taskList.get(i);
+		int[] numMatch = new int[taskList2.size()];
+		for (int i = 0; i < taskList2.size(); i++) {
+        	Task eachTask = taskList2.get(i);
         	String eachName = eachTask.getName().getName();
         	//String[] splitedName = eachName.trim().split(" ");      	            	
-        	numMatch[i] = findNumMatch(keywords, eachName);       	
+        	numMatch[i] = findNumMatch(keywords, eachName); 
+        	System.out.println("nummmmMatches: " + numMatch[i]);
         }
 		
 		//add those with more than 0 matches into resultlist in descending order
@@ -190,17 +191,22 @@ public class TaskRetriever {
 				}
 			}			
 		}		
+		
 		return resultList;
 	}
 
 	private int findNumMatch(String[] keywords, String eachName) {
 		int counter = 0;
+		String[] splitedName = eachName.trim().split(" ");
 		
 		for(int i = 0; i < keywords.length; i++) {
-			eachName = eachName.toLowerCase();
-			String eachKeyword = keywords[i].toLowerCase();
-			if(eachName.contains(eachKeyword)) {
-				counter++;
+			for(int j = 0; j < splitedName.length; j++) {
+				String eachNameWord = splitedName[j].toLowerCase();
+				String eachKeyword = keywords[i].toLowerCase();
+				if(eachNameWord.equalsIgnoreCase(eachKeyword)) {
+					counter++;
+					break;
+			    }			
 			}
 		}
 		return counter;
