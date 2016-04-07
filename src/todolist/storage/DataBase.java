@@ -199,10 +199,9 @@ public class DataBase {
 	 * @param command
 	 * @return arraylist list of result tasks
 	 */
-	public ArrayList<Task> smartSearch(SearchCommand command) {
-		assert (command != null);
-		logger.logAction(COMPONENT_STORAGE, MESSAGE_RETRIEVE_TASK + command.getType());
-		return retriever.smartRetrieve(taskList, command);
+	public ArrayList<Task> smartSearch(String[] keywords) {
+		assert (keywords != null);
+		return retriever.smartRetrieve(taskList, keywords);
 	}
 
 	/**
