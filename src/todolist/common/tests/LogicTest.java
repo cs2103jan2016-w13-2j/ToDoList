@@ -255,7 +255,7 @@ public class LogicTest {
     	logic.clean();
     	
         int original = logic.checkStep();
-        logic.stepForward(1);
+        logic.stepForward();
         assertEquals(logic.checkStep(), original + 1);
     }
 
