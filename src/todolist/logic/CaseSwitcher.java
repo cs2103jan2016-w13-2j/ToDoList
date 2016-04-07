@@ -206,20 +206,10 @@ public class CaseSwitcher {
 			logic.exit();
 			break;
 		case "undo":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To undo a few action(s), try: undo [number-of-actions]", true);
-			} else {
-				logic.undo(Integer.parseInt(arg[0]));
-			}
+			logic.undo(Integer.parseInt(arg[0]));
 			break;
 		case "redo":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]", true);
-			} else {
-				logic.redo(Integer.parseInt(arg[0]));
-			}
+			logic.redo(Integer.parseInt(arg[0]));
 			break;
 		case "reset":
 			logic.reset();
@@ -231,19 +221,13 @@ public class CaseSwitcher {
 			logic.openNewFile(arg[0]);
 			break;
 		case "tab":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To navigate to a certain page, try: tab [page-name] (as reflected on the tab bar)",
-						true);
-			} else {
-				logic.tab(arg[0]);
-			}
+			logic.tab(arg[0]);
 			break;
 		case "invalid":
 			logic.invalid(arg[0]);
 			break;
 		default:
-			logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
+			
 		}
 	}
 }
