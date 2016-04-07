@@ -54,8 +54,8 @@ public class Logic {
 		this.dataBase.clear();
 	}
 
-	public void invalid() {
-		uiHandler.sendMessage("invalid input", true);
+	public void invalid(String keyword) {
+		
 	}
 
 	public UIHandler getUIHandler() {
@@ -385,14 +385,11 @@ public class Logic {
 	public Boolean done(String title) {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
-		// <<<<<<< Updated upstream
 
 		if (noRepeat(title)) {
 			return false;
 		}
-		// =======
 
-		// >>>>>>> Stashed changes
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBaseDelete(tempTask);
 
@@ -540,11 +537,11 @@ public class Logic {
 	 * 
 	 * @return void
 	 */
-	public void search(String title) {
-
+	public void search(String[] keyword) {
+		
 		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + title);
 
-		ArrayList<Task> tempTaskList = dataBase.smartSearch(new SearchCommand("NAME", title));
+		ArrayList<Task> tempTaskList = dataBase.smartSearch(keyword);
 
 		uiHandler.display(tempTaskList);
 		uiHandler.sendMessage("Here are your search results for '" + title + "'! [to clear this search, type 'reset']",

@@ -159,7 +159,7 @@ public class CaseSwitcher {
 						"Your command was incomplete! To search for something, try: search [search-term] (You are searching task names!)",
 						true);
 			} else {
-				logic.search(arg[0]);
+				logic.search(arg);
 			}
 			break;
 		case "filter":
@@ -461,7 +461,7 @@ public class CaseSwitcher {
 			}
 			break;
 		case "invalid":
-			logic.invalid();
+			logic.invalid(arg[0]);
 			break;
 		default:
 			logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);

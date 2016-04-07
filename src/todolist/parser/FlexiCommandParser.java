@@ -25,6 +25,8 @@ public class FlexiCommandParser {
 	public TokenizedCommand parse(String input) {
 
 		String temp[] = input.split(" ");
+		
+		/*
 		for (int i = 0; i < temp.length; i++) {
 			if (temp[i].equals("add") || temp[i].equals("edit") || temp[i].equals("delete") || temp[i].equals("search")
 					|| temp[i].equals("filter") || temp[i].equals("sort") || temp[i].equals("insert")
@@ -45,6 +47,7 @@ public class FlexiCommandParser {
 				return new TokenizedCommand("invalid", temp);
 			}
 		}
+		*/
 
 		Parser parser = new Parser(TimeZone.getTimeZone(ZoneOffset.systemDefault()));
 		List<DateGroup> groups = parser.parse(input);
