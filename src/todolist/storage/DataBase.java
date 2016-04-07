@@ -28,8 +28,6 @@ import todolist.model.Task;
  * 4:category
  * but they are not integrated with the search method yet!!
  *
- *
- * @author yuxin
  */
 public class DataBase {
 

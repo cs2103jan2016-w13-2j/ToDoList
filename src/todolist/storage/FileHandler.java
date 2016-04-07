@@ -26,7 +26,6 @@ import java.util.ArrayList;
  * This class is to read and write from the file directly. It will be called by the database.
  * 
  * 
- * @author Xyx
  *
  */
 public class FileHandler {
@@ -53,7 +52,6 @@ public class FileHandler {
 		System.out.println(filePath);
 		if (isFileReady(path) && !isFileEmpty(path)) {
 			try {
-				// System.out.println("kjkkkkkk" + filePath);
 				FileReader fr = new FileReader(filePath);
 				BufferedReader br = new BufferedReader(fr);
 				String input = null;

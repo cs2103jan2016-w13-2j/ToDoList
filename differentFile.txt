@@ -1,2 +1,0 @@
-{"name":{"name":"another-event"},"startTime":{"date":{"year":2017,"month":1,"day":1},"time":{"hour":14,"minute":0,"second":0,"nano":0}},"endTime":{"date":{"year":2017,"month":1,"day":2},"time":{"hour":14,"minute":0,"second":0,"nano":0}},"isDone":false,"isRecurring":false}
-{"name":{"name":"title"},"startTime":{"date":{"year":2017,"month":1,"day":1},"time":{"hour":14,"minute":0,"second":0,"nano":0}},"endTime":{"date":{"year":2017,"month":1,"day":2},"time":{"hour":14,"minute":0,"second":0,"nano":0}},"isDone":false,"isRecurring":false}

@@ -194,7 +194,6 @@ public class FlexiCommandParserTest {
 		//check the title of the task
 		assertTrue(tokonizedCommand[1].trim().equals("2013 lecture".trim()));
 		//check the date
-		System.out.print(tokonizedCommand[2]);
 		assertTrue(tokonizedCommand[2].trim().equals(date));
 		//check the start time
 		assertTrue(tokonizedCommand[3].trim().equals(startTime));
@@ -219,7 +218,6 @@ public class FlexiCommandParserTest {
 		//check the array of string
 		String[] tokonizedCommand = command.getArgs();
 		//check the type of the task
-		System.out.print(tokonizedCommand[0]);
 		assertTrue(tokonizedCommand[0].equals("task"));
 		//check the title of the task
 		assertTrue(tokonizedCommand[1].trim().equals("attend lecture".trim()));
