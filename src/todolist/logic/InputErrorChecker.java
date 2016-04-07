@@ -1,6 +1,8 @@
-package todolist.model;
+package todolist.logic;
 
-import todolist.logic.Logic;
+import todolist.model.InputException;
+import todolist.model.Task;
+import todolist.model.TokenizedCommand;
 
 public class InputErrorChecker {
 	Logic logic;

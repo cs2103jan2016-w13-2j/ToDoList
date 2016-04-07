@@ -1,6 +1,5 @@
 package todolist.logic;
 
-import todolist.model.InputErrorChecker;
 import todolist.model.InputException;
 import todolist.model.Task;
 import todolist.model.TokenizedCommand;

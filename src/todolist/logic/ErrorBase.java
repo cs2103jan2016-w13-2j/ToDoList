@@ -1,4 +1,4 @@
-package todolist.model;
+package todolist.logic;
 
 import java.util.HashMap;
 
