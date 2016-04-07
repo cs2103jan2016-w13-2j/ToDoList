@@ -73,7 +73,6 @@
 
 .titled-pane > .title {
 	-fx-background-color: #F08A5D;
-	-fx-background-color: #EB586F;
     -fx-font-size: 20.0pt;
     -fx-text-fill: #FEFAEC;
     -fx-font-weight: bold;
@@ -91,7 +90,6 @@
 
 .titled-pane > .content {
 	-fx-background-color: #454553;
-	-fx-background-color: #FEFAEC;
 	-fx-background-radius: 0.0 0.0 6.5 6.5;
 }
 
@@ -129,13 +127,11 @@
 .list-cell {
     -fx-background-color: transparent;
     -fx-padding: 6.5 6.5 0.0 6.5;
-    -fx-background-color: transparent;
     -fx-background-insets: 0.0px, 10.0px;
 }
 
 .list-cell:filled:selected:focused > #task-hbox-item {
     -fx-background-color: #EB586F;
-    -fx-background-color: #069A8E;
     /*-fx-text-fill: #FEFAEC;*/
 }
 
@@ -149,7 +145,6 @@
 
 .list-cell:filled > #task-hbox-item {
     -fx-background-color: #506F86;
-    -fx-background-color: #D8E9F0;
     /*-fx-text-fill: #FEFAEC;*/
 }
 
@@ -169,7 +164,6 @@
 
 .text-field {
 	-fx-background-color: #454553;	
-	-fx-background-color: #FEFAEC;
     -fx-font-size: 12.0pt;
     -fx-font-family: "System Font";
     -fx-text-fill: #454553;

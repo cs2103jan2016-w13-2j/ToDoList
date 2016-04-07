@@ -49,7 +49,8 @@ public class MainParser {
 				|| head.equals("replace") || head.equals("archive") || head.equals("complete") || head.equals("finish")
 				|| head.equals("shelf") || head.equals("unarchive") || head.equals("incomplete")
 				|| head.equals("unfinish") || head.equals("unshelf") || head.equals("delay") || head.equals("advance")
-				|| head.equals("categorize") || head.equals("tag") || head.equals("load");
+				|| head.equals("categorize") || head.equals("tag") || head.equals("load") || head.equals("open")
+				|| head.equals("save");
 		return type;
 	}
 

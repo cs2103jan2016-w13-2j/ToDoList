@@ -132,7 +132,8 @@ public class Task {
 		return interval;
 	}
 
-	private TemporalUnit generateTimeUnit(String unit) {
+	@SuppressWarnings("unused")
+    private TemporalUnit generateTimeUnit(String unit) {
 		switch (unit) {
 		case "day":
 			return ChronoUnit.DAYS;

@@ -18,6 +18,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
+
 //@@author yuxin
 /*
  * This class is to read and write from the file directly. It will be called by the database.
@@ -141,6 +143,17 @@ public class FileHandler {
 		//check whether the directory exist		
 		String tempFilePath = newFilePath + fileName;
 		if(!isPathCorrect(tempFilePath)) {
+			new File(newFilePath).mkdir();
+			try {
+				FileWriter fw = new FileWriter(tempFilePath);
+				BufferedWriter bw = new BufferedWriter(fw);
+				
+				bw.close();
+				System.out.println("filehandler writing into file: successfully ");
+			} catch (Exception e) {
+				return false;
+			}
+			openFile(newFilePath);
 			return false;
 		}
 		//check whether the txt file contains the correct format (gson format)

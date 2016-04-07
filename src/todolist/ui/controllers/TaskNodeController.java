@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -63,6 +62,8 @@ public class TaskNodeController {
     private static final String DISPLAY_ITEM_ARCHIVED = "DONE";
     private static final String DISPLAY_ITEM_OVERDUE = "OVERDUE";
     private static final String DISPLAY_ITEM_HEADER_CATEGORY = "";
+    private static final String COMPLETED_RELATIVE = "completed!";
+
 
     /*** STYLES ***/
 
@@ -173,7 +174,7 @@ public class TaskNodeController {
     private ImageView reminderIndicator = null;
 
     // Date-Time Field Live Update Interval (in seconds)
-    private static final int UPDATE_INTERVAL = 1;
+    private static final int UPDATE_INTERVAL = 5;
     private static final int ZONE_OFFSET = 8;
 
     /*
@@ -345,6 +346,9 @@ public class TaskNodeController {
 
         setStyle(startDateTime, endDateTime, task.getIsCompleted());
 
+        if (task.getIsCompleted()) {
+            relativeText = COMPLETED_RELATIVE;
+        }
         this.relativeRange.setText(relativeText);
         dateRange.setText(outputDate);
         this.relativeRange.setFont(Font.font("Calibri", FontPosture.ITALIC, 14));
