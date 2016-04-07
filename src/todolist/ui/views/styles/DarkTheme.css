@@ -214,3 +214,14 @@
     -fx-text-alignment: center;
     -fx-padding: 0.0 0.0 8.0 0.0;
 }
+
+#bubble {
+   	-fx-background-color: #F08A5D;
+	-fx-background-insets: 0.0,1.0,2.0,3.0;
+	-fx-background-radius: 2.0,2.0,2.0,2.0;
+	-fx-padding: 2.0 4.0 2.0 4.0;
+	-fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-size: 8.0px;
+}

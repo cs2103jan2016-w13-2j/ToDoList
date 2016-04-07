@@ -59,6 +59,8 @@ public class MainViewController {
     // Logger
     UtilityLogger logger = null;
 
+    protected int index = 0;
+
     // @@author A0130620B
     // Temporary attributes for testing
     public String path = "demo.txt";
@@ -316,6 +318,8 @@ public class MainViewController {
         }
 
         listView.getItems().addAll(arrayOfWrappers);
+        
+
         logger.logAction(Component.UI, MESSAGE_UPDATED_MAIN_TASKLIST);
     }
 
@@ -393,7 +397,22 @@ public class MainViewController {
         }
     }
 
-    public ListView<TaskWrapper> getListView() {
-        return listView;
+    public int getCompletedCount() {
+        int count = 0;
+        for (TaskWrapper task : listView.getItems()) {
+            if (task.getIsCompleted()) {
+                count += 1;
+            }
+        }
+
+        return count;
+    }
+
+    public void setPageIndex(int homeTab) {
+        index = homeTab;
+    }
+
+    public int getPageIndex() {
+        return index;
     }
 }
