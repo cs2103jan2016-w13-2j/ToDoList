@@ -84,7 +84,7 @@ public class Logic {
 	 * @param int
 	 * @return void
 	 */
-	public void stepForward(int increment) {
+	public void stepForward() {
 
 		dataBase.takeSnapshot();
 		this.steps++;
