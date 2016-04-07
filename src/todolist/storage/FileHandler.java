@@ -18,9 +18,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 import org.apache.commons.io.FileUtils;
 
 //@@author yuxin
+=======
+//@@author A0131334W
+>>>>>>> ea31976117b3d05f5d1e37a10081de28881f4d5c
 /*
  * This class is to read and write from the file directly. It will be called by the database.
  * 

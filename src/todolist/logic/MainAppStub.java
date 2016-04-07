@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import todolist.MainApp;
 import todolist.model.Task;
 
-//@@author zhangjiyi
+//@@author A0130620B
 public class MainAppStub extends MainApp{
 	public MainAppStub() {
 		super();

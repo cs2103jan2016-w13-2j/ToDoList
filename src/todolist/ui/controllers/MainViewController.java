@@ -27,7 +27,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-//@@author huangliejun
+//@@author A0123994W
 
 /* 
  * MainViewController controls and manipulates data for display on the main display area, for the main tab.
@@ -46,9 +46,6 @@ public class MainViewController {
     private static final String NIGHT_MODE = "night-mode";
     private static final String DAY_MODE = "day-mode";
 
-    private String nightModeTheme = null;
-    private String dayModeTheme = null;
-
     // Model data
     protected ObservableList<TaskWrapper> tasksToDisplay = null;
 
@@ -62,12 +59,12 @@ public class MainViewController {
     // Logger
     UtilityLogger logger = null;
 
-    // @@author zhangjiyi
+    // @@author A0130620B
     // Temporary attributes for testing
     public String path = "demo.txt";
     public int demoCounter = 0;
 
-    // @@author huangliejun
+    // @@author A0123994W
     /*** Controller Functions ***/
 
     /*
@@ -80,8 +77,6 @@ public class MainViewController {
         listView = new ListView<TaskWrapper>();
         logger = new UtilityLogger();
 
-        nightModeTheme = MainApp.class.getResource("ui/views/DarkTheme.css").toExternalForm();
-        dayModeTheme = MainApp.class.getResource("ui/views/DefaultTheme.css").toExternalForm();
     }
 
     /*
@@ -150,19 +145,15 @@ public class MainViewController {
 
                     if (commandString.equals(NIGHT_MODE)) {
                         Scene scene = mainApplication.getPrimaryStage().getScene();
-                        scene.getStylesheets().remove(dayModeTheme);
-                        // scene.setUserAgentStylesheet(null);
-                        scene.getStylesheets().add(nightModeTheme);
-                        // scene.setUserAgentStylesheet(nightModeTheme);
+                        scene.getStylesheets().remove(mainApplication.dayModeTheme);
+                        scene.getStylesheets().add(mainApplication.nightModeTheme);
                         mainApplication.getPrimaryStage().setScene(scene);
                         mainApplication.getPrimaryStage().show();
 
                     } else if (commandString.equals(DAY_MODE)) {
                         Scene scene = mainApplication.getPrimaryStage().getScene();
-                        scene.getStylesheets().remove(nightModeTheme);
-                        // scene.setUserAgentStylesheet(null);
-                        scene.getStylesheets().add(dayModeTheme);
-                        // scene.setUserAgentStylesheet(dayModeTheme);
+                        scene.getStylesheets().remove(mainApplication.nightModeTheme);
+                        scene.getStylesheets().add(mainApplication.dayModeTheme);
                         mainApplication.getPrimaryStage().setScene(scene);
                         mainApplication.getPrimaryStage().show();
 
@@ -181,7 +172,7 @@ public class MainViewController {
         commandField.setOnAction(commandHandler);
     }
 
-    // @@author zhangjiyi
+    // @@author A0130620B
     /*** Temporary Functions for Testing ***/
 
     public ArrayList<String> demoFileHandler(String path) {
@@ -274,7 +265,7 @@ public class MainViewController {
         commandField.setOnAction(commandHandler);
     }
 
-    // @@author huangliejun
+    // @@author A0123994W
     /*** View Access Functions ***/
 
     /*

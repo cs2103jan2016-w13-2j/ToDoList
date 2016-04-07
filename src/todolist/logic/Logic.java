@@ -21,7 +21,7 @@ import todolist.model.TokenizedCommand;
 import todolist.parser.MainParser;
 import todolist.storage.DataBase;
 
-//@@author zhangjiyi
+//@@author A0130620B
 public class Logic {
 
 	private MainApp mainApp;

@@ -1,4 +1,4 @@
-/*@@author huangliejun*/
+/*@@author A0123994W*/
 
 /* Color Template */
 
@@ -67,8 +67,9 @@
 }
 
 #titled-pane-hbox-text {
-	-fx-fill: white;
+	-fx-fill: #F08A5D;
 	-fx-font-size: 16.0pt;
+    -fx-effect: innershadow( gaussian, rgba( 0.0, 0.0, 0.0, 0.4 ), 2.0, 2.0, 2.0, 2.0 );
 }
 
 .titled-pane > .title {
@@ -166,8 +167,9 @@
 	-fx-background-color: #454553;	
     -fx-font-size: 12.0pt;
     -fx-font-family: "System Font";
-    -fx-text-fill: #454553;
+    -fx-text-fill: #4AA0D5;
     -fx-prompt-text-fill: #7A9EAF;
+    -fx-font-weight: regular;
 }
 
 #table-view {

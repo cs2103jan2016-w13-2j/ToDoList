@@ -22,6 +22,7 @@ import javafx.scene.layout.BorderPane;
 import todolist.MainApp;
 import todolist.common.UtilityLogger;
 
+//@@author A0123994W
 public class HelpModalController {
 
     public class EntryComparator implements Comparator<CommandPair> {

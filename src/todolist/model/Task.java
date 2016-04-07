@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
-//@@author zhangjiyi
+//@@author A0130620B
 public class Task {
 	private Name name = null;
 	private LocalDateTime startTime = null;

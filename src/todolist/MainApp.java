@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import org.controlsfx.control.NotificationPane;
 
+import com.sun.javafx.css.StyleManager;
+
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -40,7 +42,7 @@ import todolist.ui.controllers.SideBarController;
 import todolist.ui.controllers.TodayController;
 import todolist.ui.controllers.WeekController;
 
-//@@author huangliejun
+//@@author A0123994W
 
 /*
  * MainApp is the main running class for the application.
@@ -51,6 +53,8 @@ import todolist.ui.controllers.WeekController;
  */
 public class MainApp extends Application {
 
+    private static final String UI_VIEWS_DEFAULT_THEME_CSS = "ui/views/styles/DefaultTheme.css";
+    private static final String UI_VIEWS_DARK_THEME_CSS = "ui/views/styles/DarkTheme.css";
     // Window constants
     private static final double MIN_HEIGHT = 600;
     private static final double MIN_WIDTH = 400;
@@ -76,7 +80,6 @@ public class MainApp extends Application {
     protected static final String FOCUS_COMMAND = "Command field is toggled into focus";
     protected static final String FOCUS_LIST = "Current list is toggled into focus";
 
-
     // Notification messages and delay constant
     private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
     private static final int DELAY_PERIOD = 5;
@@ -87,11 +90,13 @@ public class MainApp extends Application {
     private static final String DIRECTORY_SIDEBAR = "ui/views/SideBarView.fxml";
     public static final String DIRECTORY_TASKITEM = "ui/views/TaskNode.fxml";
 
-    // Class styles
+    // Theming
+    public String nightModeTheme = null;
+    public String dayModeTheme = null;
     private static final String STYLE_CLASS_ROOT = "root-layout";
     private static final String STYLE_CLASS_TITLEBAR = "title-bar";
     private static final String STYLE_CLASS_SIDEBAR = "side-bar";
-    private static final String STYLE_NOTIFICATION = "-fx-font-size: 10px;";
+    private static final String STYLE_NOTIFICATION_DAY = "-fx-font-size: 1.0em; -fx-font-family: \"System Font\"; -fx-text-fill: #454553;";
 
     // Tab view directories
     private static final String DIRECTORY_MAIN = "ui/views/MainView.fxml";
@@ -225,65 +230,77 @@ public class MainApp extends Application {
 
             // Display wrapper notification scene
             Scene scene = new Scene(rootWithNotification, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+            // Stylesheet Handling
+            nightModeTheme = MainApp.class.getResource(UI_VIEWS_DARK_THEME_CSS).toExternalForm();
+            dayModeTheme = MainApp.class.getResource(UI_VIEWS_DEFAULT_THEME_CSS).toExternalForm();
+            Application.setUserAgentStylesheet(null);
+            StyleManager.getInstance().addUserAgentStylesheet(dayModeTheme);
+            scene.getStylesheets().add(dayModeTheme);
+
+            // Shortcuts Handling
+            addShortcuts(scene);
+
             primaryStage.setScene(scene);
             primaryStage.show();
 
             // Show Welcome Text
             notifyWithText(NOTIFICATION_WELCOME, true);
 
-            KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.SHIFT_DOWN);
-            KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.SHIFT_DOWN);
-
-            scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                    if (focusOnCommand.match(event)) {
-                        commandField.requestFocus();
-                        logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
-                    }
-                }
-            });
-
-            
-            scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                  if (focusOnList.match(event)) {
-                        int page = sidebarController.getIndex();
-                        switch (page) {
-                        case HOME_TAB:
-                            mainController.getListView().requestFocus();
-                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
-                            break;
-                        case EXPIRED_TAB:
-                            overdueController.getListView().requestFocus();
-                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
-                            break;
-                        case TODAY_TAB:
-                            todayController.getListView().requestFocus();
-                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
-                            break;
-                        case WEEK_TAB:
-                            weekController.getListView().requestFocus();
-                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
-                            break;
-                        case DONE_TAB:
-                            archiveController.getListView().requestFocus();
-                            logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
-                            break;
-                        default:
-                            commandField.requestFocus();
-                            logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
-                        }
-                    }
-                }
-            });
-            
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_ROOT);
             ioException.printStackTrace();
             System.exit(1);
         }
+    }
+
+    private void addShortcuts(Scene scene) {
+        KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN);
+        KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
+
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (focusOnCommand.match(event)) {
+                    commandField.requestFocus();
+                    logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
+                }
+            }
+        });
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (focusOnList.match(event)) {
+                    int page = sidebarController.getIndex();
+                    switch (page) {
+                    case HOME_TAB:
+                        mainController.getListView().requestFocus();
+                        logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                        break;
+                    case EXPIRED_TAB:
+                        overdueController.getListView().requestFocus();
+                        logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                        break;
+                    case TODAY_TAB:
+                        todayController.getListView().requestFocus();
+                        logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                        break;
+                    case WEEK_TAB:
+                        weekController.getListView().requestFocus();
+                        logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                        break;
+                    case DONE_TAB:
+                        archiveController.getListView().requestFocus();
+                        logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
+                        break;
+                    default:
+                        commandField.requestFocus();
+                        logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
+                    }
+                }
+            }
+        });
     }
 
     /*
@@ -293,8 +310,8 @@ public class MainApp extends Application {
      */
     private void loadCommandLine() {
         commandField = (TextField) mainView.getBottom();
-         mainController.setCommandLineCallback(commandField);
-//        mainController.setCommandLineCallbackDemo(commandField);
+        mainController.setCommandLineCallback(commandField);
+        // mainController.setCommandLineCallbackDemo(commandField);
     }
 
     /*
@@ -516,6 +533,7 @@ public class MainApp extends Application {
     public void loadPage(int index) {
         if (index >= SMALLEST_PAGE_INDEX && index <= LARGEST_PAGE_INDEX) {
             sidebarController.setIndex(index);
+            commandField.requestFocus();
         } else {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_PAGE_INDEX + index);
         }
@@ -602,8 +620,7 @@ public class MainApp extends Application {
         BorderPane borderPane = new BorderPane(label);
         rootWithNotification = new NotificationPane(borderPane);
 
-        rootWithNotification.setStyle(STYLE_NOTIFICATION);
-
+        rootWithNotification.setStyle(STYLE_NOTIFICATION_DAY);
         rootWithNotification.setShowFromTop(true);
         rootWithNotification.setContent(rootView);
     }
