@@ -1,15 +1,23 @@
 package todolist;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.Notifications;
 
 import com.sun.javafx.css.StyleManager;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -32,6 +40,7 @@ import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
 import todolist.logic.Logic;
 import todolist.logic.UIHandler;
+import todolist.model.Reminder;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 import todolist.ui.controllers.ArchiveController;
@@ -156,6 +165,8 @@ public class MainApp extends Application {
     // Logger
     private UtilityLogger logger = null;
 
+    ArrayList<Timeline> reminders = null;
+
     /*** CORE FUNCTIONS ***/
 
     /*
@@ -180,6 +191,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        reminders = new ArrayList<Timeline>();
         logger = new UtilityLogger();
 
         // Reference and link with Logic component
@@ -202,7 +214,7 @@ public class MainApp extends Application {
                 archiveController };
 
         sidebarController.linkBubbles(controllers);
-        
+
         commandField.requestFocus();
 
     }
@@ -739,6 +751,45 @@ public class MainApp extends Application {
             sidebarController.linkBubbles(controllers);
         }
 
+        FilteredList<TaskWrapper> tasksToRemind = new FilteredList<TaskWrapper>(
+                mainController.getTaskListView().getItems(),
+                task -> task.getReminder() != null && !task.getIsCompleted() && task.getReminder().getStatus());
+
+        for (Timeline reminder : reminders) {
+            reminder.stop();
+        }
+
+        reminders.clear();
+
+        for (TaskWrapper task : tasksToRemind) {
+            Reminder taskReminder = task.getReminder();
+            LocalDateTime remindTime = taskReminder.getTime();
+            if (remindTime == null) {
+                remindTime = task.getStartTime();
+            }
+
+            if (remindTime == null) {
+                remindTime = task.getEndTime();
+            }
+
+            if (remindTime != null && remindTime.isAfter(LocalDateTime.now())) {
+                long difference = LocalDateTime.now().until(remindTime, ChronoUnit.SECONDS);
+                Timeline timer = new Timeline(
+                        new KeyFrame(Duration.seconds(difference), new EventHandler<ActionEvent>() {
+
+                            @Override
+                            public void handle(ActionEvent event) {
+                                Notifications notification = Notifications.create();
+                                notification.title("Reminder: " + task.getTaskTitle());
+                                notification.text("Some reminder text here!");
+                                notification.showInformation();
+                            }
+                        }));
+                timer.setCycleCount(1);
+                timer.play();
+                reminders.add(timer);
+            }
+        }
     }
 
     /*
@@ -871,4 +922,5 @@ public class MainApp extends Application {
     public SideBarController getSideBarController() {
         return sidebarController;
     }
+
 }
