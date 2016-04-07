@@ -538,13 +538,18 @@ public class Logic {
 	 * @return void
 	 */
 	public void search(String[] keyword) {
+		String input = keyword[0];
 		
-		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + title);
+		for(int i=1;i<keyword.length;i++) {
+			input = input + " " + keyword[i];
+		}
+		
+		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + input);
 
 		ArrayList<Task> tempTaskList = dataBase.smartSearch(keyword);
 
 		uiHandler.display(tempTaskList);
-		uiHandler.sendMessage("Here are your search results for '" + title + "'! [to clear this search, type 'reset']",
+		uiHandler.sendMessage("Here are your search results for '" + input + "'! [to clear this search, type 'reset']",
 				true);
 	}
 
