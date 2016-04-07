@@ -1,5 +1,6 @@
 package todolist.logic;
 
+import todolist.model.InputErrorChecker;
 import todolist.model.InputException;
 import todolist.model.Task;
 import todolist.model.TokenizedCommand;
@@ -8,424 +9,197 @@ import todolist.model.TokenizedCommand;
 public class CaseSwitcher {
 
 	private Logic logic;
+	private InputErrorChecker inputErrorChecker;
 
 	public CaseSwitcher(Logic logic) {
 		this.logic = logic;
+		this.inputErrorChecker = new InputErrorChecker(logic);
+	}
+
+	private boolean isInteger(String s) {
+		try {
+			int i = Integer.parseInt(s);
+			return true;
+		} catch (NumberFormatException er) {
+			return false;
+		}
 	}
 
 	public void execute(TokenizedCommand command) {
+		InputException inputException = inputErrorChecker.validate(command);
+		if (inputException.getCorrectness()) {
+			forceExecute(command);
+		} else {
+			logic.getUIHandler().sendMessage(inputException.getErrorMessage(), true);
+		}
+	}
+
+	public void forceExecute(TokenizedCommand command) {
+		logic.stepForward();
+
 		String action = command.getAction();
 		String arg[] = command.getArgs();
 
 		switch (action) {
 
 		case "add":
-			String type = "null";
-			if (arg.length == 0) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To create a task, you will first need to specify the type of task that you wish to create.",
-						true);
-			} else {
-				type = arg[0];
-			}
-
+			String type = arg[0];
 			switch (type) {
 			case "event":
-				if (arg.length != 6 && arg.length != 5) {
-					logic.getUIHandler().sendMessage(
-							"Your command was incomplete! To add an event, try: add event [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day].",
-							true);
+				if (arg.length == 6) {
+					logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
 				} else {
-					if (arg.length == 6) {
-						logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
-						logic.stepForward(1);
-					} else {
-						logic.addEventLess(arg[1], arg[2], arg[3], arg[4]);
-						logic.stepForward(1);
-					}
+					logic.addEventLess(arg[1], arg[2], arg[3], arg[4]);
 				}
 				break;
 			case "deadline":
-				if (arg.length != 4 && arg.length != 3) {
-					logic.getUIHandler().sendMessage(
-							"Your command was incomplete! To add a deadline, try: add deadline [title] [YYYY-MM-DD] [HH:MM]",
-							true);
+				if (arg.length == 4) {
+					logic.addDeadline(arg[1], arg[2], arg[3]);
 				} else {
-					if (arg.length == 4) {
-						logic.addDeadline(arg[1], arg[2], arg[3]);
-						logic.stepForward(1);
-					} else {
-						logic.addDeadlineLess(arg[1], arg[2]);
-						logic.stepForward(1);
-					}
+					logic.addDeadlineLess(arg[1], arg[2]);
 				}
 				break;
 			case "task":
-				if (arg.length != 2) {
-					logic.getUIHandler().sendMessage(
-							"Your command was incomplete! To add an un-dated task: add task [title]", true);
-				} else {
-					logic.addTask(arg[1]);
-					logic.stepForward(1);
-				}
+				logic.addTask(arg[1]);
 				break;
 			case "recurring":
 				switch (arg[1]) {
 				case "event":
-					if (arg.length != 8 && arg.length != 7) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To add a recurring event, try: add recurring event [7-day] [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day]",
-								true);
+					if (arg.length == 8) {
+						logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
 					} else {
-						if (arg.length == 8) {
-							logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
-							logic.stepForward(3);
-						} else {
-							logic.addRecurringEventLess(arg[2], arg[3], arg[4], arg[5], arg[6]);
-							logic.stepForward(3);
-						}
+						logic.addRecurringEventLess(arg[2], arg[3], arg[4], arg[5], arg[6]);
 					}
 					break;
 				case "deadline":
-					if (arg.length != 6 && arg.length != 5) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To add a recurring deadline, try: add recurring deadline [7-day] [title] [YYYY-MM-DD] [HH:MM]",
-								true);
+					if (arg.length == 6) {
+						logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
 					} else {
-						if (arg.length == 6) {
-							logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
-							logic.stepForward(3);
-						} else {
-							logic.addRecurringDeadlineLess(arg[2], arg[3], arg[4]);
-							logic.stepForward(3);
-						}
+						logic.addRecurringDeadlineLess(arg[2], arg[3], arg[4]);
 					}
 					break;
 				default:
-					logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
-
 				}
 				break;
 			default:
-				logic.getUIHandler().sendMessage("Opps! I don't understand this command! Please try again.", true);
 			}
 			break;
 		case "edit":
-			if (arg.length != 3) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.edit(task.getName().getName(), arg[1], arg[2]);
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]",
-								true);
-					} else {
-						logic.edit(task.getName().getName(), arg[1], arg[2]);
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.edit(arg[0], arg[1], arg[2]);
-					logic.stepForward(2);
-				}
+				logic.edit(arg[0], arg[1], arg[2]);
 			}
 			break;
 		case "delete":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage("Your command was incomplete! To delete a task, try: delete [title]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.delete(task.getName().getName());
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To delete a task, try: delete [title]", true);
-					} else {
-						logic.delete(task.getName().getName());
-						logic.stepForward(1);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.delete(arg[0]);
-					logic.stepForward(1);
-				}
+				logic.delete(arg[0]);
 			}
 			break;
 		case "search":
-			/*
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To search for something, try: search [search-term] (You are searching task names!)",
-						true);
-			} else {
-			*/
-				logic.search(arg);
-			/*
-			}
-			*/
+			logic.search(arg);
 			break;
 		case "filter":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To apply a filter, try: filter [category-name]", true);
-			} else {
-				logic.filter(arg[0]);
-			}
+			logic.filter(arg[0]);
 			break;
 		case "sort":
-			if (arg.length != 2) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To sort, try: sort ['start' | 'end' | 'category' | 'name'] [ascending | descending]",
-						true);
-			} else {
-				logic.sort(arg[0], arg[1]);
-				logic.stepForward(1);
-			}
-			break;
-		case "insert":
-			// logic.insert(arg[0], arg[1], arg[2]);
-			logic.getUIHandler().sendMessage("Sorry! This command is not yet supported!", true);
-			break;
-		case "switchPosition":
-			// logic.switchPosition(arg[0], arg[1]);
-			logic.getUIHandler().sendMessage("Sorry! This command is not yet supported!", true);
+			logic.sort(arg[0], arg[1]);
 			break;
 		case "label":
-			if (arg.length != 2) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To categorise or label a task, try: label [title] [category-name]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.label(task.getName().getName(), arg[1]);
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To categorise or label a task, try: label [title] [category-name]",
-								true);
-					} else {
-						logic.label(task.getName().getName(), arg[1]);
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.label(arg[0], arg[1]);
-					logic.stepForward(2);
-				}
-
+				logic.label(arg[0], arg[1]);
 			}
 			break;
 		case "set-recurring":
-			if (arg.length != 2) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.setRecurring(task.getName().getName(), true, arg[1]);
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]",
-								true);
-					} else {
-						// System.out.println("HELLO WORLD");
-						logic.setRecurring(task.getName().getName(), true, arg[1]);
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.setRecurring(arg[0], true, arg[1]);
-					logic.stepForward(2);
-				} catch (RuntimeException e) {
-					// System.out.println("DO NOTHING");
-				}
+				logic.setRecurring(arg[0], true, arg[1]);
 			}
 			break;
 		case "remove-recurring":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.setRecurring(task.getName().getName(), false, null);
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]",
-								true);
-					} else {
-						logic.setRecurring(task.getName().getName(), false, null);
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.setRecurring(arg[0], false, null);
-					logic.stepForward(2);
-				}
+				logic.setRecurring(arg[0], false, null);
 			}
 			break;
 		case "postpone":
-			if (arg.length != 3) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.postpone(task.getName().getName(), arg[1], arg[2]);
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]",
-								true);
-					} else {
-						logic.postpone(task.getName().getName(), arg[1], arg[2]);
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.postpone(arg[0], arg[1], arg[2]);
-					logic.stepForward(2);
-				}
-
+				logic.postpone(arg[0], arg[1], arg[2]);
 			}
 			break;
 		case "forward":
-			if (arg.length != 3) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.forward(task.getName().getName(), arg[1], arg[2]);
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]",
-								true);
-					} else {
-						logic.forward(task.getName().getName(), arg[1], arg[2]);
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.forward(arg[0], arg[1], arg[2]);
-					logic.stepForward(2);
-				}
-
+				logic.forward(arg[0], arg[1], arg[2]);
 			}
 			break;
 		case "add-remind":
-			try {
-				// need to handle exceptions here
-				logic.addRemind(arg);
-				logic.stepForward(3);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			logic.addRemind(arg);
 			break;
 		case "remind":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.remind(task.getName().getName());
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]",
-								true);
-					} else {
-						logic.remind(task.getName().getName());
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.remind(arg[0]);
-					logic.stepForward(2);
-				}
+				logic.remind(arg[0]);
 			}
 			break;
 		case "add-remind-bef":
-			// need to handle exceptions here
 			String[] restOfArgs = new String[arg.length - 2];
 			for (int i = 0; i < arg.length; i++) {
 				restOfArgs[i] = arg[i + 2];
 			}
-			try {
-				logic.addRemindBef(arg[0], arg[1], restOfArgs);
-				logic.stepForward(3);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			logic.addRemindBef(arg[0], arg[1], restOfArgs);
 			break;
 		case "remind-bef":
-			if (arg.length != 3) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.remindBef(task.getName().getName(), arg[1], arg[2]);
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]",
-								true);
-					} else {
-						logic.remindBef(task.getName().getName(), arg[1], arg[2]);
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.remindBef(arg[0], arg[1], arg[2]);
-					logic.stepForward(2);
-				}
+				logic.remindBef(arg[0], arg[1], arg[2]);
 			}
 			break;
 		case "done":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To archive a completed task, try: done [title]", true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.done(task.getName().getName());
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To archive a completed task, try: done [title]", true);
-					} else {
-						logic.done(task.getName().getName());
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.done(arg[0]);
-					logic.stepForward(2);
-				}
-
+				logic.done(arg[0]);
 			}
 			break;
 		case "undone":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To un-archive an ongoing task, try: undone [title]", true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.undone(task.getName().getName());
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To un-archive an ongoing task, try: undone [title]",
-								true);
-					} else {
-						logic.undone(task.getName().getName());
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.undone(arg[0]);
-					logic.stepForward(2);
-				}
+				logic.undone(arg[0]);
 			}
 			break;
 		case "exit":

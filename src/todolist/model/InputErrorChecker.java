@@ -332,6 +332,6 @@ public class InputErrorChecker {
 		default:
 			
 		}
-		return new InputException("ALL", "NO ERROR");
+		return new InputException();
 	}
 }

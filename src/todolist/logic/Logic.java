@@ -84,7 +84,7 @@ public class Logic {
 	 * @param int
 	 * @return void
 	 */
-	public void stepForward(int increment) {
+	public void stepForward() {
 
 		dataBase.takeSnapshot();
 		this.steps++;
@@ -853,7 +853,7 @@ public class Logic {
 
 		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
 
-		return remindBef(title, null, null);
+		return remindBef(title, "0", "minute");
 	}
 
 	/**
