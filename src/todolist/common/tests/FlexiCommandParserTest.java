@@ -60,7 +60,8 @@ public class FlexiCommandParserTest {
 		String input = "sumbit proposal by today";//should be by 2359 today
 		LocalDateTime date = LocalDateTime.now();
 		DecimalFormat decimalFormatter = new DecimalFormat("00");
-	    String deadlineDate = date.getYear() + "-"
+	    @SuppressWarnings("unused")
+        String deadlineDate = date.getYear() + "-"
 				+ decimalFormatter.format(date.getMonthValue()) + "-"
 				+ decimalFormatter.format(date.getDayOfMonth());
 	    

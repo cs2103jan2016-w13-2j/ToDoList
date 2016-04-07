@@ -24,7 +24,8 @@ public class FlexiCommandParser {
 
 	public TokenizedCommand parse(String input) {
 
-		String temp[] = input.split(" ");
+		@SuppressWarnings("unused")
+        String temp[] = input.split(" ");
 		
 		/*
 		for (int i = 0; i < temp.length; i++) {

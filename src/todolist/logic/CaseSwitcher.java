@@ -17,7 +17,8 @@ public class CaseSwitcher {
 
 	private boolean isInteger(String s) {
 		try {
-			int i = Integer.parseInt(s);
+			@SuppressWarnings("unused")
+            int i = Integer.parseInt(s);
 			return true;
 		} catch (NumberFormatException er) {
 			return false;
