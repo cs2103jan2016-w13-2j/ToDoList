@@ -1,3 +1,4 @@
+//@@author A0131334W
 package todolist.common.tests;
 
 import static org.junit.Assert.*;
@@ -17,7 +18,7 @@ import todolist.model.Name;
 import todolist.model.SearchCommand;
 import todolist.model.Task;
 
-//@@author A0131334W
+
 public class LogicTest {
 
     private MainApp mainAppStub;

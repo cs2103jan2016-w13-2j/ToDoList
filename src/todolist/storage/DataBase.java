@@ -1,3 +1,4 @@
+//@@author A0131334W
 package todolist.storage;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import todolist.common.UtilityLogger.Component;
 import todolist.model.SearchCommand;
 import todolist.model.Task;
 
-//@@author A0131334W
+
 /*
  * This class is the storage class, handling the read and write of local file with relative commands.
  * It will be called by the logic.

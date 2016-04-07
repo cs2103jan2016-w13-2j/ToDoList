@@ -1,3 +1,4 @@
+//@@author A0131334W
 package todolist.storage;
 
 import java.time.LocalDateTime;
@@ -6,7 +7,7 @@ import java.util.Arrays;
 
 import todolist.model.SearchCommand;
 import todolist.model.Task;
-//@@author A0131334W
+
 public class TaskRetriever {
 
     private static enum FilterType {
