@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -97,6 +98,25 @@ public class FlexiCommandParser {
 						+ decimalFormatter.format(end.getDayOfMonth());
 			    
 			    String deadlineTime = decimalFormatter.format(end.getHour()) + ":" + decimalFormatter.format(end.getMinute());
+			    
+			    
+			    if(end.isBefore(LocalDateTime.now()) && end.plus(10, ChronoUnit.SECONDS).isAfter(LocalDateTime.now()) && input.toLowerCase().contains("today")) {
+			    	//System.out.println("hello");
+				    deadlineTime = "23:59";
+			    }
+			    
+			    if(result.endsWith(" by ")) {
+			    	result = result.substring(0, result.length() - 3);
+			    }
+			    
+			    if(result.endsWith(" from ")) {
+			    	result = result.substring(0, result.length() - 5);
+			    }
+			    
+			    if(result.startsWith("From ") || result.startsWith("from ")) {
+			    	result = result.substring(6);
+			    }
+			    
 			    /*
 				String endDate = deadline.getYear() + "-" + deadline.getMonth() + "-" + deadline.getDay();
 				String endTime = deadline.getHours() + ":" + deadline.getMinutes();
@@ -135,7 +155,19 @@ public class FlexiCommandParser {
 				*/
 			    
 				//return new TokenizedCommand("add", new String[]{"event", input, startDate, startTime, endDate, endTime});
-
+			    
+			    if(result.endsWith(" by ")) {
+			    	result = result.substring(0, result.length() - 3);
+			    }
+			    
+			    if(result.endsWith(" from ")) {
+			    	result = result.substring(0, result.length() - 5);
+			    }
+			    
+			    if(result.startsWith("From ") || result.startsWith("from ")) {
+			    	result = result.substring(6);
+			    }
+			    
 				return new TokenizedCommand("add", new String[]{"event", result, startDate, startTime, Integer.toString(interval), "minute"});
 			}
 		}
