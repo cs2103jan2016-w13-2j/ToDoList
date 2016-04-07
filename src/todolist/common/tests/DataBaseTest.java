@@ -97,8 +97,7 @@ public class DataBaseTest {
 		end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
 		newEvent = new Task(name, start, end, null, null, false, false, null);
 		
-		boolean expected = false;
-		assertEquals(db.delete(newEvent), expected);
+		assertFalse(db.delete(newEvent));
 	}
     /**
      * test check existence for an event (existing) in the database
