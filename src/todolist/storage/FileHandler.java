@@ -84,7 +84,6 @@ public class FileHandler {
 			FileWriter fw = new FileWriter(filePath);
 			BufferedWriter bw = new BufferedWriter(fw);
 			for (Task eachTask : taskList) {
-				System.out.println("filehandler writing into file: " + gson.toJson(eachTask));
 				bw.write(gson.toJson(eachTask) + "\n");
 			}
 			bw.close();
@@ -173,7 +172,7 @@ public class FileHandler {
 		File updatedDirectory = new File(PATH_UPDATEDDIRECTORY);
 
 		try {
-			if (!isFileEmpty(updatedDirectory)) {
+			if (isFileReady(updatedDirectory) && !isFileEmpty(updatedDirectory)) {
 				FileReader fr = new FileReader(updatedDirectory);
 				BufferedReader br = new BufferedReader(fr);
 				filePath = br.readLine();
@@ -197,7 +196,6 @@ public class FileHandler {
 
     private boolean isPathCorrect(String pathName) {
 		if (pathName.length() == 0) {
-
 			return true;
 		}
 		File pathToCheck = new File(pathName);
