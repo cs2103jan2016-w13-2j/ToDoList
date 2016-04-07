@@ -35,10 +35,19 @@ public class ErrorBase {
 				"Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]");
 		errorBase.put(new Pair<String, String>("FORWARD", "INCOMPLETE"),
 				"Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]");
-		errorBase.put(new Pair<String, String>("LABEL", "INCOMPLETE"),
-				"Your command was incomplete! To categorise or label a task, try: label [title] [category-name]");
-		errorBase.put(new Pair<String, String>("LABEL", "INCOMPLETE"),
-				"Your command was incomplete! To categorise or label a task, try: label [title] [category-name]");
+		errorBase.put(new Pair<String, String>("REMIND", "INCOMPLETE"),
+				"Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]");
+		errorBase.put(new Pair<String, String>("REMIND-BEF", "INCOMPLETE"),
+				"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]");
+		errorBase.put(new Pair<String, String>("DONE", "INCOMPLETE"),
+				"Your command was incomplete! To archive a completed task, try: done [title]");
+		errorBase.put(new Pair<String, String>("UNDONE", "INCOMPLETE"),
+				"Your command was incomplete! To un-archive an ongoing task, try: undone [title]");
+		
+		errorBase.put(new Pair<String, String>("REMIND-BEF", "INCOMPLETE"),
+				"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]");
+		errorBase.put(new Pair<String, String>("REMIND-BEF", "INCOMPLETE"),
+				"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]");
 	}
 
 	public static String getErrorMessage(String commandType, String errorType) {

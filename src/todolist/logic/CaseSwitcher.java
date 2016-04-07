@@ -157,117 +157,49 @@ public class CaseSwitcher {
 			}
 			break;
 		case "add-remind":
-			try {
-				// need to handle exceptions here
-				logic.addRemind(arg);
-				logic.stepForward(3);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			logic.addRemind(arg);
 			break;
 		case "remind":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.remind(task.getName().getName());
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]",
-								true);
-					} else {
-						logic.remind(task.getName().getName());
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.remind(arg[0]);
-					logic.stepForward(2);
-				}
+				logic.remind(arg[0]);
 			}
 			break;
 		case "add-remind-bef":
-			// need to handle exceptions here
 			String[] restOfArgs = new String[arg.length - 2];
 			for (int i = 0; i < arg.length; i++) {
 				restOfArgs[i] = arg[i + 2];
 			}
-			try {
-				logic.addRemindBef(arg[0], arg[1], restOfArgs);
-				logic.stepForward(3);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			logic.addRemindBef(arg[0], arg[1], restOfArgs);
 			break;
 		case "remind-bef":
-			if (arg.length != 3) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]",
-						true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.remindBef(task.getName().getName(), arg[1], arg[2]);
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]",
-								true);
-					} else {
-						logic.remindBef(task.getName().getName(), arg[1], arg[2]);
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.remindBef(arg[0], arg[1], arg[2]);
-					logic.stepForward(2);
-				}
+				logic.remindBef(arg[0], arg[1], arg[2]);
 			}
 			break;
 		case "done":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To archive a completed task, try: done [title]", true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.done(task.getName().getName());
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To archive a completed task, try: done [title]", true);
-					} else {
-						logic.done(task.getName().getName());
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.done(arg[0]);
-					logic.stepForward(2);
-				}
-
+				logic.done(arg[0]);
 			}
 			break;
 		case "undone":
-			if (arg.length != 1) {
-				logic.getUIHandler().sendMessage(
-						"Your command was incomplete! To un-archive an ongoing task, try: undone [title]", true);
+			if (isInteger(arg[0])) {
+				int index = Integer.parseInt(arg[0]);
+				Task task = logic.getMainApp().getTaskAt(index);
+				logic.undone(task.getName().getName());
 			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						logic.getUIHandler().sendMessage(
-								"Your command was incomplete! To un-archive an ongoing task, try: undone [title]",
-								true);
-					} else {
-						logic.undone(task.getName().getName());
-						logic.stepForward(2);
-					}
-				} catch (NumberFormatException nfe) {
-					logic.undone(arg[0]);
-					logic.stepForward(2);
-				}
+				logic.undone(arg[0]);
 			}
 			break;
 		case "exit":
