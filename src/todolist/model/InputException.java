@@ -1,5 +1,7 @@
 package todolist.model;
 
+import todolist.logic.ErrorBase;
+
 public class InputException {
 	String commandType = null;
 	String errorType = null;
@@ -10,8 +12,8 @@ public class InputException {
 	}
 	
 	public InputException(String commandType, String errorType) {
-		this.commandType = null;
-		this.errorType = null;
+		this.commandType = commandType;
+		this.errorType = errorType;
 		this.error = false;
 	}
 	
@@ -24,7 +26,7 @@ public class InputException {
 	}
 	
 	public String getErrorMessage() {
-		return null;
+		return new ErrorBase().getErrorMessage(commandType, errorType);
 	}
 	
 	public Boolean getCorrectness() {
