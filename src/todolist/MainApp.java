@@ -158,6 +158,10 @@ public class MainApp extends Application {
     // Logger
     private UtilityLogger logger = null;
 
+    // Command history
+    private ArrayList<String> commandHistory = null;
+    int commandHistoryPointer = -1;
+
     /*** CORE FUNCTIONS ***/
 
     /*
@@ -183,6 +187,8 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
 
         logger = new UtilityLogger();
+
+        commandHistory = new ArrayList<String>();
 
         // Reference and link with Logic component
         logicUnit = new Logic(this);
@@ -347,6 +353,32 @@ public class MainApp extends Application {
         commandField = (TextField) mainView.getBottom();
         mainController.setCommandLineCallback(commandField);
 
+        // Cycle through history of commands
+        KeyCodeCombination scrollHistoryUp = new KeyCodeCombination(KeyCode.UP, KeyCombination.ALT_DOWN);
+        KeyCodeCombination scrollHistoryDown = new KeyCodeCombination(KeyCode.DOWN, KeyCombination.ALT_DOWN);
+
+        commandField.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (scrollHistoryUp.match(event)) {
+                    // ... decrement pointer
+                    if (commandHistoryPointer > 0) {
+                        commandHistoryPointer -= 1;
+                        commandField.setText(commandHistory.get(commandHistoryPointer));
+                    }
+                } else if(scrollHistoryDown.match(event)) {
+                    // ... increment pointer
+                    if (commandHistoryPointer < commandHistory.size() - 1) {
+                        commandHistoryPointer += 1;
+                        commandField.setText(commandHistory.get(commandHistoryPointer));
+                    }
+                } else {
+                    // Reset on other input
+                    commandHistoryPointer = commandHistory.size();
+                }
+            }
+        });
+
         /* Reserved command for demo purposes */
         // mainController.setCommandLineCallbackDemo(commandField);
     }
@@ -426,7 +458,7 @@ public class MainApp extends Application {
             mainController = loader.getController();
             mainController.setMainApp(this);
             mainController.setPageIndex(HOME_TAB);
-            
+
             loadCommandLine();
             uiHandlerUnit.refresh();
 
@@ -846,6 +878,10 @@ public class MainApp extends Application {
 
     public SideBarController getSideBarController() {
         return sidebarController;
+    }
+
+    public ArrayList<String> getCommandHistory() {
+        return commandHistory;
     }
 
 }

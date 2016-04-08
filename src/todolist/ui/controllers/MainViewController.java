@@ -160,6 +160,8 @@ public class MainViewController {
 
                     commandField.clear();
                     logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
+                    
+                    mainApplication.getCommandHistory().add(commandString);                   
 
                     // System.out.println(commandString);
 
