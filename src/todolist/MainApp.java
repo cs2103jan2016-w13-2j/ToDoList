@@ -365,12 +365,14 @@ public class MainApp extends Application {
                     if (commandHistoryPointer > 0) {
                         commandHistoryPointer -= 1;
                         commandField.setText(commandHistory.get(commandHistoryPointer));
+                        commandField.selectAll();
                     }
                 } else if(scrollHistoryDown.match(event)) {
                     // ... increment pointer
                     if (commandHistoryPointer < commandHistory.size() - 1) {
                         commandHistoryPointer += 1;
                         commandField.setText(commandHistory.get(commandHistoryPointer));
+                        commandField.selectAll();
                     }
                 } else {
                     // Reset on other input
