@@ -289,4 +289,20 @@ public class TaskWrapper {
     public boolean getIsExpired() {
         return getEndTime() != null && getEndTime().isBefore(LocalDateTime.now());
     }
+    
+    public enum TaskType {
+        EVENT, DEADLINE, FLOATING, UNKNOWN
+    };
+    
+    public TaskType getTaskType() {
+        if(getStartTime() != null && getEndTime() != null) {
+            return TaskType.EVENT;
+        } else if (getStartTime() == null && getEndTime() != null) {
+            return TaskType.DEADLINE;
+        } else if (getStartTime() == null && getEndTime() == null) {
+            return TaskType.FLOATING;
+        } else {
+            return TaskType.UNKNOWN;
+        }
+    }
 }
