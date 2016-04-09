@@ -149,12 +149,12 @@ public class DataBase {
 	 *
 	 * @return an arraylist of all the tasks in database
 	 */
-	public ArrayList<Task> retrieveAll() {
-		return taskList;
+	public ArrayList<Task> retrieveAll() {        
+		return fh.read();
 	}
 	
 	public Boolean recover(ArrayList<Task> backup) {
-		taskList = backup;
+		fh.write(backup);
 		return true;
 	}
 
