@@ -295,6 +295,7 @@ public class Logic {
 
 			if (newValue.equals("remove")) {
 				end = null;
+				start = null;
 			} else {
 				end = LocalDateTime.parse(newValue, formatter);
 			}
@@ -659,7 +660,10 @@ public class Logic {
 
 		tempTask.setDoneStatus(true);
 		String tempName = tempTask.getName().getName();
-		tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
+		
+		if (tempTask.getRecurringStatus()) {
+			tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
+		}
 
 		Boolean addResponse = dataBase.add(tempTask);
 

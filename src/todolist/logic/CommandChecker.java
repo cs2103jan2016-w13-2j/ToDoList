@@ -400,5 +400,4 @@ public class CommandChecker {
 	public InputException help(String[] arg) {
 		return new InputException();
 	}
-
 }
