@@ -13,8 +13,10 @@ import org.controlsfx.control.Notifications;
 import todolist.MainApp;
 import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
+import todolist.logic.UIHandler;
 import todolist.model.Reminder;
 import todolist.model.Task;
+import todolist.ui.TaskListCell;
 import todolist.ui.TaskWrapper;
 import todolist.ui.TaskWrapper.TaskType;
 import javafx.animation.Animation;
@@ -69,6 +71,7 @@ public class MainViewController {
 
     // Main application linkback
     private MainApp mainApplication = null;
+    private UIHandler uiHandler = null;
 
     /*** Views ***/
     @FXML
@@ -106,8 +109,9 @@ public class MainViewController {
      * @param MainApp mainApp is the reference provided to the calling function
      * 
      */
-    public void setMainApp(MainApp mainApp) {
+    public void setMainApp(MainApp mainApp,  UIHandler uiHandlerUnit) {
         mainApplication = mainApp;
+        uiHandler = uiHandlerUnit;     
     }
 
     /*
@@ -145,15 +149,13 @@ public class MainViewController {
      * input
      * 
      */
-    public void setCommandLineCallback(TextField commandField) {
+    public void setCommandLineCallback(TextField commandField, String dayMode, String nightMode) {
         // Set Callback for TextField
         EventHandler<ActionEvent> commandHandler = new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
                 String commandString = commandField.getText();
-                // Command command = new Command(commandString);
-                // System.out.println(command.getCommand());
 
                 // Pass command line input for processing
                 try {
@@ -161,26 +163,24 @@ public class MainViewController {
                     commandField.clear();
                     logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
                     
-                    mainApplication.getCommandHistory().add(commandString);                   
-
-                    // System.out.println(commandString);
+                    mainApplication.getCommandHistoryBackward().push(commandString);                   
 
                     if (commandString.equals(NIGHT_MODE)) {
                         Scene scene = mainApplication.getPrimaryStage().getScene();
-                        scene.getStylesheets().remove(mainApplication.dayModeTheme);
-                        scene.getStylesheets().add(mainApplication.nightModeTheme);
+                        scene.getStylesheets().remove(dayMode);
+                        scene.getStylesheets().add(nightMode);
                         mainApplication.getPrimaryStage().setScene(scene);
                         mainApplication.getPrimaryStage().show();
 
                     } else if (commandString.equals(DAY_MODE)) {
                         Scene scene = mainApplication.getPrimaryStage().getScene();
-                        scene.getStylesheets().remove(mainApplication.nightModeTheme);
-                        scene.getStylesheets().add(mainApplication.dayModeTheme);
+                        scene.getStylesheets().remove(nightMode);
+                        scene.getStylesheets().add(dayMode);
                         mainApplication.getPrimaryStage().setScene(scene);
                         mainApplication.getPrimaryStage().show();
 
                     } else {
-                        mainApplication.uiHandlerUnit.process(commandString);
+                        uiHandler.process(commandString);
                         logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
                     }
 
@@ -237,7 +237,7 @@ public class MainViewController {
                         if (commandString.equals("Start demo")) {
                             isDemoing = true;
                         } else {
-                            mainApplication.uiHandlerUnit.process(commandString);
+                            uiHandler.process(commandString);
                             logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
                         }
                     } catch (Exception exception) {
@@ -273,7 +273,7 @@ public class MainViewController {
                             animation.setOnFinished(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
-                                    mainApplication.uiHandlerUnit.process(commandString);
+                                    uiHandler.process(commandString);
                                 }
                             });
 
@@ -487,7 +487,6 @@ public class MainViewController {
                     AudioClip notificationSound = new AudioClip(
                             MainApp.class.getResource(DIRECTORY_REMINDER_SOUND).toExternalForm());
                     notificationSound.play();
-
                     notification.show();
                 }
             }));
@@ -508,8 +507,8 @@ public class MainViewController {
         return count;
     }
 
-    public void setPageIndex(int homeTab) {
-        index = homeTab;
+    public void setPageIndex(int tab) {
+        index = tab;
     }
 
     public int getPageIndex() {

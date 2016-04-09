@@ -181,6 +181,7 @@
     -fx-border-color: transparent;
     -fx-border-width: 0.0;
     -fx-focus-color: white;
+    -fx-font-size: 10.0pt;
 }
 
 .title-bar {

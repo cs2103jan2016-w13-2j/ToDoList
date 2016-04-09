@@ -42,7 +42,7 @@ public class Logic {
 	private static String LOGGING_REPEATED_TASK = "The task has already existed: ";
 	private static String LOGGING_TIME_ERROR = "This time was in the past";
 
-	public Logic(MainApp mainApp) {
+    public Logic(MainApp mainApp) {
 		this.setMainApp(mainApp);
 		this.dataBase = new DataBase();
 		this.mainParser = new MainParser();

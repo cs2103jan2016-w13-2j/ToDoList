@@ -15,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import todolist.MainApp;
 import todolist.common.UtilityLogger;
-import todolist.common.UtilityLogger.Component;
 import todolist.ui.TaskWrapper;
 
 //@@author A0123994W
@@ -94,7 +93,7 @@ public class SideBarController {
 
     /*** SIDEBAR AND PAGE PROPERTIES ***/
 
-    private int index = 1;
+    private int index = -1;
     private static int NUMBER_BUTTONS = 7;
     private Button[] buttonArray = null;
     private HashMap<Button, Integer> buttonHash = null;
@@ -104,7 +103,6 @@ public class SideBarController {
 
     // Logger and Logger messages
     UtilityLogger logger = null;
-    private static final String MESSAGE_CHANGED_PAGE = "Switched tab to %1$s";
 
     /*** CORE FUNCTIONS ***/
 
@@ -120,6 +118,7 @@ public class SideBarController {
 
     @FXML
     public void initialize() {
+        index = MainApp.getDefaultTab();
         logger = new UtilityLogger();
         setButtonArray();
         setButtonHash();
@@ -151,7 +150,8 @@ public class SideBarController {
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    paging(button);
+                    int index = getButtonIndex(button);
+                    mainApplication.loadPage(index);
                 }
             });
         }
@@ -159,7 +159,8 @@ public class SideBarController {
         todayLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                paging(today);
+                int index = getButtonIndex(today);
+                mainApplication.loadPage(index);
             }
         });
     }
@@ -193,13 +194,12 @@ public class SideBarController {
      * 
      */
     public void setIndex(int index) {
-        if (index != MainApp.HELP_TAB) {
+        
+        if (index != MainApp.getHelpTab()) {
             this.index = index;
             colourTab();
         }
 
-        mainApplication.setPageView(index);
-        logger.logAction(Component.UI, String.format(MESSAGE_CHANGED_PAGE, getTabName(index)));
     }
 
     /*
@@ -214,7 +214,6 @@ public class SideBarController {
             // Highlight if focused
             if (i == index - 1) {
                 currentButton.setStyle(STYLE_TAB_FOCUSED);
-                // currentButton.setStyle(STYLE_TAB_FOCUSED_DARK);
             }
         }
     }
@@ -251,20 +250,6 @@ public class SideBarController {
             return buttonHash.get(button);
         } else {
             return -1;
-        }
-    }
-
-    /*
-     * paging is a callback function that is called when a button is clicked. It
-     * navigates to the page / tab that the button is mapped to.
-     * 
-     * @param Button button
-     * 
-     */
-    private void paging(Button button) {
-        int index = getButtonIndex(button);
-        if (index >= 1 && index <= 7) {
-            setIndex(index);
         }
     }
 

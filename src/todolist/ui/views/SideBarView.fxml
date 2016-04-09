@@ -23,7 +23,7 @@
 			</VBox.margin>
 			<children>
 				<Button fx:id="home" contentDisplay="TOP" mnemonicParsing="false"
-					prefHeight="50.0" prefWidth="50.0" text="HOME">
+					prefHeight="50.0" prefWidth="50.0" text="ALL">
 					<graphic>
 						<ImageView id="home-icon" fx:id="homeIcon" fitHeight="30.0"
 							fitWidth="30.0" pickOnBounds="true" preserveRatio="true">

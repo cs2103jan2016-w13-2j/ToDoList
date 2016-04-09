@@ -7,18 +7,18 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane id="table-view" maxHeight="1.7976931348623157E308"
-	maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="750"
+	maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="1250"
 	styleClass="table-view" xmlns="http://javafx.com/javafx/8.0.65"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.HelpModalController">
 	<center>
 		<TableView id="helpTable" fx:id="helpTable"
-			focusTraversable="false" prefHeight="200.0" prefWidth="200.0"
+			focusTraversable="false" prefHeight="200.0" prefWidth="1200.0"
 			BorderPane.alignment="CENTER">
 			<columns>
-				<TableColumn fx:id="commandColumn" prefWidth="320.0"
-					text="Command" />
-				<TableColumn fx:id="formatColumn" prefWidth="400.0"
-					text="Format" />
+				<TableColumn fx:id="commandColumn" maxWidth="1.7976931348623157E308"
+					prefWidth="500.0" text="Command" />
+				<TableColumn fx:id="formatColumn" maxWidth="1.7976931348623157E308"
+					prefWidth="700.0" text="Format" />
 			</columns>
 		</TableView>
 	</center>

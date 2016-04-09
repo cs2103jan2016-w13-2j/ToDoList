@@ -1,9 +1,12 @@
 package todolist;
 
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import org.controlsfx.control.NotificationPane;
+
 import com.sun.javafx.css.StyleManager;
 
 import javafx.animation.PauseTransition;
@@ -76,6 +79,7 @@ public class MainApp extends Application {
     private static final String ACTION_NOTIFICATION_TRIGGERED = "Notification triggered";
     protected static final String FOCUS_COMMAND = "Command field is toggled into focus";
     protected static final String FOCUS_LIST = "Current list is toggled into focus";
+    private static final String MESSAGE_CHANGED_PAGE = "Switched tab to %1$s";
 
     // Notification messages and delay constant
     private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
@@ -86,18 +90,6 @@ public class MainApp extends Application {
     private static final String DIRECTORY_TITLEBAR = "ui/views/TitleBarView.fxml";
     private static final String DIRECTORY_SIDEBAR = "ui/views/SideBarView.fxml";
     public static final String DIRECTORY_TASKITEM = "ui/views/TaskNode.fxml";
-
-    // Stylesheets
-    private static final String UI_VIEWS_DEFAULT_THEME_CSS = "ui/views/styles/DefaultTheme.css";
-    private static final String UI_VIEWS_DARK_THEME_CSS = "ui/views/styles/DarkTheme.css";
-
-    // Styles
-    public String nightModeTheme = null;
-    public String dayModeTheme = null;
-    private static final String STYLE_CLASS_ROOT = "root-layout";
-    private static final String STYLE_CLASS_TITLEBAR = "title-bar";
-    private static final String STYLE_CLASS_SIDEBAR = "side-bar";
-    private static final String STYLE_NOTIFICATION_DAY = "-fx-font-size: 1.0em; -fx-font-family: \"System Font\"; -fx-text-fill: #454553;";
 
     // Tab view directories
     private static final String DIRECTORY_MAIN = "ui/views/MainView.fxml";
@@ -112,10 +104,27 @@ public class MainApp extends Application {
     private static final String DIRECTORY_NOTIFICATION_SOUND = "ui/views/assets/notification-sound-flyff.wav";
     private static final String DIRECTORY_WELCOME_SOUND = "ui/views/assets/notification-sound-twitch.mp3";
 
+    // Logo directory
+    private static final String APPLICATION_ICON = "ui/views/assets/icon.png";
+
+    // Stylesheets
+    private static final String UI_VIEWS_DEFAULT_THEME_CSS = "ui/views/styles/DefaultTheme.css";
+    private static final String UI_VIEWS_DARK_THEME_CSS = "ui/views/styles/DarkTheme.css";
+
+    // Styles
+    private String nightModeTheme = null;
+    private String dayModeTheme = null;
+    private static final String STYLE_CLASS_ROOT = "root-layout";
+    private static final String STYLE_CLASS_TITLEBAR = "title-bar";
+    private static final String STYLE_CLASS_SIDEBAR = "side-bar";
+    private static final String STYLE_NOTIFICATION_DAY = "-fx-font-size: 1.0em; -fx-font-family:"
+            + "\"System Font\"; -fx-text-fill: #454553;";
+
     // Views: Display and UI components
     private Stage primaryStage;
     private BorderPane rootView;
     private BorderPane mainView;
+    private Node mainViewDisplay;
     private TextField commandField;
     private HBox titleBarView;
     private VBox sideBarView;
@@ -124,6 +133,7 @@ public class MainApp extends Application {
     private BorderPane weekView;
     private BorderPane archiveView;
     private BorderPane settingsView;
+    private BorderPane helpView;
 
     // Page view index
     private static final int HOME_TAB = 1;
@@ -132,7 +142,8 @@ public class MainApp extends Application {
     private static final int WEEK_TAB = 4;
     private static final int DONE_TAB = 5;
     private static final int OPTIONS_TAB = 6;
-    public static final int HELP_TAB = 7;
+    private static final int HELP_TAB = 7;
+    private static final int DEFAULT_TAB = 3;
     private static final int SMALLEST_PAGE_INDEX = 1;
     private static final int LARGEST_PAGE_INDEX = 7;
 
@@ -146,30 +157,29 @@ public class MainApp extends Application {
     private HelpModalController helpModal;
 
     // Other components
-    public Logic logicUnit = null;
-    public UIHandler uiHandlerUnit = null;
+    private Logic logicUnit = null;
+    private UIHandler uiHandlerUnit = null;
 
     // Notification system
     private static final int NOTIFICATION_PADDING = 50;
-    public NotificationPane rootWithNotification = null;
-    public PauseTransition delay = null;
+    private NotificationPane rootWithNotification = null;
+    private PauseTransition delay = null;
     private boolean isFirstNotif = true;
 
     // Logger
     private UtilityLogger logger = null;
 
     // Command history
-    private ArrayList<String> commandHistory = null;
+    private Stack<String> commandHistoryBackward = null;
+    private Stack<String> commandHistoryForward = null;
     int commandHistoryPointer = -1;
 
+    // Autocomplete dictionary
+    private static final String[] suggestions = { "add", "edit", "delete", "mark", "done", "undone", "sort", "search",
+            "filter", "redo", "undo", "reset", "forward", "postpone", "remind", "set-recurring", "open", "task",
+            "event", "deadline" };
+
     /*** CORE FUNCTIONS ***/
-
-    /*
-     * Empty constructor.
-     */
-    public MainApp() {
-
-    }
 
     /*
      * Starts the application with launch() command.
@@ -186,9 +196,15 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        logger = new UtilityLogger();
+        // Setting application icon
+        com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
+        java.awt.Image image = Toolkit.getDefaultToolkit().getImage(MainApp.class.getResource(APPLICATION_ICON));
+        application.setDockIconImage(image);
 
-        commandHistory = new ArrayList<String>();
+        // Initializing utilities
+        logger = new UtilityLogger();
+        commandHistoryBackward = new Stack<String>();
+        commandHistoryForward = new Stack<String>();
 
         // Reference and link with Logic component
         logicUnit = new Logic(this);
@@ -199,8 +215,6 @@ public class MainApp extends Application {
         loadMainView();
         loadTitleBar();
         loadSideBar();
-        initializeTabs();
-        loadNotifBubbles();
 
         // Prepare for user input
         commandField.requestFocus();
@@ -221,11 +235,13 @@ public class MainApp extends Application {
      * initializeTabs load and initialize the controllers for each tab or page
      */
     private void initializeTabs() {
-        for (int i = HOME_TAB; i <= DONE_TAB; ++i) {
-            setPageView(i);
+        for (int i = EXPIRED_TAB; i <= OPTIONS_TAB; ++i) {
+            loadPage(i);
         }
 
-        setPageView(HOME_TAB);
+        loadPage(getDefaultTab());
+        rootView.setCenter(mainView);
+        uiHandlerUnit.refresh();
     }
 
     /*
@@ -350,39 +366,57 @@ public class MainApp extends Application {
      * 
      */
     private void loadCommandLine() {
-        commandField = (TextField) mainView.getBottom();
-        mainController.setCommandLineCallback(commandField);
 
-        // Cycle through history of commands
-        KeyCodeCombination scrollHistoryUp = new KeyCodeCombination(KeyCode.UP, KeyCombination.ALT_DOWN);
-        KeyCodeCombination scrollHistoryDown = new KeyCodeCombination(KeyCode.DOWN, KeyCombination.ALT_DOWN);
+        if (commandField == null) {
+            commandField = (TextField) mainView.getBottom();
 
-        commandField.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (scrollHistoryUp.match(event)) {
-                    // ... decrement pointer
-                    if (commandHistoryPointer > 0) {
-                        commandHistoryPointer -= 1;
-                        commandField.setText(commandHistory.get(commandHistoryPointer));
+            // AutoCompletionBinding<String> binding =
+            // TextFields.bindAutoCompletion(commandField, suggestions);
+
+            // ... From current caret position to last space ... search word
+
+            // ... Populate, anchor and display ContextMenu if applicable
+
+            mainController.setCommandLineCallback(commandField, dayModeTheme, nightModeTheme);
+
+            // Cycle through history of commands
+            KeyCodeCombination scrollHistoryUp = new KeyCodeCombination(KeyCode.UP, KeyCombination.ALT_DOWN);
+            KeyCodeCombination scrollHistoryDown = new KeyCodeCombination(KeyCode.DOWN, KeyCombination.ALT_DOWN);
+
+            commandField.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+
+                    if (scrollHistoryUp.match(event) && !commandHistoryBackward.isEmpty()) {
+
+                        // Browse history backward
+                        String history = commandHistoryBackward.pop();
+                        commandField.setText(history);
+                        commandHistoryForward.push(history);
                         commandField.selectAll();
-                    }
-                } else if(scrollHistoryDown.match(event)) {
-                    // ... increment pointer
-                    if (commandHistoryPointer < commandHistory.size() - 1) {
-                        commandHistoryPointer += 1;
-                        commandField.setText(commandHistory.get(commandHistoryPointer));
+
+                    } else if (scrollHistoryDown.match(event) && !commandHistoryForward.isEmpty()) {
+
+                        // Browse history forward
+                        String history = commandHistoryForward.pop();
+                        commandField.setText(history);
+                        commandHistoryBackward.push(history);
                         commandField.selectAll();
+
+                    } else if (scrollHistoryUp.match(event) || scrollHistoryDown.match(event)) {
+                        // do nothing ...
+                    } else {
+
+                        // Reset on other input
+                        while (!commandHistoryForward.isEmpty()) {
+                            commandHistoryBackward.push(commandHistoryForward.pop());
+                        }
+
                     }
-                } else {
-                    // Reset on other input
-                    commandHistoryPointer = commandHistory.size();
                 }
-            }
-        });
+            });
+        }
 
-        /* Reserved command for demo purposes */
-        // mainController.setCommandLineCallbackDemo(commandField);
     }
 
     /*
@@ -424,6 +458,8 @@ public class MainApp extends Application {
             // Set up display logic for side bar
             sidebarController = loader.getController();
             sidebarController.setMainApp(this);
+            initializeTabs();
+            loadNotifBubbles();
 
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_SIDEBAR);
@@ -452,17 +488,27 @@ public class MainApp extends Application {
      */
     private void loadMainView() {
         try {
+
             // Acquire FXML and CSS component for main view
             FXMLLoader loader = new FXMLLoader();
-            mainView = (BorderPane) getView(loader, DIRECTORY_MAIN);
+            if (mainView == null) {
+                mainView = (BorderPane) getView(loader, DIRECTORY_MAIN);
+                mainViewDisplay = mainView.getCenter();
+            }
 
-            // Set up display logic for main view
-            mainController = loader.getController();
-            mainController.setMainApp(this);
-            mainController.setPageIndex(HOME_TAB);
+            if (mainController == null) {
+                // Set up display logic for main view
+                mainController = loader.getController();
+                mainController.setMainApp(this, uiHandlerUnit);
+                mainController.setPageIndex(HOME_TAB);
+            }
 
-            loadCommandLine();
-            uiHandlerUnit.refresh();
+            rootView.setCenter(mainView);
+            mainView.setCenter(mainViewDisplay);
+            if (commandField == null) {
+                loadCommandLine();
+            }
+//            uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_MAIN);
@@ -479,16 +525,22 @@ public class MainApp extends Application {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
         try {
-            overdueView = (BorderPane) getView(loader, DIRECTORY_OVERDUE);
-            loadMainView();
+
+            if (overdueView == null) {
+                overdueView = (BorderPane) getView(loader, DIRECTORY_OVERDUE);
+            }
+
+            // loadMainView();
             mainView.setCenter(overdueView);
 
-            // Set up display logic for main view
-            overdueController = loader.getController();
-            overdueController.setMainApp(this);
-            overdueController.setPageIndex(EXPIRED_TAB);
+            if (overdueController == null) {
+                // Set up display logic for main view
+                overdueController = loader.getController();
+                overdueController.setMainApp(this, uiHandlerUnit);
+                overdueController.setPageIndex(EXPIRED_TAB);
+            }
 
-            uiHandlerUnit.refresh();
+            // uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_OVERDUE);
@@ -503,16 +555,21 @@ public class MainApp extends Application {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
         try {
-            todayView = (BorderPane) getView(loader, DIRECTORY_TODAY);
-            loadMainView();
+            if (todayView == null) {
+                todayView = (BorderPane) getView(loader, DIRECTORY_TODAY);
+            }
+
+            // loadMainView();
             mainView.setCenter(todayView);
 
-            // Set up display logic for main view
-            todayController = loader.getController();
-            todayController.setMainApp(this);
-            todayController.setPageIndex(TODAY_TAB);
+            if (todayController == null) {
+                // Set up display logic for main view
+                todayController = loader.getController();
+                todayController.setMainApp(this, uiHandlerUnit);
+                todayController.setPageIndex(TODAY_TAB);
+            }
 
-            uiHandlerUnit.refresh();
+            // uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_TODAY);
@@ -527,16 +584,22 @@ public class MainApp extends Application {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
         try {
-            weekView = (BorderPane) getView(loader, DIRECTORY_WEEK);
-            loadMainView();
+
+            if (weekView == null) {
+                weekView = (BorderPane) getView(loader, DIRECTORY_WEEK);
+            }
+
+            // loadMainView();
             mainView.setCenter(weekView);
 
-            // Set up display logic for main view
-            weekController = loader.getController();
-            weekController.setMainApp(this);
-            weekController.setPageIndex(WEEK_TAB);
+            if (weekController == null) {
+                // Set up display logic for main view
+                weekController = loader.getController();
+                weekController.setMainApp(this, uiHandlerUnit);
+                weekController.setPageIndex(WEEK_TAB);
+            }
 
-            uiHandlerUnit.refresh();
+            // uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_WEEK);
@@ -551,16 +614,21 @@ public class MainApp extends Application {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
         try {
-            archiveView = (BorderPane) getView(loader, DIRECTORY_ARCHIVE);
-            loadMainView();
+            if (archiveView == null) {
+                archiveView = (BorderPane) getView(loader, DIRECTORY_ARCHIVE);
+            }
+
+            // loadMainView();
             mainView.setCenter(archiveView);
 
-            // Set up display logic for main view
-            archiveController = loader.getController();
-            archiveController.setMainApp(this);
-            archiveController.setPageIndex(DONE_TAB);
+            if (archiveController == null) {
+                // Set up display logic for main view
+                archiveController = loader.getController();
+                archiveController.setMainApp(this, uiHandlerUnit);
+                archiveController.setPageIndex(DONE_TAB);
+            }
 
-            uiHandlerUnit.refresh();
+            // uiHandlerUnit.refresh();
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_ARCHIVE);
             ioException.printStackTrace();
@@ -574,9 +642,14 @@ public class MainApp extends Application {
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
         try {
-            settingsView = (BorderPane) getView(loader, DIRECTORY_SETTINGS);
-            loadMainView();
+            if (settingsView == null) {
+                settingsView = (BorderPane) getView(loader, DIRECTORY_SETTINGS);
+            }
+
+            // loadMainView();
             mainView.setCenter(settingsView);
+
+            // uiHandlerUnit.refresh();
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_SETTINGS);
             ioException.printStackTrace();
@@ -591,11 +664,15 @@ public class MainApp extends Application {
      */
     public void loadPage(int index) {
         if (index >= SMALLEST_PAGE_INDEX && index <= LARGEST_PAGE_INDEX) {
+            int oldIndex = sidebarController.getIndex();
             sidebarController.setIndex(index);
+            setPageView(index, oldIndex);
+
             commandField.requestFocus();
         } else {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_PAGE_INDEX + index);
         }
+
     }
 
     /*
@@ -604,34 +681,50 @@ public class MainApp extends Application {
      * @param index is the page number to load
      * 
      */
-    public void setPageView(int index) {
-        switch (index) {
+    public void setPageView(int index, int oldIndex) {
+
+        int page = index;
+
+        switch (page) {
         case HOME_TAB:
-            loadMainView();
+            if (index != oldIndex) {
+                loadMainView();
+            }
             break;
         case EXPIRED_TAB:
-            loadOverdueView();
+            if (index != oldIndex) {
+                loadOverdueView();
+            }
             break;
         case TODAY_TAB:
-            loadTodayView();
+            if (index != oldIndex) {
+                loadTodayView();
+            }
             break;
         case WEEK_TAB:
-            loadWeekView();
+            if (index != oldIndex) {
+                loadWeekView();
+            }
             break;
         case DONE_TAB:
-            loadArchiveView();
+            if (index != oldIndex) {
+                loadArchiveView();
+            }
             break;
         case OPTIONS_TAB:
-            loadSettingsView();
+            if (index != oldIndex) {
+                loadSettingsView();
+            }
             break;
         case HELP_TAB:
             loadHelpPopup();
-            // Persist on the current page
-            setPageView(sidebarController.getIndex());
             break;
         default:
-            loadMainView();
+            break;
         }
+
+        logger.logAction(Component.UI, String.format(MESSAGE_CHANGED_PAGE, sidebarController.getTabName(index)));
+
     }
 
     /*
@@ -641,19 +734,28 @@ public class MainApp extends Application {
 
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
+
         try {
-            BorderPane helpView = (BorderPane) getView(loader, DIRECTORY_HELP);
-            helpModal = loader.getController();
-            helpModal.setMainApp(this, helpView);
+            if (helpView == null) {
+                helpView = (BorderPane) getView(loader, DIRECTORY_HELP);
+            }
+
+            if (helpModal == null) {
+                helpModal = loader.getController();
+                helpModal.setMainApp(this, helpView);
+            }
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_HELP);
             ioException.printStackTrace();
         }
 
-        if (helpModal.initializeHelpModal()) {
+        if (helpModal.getModalPopup() == null) {
+            helpModal.initializeHelpModal();
+        }
+        if (!helpModal.getModalPopup().isShowing()) {
             helpModal.displayPopup(sidebarController.help);
         }
-
+        rootView.setCenter(mainView);
     }
 
     /*
@@ -756,6 +858,7 @@ public class MainApp extends Application {
         }
 
         mainController.refreshReminders();
+
     }
 
     /*
@@ -854,11 +957,7 @@ public class MainApp extends Application {
             }
             // Fallthrough
         default:
-            if (mainController != null) {
-                return mainController.getTaskAt(pos);
-            } else {
-                return null;
-            }
+            return null;
         }
     }
 
@@ -882,8 +981,24 @@ public class MainApp extends Application {
         return sidebarController;
     }
 
-    public ArrayList<String> getCommandHistory() {
-        return commandHistory;
+    public Stack<String> getCommandHistoryBackward() {
+        return commandHistoryBackward;
+    }
+
+    public Stack<String> getCommandHistoryForward() {
+        return commandHistoryForward;
+    }
+
+    public static int getHelpTab() {
+        return HELP_TAB;
+    }
+
+    public static String[] getSuggestions() {
+        return suggestions;
+    }
+
+    public static int getDefaultTab() {
+        return DEFAULT_TAB;
     }
 
 }

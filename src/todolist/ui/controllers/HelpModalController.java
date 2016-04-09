@@ -81,7 +81,7 @@ public class HelpModalController {
 
     private BorderPane helpView = null;
     private UtilityLogger logger = null;
-    private PopOver modalPopup = null;
+    private static PopOver modalPopup = null;
     private boolean initialized = false;
 
     private HashMap<String, String> actionFormatTable = null;
@@ -113,6 +113,7 @@ public class HelpModalController {
         modalPopup.hideOnEscapeProperty().setValue(true);
         modalPopup.setTitle(TITLE_POPUP_HELP);
         modalPopup.setOpacity(OPACITY);
+        modalPopup.setArrowSize(0);
 
         for (Node component : helpView.getChildren()) {
             component.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
@@ -135,9 +136,11 @@ public class HelpModalController {
     public void displayPopup(Node pointSource) {
         if (initialized) {
             populateCheatsheet();
-            modalPopup.show(pointSource);
-            modalPopup.getContentNode().requestFocus();
-            logger.logAction(UtilityLogger.Component.UI, MESSAGE_DISPLAY_MODAL);
+            if (!modalPopup.isShowing()) {
+                modalPopup.show(pointSource);
+                modalPopup.getContentNode().requestFocus();
+                logger.logAction(UtilityLogger.Component.UI, MESSAGE_DISPLAY_MODAL);
+            }
         }
     }
 
@@ -206,6 +209,10 @@ public class HelpModalController {
         }
 
         entries.sort(new EntryComparator());
+    }
+
+    public PopOver getModalPopup() {
+        return modalPopup;
     }
 
 }

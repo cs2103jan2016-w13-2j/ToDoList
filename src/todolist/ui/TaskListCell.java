@@ -1,7 +1,7 @@
-package todolist.ui.controllers;
+package todolist.ui;
 
 import javafx.scene.control.ListCell;
-import todolist.ui.TaskWrapper;
+import todolist.ui.controllers.TaskNodeController;
 
 //@@author A0123994W
 
@@ -26,6 +26,7 @@ public class TaskListCell extends ListCell<TaskWrapper> {
 
             // Link task to graphic node
             try {
+                
                 TaskNodeController taskNode = new TaskNodeController(task, this.getIndex());
                 setGraphic(taskNode.getNode());
             } catch (IllegalArgumentException iae) {
