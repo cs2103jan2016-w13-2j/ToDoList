@@ -56,7 +56,7 @@ public class DataBase {
 		sorter = new TaskSorter();
 		modifier = new DatabaseModifier();
 		logger = new UtilityLogger();
-		
+
 		loadFromFile();		
 	}
 

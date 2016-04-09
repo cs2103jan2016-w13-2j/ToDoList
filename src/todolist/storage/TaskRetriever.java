@@ -154,6 +154,7 @@ public class TaskRetriever {
     }
 
     private ArrayList<Task> retrieve_Name(SearchCommand command) {
+
         ArrayList<Task> resultList = new ArrayList<Task>();
         
         String requiredName = command.getContent();
@@ -169,6 +170,7 @@ public class TaskRetriever {
     }
     
     protected ArrayList<Task> smartRetrieve(ArrayList<Task> taskList, String[] keywords) {
+    	System.out.println("counterrrrrrrrrpppp: " );
     	ArrayList<Task> resultList = new ArrayList<Task>();
     	
     	if(taskList.isEmpty()) {
@@ -181,7 +183,7 @@ public class TaskRetriever {
     }
 
     private ArrayList<Task> retrieveByTokenizedName(ArrayList<Task> taskList2, String[] keywords) {
-    	
+    	System.out.println("counterrrrrrrrr: " );
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		int[] numMatch = new int[taskList2.size()];
 		
@@ -225,7 +227,7 @@ public class TaskRetriever {
 			    }			
 			}
 		}
-		
+		System.out.println("counterrrrrrrrr: " + counter);
 		return counter;
 	}
 
@@ -273,8 +275,8 @@ public class TaskRetriever {
         String requiredCategory = command.getContent();
 
         for (Task eachTask : taskList) {
-  
-            if (isSameCategory(eachTask.getCategory().getCategory(), requiredCategory)) {
+         
+            if (eachTask.getCategory() != null && isSameCategory(eachTask.getCategory().getCategory(), requiredCategory)) {
                 resultList.add(eachTask);
             }
         }

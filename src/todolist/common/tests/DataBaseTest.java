@@ -24,34 +24,112 @@ public class DataBaseTest {
 	 */
 
 	private DataBase db;
+	private ArrayList<String> name;
+	private ArrayList<String> date;
+    private ArrayList<Task> eventList;
 
 	@Before
 	public void setUp() throws Exception {
+		
 		db = new DataBase();
+		name = new ArrayList<String>();
+		date = new ArrayList<String>();
+		eventList = new ArrayList<Task>();
+		
+		initialiseName();
+		initialiseDate();
+				
+	}
+	   
+	private void initialiseDate() {
+		
+       String commandDate = "2017-01-0";
+	   
+       for(int i = 0; i < 10; i++) {
+    	   date.add(commandDate + i + " " + "14:00");
+       }
 	}
 
+	private void initialiseName() {
+		
+		String commonName = "title";
+		
+		for(int i = 0; i < 10; i++) {
+			name.add(commonName + i);
+		}		
+	}
+
+	private void initialiseEventList() {
+		
+		for(int i = 0; i < name.size(); i++) {
+			
+			Task eachTask = createTask(name.get(i), date.get(i), date.get(i), "cat");
+			eventList.add(eachTask);			
+		}
+	}
+	
+	private void addEvents() {
+		
+		if(eventList == null) {
+			
+			for(int i = 0; i < eventList.size(); i++) {
+				db.add(eventList.get(i));
+			}
+		}
+		
+	}
+	
+	private Task createTask(String taskName, String taskStart, String taskEnd, String cat) {
+		
+		Name name = new Name(taskName);
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		
+		LocalDateTime start = null;
+		if(taskStart != null) {
+			start = LocalDateTime.parse(taskStart, formatter);			
+		}
+				
+		LocalDateTime end = null;
+		if(taskEnd != null) {
+			end = LocalDateTime.parse(taskEnd, formatter);
+		}
+			
+		Category category = null;
+		if(cat != null) {
+			category = new Category(cat);
+		}
+		
+		Task newEvent = new Task(name, start, end, category, null, false, false, null);
+		
+		return newEvent;
+	}
+	
 	@Test
 	/**
-	 * test add an event to the database
+	 * test add event to the database
 	 * 
 	 */
 	public void testAdd1() {
 		db.clear();
-		// create a event
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-
+		
+		eventList = null;
 		// test whether can add an event to database
-		boolean expected = true;
-		assertEquals(db.add(newEvent), expected);
-
+		for(int i = 0; i < eventList.size(); i++) {
+			assertTrue(db.add(eventList.get(i)));
+		}
+		
 		// test whether it is really written into the file
 		db.loadFromFile();
-		boolean isEqual = db.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
-		assertEquals(isEqual, expected);
+		ArrayList<Task> listReadFromFile = db.taskList;
+		assertEquals(listReadFromFile.size(), eventList.size());
+		
+		//assert the title of task written into file
+		for(int i = 0; i < listReadFromFile.size(); i++) {
+			boolean isEqual = listReadFromFile.get(0).getName().getName().equals(name.get(i));
+			assertTrue(isEqual);
+		}
+		
 	}
     
 	/**
@@ -60,21 +138,18 @@ public class DataBaseTest {
 	@Test
 	public void testDelete1() {
 		db.clear();
+		
 		// add one event
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
+		addEvents();
 
 		// delete the task
-		boolean expected = true;
-		assertEquals(db.delete(newEvent), expected);
+		for(int i = 0; i < eventList.size(); i++) {
+			assertTrue(db.delete(eventList.get(i)));
+		}
 
 		// check whether it is really deleted from the file
 		db.loadFromFile();
-		assertEquals(db.taskList.isEmpty(), expected);
+		assertTrue(db.taskList.isEmpty());
 	}
 	
 	/**
@@ -83,40 +158,29 @@ public class DataBaseTest {
 	@Test
 	public void testDelete2() {
 		db.clear();
-		//add an event to the database
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
+		
+		//add event to the database
+		addEvents();
 		
 		//delete an event not in the database
-		name = new Name("title2");
-		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		newEvent = new Task(name, start, end, null, null, false, false, null);
-		
-		assertFalse(db.delete(newEvent));
+		Task taskToDelete = createTask("title not exit", date.get(0), date.get(0), null);
+		assertFalse(db.delete(taskToDelete));
 	}
+	
     /**
      * test check existence for an event (existing) in the database
      */
 	@Test
 	public void testCheckExistence1() {
 		db.clear();
-		// add one event
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
+		
+		addEvents();
 
 		// check the existence
-		boolean expected = true;
-		assertEquals(db.checkExistence(newEvent), expected);
+		for(int i = 0; i < eventList.size(); i++) {
+			assertTrue(db.checkExistence(eventList.get(i)));
+		}
+		
 	}
 	/**
      * test check existence for an event (not existing) in the database
@@ -124,19 +188,12 @@ public class DataBaseTest {
 	@Test
 	public void testCheckExistence2() {
 		db.clear();
-		// add one event
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
+
+		addEvents();
 		
 		//check the existence for another event
-		name = new Name("title2");
-        newEvent = new Task(name, start, end, null, null, false, false, null);
-        boolean expected = false;
-		assertEquals(db.checkExistence(newEvent), expected);
+		Task taskToCheck = createTask("new task", date.get(0), date.get(0), null);
+		assertFalse(db.checkExistence(taskToCheck));
 	}
     
 	/**
@@ -145,23 +202,20 @@ public class DataBaseTest {
 	@Test
 	public void testRetrieve1() {
 		db.clear();
-		// add one event
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
-
-		// retrieve the task for the name of the (existing) task
-		ArrayList<Task> taskList = db.retrieve(new SearchCommand("name", "title"));
-		boolean expected = true;
-		//check the size of the resultant list
-		boolean isEqual = taskList.size() == 1;
-		assertEquals(expected, isEqual);
-		// check the element is the task we add in
-		isEqual = db.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
-		assertEquals(expected, isEqual);
+		
+		addEvents();
+        
+		for(int i = 0; i < name.size(); i++) {
+			ArrayList<Task> taskList = db.retrieve(new SearchCommand("name", name.get(0)));
+			
+			//check the size of the resultant list
+			boolean isEqual = taskList.size() == 1;
+			assertTrue(isEqual);
+			
+			// check the element is the task we add in
+			isEqual = taskList.get(0).getName().getName().equals(name.get(0));
+			assertTrue(isEqual);
+		}		
 	}
 	
 	/**
@@ -170,20 +224,14 @@ public class DataBaseTest {
 	@Test
 	public void testRetrieve2() {
 		db.clear();
-		// add one event
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
+		
+		addEvents();
 
 		// retrieve the task for the name of the ( not existing) task
 		ArrayList<Task> taskList = db.retrieve(new SearchCommand("name", "different-name"));
-		boolean expected = false;
 		//check the size of the resultant list
-		boolean isEqual = taskList.size() == 1;
-		assertEquals(expected, isEqual);
+		boolean isEqual = taskList.size() == 0;
+		assertTrue(isEqual);
 	}
 	
 	/**
@@ -192,24 +240,13 @@ public class DataBaseTest {
 	@Test
 	public void testRetrieve3() {
 		db.clear();
-		// add one event with category
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Category cat = new Category("cat1");
-		Task newEvent = new Task(name, start, end, cat, null, false, false, null);
-		db.add(newEvent);
+		
+		addEvents();
 
 		// retrieve the task for the specific (existing) category
 		ArrayList<Task> taskList = db.retrieve(new SearchCommand("category", "cat1"));
-		boolean expected = true;
 		//check the size of the resultant list
-		boolean isEqual = taskList.size() == 1;
-		assertEquals(expected, isEqual);
-		//check the task in the resultant list 
-		isEqual = db.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
-		assertEquals(expected, isEqual);
+		assertEquals(taskList.size(), 10);
 	}
 	
 	/**
@@ -218,14 +255,8 @@ public class DataBaseTest {
 	@Test
 	public void testRetrieve4() {
 		db.clear();
-		// add one event with category
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Category cat = new Category("cat1");
-		Task newEvent = new Task(name, start, end, cat, null, false, false, null);
-		db.add(newEvent);
+		
+		addEvents();
 
 		// retrieve the task for the specific (existing) category
 		ArrayList<Task> taskList = db.retrieve(new SearchCommand("category", "not_existing_cat"));

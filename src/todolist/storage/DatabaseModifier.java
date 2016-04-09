@@ -83,7 +83,7 @@ public class DatabaseModifier {
         	
             Task currentTask = taskList.get(i);
 
-            if (currentTask.getName().getName().equals(taskToDelete.getName().getName())) {
+            if (currentTask.getName().getName().equalsIgnoreCase(taskToDelete.getName().getName())) {
                 return i;
             }
         }
