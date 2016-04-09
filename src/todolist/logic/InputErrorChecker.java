@@ -6,334 +6,71 @@ import todolist.model.Task;
 import todolist.model.TokenizedCommand;
 
 public class InputErrorChecker {
-	Logic logic;
-	
-	public InputErrorChecker (Logic logic) {
+	private Logic logic;
+	private CommandChecker commandChecker;
+
+	public InputErrorChecker(Logic logic) {
 		this.logic = logic;
+		commandChecker = new CommandChecker(this.logic);
 	}
-	
 	
 	public InputException validate(TokenizedCommand command) {
 		String action = command.getAction();
 		String arg[] = command.getArgs();
-		
-		switch(action) {
+
+		switch (action) {
 		case "add":
-			String type = "null";
-			if (arg.length == 0) {
-				return new InputException("ADD", "INCOMPLETE");
-			} else {
-				type = arg[0];
-			}
-
-			switch (type) {
-			case "event":
-				if (arg.length != 6 && arg.length != 5) {
-					return new InputException("ADD EVENT", "INCOMPLETE");
-				} else {
-					
-				}
-				break;
-			case "deadline":
-				if (arg.length != 4 && arg.length != 3) {
-					return new InputException("ADD DEADLINE", "INCOMPLETE");
-				} else {
-					
-				}
-				break;
-			case "task":
-				if (arg.length != 2) {
-					return new InputException("ADD TASK", "INCOMPLETE");
-				} else {
-					
-				}
-				break;
-			case "recurring":
-				switch (arg[1]) {
-				case "event":
-					if (arg.length != 8 && arg.length != 7) {
-						return new InputException("ADD RECURRING EVENT", "INCOMPLETE");
-					} else {
-						
-					}
-					break;
-				case "deadline":
-					if (arg.length != 6 && arg.length != 5) {
-						return new InputException("ADD RECURRING DEADLINE", "INCOMPLETE");
-					} else {
-						
-					}
-					break;
-				default:
-
-				}
-				break;
-			default:
-				
-			}
-			break;
+			return commandChecker.add(arg);
 		case "edit":
-			if (arg.length != 3) {
-				return new InputException("EDIT", "INCOMPLETE");
-
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("EDIT", "NOT EXIST");
-					} else {
-						
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-			}
-			break;
+			return commandChecker.edit(arg);
 		case "delete":
-			if (arg.length != 1) {
-				return new InputException("DELETE", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("DELETE", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-			}
-			break;
+			return commandChecker.delete(arg);
 		case "search":
-			if (arg.length != 1) {
-				return new InputException("SEARCH", "INCOMPLETE");
-			} else {
-
-			}
-			break;
+			return commandChecker.search(arg);
 		case "filter":
-			if (arg.length != 1) {
-				return new InputException("FILTER", "INCOMPLETE");
-			} else {
-			}
-			break;
+			return commandChecker.filter(arg);
 		case "sort":
-			if (arg.length != 2) {
-				return new InputException("SORT", "INCOMPLETE");
-			} else {
-
-			}
-			break;
+			return commandChecker.sort(arg);
 		case "label":
-			if (arg.length != 2) {
-				return new InputException("LABEL", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("LABEL", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-
-			}
-			break;
+			return commandChecker.label(arg);
 		case "set-recurring":
-			if (arg.length != 2) {
-				return new InputException("SET-RECURRING", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("SET-RECURRING", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				} catch (RuntimeException e) {
-
-				}
-			}
-			break;
+			return commandChecker.setRecurring(arg);
 		case "remove-recurring":
-			if (arg.length != 1) {
-				return new InputException("REMOVE-RECURRING", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("REMOVE-RECURRING", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-			}
-			break;
+			return commandChecker.removeRecurring(arg);
 		case "postpone":
-			if (arg.length != 3) {
-				return new InputException("POSTPONE", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("POSTPONE", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-
-			}
-			break;
+			return commandChecker.postpone(arg);
 		case "forward":
-			if (arg.length != 3) {
-				return new InputException("FORWARD", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("FORWARD", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-
-			}
-			break;
+			return commandChecker.forward(arg);
 		case "add-remind":
-			try {
-
-			} catch (Exception e1) {
-
-			}
-			break;
+			return commandChecker.addRemind(arg);
 		case "remind":
-			if (arg.length != 1) {
-				return new InputException("REMIND", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("REMIND", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-			}
-			break;
+			return commandChecker.remind(arg);
 		case "add-remind-bef":
-
-			break;
+			return commandChecker.addRemindBef(arg);
 		case "remind-bef":
-			if (arg.length != 3) {
-				return new InputException("REMIND-BEF", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("REMIND", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-			}
-			break;
+			return commandChecker.remindBef(arg);
 		case "done":
-			if (arg.length != 1) {
-				return new InputException("DONE", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("DONE", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-
-			}
-			break;
+			return commandChecker.done(arg);
 		case "undone":
-			if (arg.length != 1) {
-				return new InputException("UNDONE", "INCOMPLETE");
-			} else {
-				try {
-					int index = Integer.parseInt(arg[0]);
-					Task task = logic.getMainApp().getTaskAt(index);
-					if (task == null) {
-						return new InputException("UNDONE", "NOT EXIST");
-					} else {
-
-					}
-				} catch (NumberFormatException nfe) {
-
-				}
-			}
-			break;
+			return commandChecker.undone(arg);
 		case "exit":
-
-			break;
+			return commandChecker.exit(arg);
 		case "undo":
-			if (arg.length != 1) {
-				return new InputException("UNDO", "INCOMPLETE");
-			} else {
-				
-			}
-			break;
+			return commandChecker.undo(arg);
 		case "redo":
-			if (arg.length != 1) {
-				return new InputException("REDO", "INCOMPLETE");
-			} else {
-
-			}
-			break;
+			return commandChecker.redo(arg);
 		case "reset":
-
-			break;
+			return commandChecker.reset(arg);
 		case "save":
-
-			break;
+			return commandChecker.save(arg);
 		case "open":
-
-			break;
+			return commandChecker.open(arg);
 		case "tab":
-			if (arg.length != 1) {
-				return new InputException("TAB", "INCOMPLETE");
-			} else {
-
-			}
-			break;
+			return commandChecker.tab(arg);
 		case "invalid":
-
-			break;
+			return commandChecker.invalid(arg);
 		default:
-			
+
 		}
 		return new InputException();
 	}
