@@ -1,3 +1,4 @@
+//@@author A0130620B
 package todolist.logic;
 
 import java.text.ParseException;
@@ -15,148 +16,304 @@ import todolist.storage.DataBase;
 public class FunctionChecker {
 	private Logic logic;
 	private DataBase dataBase;
-	
+
 	public FunctionChecker(Logic logic, DataBase dataBase) {
 		this.logic = logic;
 		this.dataBase = dataBase;
 	}
-	
+
 	public InputException addTaskChecker(String title) {
-		if(noRepeat(title)) {
+		if (noRepeat(title)) {
 			return new InputException();
 		} else {
 			return new InputException("ADD", "REPEAT TITLE");
 		}
 	}
-	
-	public InputException addEventChecker(String title, String startDate, String startTime, String quantity, String timeUnit) {
-		if(noRepeat(title)) {
-			return new InputException();
-		} else {
-			return new InputException("ADD", "REPEAT TITLE");
-		}
-	}
-	
-	public InputException addEventLessChecker(String title, String fuzzyTime, String quantity, String timeUnit) {
-		if(noRepeat(title)) {
-			return new InputException();
-		} else {
-			return new InputException("ADD", "REPEAT TITLE");
-		}
-	}
-	
-	public InputException addDeadlineChecker(String title, String endDate, String endTime) {
-		if(noRepeat(title)) {
-			return new InputException();
-		} else {
-			return new InputException("ADD", "REPEAT TITLE");
-		}
-	}
-	
-	public InputException addDeadlineLessChecker(String title, String fuzzyTime) {
-		if(noRepeat(title)) {
-			return new InputException();
-		} else {
-			return new InputException("ADD", "REPEAT TITLE");
-		}
-	}
-	
-	public InputException addRecurringEventChecker(String interval, String title, String startDate, String startTime, String quantity,
+
+	public InputException addEventChecker(String title, String startDate, String startTime, String quantity,
 			String timeUnit) {
-		// TODO Auto-generated method stub
-		return new InputException();
+		if (noRepeat(title)) {
+			if (validFuzzyDate(startDate)) {
+				if (validTime(startTime)) {
+					if (validQuantity(quantity)) {
+						if (validUnit(timeUnit)) {
+							return new InputException();
+						} else {
+							return new InputException("ADD EVENT", "INVALID TIME UNIT");
+						}
+					} else {
+						return new InputException("ADD EVENT", "INVALID QUANTITY");
+					}
+				} else {
+					return new InputException("ADD EVENT", "INVALID START TIME");
+				}
+			} else {
+				return new InputException("ADD EVENT", "INVALID START DATE");
+			}
+		} else {
+			return new InputException("ADD", "REPEAT TITLE");
+		}
 	}
-	
+
+	public InputException addEventLessChecker(String title, String fuzzyTime, String quantity, String timeUnit) {
+		if (noRepeat(title)) {
+			if (validFuzzyTime(fuzzyTime)) {
+				if (validQuantity(quantity)) {
+					if (validUnit(timeUnit)) {
+						return new InputException();
+					} else {
+						return new InputException("ADD EVENT", "INVALID TIME UNIT");
+					}
+				} else {
+					return new InputException("ADD EVENT", "INVALID QUANTITY");
+				}
+			} else {
+				return new InputException("ADD EVENT", "INVALID START TIME");
+			}
+		} else {
+			return new InputException("ADD EVENT", "INVLAID TIME");
+		}
+	}
+
+	public InputException addDeadlineChecker(String title, String endDate, String endTime) {
+		if (noRepeat(title)) {
+			if (validFuzzyDate(endDate)) {
+				if (validTime(endTime)) {
+					return new InputException();
+				} else {
+					return new InputException("ADD EVENT", "INVALID END TIME");
+				}
+			} else {
+				return new InputException("ADD EVENT", "INVLAID END DATE");
+			}
+		} else {
+			return new InputException("ADD", "REPEAT TITLE");
+		}
+	}
+
+	public InputException addDeadlineLessChecker(String title, String fuzzyTime) {
+		if (noRepeat(title)) {
+			if (validFuzzyTime(fuzzyTime)) {
+				return new InputException();
+			} else {
+				return new InputException("ADD EVENT", "INVALID END TIME");
+			}
+		} else {
+			return new InputException("ADD", "REPEAT TITLE");
+		}
+	}
+
+	public InputException addRecurringEventChecker(String interval, String title, String startDate, String startTime,
+			String quantity, String timeUnit) {
+		if (validInterval(interval)) {
+			return addEventChecker(title, startDate, startTime, quantity, timeUnit);
+		} else {
+			return new InputException("ADD RECURRING EVENT", "INVALID INTERVAL");
+		}
+	}
+
 	public InputException addRecurringEventLessChecker(String interval, String title, String fuzzyTime, String quantity,
 			String timeUnit) {
-		// TODO Auto-generated method stub
-		return new InputException();
+		if (validInterval(interval)) {
+			return addEventLessChecker(title, fuzzyTime, quantity, timeUnit);
+		} else {
+			return new InputException("ADD RECURRING EVENT", "INVALID INTERVAL");
+		}
 	}
 
 	public InputException addRecurringDeadlineChecker(String interval, String title, String endDate, String endTime) {
-		// TODO Auto-generated method stub
-		return new InputException();
+		if (validInterval(interval)) {
+			return addDeadlineChecker(title, endDate, endTime);
+		} else {
+			return new InputException("ADD RECURRING DEADLINE", "INVALID INTERVAL");
+		}
 	}
-	
+
 	public InputException addRecurringDeadlineLessChecker(String interval, String title, String fuzzyTime) {
-		// TODO Auto-generated method stub
-		return new InputException();
+		if (validInterval(interval)) {
+			return addDeadlineLessChecker(title, fuzzyTime);
+		} else {
+			return new InputException("ADD RECURRING DEADLINE", "INVALID INTERVAL");
+		}
 	}
-	
-	public InputException remindBefChecker(String name, String string, String string2) {
-		// TODO Auto-generated method stub
+
+	public InputException remindBefChecker(String title, String quantity, String timeUnit) {
+		if (!noRepeat(title)) {
+			if (validQuantity(quantity)) {
+				if (validUnit(timeUnit)) {
+					return new InputException();
+				} else {
+					return new InputException("REMIND BEF", "INVALID TIME UNIT");
+				}
+			} else {
+				return new InputException("REMIND BEF", "INVALID QUANTITY");
+			}
+		} else {
+			return new InputException("REMIND BEF", "TASK NOT EXIST");
+		}
+	}
+
+	public InputException addRemindBefChecker(String quantity, String timeUnit, String[] arg) {
+		if (validQuantity(quantity)) {
+			if (validUnit(timeUnit)) {
+				String type = arg[0];
+				switch (type) {
+				case "event":
+					return addEventChecker(arg[1], arg[2], arg[3], arg[4], arg[5]);
+				case "deadline":
+					return addDeadlineChecker(arg[1], arg[2], arg[3]);
+				case "task":
+					return addTaskChecker(arg[1]);
+				default:
+					return new InputException("ADD REMIND", "INVALID TYPE");
+				}
+			} else {
+				return new InputException("REMIND BEF", "INVALID TIME UNIT");
+			}
+		} else {
+			return new InputException("REMIND BEF", "INVALID QUANTITY");
+		}
+	}
+
+	public InputException remindChecker(String title) {
+		if (!noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("REMIND BEF", "TASK NOT EXIST");
+		}
+	}
+
+	public InputException forwardChecker(String title, String quantity, String timeUnit) {
+		if (!noRepeat(title)) {
+			if (validQuantity(quantity)) {
+				if (validUnit(timeUnit)) {
+					return new InputException();
+				} else {
+					return new InputException("FORWARD", "INVALID TIME UNIT");
+				}
+			} else {
+				return new InputException("FORWARD", "INVALID QUANTITY");
+			}
+		} else {
+			return new InputException("FORWARD", "NOT EXIST");
+		}
+	}
+
+	public InputException postponeChecker(String title, String quantity, String timeUnit) {
+		if (!noRepeat(title)) {
+			if (validQuantity(quantity)) {
+				if (validUnit(timeUnit)) {
+					return new InputException();
+				} else {
+					return new InputException("POSTPONE", "INVALID TIME UNIT");
+				}
+			} else {
+				return new InputException("POSTPONE", "INVALID QUANTITY");
+			}
+		} else {
+			return new InputException("POSTPONE", "NOT EXIST");
+		}
+	}
+
+	public InputException redoChecker(String redostep) {
+		if (isInteger(redostep)) {
+			if (Integer.parseInt(redostep) > 0) {
+				if (logic.getSnapshot()[logic.checkStep() + Integer.parseInt(redostep)] == null) {
+					return new InputException("REDO", "NO ACTION TO REDO");
+				} else {
+					return new InputException();
+				}
+			} else {
+				return new InputException("REDO", "STEP NOT POSITIVE");
+			}
+		} else {
+			return new InputException("REDO", "AUGUMENT NOT INTEGER");
+		}
+	}
+
+	public InputException undoChecker(String undostep) {
+		if (isInteger(undostep)) {
+			if (Integer.parseInt(undostep) > 0) {
+				if (logic.checkStep() - Integer.parseInt(undostep) < 0) {
+					return new InputException("UNDO", "NO ACTION TO UNDO");
+				} else {
+					return new InputException();
+				}
+			} else {
+				return new InputException("UNDO", "STEP NOT POSITIVE");
+			}
+		} else {
+			return new InputException("UNDO", "AUGUMENT NOT INTEGER");
+		}
+	}
+
+	public InputException undoneChecker(String title) {
+		if (!noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("UNDONE", "NOT EXIST");
+		}
+	}
+
+	public InputException doneChecker(String title) {
+		if (!noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("DONE", "NOT EXIST");
+		}
+	}
+
+	public InputException openChecker(String path) {
 		return new InputException();
 	}
 
-	public InputException addRemindBefChecker(String string, String string2, String[] restOfArgs) {
-		// TODO Auto-generated method stub
+	public InputException saveChecker(String path) {
 		return new InputException();
 	}
 
-	public InputException remindChecker(String string) {
-		// TODO Auto-generated method stub
+	public InputException invalidChecker(String arg) {
 		return new InputException();
 	}
 
-	public InputException forwardChecker(String name, String string, String string2) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	public InputException tabChecker(String workplace) {
+		switch (workplace) {
+		case "home":
+			return new InputException();
+		case "expired":
+			return new InputException();
+		case "today":
+			return new InputException();
+		case "week":
+			return new InputException();
+		case "done":
+			return new InputException();
+		case "options":
+			return new InputException();
+		case "help":
+			return new InputException();
+		default:
+			return new InputException("TAB", "WORDPLACE NOT EXIST");
+		}
 	}
 
-	public InputException postponeChecker(String name, String string, String string2) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-	
-	public InputException redoChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException undoChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	public InputException setRecurringChecker(String title, Boolean status, String interval) {
+		if (!noRepeat(title)) {
+			if (validInterval(interval)) {
+				return new InputException();
+			} else {
+				return new InputException("SET RECURRING", "INVALID INTERVAL");
+			}
+		} else {
+			return new InputException("SET RECURRING", "TASK NOT EXIST");
+		}
 	}
 
-	public InputException undoneChecker(String string) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException doneChecker(String string) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	
-	public InputException openChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException saveChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException invalidChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException tabChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException setRecurringChecker(String string, boolean b, String string2) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException labelChecker(String name, String string) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	public InputException labelChecker(String title, String category) {
+		if (!noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("LABEL", "TASK NOT EXIST");
+		}
 	}
 
 	public InputException sortChecker(String[] arg) {
@@ -178,15 +335,13 @@ public class FunctionChecker {
 		// TODO Auto-generated method stub
 		return new InputException();
 	}
-	
+
 	public InputException deleteChecker(String name) {
 		// TODO Auto-generated method stub
 		return new InputException();
 	}
 
-	
-	public InputException resetChecker(String[] arg) {
-		// TODO Auto-generated method stub
+	public InputException resetChecker() {
 		return new InputException();
 	}
 
@@ -200,11 +355,6 @@ public class FunctionChecker {
 		return new InputException();
 	}
 
-	public InputException removeRecurringChecker(String name, boolean b, String string) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-	
 	private Boolean noRepeat(String title) {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
 		if (tempTaskList.size() > 0) {
@@ -213,26 +363,26 @@ public class FunctionChecker {
 			return true;
 		}
 	}
-	
+
 	private Boolean validDateTime(String date, String time) {
 		String dateTime = date + " " + time;
-		if(date == null){
+		if (date == null) {
 			return false;
 		}
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		sdf.setLenient(false);
-		
+
 		try {
 			Date newDateTime = sdf.parse(dateTime);
 		} catch (ParseException e) {
-			
+
 			e.printStackTrace();
 			return false;
 		}
-		return true;		
+		return true;
 	}
-	
+
 	private Boolean validFuzzyDate(String fuzzyDate) {
 		int count = fuzzyDate.length() - fuzzyDate.replace("-", "").length();
 		if (count == 1) {
@@ -260,7 +410,7 @@ public class FunctionChecker {
 			return false;
 		}
 	}
-	
+
 	private Boolean validFuzzyTime(String fuzzyTime) {
 		if (fuzzyTime.contains("-")) {
 			return validFuzzyTime(fuzzyTime);
@@ -272,7 +422,7 @@ public class FunctionChecker {
 			}
 		}
 	}
-	
+
 	private Boolean validTime(String time) {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		sdf.setLenient(false);
@@ -284,33 +434,45 @@ public class FunctionChecker {
 		}
 		return true;
 	}
-	
+
 	private Boolean validInterval(String interval) {
 		String temp[] = interval.split("-");
 		String length = temp[0];
 		String unit = temp[1];
-		if(isInteger(length) && Integer.parseInt(length) > 0) {
-			switch (unit) {
-			case "day":
-				return true;
-			case "hour":
-				return true;
-			case "minute":
-				return true;
-			case "week":
-				return true;
-			case "month":
-				return true;
-			case "year":
-				return true;
-			default:
-				return false;
-			}
+		if (isInteger(length) && Integer.parseInt(length) > 0) {
+			return validUnit(unit);
 		} else {
 			return false;
 		}
 	}
-	
+
+	private boolean validUnit(String unit) {
+		switch (unit) {
+		case "day":
+			return true;
+		case "hour":
+			return true;
+		case "minute":
+			return true;
+		case "week":
+			return true;
+		case "month":
+			return true;
+		case "year":
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private Boolean validQuantity(String quantity) {
+		if (isInteger(quantity) && Integer.parseInt(quantity) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	private boolean isInteger(String s) {
 		try {
 			@SuppressWarnings("unused")

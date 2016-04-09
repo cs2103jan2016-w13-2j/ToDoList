@@ -9,14 +9,13 @@ public class CommandChecker {
 	private Logic logic;
 	private DataBase dataBase;
 	private FunctionChecker functionChecker;
-	
-	
+
 	public CommandChecker(Logic logic, DataBase dataBase) {
 		this.logic = logic;
 		this.dataBase = dataBase;
 		this.functionChecker = new FunctionChecker(this.logic, this.dataBase);
 	}
-	
+
 	public InputException add(String[] arg) {
 		String type = "null";
 		if (arg.length == 0) {
@@ -38,7 +37,7 @@ public class CommandChecker {
 			return new InputException("ADD", "INCOMPLETE");
 		}
 	}
-	
+
 	public InputException addTask(String[] arg) {
 		if (arg.length != 2) {
 			return new InputException("ADD TASK", "INCOMPLETE");
@@ -213,10 +212,10 @@ public class CommandChecker {
 				if (task == null) {
 					return new InputException("REMOVE-RECURRING", "NOT EXIST");
 				} else {
-					return functionChecker.removeRecurringChecker(task.getName().getName(), true, arg[1]);
+					return functionChecker.setRecurringChecker(task.getName().getName(), false, arg[1]);
 				}
 			} else {
-				return functionChecker.removeRecurringChecker(arg[0], true, arg[1]);
+				return functionChecker.setRecurringChecker(arg[0], false, arg[1]);
 			}
 		}
 	}
@@ -340,52 +339,54 @@ public class CommandChecker {
 			}
 		}
 	}
-	
+
 	public InputException exit(String[] arg) {
 		return functionChecker.exitChecker(arg);
 	}
-	
+
 	public InputException undo(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("UNDO", "INCOMPLETE");
 		} else {
-			return functionChecker.undoChecker(arg);
+			return functionChecker.undoChecker(arg[0]);
 		}
 	}
-	
+
 	public InputException redo(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("REDO", "INCOMPLETE");
 		} else {
-			return functionChecker.redoChecker(arg);
+			return functionChecker.redoChecker(arg[0]);
 		}
 	}
-	
+
 	public InputException reset(String[] arg) {
-		return functionChecker.resetChecker(arg);
+		if (arg.length != 0) {
+			return new InputException("RESET", "INVALID ARGUMENT");
+		}
+		return functionChecker.resetChecker();
 	}
-	
+
 	public InputException tab(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("TAB", "INCOMPLETE");
 		} else {
-			return functionChecker.tabChecker(arg);
+			return functionChecker.tabChecker(arg[0]);
 		}
 	}
-	
+
 	public InputException open(String[] arg) {
-		return functionChecker.openChecker(arg);
-	}
-	
-	public InputException save(String[] arg) {
-		return functionChecker.saveChecker(arg);
-	}
-	
-	public InputException invalid(String[] arg) {
-		return functionChecker.invalidChecker(arg);
+		return functionChecker.openChecker(arg[0]);
 	}
 
-	
+	public InputException save(String[] arg) {
+		return functionChecker.saveChecker(arg[0]);
+	}
+
+	public InputException invalid(String[] arg) {
+		return functionChecker.invalidChecker(arg[0]);
+	}
+
 	private boolean isInteger(String s) {
 		try {
 			@SuppressWarnings("unused")

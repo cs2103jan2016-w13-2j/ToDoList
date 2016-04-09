@@ -740,29 +740,9 @@ public class Logic {
 	 */
 	public Boolean undo(int undostep) {
 		Boolean undoResponse = false;
-		if (steps - undostep < 0) {
-			uiHandler.sendMessage("Undo was unsuccessful. No actions to undo!", true);
-			return false;
-		}
-
 		steps = steps - undostep;
-
 		undoResponse = dataBase.recover(snapshot[steps]);
-
-		if (undoResponse) {
-			uiHandler.sendMessage("Undo #" + undostep + " step(s) successfully!", true);
-		} else {
-			uiHandler.sendMessage("Undo was unsuccessful. Try again!", true);
-		}
-
 		uiHandler.refresh();
-		for (ArrayList<Task> list : snapshot) {
-			System.out.println("print each step:   " + list.size());
-			if (snapshot[0] != snapshot[1]) {
-				System.out.println("not equalllll  ");
-			}
-		}
-
 		return undoResponse;
 	}
 
@@ -774,18 +754,8 @@ public class Logic {
 	 */
 	public Boolean redo(int redostep) {
 		Boolean redoResponse = false;
-		if (snapshot[steps + redostep] == null) {
-			uiHandler.sendMessage("Redo was unsuccessful. No actions to redo!", true);
-			return false;
-		}
-
 		steps = steps + redostep;
 		redoResponse = dataBase.recover(snapshot[steps]);
-		if (redoResponse) {
-			uiHandler.sendMessage("Redo #" + redostep + " step(s) successfully!", true);
-		} else {
-			uiHandler.sendMessage("Redo was unsuccessful. Try again!", true);
-		}
 		uiHandler.refresh();
 		return redoResponse;
 	}
@@ -887,6 +857,26 @@ public class Logic {
 	}
 	
 	/**
+	 * This method returns the current main app
+	 *
+	 * 
+	 * @return Boolean
+	 */
+	public MainApp getMainApp() {
+		return mainApp;
+	}
+
+	/**
+	 * This method sets the main app
+	 *
+	 * 
+	 * @return Boolean
+	 */
+	public void setMainApp(MainApp mainApp) {
+		this.mainApp = mainApp;
+	}
+	
+	/**
 	 * This method takes in an integer, increases the internal step counter and takes a snapshot
 	 *
 	 * 
@@ -907,6 +897,16 @@ public class Logic {
 	public int checkStep() {
 		return this.steps;
 	}
+	
+	/**
+	 * This method returns the snapshot array
+	 *
+	 * 
+	 * @return ArrayList<Task>[]
+	 */
+	public ArrayList<Task>[] getSnapshot() {
+		return this.snapshot;
+	}
 
 	/**
 	 * This method process a fuzzy date
@@ -914,7 +914,7 @@ public class Logic {
 	 * 
 	 * @return Boolean
 	 */
-	public String fuzzyParseDate(String fuzzyDate) {
+	private String fuzzyParseDate(String fuzzyDate) {
 		String myDate = null;
 		int count = fuzzyDate.length() - fuzzyDate.replace("-", "").length();
 		if (count == 1) {
@@ -933,7 +933,7 @@ public class Logic {
 	 * 
 	 * @return Boolean
 	 */
-	public LocalDateTime fuzzyParseTime(String fuzzyTime) {
+	private LocalDateTime fuzzyParseTime(String fuzzyTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		String myTime = null;
 
@@ -997,25 +997,5 @@ public class Logic {
 		default:
 			return null;
 		}
-	}
-	
-	/**
-	 * This method returns the current main app
-	 *
-	 * 
-	 * @return Boolean
-	 */
-	public MainApp getMainApp() {
-		return mainApp;
-	}
-
-	/**
-	 * This method sets the main app
-	 *
-	 * 
-	 * @return Boolean
-	 */
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
 	}
 }
