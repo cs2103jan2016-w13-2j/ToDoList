@@ -357,8 +357,6 @@ public class CommandTest {
         isEqual = taskList.get(0).getName().getName().trim().equals("sumbit proposal");
         assertTrue(isEqual);
         
-        System.out.println("test delete command: " + deadline);
-        System.out.println("test delete command: "+ taskList.get(0).getEndTime());
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(deadline);
         assertTrue(isEqual);

@@ -174,27 +174,29 @@ public class TaskRetriever {
     	if(taskList.isEmpty()) {
     		return resultList;
     	}
-    	
-    	if(keywords.length == 1) {
-    		resultList = retrieveByInitial(taskList, keywords[0]);   		
-    	}else {    		
-    		resultList = retrieveByTokenizedName(taskList, keywords);
-    	}
-      
+    	 		
+    	resultList = retrieveByTokenizedName(taskList, keywords);
+
         return resultList;
     }
 
     private ArrayList<Task> retrieveByTokenizedName(ArrayList<Task> taskList2, String[] keywords) {
+    	
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		int[] numMatch = new int[taskList2.size()];
 		
+		if(keywords.length == 1) {
+			resultList = retrieveByInitial(taskList2, keywords[0]);
+		}
+		
 		for (int i = 0; i < taskList2.size(); i++) {
+			
         	Task eachTask = taskList2.get(i);        	
         	String eachName = eachTask.getName().getName();  
         	
         	numMatch[i] = findNumMatch(keywords, eachName); 
         }
-		
+	
 		//add those with more than 0 matches into resultlist in descending order
 		for(int i = 1; i <= keywords.length; i++) {
 			for(int j = 0; j < numMatch.length; j++) {
@@ -228,10 +230,12 @@ public class TaskRetriever {
 	}
 
 	private ArrayList<Task> retrieveByInitial(ArrayList<Task> taskList, String keyword) {
+		
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		boolean isMatching = false;
 		
-		for(int i = 0; i < taskList.size(); i++) {			
+		for(int i = 0; i < taskList.size(); i++) {
+			
 			String eachName = taskList.get(i).getName().getName();
 			int nameLength = eachName.trim().split(" ")[0].length();
 			int keywordLength = keyword.length();
