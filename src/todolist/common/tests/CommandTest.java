@@ -40,6 +40,7 @@ public class CommandTest {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
         LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+        
         // add in the command to add a new event
         logic.process("add event title 2017-01-01 14:00 1 day");
 
@@ -47,12 +48,15 @@ public class CommandTest {
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
+        
         // check start time
         isEqual = taskList.get(0).getStartTime().isEqual(start);
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
         assertTrue(isEqual);
@@ -69,6 +73,7 @@ public class CommandTest {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime start = LocalDateTime.parse("2016-01-01" + " " + "14:00", formatter);
         LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
+        
         // add in the command to add a new event
         logic.process("add event title 2016-01-01 14:00 1 day");
 
@@ -76,12 +81,15 @@ public class CommandTest {
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
+        
         // check start time
         isEqual = taskList.get(0).getStartTime().isEqual(start);
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
         assertTrue(isEqual);
@@ -105,12 +113,15 @@ public class CommandTest {
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
+        
         // check start time
         isEqual = taskList.get(0).getStartTime().isEqual(start);
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
         assertTrue(isEqual);
@@ -143,9 +154,11 @@ public class CommandTest {
         
         isEqual = taskList.get(0).getName().getName().trim().equals(name);
         assertTrue(isEqual);
+        
         // check start time
         isEqual = taskList.get(0).getStartTime().isEqual(start);
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
         assertTrue(isEqual);
@@ -167,6 +180,7 @@ public class CommandTest {
         
         LocalDateTime start = LocalDateTime.parse(start_string, formatter);
         LocalDateTime end = start.plus(Long.parseLong("2"), ChronoUnit.HOURS);
+        
         // add in the command to add a new event
         logic.process("i want to add money to my account tmr 4pm to 6pm");
 
@@ -178,9 +192,11 @@ public class CommandTest {
         
         isEqual = taskList.get(0).getName().getName().trim().equals(name);
         assertTrue(isEqual);
+        
         // check start time
         isEqual = taskList.get(0).getStartTime().isEqual(start);
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
         assertTrue(isEqual);
@@ -206,13 +222,16 @@ public class CommandTest {
 		
 	    // add in the command to add a new deadline
         logic.process(input);
+        
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().trim().equals("i want to eat lunch");
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(deadline);
         assertTrue(isEqual);
@@ -237,9 +256,11 @@ public class CommandTest {
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
         assertTrue(isEqual);
@@ -263,9 +284,11 @@ public class CommandTest {
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(end);
         assertTrue(isEqual);
@@ -294,9 +317,11 @@ public class CommandTest {
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().trim().equals(name);
         assertTrue(isEqual);
+        
         // check end time
         isEqual = taskList.get(0).getEndTime().isEqual(deadline);
         assertTrue(isEqual);
@@ -306,10 +331,11 @@ public class CommandTest {
 	 * test flexi-command for add deadline (with key word today)
 	 */
 	@Test
-	public void test_ParseDeadline2() {
+	public void testAddDeadline5() {
 		logic.clean();
-		//parse the command
-		String input = "sumbit proposal by today";//should be by 2359 today
+		
+		//parse the command, should be by 2359 today
+		String input = "sumbit proposal by today";
 		LocalDateTime date = LocalDateTime.now();
 		DecimalFormat decimalFormatter = new DecimalFormat("00");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -318,6 +344,7 @@ public class CommandTest {
 				+ decimalFormatter.format(date.getDayOfMonth()) + " " + "23:59";
 	    
 	    LocalDateTime deadline = LocalDateTime.parse(deadlineDate, formatter);
+	    
 		// pass in the command to add a new deadline
         logic.process(input);
 
@@ -325,12 +352,14 @@ public class CommandTest {
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().trim().equals("sumbit proposal");
         assertTrue(isEqual);
+        
+        System.out.println("test delete command: " + deadline);
+        System.out.println("test delete command: "+ taskList.get(0).getEndTime());
         // check end time
-        //System.out.println("endddd: " + taskList.get(0).getEndTime());
-        //System.out.println("endddd: " + deadline);
         isEqual = taskList.get(0).getEndTime().isEqual(deadline);
         assertTrue(isEqual);
 	 }
@@ -347,10 +376,12 @@ public class CommandTest {
 
         // pass in command to add a floating task
         logic.process("add task title");
+        
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
@@ -367,10 +398,12 @@ public class CommandTest {
 
         // pass in command to add a floating task
         logic.process("try tutorial question");
+        
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
@@ -387,10 +420,12 @@ public class CommandTest {
 
         // pass in command to add a floating task
         logic.process("try to add amount to bank account");
+        
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
         assertTrue(isEqual);
@@ -438,12 +473,43 @@ public class CommandTest {
 
         // pass in command to add a floating task
         logic.process("try to add amount to bank account");
+        
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
         Boolean isEqual = taskList.size() == 1;
         assertTrue(isEqual);
+        
         // check name of the task
         isEqual = taskList.get(0).getName().getName().equals(name);
+        assertTrue(isEqual);
+    }
+    
+    /*
+     * 12. test delete function
+     */
+    @Test
+    public void testDelete() {
+        logic.clean();
+        
+        //add a task       
+        String input = "add event \"a new task\" 2016-01-01 14:00 1 day";
+        logic.process(input);
+        
+        //check the the task really been added
+        ArrayList<Task> taskList = logic.dataBase.retrieveAll();
+        Boolean isEqual = taskList.size() == 1;
+        assertTrue(isEqual);
+        
+        isEqual = taskList.get(0).getName().getName().trim().equals("a new task");
+        assertTrue(isEqual);
+
+        // delete the task
+        input = "delete \"a new task\"";
+        logic.process(input);
+        
+        // check size of database
+        taskList = logic.dataBase.retrieveAll();
+        isEqual = taskList.size() == 0;
         assertTrue(isEqual);
     }
     

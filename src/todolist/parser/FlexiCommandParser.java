@@ -102,7 +102,7 @@ public class FlexiCommandParser {
 				String deadlineTime = decimalFormatter.format(end.getHour()) + ":"
 						+ decimalFormatter.format(end.getMinute());
 
-				if (end.isBefore(LocalDateTime.now()) && end.plus(10, ChronoUnit.SECONDS).isAfter(LocalDateTime.now())
+				if (end.isBefore(LocalDateTime.now().plus(10, ChronoUnit.SECONDS)) && end.plus(10, ChronoUnit.SECONDS).isAfter(LocalDateTime.now())
 						&& input.toLowerCase().contains("today")) {
 					// System.out.println("hello");
 					deadlineTime = "23:59";
