@@ -1,6 +1,6 @@
+//@@author A0130620B
 package todolist.model;
 
-//@@author A0130620B
 public class SearchCommand {
 	private String type = null;
 	private String content = null;

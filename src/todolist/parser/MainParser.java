@@ -1,8 +1,8 @@
+//@@author A0130620B
 package todolist.parser;
 
 import todolist.model.TokenizedCommand;
 
-//@@author A0130620B
 public class MainParser {
 
 	private FlexiCommandParser flexiCommandParser;

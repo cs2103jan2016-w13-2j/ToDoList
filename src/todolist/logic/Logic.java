@@ -1,3 +1,4 @@
+//@@author A0130620B
 package todolist.logic;
 
 import java.text.DecimalFormat;
@@ -21,7 +22,6 @@ import todolist.model.TokenizedCommand;
 import todolist.parser.MainParser;
 import todolist.storage.DataBase;
 
-//@@author A0130620B
 public class Logic {
 
 	private MainApp mainApp;

@@ -1,10 +1,10 @@
+//@@author A0130620B
 package todolist.logic;
 
 import todolist.model.InputException;
 import todolist.model.Task;
 import todolist.model.TokenizedCommand;
 
-//@@author A0130620B
 public class CaseSwitcher {
 
 	private Logic logic;

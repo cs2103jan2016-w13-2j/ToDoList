@@ -1,3 +1,4 @@
+//@@author A0130620B
 package todolist.logic;
 
 import java.util.ArrayList;
@@ -5,7 +6,6 @@ import java.util.ArrayList;
 import todolist.MainApp;
 import todolist.model.Task;
 
-//@@author A0130620B
 public class MainAppStub extends MainApp{
 	public MainAppStub() {
 		super();

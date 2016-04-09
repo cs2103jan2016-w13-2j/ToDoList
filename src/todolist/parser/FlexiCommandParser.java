@@ -1,3 +1,4 @@
+//@@author A0130620B
 package todolist.parser;
 
 import java.text.DecimalFormat;
@@ -15,7 +16,6 @@ import com.joestelmach.natty.Parser;
 
 import todolist.model.TokenizedCommand;
 
-//@@author A0130620B
 public class FlexiCommandParser {
 
 	public FlexiCommandParser() {

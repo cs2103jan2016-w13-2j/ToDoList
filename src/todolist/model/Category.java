@@ -1,6 +1,6 @@
+//@@author A0130620B
 package todolist.model;
 
-//@@author A0130620B
 public class Category implements Comparable<Category>{
     private String category;
 	public Category(String category) {
