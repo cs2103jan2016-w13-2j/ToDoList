@@ -21,7 +21,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (in the future)
 	 */
 	@Test
-	public void test_ParseEvent1() {
+	public void test_ParseAdd1() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 2019-05-01 16:00 2 hour";
 	    String date = "2019-05-01";
@@ -53,7 +53,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (in the future)
 	 */
 	@Test
-	public void test_ParseEvent2() {
+	public void test_ParseAdd2() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 2019-05-01 16:00 2 hour";
 	    String date = "2019-05-01";
@@ -86,7 +86,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (in the past)
 	 */
 	@Test
-	public void test_ParseEvent3() {
+	public void test_ParseAdd3() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 2100-05-01 16:00 2 hour";
 	    String date = "2100-05-01";
