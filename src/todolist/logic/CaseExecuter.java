@@ -238,6 +238,10 @@ public class CaseExecuter {
 	public void tab(String[] arg) {
 		logic.tab(arg[0]);
 	}
+	
+	public void help(String[] arg) {
+		logic.tab("help");
+	}
 
 	public void invalid(String[] arg) {
 		logic.invalid(arg[0]);
