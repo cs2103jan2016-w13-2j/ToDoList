@@ -46,7 +46,6 @@ public class DataBase {
 	private FileHandler fh;
 	public ArrayList<Task> taskList;
 	//private ArrayList<ArrayList<Task>> snapshot;
-	ArrayList<Task>[] snapshot;
 	private TaskRetriever retriever;
 	private TaskSorter sorter;
 	private DatabaseModifier modifier;
@@ -62,8 +61,6 @@ public class DataBase {
 		modifier = new DatabaseModifier();
 		loadFromFile();
 		//snapshot = new ArrayList<ArrayList<Task>>();
-		snapshot = new ArrayList[1000];
-		snapshot[0] = fh.read();
 		counter = 0;
 		logger = new UtilityLogger();
 	}
@@ -101,9 +98,6 @@ public class DataBase {
 			logger.logError(COMPONENT_STORAGE, ERROR_REPEATED_TASK + task.getName().getName());
 			return false;
 		}
-		@SuppressWarnings("unused")
-        ArrayList<Task> temp = fh.read();
-		//snapshot.add(temp);
 		writeToFile();
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_ADD_TASK + task.getName().getName());
 		return true;
@@ -125,7 +119,6 @@ public class DataBase {
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_DELETING_TASK + taskToDelete.getName().getName());
 		// dataBase_Logger.log(Level.INFO, LOGGING_DELETING_TASK +
 		// taskToDelete.getName().getName());
-		//ArrayList<Task> temptemp = taskList;
 		try {
 			taskList = modifier.deleteTask(taskList, taskToDelete);
 		} catch (IOException e) {
@@ -135,26 +128,11 @@ public class DataBase {
 
 		// dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED +
 		// taskToDelete.getName().getName());
-		@SuppressWarnings("unused")
-        ArrayList<Task> temp = fh.read();
-		//ArrayList<Task> temp = temptemp;
-		//snapshot.add(temp);
 		writeToFile();
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_DELETE_TASK + taskToDelete.getName().getName());
 		return true;
 	}
  	
-	public boolean takeSnapshot() {
-	    counter++;
-	    System.out.println("snapshot" + counter);
-		snapshot[counter] = fh.read();
-		for(Task each: snapshot[counter-1]) {
-		    System.out.println(each.getName().getName());
-		}
-		//System.out.println("hello" + snapshot.length);
-		return true;
-	}
-
 	/**
 	 * This method returns whether a task is in the text file.
 	 *
@@ -173,6 +151,11 @@ public class DataBase {
 	 */
 	public ArrayList<Task> retrieveAll() {
 		return taskList;
+	}
+	
+	public Boolean recover(ArrayList<Task> backup) {
+		taskList = backup;
+		return true;
 	}
 
 	/**
@@ -251,22 +234,6 @@ public class DataBase {
 		return fh.getPath();
 	}
 
-	/**
-	 * Goes back to a number of steps ago according to the number of steps pass
-	 * in.
-	 *
-	 * @param steps
-	 *            the number of steps to go back
-	 */
-	public Boolean retrieveHistory(int steps) {
-		taskList = snapshot[steps];
-		System.out.println("database" + counter);
-		this.counter = steps;
-		//System.out.println("goodbye" + steps);
-		writeToFile();
-		System.out.println("size:::::::" + taskList.size() + "step:::" + steps);
-		return true;
-	}
 
 	/**
 	 * Sort the tasks in the text file in the specific order of the specific
