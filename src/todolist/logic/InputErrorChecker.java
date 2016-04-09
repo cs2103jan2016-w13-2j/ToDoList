@@ -72,6 +72,6 @@ public class InputErrorChecker {
 		default:
 
 		}
-		return new InputException();
+		return new InputException("UNKNOWN", "UNKNOWN");
 	}
 }
