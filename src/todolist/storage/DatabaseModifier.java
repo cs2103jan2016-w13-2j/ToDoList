@@ -30,15 +30,13 @@ public class DatabaseModifier {
      */
     public ArrayList<Task> addTask(ArrayList<Task> tasks, Task task) throws IOException {
         this.taskList = tasks;
+        
         if (isExistingTask(task)) {
-            // dataBase_Logger.log(Level.INFO, LOGGING_REPEATED_TASK +
-            // task.getName().getName());
             throw new IOException(EXCEPEPTION_REPEATED_TASK);
         }
 
-        // dataBase_Logger.log(Level.INFO, LOGGING_ADDING_TASK +
-        // task.getName().getName());
         taskList.add(0, task);
+        
         return taskList;
     }
 
@@ -60,32 +58,32 @@ public class DatabaseModifier {
      */
     public ArrayList<Task> deleteTask(ArrayList<Task> tasks, Task taskToDelete) throws IOException {
         taskList = tasks;
-        if (taskList.size() == 0) {
-            // dataBase_Logger.log(Level.INFO, LOGGING_TASK_NOTEXIST +
-            // taskToDelete.getName().getName());
+        
+        boolean isListEmpty = false;
+        isListEmpty = taskList.size() == 0;
+        
+        if (isListEmpty) {
             throw new IOException(EXCEPTION_TASKNOTEXIST);
         }
 
         Integer index = searchForIndexOfTask(taskToDelete);
 
         if (index == null) {
-            // dataBase_Logger.log(Level.INFO, LOGGING_TASK_NOTEXIST +
-            // taskToDelete.getName().getName());
-            System.out.println("why not throwing");
             throw new IOException(EXCEPTION_TASKNOTEXIST);
         }
+        
         taskList.remove(taskList.get(index));
 
         return taskList;
     }
 
     // helper methods
-    private Integer searchForIndexOfTask(Task taskToDelete) {
+    private Integer searchForIndexOfTask(Task taskToDelete) {  	
         for (int i = 0; i < taskList.size(); i++) {
+        	
             Task currentTask = taskList.get(i);
 
             if (currentTask.getName().getName().equals(taskToDelete.getName().getName())) {
-                System.out.println(i);
                 return i;
             }
         }

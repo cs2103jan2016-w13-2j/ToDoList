@@ -45,24 +45,19 @@ public class DataBase {
 
 	private FileHandler fh;
 	public ArrayList<Task> taskList;
-	//private ArrayList<ArrayList<Task>> snapshot;
 	private TaskRetriever retriever;
 	private TaskSorter sorter;
 	private DatabaseModifier modifier;
 	private UtilityLogger logger = null;
-	private int counter;
 
-	@SuppressWarnings("unchecked")
     public DataBase() {
-		// taskList = null;
 		fh = new FileHandler();
 		retriever = new TaskRetriever();
 		sorter = new TaskSorter();
 		modifier = new DatabaseModifier();
-		loadFromFile();
-		//snapshot = new ArrayList<ArrayList<Task>>();
-		counter = 0;
 		logger = new UtilityLogger();
+		
+		loadFromFile();		
 	}
 
 	private void writeToFile() {
@@ -71,6 +66,7 @@ public class DataBase {
 
 	public void clear() {
 		taskList = new ArrayList<Task>();
+		
 		writeToFile();
 	}
 
@@ -89,17 +85,21 @@ public class DataBase {
 	 * @throws IOException
 	 *             when task already exist
 	 */
-	public boolean add(Task task) {
+	public boolean add(Task task) {		
 		assert (task != null);
+		
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_ADDING_TASK + task.getName().getName());
+		
 		try {
 			taskList = modifier.addTask(taskList, task);
 		} catch (IOException e) {
 			logger.logError(COMPONENT_STORAGE, ERROR_REPEATED_TASK + task.getName().getName());
 			return false;
 		}
-		writeToFile();
+		
+		writeToFile();	
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_ADD_TASK + task.getName().getName());
+		
 		return true;
 	}
 
@@ -114,11 +114,11 @@ public class DataBase {
 	 */
 	public boolean delete(Task taskToDelete) {
 		assert (taskToDelete != null);
+		
 		loadFromFile();
 
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_DELETING_TASK + taskToDelete.getName().getName());
-		// dataBase_Logger.log(Level.INFO, LOGGING_DELETING_TASK +
-		// taskToDelete.getName().getName());
+
 		try {
 			taskList = modifier.deleteTask(taskList, taskToDelete);
 		} catch (IOException e) {
@@ -126,10 +126,9 @@ public class DataBase {
 			return false;
 		}
 
-		// dataBase_Logger.log(Level.INFO, LOGGING_TASK_DELETED +
-		// taskToDelete.getName().getName());
 		writeToFile();
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_DELETE_TASK + taskToDelete.getName().getName());
+		
 		return true;
 	}
  	
@@ -155,9 +154,9 @@ public class DataBase {
 	
 	public Boolean recover(ArrayList<Task> backup) {
 		fh.write(backup);
-		System.out.println("database de size:   " + backup.size());
+		
 		loadFromFile();
-		System.out.println("database de size:   " + taskList.size());
+		
 		return true;
 	}
 
@@ -172,7 +171,9 @@ public class DataBase {
 	 */
 	public ArrayList<Task> retrieve(SearchCommand command) {
 		assert (command != null);
+		
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_RETRIEVE_TASK + command.getType());
+		
 		return retriever.retrieveHandler(taskList, command);
 	}
 
@@ -185,6 +186,7 @@ public class DataBase {
 	 */
 	public ArrayList<Task> smartSearch(String[] keywords) {
 		assert (keywords != null);
+		
 		return retriever.smartRetrieve(taskList, keywords);
 	}
 
@@ -199,31 +201,40 @@ public class DataBase {
 	 */
 	public boolean setNewFile(String newFilePath) {
 		assert (newFilePath != null);
+		
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SETTING_NEW_PATH + newFilePath);
+		
 		boolean isSet = false;
 		isSet = fh.setFile(newFilePath);
 
 		if (!isSet) {
 			return false;
 		}
+		
 		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_SET_PATH + newFilePath);
+		
 		this.loadFromFile();
+		
 		return isSet;
 	}
     
 	/**
-	 * load 
-	 * @param newFilePath
-	 * @return
+	 * open a new file for task storage in another directory
+	 * @param newFilePath  the new directory to store the tasks
+	 * @return  boolean   true if the a new file is created in the new directory;
 	 */
 	public boolean openNewFile(String newFilePath) {
 		assert (newFilePath != null);
+		
 		boolean isOpen = false;
 		isOpen = fh.openFile(newFilePath);
+		
 		if (!isOpen) {
 			return false;
 		}
+		
 		this.loadFromFile();
+		
 		return isOpen;
 	}
 
@@ -250,7 +261,5 @@ public class DataBase {
 	 */
 	public void sort(String fieldName, String order) {
 		taskList = sorter.sortHandler(taskList, fieldName, order);
-		//ArrayList<Task> temp = fh.read();
-		//snapshot.add(temp);
 	}
 }
