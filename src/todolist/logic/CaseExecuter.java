@@ -241,7 +241,6 @@ public class CaseExecuter {
 		logic.setNewFile(arg[0]);
 	}
 	
-
 	public void open(String[] arg) {
 		logic.openNewFile(arg[0]);
 	}
