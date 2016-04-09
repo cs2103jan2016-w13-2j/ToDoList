@@ -79,10 +79,10 @@ public class FunctionChecker {
 				if (validTime(endTime)) {
 					return new InputException();
 				} else {
-					return new InputException("ADD EVENT", "INVALID END TIME");
+					return new InputException("ADD DEADLINE", "INVALID END TIME");
 				}
 			} else {
-				return new InputException("ADD EVENT", "INVLAID END DATE");
+				return new InputException("ADD DEADLINE", "INVLAID END DATE");
 			}
 		} else {
 			return new InputException("ADD", "REPEAT TITLE");
@@ -94,7 +94,7 @@ public class FunctionChecker {
 			if (validFuzzyTime(fuzzyTime)) {
 				return new InputException();
 			} else {
-				return new InputException("ADD EVENT", "INVALID END TIME");
+				return new InputException("ADD DEADLINE", "INVALID END TIME");
 			}
 		} else {
 			return new InputException("ADD", "REPEAT TITLE");
@@ -177,7 +177,7 @@ public class FunctionChecker {
 		if (!noRepeat(title)) {
 			return new InputException();
 		} else {
-			return new InputException("REMIND BEF", "TASK NOT EXIST");
+			return new InputException("REMIND", "TASK NOT EXIST");
 		}
 	}
 

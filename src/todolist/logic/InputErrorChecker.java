@@ -2,9 +2,7 @@
 package todolist.logic;
 
 import todolist.model.InputException;
-import todolist.model.Task;
 import todolist.model.TokenizedCommand;
-import todolist.storage.DataBase;
 import todolist.storage.DataBase;
 
 public class InputErrorChecker {
