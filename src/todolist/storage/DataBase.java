@@ -113,7 +113,10 @@ public class DataBase {
 	 *         task to delete does not exist
 	 */
 	public boolean delete(Task taskToDelete) {
-		assert (taskToDelete != null);
+		
+		if(taskToDelete == null) {
+			return false;
+		}
 		
 		loadFromFile();
 
@@ -186,8 +189,9 @@ public class DataBase {
 	 */
 	public ArrayList<Task> smartSearch(String[] keywords) {
 		assert (keywords != null);
-		
-		return retriever.smartRetrieve(taskList, keywords);
+		ArrayList<Task> resultList = retriever.smartRetrieve(taskList, keywords);
+
+		return resultList;
 	}
 
 	/**

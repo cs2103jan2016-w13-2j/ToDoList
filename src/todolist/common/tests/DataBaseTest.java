@@ -42,41 +42,48 @@ public class DataBaseTest {
 	}
 	   
 	private void initialiseDate() {
-		
-       String commandDate = "2017-01-0";
-	   
-       for(int i = 0; i < 10; i++) {
-    	   date.add(commandDate + i + " " + "14:00");
-       }
+		date.add(0, "2030-11-01 14:00");
+		date.add(1, "2030-01-01 15:00");
+		date.add(2, "2030-01-01 10:00");
+		date.add(3, "2030-01-01 10:00");
+		date.add(4, "2009-01-01 10:00");
+		date.add(5, "2016-01-01 10:00");
+		date.add(6, "2012-03-01 10:00");
+		date.add(7, "2020-01-22 10:00");
+		date.add(8, "2030-01-01 10:00");
+		date.add(9, "2011-01-01 10:00");
 	}
 
 	private void initialiseName() {
-		
-		String commonName = "title";
-		
-		for(int i = 0; i < 10; i++) {
-			name.add(commonName + i);
-		}		
+		name.add(0, "hello jenny");
+		name.add(1, "hello world");
+		name.add(2, "some random title");
+		name.add(3, "finish proposal");
+		name.add(4, "do laundry");
+		name.add(5, "buy lunch for girfriend");
+		name.add(6, "buy jay chou cd");
+		name.add(7, "do homework");
+		name.add(8, "have date with girlfriend");
+		name.add(9, "rewrite taskstorage");
 	}
 
 	private void initialiseEventList() {
 		
 		for(int i = 0; i < name.size(); i++) {
-			
-			Task eachTask = createTask(name.get(i), date.get(i), date.get(i), "cat");
+			Task eachTask = createTask(name.get(i), date.get(i), date.get(i), "cat1");
 			eventList.add(eachTask);			
 		}
 	}
 	
 	private void addEvents() {
 		
-		if(eventList == null) {
-			
-			for(int i = 0; i < eventList.size(); i++) {
-				db.add(eventList.get(i));
-			}
+		if(eventList.size() == 0) {
+			initialiseEventList();
 		}
 		
+		for(int i = 0; i < eventList.size(); i++) {
+			db.add(eventList.get(i));
+		}
 	}
 	
 	private Task createTask(String taskName, String taskStart, String taskEnd, String cat) {
@@ -113,7 +120,7 @@ public class DataBaseTest {
 	public void testAdd1() {
 		db.clear();
 		
-		eventList = null;
+		eventList = new ArrayList<Task>();
 		// test whether can add an event to database
 		for(int i = 0; i < eventList.size(); i++) {
 			assertTrue(db.add(eventList.get(i)));
@@ -267,44 +274,69 @@ public class DataBaseTest {
 	}
     
 	/**
+	 * test retrieveSmartSearch function
+	 */
+	@Test
+	public void testSmartSearch() {
+		db.clear();
+		
+        addEvents();
+
+        // retrieve the task for the keywords
+        String[] keywords = ("hello word").split(" ");
+        ArrayList<Task> taskList = db.smartSearch(keywords);
+
+        //check the size of the resultant list
+        assertEquals(2, taskList.size());
+        boolean isEqual = taskList.get(0).getName().getName().equals(name.get(0));
+        assertTrue(isEqual);
+        isEqual = taskList.get(1).getName().getName().equals(name.get(1));
+        assertTrue(isEqual);
+	}
+	
+	/**
+	 * test retrieveSmartSearch function
+	 */
+	@Test
+	public void testSmartSearch2() {
+		db.clear();
+		
+        addEvents();
+
+        // retrieve the task for the keywords
+        String[] keywords = ("hello").split(" ");
+        ArrayList<Task> taskList = db.smartSearch(keywords);
+
+        //check the size of the resultant list      
+        assertEquals(2, taskList.size());      
+      
+        boolean isEqual = taskList.get(0).getName().getName().equals(name.get(0));
+        assertTrue(isEqual);
+        
+        isEqual = taskList.get(1).getName().getName().equals(name.get(1));
+        assertTrue(isEqual);
+	}
+	
+	/**
 	 * test retrieveAll function
 	 */
 	@Test
 	public void testRetrieveAll() {
 		db.clear();
-		// add one event
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
+		
+        addEvents();
 
-		// check the arraylist only has one element
+		// check size of the database
 		ArrayList<Task> taskList = db.retrieveAll();
-		boolean expected = true;
-		boolean isEqual = taskList.size() == 1;
-		assertEquals(expected, isEqual);
+		assertEquals(taskList.size(), 10);
+		
 		// check the element is the task we add in
-		isEqual = db.taskList.get(0).getName().getName().equals(newEvent.getName().getName());
-		assertEquals(expected, isEqual);
-
-		// add one more event
-		name = new Name("title2");
-		Task newEvent2 = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent2);
-
-		// check the size the the taskList
-		taskList = db.retrieveAll();
-		isEqual = taskList.size() == 2;
-		assertEquals(expected, isEqual);
-		// check the two tasks really are the two tasks
-		isEqual = db.taskList.get(1).getName().getName().equals(newEvent.getName().getName());
-		assertEquals(expected, isEqual);
-
-		isEqual = db.taskList.get(0).getName().getName().equals(newEvent2.getName().getName());
-		assertEquals(expected, isEqual);
+		for(int i = 0; i < eventList.size(); i++) {
+			boolean isEqual = taskList.get(i).getName().getName().equals(name.get(9-i));
+			assertTrue(isEqual);
+		}
 	}
+	
 	
 	/**
 	 * test change directory method
@@ -312,17 +344,8 @@ public class DataBaseTest {
 	@Test 
 	public void testChangeDir() {
 		db.clear();
-		//add one event
-		Name name = new Name("title");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-		LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-		LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-		Task newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
-		//add another event
-		name = new Name("another-event");
-        newEvent = new Task(name, start, end, null, null, false, false, null);
-		db.add(newEvent);
+		
+        addEvents();
 		
 		//change the directory
 		assertTrue(db.setNewFile("/Users/Xyx/Desktop/jim"));

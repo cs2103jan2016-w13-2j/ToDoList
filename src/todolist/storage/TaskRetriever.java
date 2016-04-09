@@ -170,7 +170,6 @@ public class TaskRetriever {
     }
     
     protected ArrayList<Task> smartRetrieve(ArrayList<Task> taskList, String[] keywords) {
-    	System.out.println("counterrrrrrrrrpppp: " );
     	ArrayList<Task> resultList = new ArrayList<Task>();
     	
     	if(taskList.isEmpty()) {
@@ -178,17 +177,17 @@ public class TaskRetriever {
     	}
     	 		
     	resultList = retrieveByTokenizedName(taskList, keywords);
-
+        System.out.println(resultList.size());
         return resultList;
     }
 
     private ArrayList<Task> retrieveByTokenizedName(ArrayList<Task> taskList2, String[] keywords) {
-    	System.out.println("counterrrrrrrrr: " );
 		ArrayList<Task> resultList = new ArrayList<Task>();
 		int[] numMatch = new int[taskList2.size()];
 		
 		if(keywords.length == 1) {
 			resultList = retrieveByInitial(taskList2, keywords[0]);
+			System.out.println("after initial: " + resultList.size());
 		}
 		
 		for (int i = 0; i < taskList2.size(); i++) {
@@ -208,7 +207,7 @@ public class TaskRetriever {
 				}
 			}			
 		}		
-		
+
 		return resultList;
 	}
 
@@ -227,7 +226,7 @@ public class TaskRetriever {
 			    }			
 			}
 		}
-		System.out.println("counterrrrrrrrr: " + counter);
+
 		return counter;
 	}
 
@@ -242,7 +241,7 @@ public class TaskRetriever {
 			int nameLength = eachName.trim().split(" ")[0].length();
 			int keywordLength = keyword.length();
 			
-			if(nameLength < keywordLength)  {
+			if(nameLength <= keywordLength)  {
 				isMatching = false;
 			} else {
 				String initialPart = eachName.substring(0, keywordLength);
