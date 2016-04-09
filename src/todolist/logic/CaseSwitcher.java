@@ -35,10 +35,13 @@ public class CaseSwitcher {
 	}
 
 	public void forceExecute(TokenizedCommand command) {
-		logic.stepForward();
 
 		String action = command.getAction();
 		String arg[] = command.getArgs();
+		
+		if(!action.equals("undo") && !action.equals("redo")) {
+			logic.stepForward();
+		}
 
 		switch (action) {
 
