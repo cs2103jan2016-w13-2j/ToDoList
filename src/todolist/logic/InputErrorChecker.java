@@ -71,6 +71,8 @@ public class InputErrorChecker {
 			return commandChecker.tab(arg);
 		case "invalid":
 			return commandChecker.invalid(arg);
+		case "help":
+			return commandChecker.help(arg);
 		default:
 
 		}
