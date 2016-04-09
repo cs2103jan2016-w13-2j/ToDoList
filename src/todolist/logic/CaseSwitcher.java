@@ -4,16 +4,19 @@ package todolist.logic;
 import todolist.model.InputException;
 import todolist.model.Task;
 import todolist.model.TokenizedCommand;
+import todolist.storage.DataBase;
 
 public class CaseSwitcher {
 
 	private Logic logic;
+	private DataBase dataBase;
 	private InputErrorChecker inputErrorChecker;
 	private CaseExecuter caseExecuter;
 
-	public CaseSwitcher(Logic logic) {
+	public CaseSwitcher(Logic logic, DataBase dataBase) {
 		this.logic = logic;
-		this.inputErrorChecker = new InputErrorChecker(logic);
+		this.dataBase = dataBase;
+		this.inputErrorChecker = new InputErrorChecker(logic, dataBase);
 		this.caseExecuter = new CaseExecuter(logic);
 	}
 
@@ -72,10 +75,10 @@ public class CaseSwitcher {
 		case "remind":
 			caseExecuter.remind(arg);
 			break;
-		case "add-remind-bef":
+		case "remind-bef":
 			caseExecuter.addRemindBef(arg);
 			break;
-		case "remind-bef":
+		case "add-remind-bef":
 			caseExecuter.addRemindBef(arg);
 			break;
 		case "done":
@@ -108,6 +111,8 @@ public class CaseSwitcher {
 		case "invalid":
 			caseExecuter.invalid(arg);
 			break;
+		case "clean":
+		caseExecuter.clean(arg);
 		default:
 
 		}

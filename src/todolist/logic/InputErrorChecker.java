@@ -4,14 +4,18 @@ package todolist.logic;
 import todolist.model.InputException;
 import todolist.model.Task;
 import todolist.model.TokenizedCommand;
+import todolist.storage.DataBase;
+import todolist.storage.DataBase;
 
 public class InputErrorChecker {
 	private Logic logic;
+	private DataBase dataBase;
 	private CommandChecker commandChecker;
 
-	public InputErrorChecker(Logic logic) {
+	public InputErrorChecker(Logic logic, DataBase dataBase) {
 		this.logic = logic;
-		commandChecker = new CommandChecker(this.logic);
+		this.dataBase = dataBase;
+		commandChecker = new CommandChecker(this.logic, this.dataBase);
 	}
 	
 	public InputException validate(TokenizedCommand command) {

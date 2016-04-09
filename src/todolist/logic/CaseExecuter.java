@@ -10,33 +10,27 @@ public class CaseExecuter {
 		this.logic = logic;
 	}
 
-	private boolean isInteger(String s) {
-		try {
-			@SuppressWarnings("unused")
-			int i = Integer.parseInt(s);
-			return true;
-		} catch (NumberFormatException er) {
-			return false;
-		}
-	}
-
 	public void add(String[] arg) {
 		String type = arg[0];
 		switch (type) {
+		case "task":
+			addTask(arg);
+			break;
 		case "event":
 			addEvent(arg);
 			break;
 		case "deadline":
 			addDeadline(arg);
 			break;
-		case "task":
-			addTask(arg);
-			break;
 		case "recurring":
 			addRecurring(arg);
 			break;
 		default:
 		}
+	}
+	
+	public void addTask(String[] arg) {
+		logic.addTask(arg[1]);
 	}
 
 	public void addEvent(String[] arg) {
@@ -53,10 +47,6 @@ public class CaseExecuter {
 		} else {
 			logic.addDeadlineLess(arg[1], arg[2]);
 		}
-	}
-
-	public void addTask(String[] arg) {
-		logic.addTask(arg[1]);
 	}
 
 	public void addRecurring(String[] arg) {
@@ -252,5 +242,18 @@ public class CaseExecuter {
 	public void invalid(String[] arg) {
 		logic.invalid(arg[0]);
 	}
-
+	
+	public void clean(String[] arg) {
+		logic.clean();
+	}
+	
+	private boolean isInteger(String s) {
+		try {
+			@SuppressWarnings("unused")
+			int i = Integer.parseInt(s);
+			return true;
+		} catch (NumberFormatException er) {
+			return false;
+		}
+	}
 }

@@ -51,6 +51,10 @@ public class ErrorBase {
 				"Your command was incomplete! To navigate to a certain page, try: tab [page-name] (as reflected on the tab bar)");
 		errorBase.put(("REDO" + "INCOMPLETE"),
 				"Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]");
+		errorBase.put(("ADD" + "REPEAT TITLE"), 
+				"You have added a task with same name before! Try another name!");
+		errorBase.put(("SORT" + "NO FIELD"), 
+				"Please specify a sorting order! Try sort ['start' | 'end' | 'category' | 'name'], followed by [ascending | descending].");
 	}
 
 	public String getErrorMessage(String commandType, String errorType) {
