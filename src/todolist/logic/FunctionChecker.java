@@ -3,8 +3,6 @@ package todolist.logic;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -316,29 +314,45 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException sortChecker(String[] arg) {
-		// TODO Auto-generated method stub
+	public InputException sortChecker(String fieldName, String order) {
 		return new InputException();
 	}
 
 	public InputException filterChecker(String[] arg) {
-		// TODO Auto-generated method stub
 		return new InputException();
 	}
 
 	public InputException searchChecker(String[] arg) {
-		// TODO Auto-generated method stub
 		return new InputException();
 	}
 
-	public InputException editChecker(String name, String string, String string2) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	public InputException editChecker(String title, String fieldName, String newValue) {
+		if (!noRepeat(title)) {
+			switch (fieldName) {
+			case "title":
+				return new InputException();
+			case "done":
+				return new InputException();
+			case "undone":
+				return new InputException();
+			case "start-time":
+				return new InputException();
+			case "end-time":
+				return new InputException();
+			default:
+				return new InputException("EDIT", "FIELD NOT EXIST");
+			}
+		} else {
+			return new InputException("EDIT", "TASK NOT EXIST");
+		}
 	}
 
-	public InputException deleteChecker(String name) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	public InputException deleteChecker(String title) {
+		if (!noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("DELETE", "TASK NOT EXIST");
+		}
 	}
 
 	public InputException resetChecker() {
@@ -346,13 +360,21 @@ public class FunctionChecker {
 	}
 
 	public InputException exitChecker(String[] arg) {
-		// TODO Auto-generated method stub
 		return new InputException();
 	}
 
 	public InputException addRemindChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
+		String type = arg[0];
+		switch (type) {
+		case "event":
+			return addEventChecker(arg[1], arg[2], arg[3], arg[4], arg[5]);
+		case "deadline":
+			return addDeadlineChecker(arg[1], arg[2], arg[3]);
+		case "task":
+			return addTaskChecker(arg[1]);
+		default:
+			return new InputException("ADD REMIND", "INVALID TYPE");
+		}
 	}
 
 	private Boolean noRepeat(String title) {
@@ -364,6 +386,7 @@ public class FunctionChecker {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private Boolean validDateTime(String date, String time) {
 		String dateTime = date + " " + time;
 		if (date == null) {
@@ -389,6 +412,7 @@ public class FunctionChecker {
 			SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
 			sdf.setLenient(false);
 			try {
+				@SuppressWarnings("unused")
 				Date newFuzzyDate = sdf.parse(fuzzyDate);
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -400,6 +424,7 @@ public class FunctionChecker {
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				sdf.setLenient(false);
 				try {
+					@SuppressWarnings("unused")
 					Date newFuzzyDate = sdf.parse(fuzzyDate);
 				} catch (ParseException e) {
 					e.printStackTrace();
@@ -427,6 +452,7 @@ public class FunctionChecker {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		sdf.setLenient(false);
 		try {
+			@SuppressWarnings("unused")
 			Date newTime = sdf.parse(time);
 		} catch (ParseException e) {
 			e.printStackTrace();

@@ -2,7 +2,6 @@
 package todolist.logic;
 
 import todolist.model.InputException;
-import todolist.model.Task;
 import todolist.model.TokenizedCommand;
 import todolist.storage.DataBase;
 
@@ -16,7 +15,7 @@ public class CaseSwitcher {
 	public CaseSwitcher(Logic logic, DataBase dataBase) {
 		this.logic = logic;
 		this.dataBase = dataBase;
-		this.inputErrorChecker = new InputErrorChecker(logic, dataBase);
+		this.inputErrorChecker = new InputErrorChecker(this.logic, this.dataBase);
 		this.caseExecuter = new CaseExecuter(logic);
 	}
 

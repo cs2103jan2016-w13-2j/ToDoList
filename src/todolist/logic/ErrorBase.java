@@ -55,6 +55,7 @@ public class ErrorBase {
 				"You have added a task with same name before! Try another name!");
 		errorBase.put(("SORT" + "NO FIELD"), 
 				"Please specify a sorting order! Try sort ['start' | 'end' | 'category' | 'name'], followed by [ascending | descending].");
+		
 	}
 
 	public String getErrorMessage(String commandType, String errorType) {

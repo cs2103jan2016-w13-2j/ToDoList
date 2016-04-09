@@ -39,8 +39,8 @@ public class Logic {
 	private static String LOGGING_EDITING_TASK = "tring to edit task: ";
 	private static String LOGGING_SEARCHING_TASK = "tring to search task: ";
 	private static String LOGGING_DELETING_TASK = "tring to delete task: ";
-	private static String LOGGING_TIME_ERROR = "This time was in the past";
-
+	
+	@SuppressWarnings("unchecked")
 	public Logic(MainApp mainApp) {
 		this.setMainApp(mainApp);
 		this.dataBase = new DataBase();

@@ -162,7 +162,7 @@ public class CommandChecker {
 		if (arg.length != 2) {
 			return new InputException("SORT", "INCOMPLETE");
 		} else {
-			return functionChecker.sortChecker(arg);
+			return functionChecker.sortChecker(arg[0], arg[1]);
 		}
 	}
 
