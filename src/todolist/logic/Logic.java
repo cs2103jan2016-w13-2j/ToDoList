@@ -890,6 +890,13 @@ public class Logic {
 		}
 
 		uiHandler.refresh();
+		for(ArrayList<Task> list: snapshot) {
+			System.out.println("print each step:   " + list.size());
+			if(snapshot[0]!=snapshot[1]) {
+				System.out.println("not equalllll  ");
+			}
+		}
+		
 		return undoResponse;
 	}
 

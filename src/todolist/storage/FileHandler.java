@@ -30,8 +30,8 @@ import java.util.ArrayList;
  */
 public class FileHandler {
 	private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
-	private String fileName = "/taskStorage.txt";
-	private String filePath = "taskStorage.txt";
+	private static String FILENAME = "/taskStorage.txt";
+	private static String FILEPATH = "taskStorage.txt";
 
 	private Gson gson = new Gson();
 
@@ -48,11 +48,11 @@ public class FileHandler {
 	 */
 	public ArrayList<Task> read() {
 		ArrayList<Task> taskList = new ArrayList<Task>();
-		File path = new File(filePath);
-		System.out.println(filePath);
+		File path = new File(FILEPATH);
+		System.out.println(FILEPATH);
 		if (isFileReady(path) && !isFileEmpty(path)) {
 			try {
-				FileReader fr = new FileReader(filePath);
+				FileReader fr = new FileReader(FILEPATH);
 				BufferedReader br = new BufferedReader(fr);
 				String input = null;
 				input = br.readLine();
@@ -81,16 +81,18 @@ public class FileHandler {
 	 */
 	public boolean write(ArrayList<Task> taskList) {
 		try {
-			FileWriter fw = new FileWriter(filePath);
+			FileWriter fw = new FileWriter(FILEPATH);
 			BufferedWriter bw = new BufferedWriter(fw);
+			
 			for (Task eachTask : taskList) {
 				bw.write(gson.toJson(eachTask) + "\n");
 			}
 			bw.close();
-			System.out.println("filehandler writing into file: successfully ");
+
 		} catch (Exception e) {
 			return false;
 		}
+		
 		return true;
 	}
 
@@ -109,8 +111,9 @@ public class FileHandler {
 			return false;
 		}
 		
-		newFilePath = newFilePath + fileName;
-		Path from = Paths.get(filePath);
+		newFilePath = newFilePath + FILENAME;
+		
+		Path from = Paths.get(FILEPATH);
 		Path to = Paths.get(newFilePath);
 		CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING,
 				StandardCopyOption.COPY_ATTRIBUTES };
@@ -121,25 +124,32 @@ public class FileHandler {
 		} catch (IOException e1) {
 			return false;
 		}
-
-		filePath = newFilePath;
-        
-		//write the new file path into local txt file
-		try {
-			FileWriter fw = new FileWriter(PATH_UPDATEDDIRECTORY);
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(filePath + "\n");// store the new path in the local file
-			bw.close();
-		} catch (Exception e) {
-			return false;
-		}
 		
+        try {
+			storeNewDirectory(newFilePath);
+		} catch (IOException e) {
+			return false;			
+		}
+        
+        FILEPATH = newFilePath;
+        
 		return true;
 	}
 
+	private void storeNewDirectory(String newFilePath) throws IOException {
+
+		FileWriter fw = new FileWriter(PATH_UPDATEDDIRECTORY);
+		BufferedWriter bw = new BufferedWriter(fw);
+		
+		// store the new path in the local file
+		bw.write(newFilePath + "\n");
+		bw.close();
+	}
+
 	public boolean openFile(String newFilePath) {
+		
 		//check whether the directory exist		
-		String tempFilePath = newFilePath + fileName;
+		String tempFilePath = newFilePath + FILENAME;
 		if(!isPathCorrect(tempFilePath)) {
 			new File(newFilePath).mkdir();
 			try {
@@ -147,24 +157,26 @@ public class FileHandler {
 				BufferedWriter bw = new BufferedWriter(fw);
 				
 				bw.close();
-				System.out.println("filehandler writing into file: successfully ");
+				
 			} catch (Exception e) {
 				return false;
 			}
+			
 			openFile(newFilePath);
 			return false;
 		}
+		
 		//check whether the txt file contains the correct format (gson format)
 		if(read() == null) {			
 			return false;
 		}
 		
-		filePath = tempFilePath;
+		FILEPATH = tempFilePath;
 		return true;
 	}
 
 	public String getPath() {
-		return filePath;
+		return FILEPATH;
 	}
 
 	// helper methods
@@ -175,7 +187,7 @@ public class FileHandler {
 			if (isFileReady(updatedDirectory) && !isFileEmpty(updatedDirectory)) {
 				FileReader fr = new FileReader(updatedDirectory);
 				BufferedReader br = new BufferedReader(fr);
-				filePath = br.readLine();
+				FILEPATH = br.readLine();
 				br.close();
 			}
 		} catch (Exception e) {
@@ -198,14 +210,13 @@ public class FileHandler {
 		if (pathName.length() == 0) {
 			return true;
 		}
+		
 		File pathToCheck = new File(pathName);
 		if (pathToCheck.isDirectory() || pathToCheck.isFile()) {
 			return true;
 		}
+		
 		return false;
 	}
-
-
-
 
 }

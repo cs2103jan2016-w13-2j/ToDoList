@@ -155,6 +155,9 @@ public class DataBase {
 	
 	public Boolean recover(ArrayList<Task> backup) {
 		fh.write(backup);
+		System.out.println("database de size:   " + backup.size());
+		loadFromFile();
+		System.out.println("database de size:   " + taskList.size());
 		return true;
 	}
 
