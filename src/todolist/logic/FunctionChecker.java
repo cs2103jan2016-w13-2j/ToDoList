@@ -1,54 +1,88 @@
 package todolist.logic;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Date;
+
 import todolist.model.InputException;
+import todolist.model.SearchCommand;
+import todolist.model.Task;
+import todolist.storage.DataBase;
 
 public class FunctionChecker {
 	private Logic logic;
+	private DataBase dataBase;
 	
-	public FunctionChecker(Logic logic) {
+	public FunctionChecker(Logic logic, DataBase dataBase) {
 		this.logic = logic;
+		this.dataBase = dataBase;
 	}
 	
-	public InputException openChecker(String[] arg) {
+	public InputException addTaskChecker(String title) {
+		if(noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("ADD", "REPEAT TITLE");
+		}
+	}
+	
+	public InputException addEventChecker(String title, String startDate, String startTime, String quantity, String timeUnit) {
+		if(noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("ADD", "REPEAT TITLE");
+		}
+	}
+	
+	public InputException addEventLessChecker(String title, String fuzzyTime, String quantity, String timeUnit) {
+		if(noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("ADD", "REPEAT TITLE");
+		}
+	}
+	
+	public InputException addDeadlineChecker(String title, String endDate, String endTime) {
+		if(noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("ADD", "REPEAT TITLE");
+		}
+	}
+	
+	public InputException addDeadlineLessChecker(String title, String fuzzyTime) {
+		if(noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("ADD", "REPEAT TITLE");
+		}
+	}
+	
+	public InputException addRecurringEventChecker(String interval, String title, String startDate, String startTime, String quantity,
+			String timeUnit) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+	
+	public InputException addRecurringEventLessChecker(String interval, String title, String fuzzyTime, String quantity,
+			String timeUnit) {
 		// TODO Auto-generated method stub
 		return new InputException();
 	}
 
-	public InputException saveChecker(String[] arg) {
+	public InputException addRecurringDeadlineChecker(String interval, String title, String endDate, String endTime) {
 		// TODO Auto-generated method stub
 		return new InputException();
 	}
-
-	public InputException invalidChecker(String[] arg) {
+	
+	public InputException addRecurringDeadlineLessChecker(String interval, String title, String fuzzyTime) {
 		// TODO Auto-generated method stub
 		return new InputException();
 	}
-
-	public InputException tabChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException redoChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException undoChecker(String[] arg) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException undoneChecker(String string) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
-	public InputException doneChecker(String string) {
-		// TODO Auto-generated method stub
-		return new InputException();
-	}
-
+	
 	public InputException remindBefChecker(String name, String string, String string2) {
 		// TODO Auto-generated method stub
 		return new InputException();
@@ -70,6 +104,47 @@ public class FunctionChecker {
 	}
 
 	public InputException postponeChecker(String name, String string, String string2) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+	
+	public InputException redoChecker(String[] arg) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+
+	public InputException undoChecker(String[] arg) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+
+	public InputException undoneChecker(String string) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+
+	public InputException doneChecker(String string) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+
+	
+	public InputException openChecker(String[] arg) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+
+	public InputException saveChecker(String[] arg) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+
+	public InputException invalidChecker(String[] arg) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
+
+	public InputException tabChecker(String[] arg) {
 		// TODO Auto-generated method stub
 		return new InputException();
 	}
@@ -103,6 +178,11 @@ public class FunctionChecker {
 		// TODO Auto-generated method stub
 		return new InputException();
 	}
+	
+	public InputException deleteChecker(String name) {
+		// TODO Auto-generated method stub
+		return new InputException();
+	}
 
 	
 	public InputException resetChecker(String[] arg) {
@@ -124,61 +204,120 @@ public class FunctionChecker {
 		// TODO Auto-generated method stub
 		return new InputException();
 	}
-
-	public InputException addRecurringDeadlineLessChecker(String string, String string2, String string3) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	
+	private Boolean noRepeat(String title) {
+		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
+		if (tempTaskList.size() > 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
-
-	public InputException addRecurringDeadlineChecker(String string, String string2, String string3, String string4) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	
+	private Boolean validDateTime(String date, String time) {
+		String dateTime = date + " " + time;
+		if(date == null){
+			return false;
+		}
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		sdf.setLenient(false);
+		
+		try {
+			Date newDateTime = sdf.parse(dateTime);
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+			return false;
+		}
+		return true;		
 	}
-
-	public InputException addRecurringEventLessChecker(String string, String string2, String string3, String string4,
-			String string5) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	
+	private Boolean validFuzzyDate(String fuzzyDate) {
+		int count = fuzzyDate.length() - fuzzyDate.replace("-", "").length();
+		if (count == 1) {
+			SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+			sdf.setLenient(false);
+			try {
+				Date newFuzzyDate = sdf.parse(fuzzyDate);
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		} else {
+			if (count == 2) {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				sdf.setLenient(false);
+				try {
+					Date newFuzzyDate = sdf.parse(fuzzyDate);
+				} catch (ParseException e) {
+					e.printStackTrace();
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
 	}
-
-	public InputException addRecurringEventChecker(String string, String string2, String string3, String string4,
-			String string5, String string6) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	
+	private Boolean validFuzzyTime(String fuzzyTime) {
+		if (fuzzyTime.contains("-")) {
+			return validFuzzyTime(fuzzyTime);
+		} else {
+			if (fuzzyTime.contains(":")) {
+				return validTime(fuzzyTime);
+			} else {
+				return false;
+			}
+		}
 	}
-
-	public InputException addTaskChecker(String string) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	
+	private Boolean validTime(String time) {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		sdf.setLenient(false);
+		try {
+			Date newTime = sdf.parse(time);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
-
-	public InputException addDeadlineLessChecker(String string, String string2) {
-		return new InputException();
-		// TODO Auto-generated method stub
-
+	
+	private Boolean validInterval(String interval) {
+		String temp[] = interval.split("-");
+		String length = temp[0];
+		String unit = temp[1];
+		if(isInteger(length) && Integer.parseInt(length) > 0) {
+			switch (unit) {
+			case "day":
+				return true;
+			case "hour":
+				return true;
+			case "minute":
+				return true;
+			case "week":
+				return true;
+			case "month":
+				return true;
+			case "year":
+				return true;
+			default:
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
-
-	public InputException addDeadlineChecker(String string, String string2, String string3) {
-		return new InputException();
-		// TODO Auto-generated method stub
-
-	}
-
-	public InputException addEventLessChecker(String string, String string2, String string3, String string4) {
-		return new InputException();
-		// TODO Auto-generated method stub
-
-	}
-
-	public InputException addEventChecker(String string, String string2, String string3, String string4,
-			String string5) {
-		return new InputException();
-		// TODO Auto-generated method stub
-
-	}
-
-	public InputException deleteChecker(String name) {
-		// TODO Auto-generated method stub
-		return new InputException();
+	
+	private boolean isInteger(String s) {
+		try {
+			@SuppressWarnings("unused")
+			int i = Integer.parseInt(s);
+			return true;
+		} catch (NumberFormatException er) {
+			return false;
+		}
 	}
 }

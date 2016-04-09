@@ -3,15 +3,18 @@ package todolist.logic;
 
 import todolist.model.InputException;
 import todolist.model.Task;
+import todolist.storage.DataBase;
 
 public class CommandChecker {
 	private Logic logic;
+	private DataBase dataBase;
 	private FunctionChecker functionChecker;
 	
 	
-	public CommandChecker(Logic logic) {
+	public CommandChecker(Logic logic, DataBase dataBase) {
 		this.logic = logic;
-		this.functionChecker = new FunctionChecker(this.logic);
+		this.dataBase = dataBase;
+		this.functionChecker = new FunctionChecker(this.logic, this.dataBase);
 	}
 	
 	public InputException add(String[] arg) {
@@ -23,16 +26,24 @@ public class CommandChecker {
 		}
 
 		switch (type) {
+		case "task":
+			return addTask(arg);
 		case "event":
 			return addEvent(arg);
 		case "deadline":
 			return addDeadline(arg);
-		case "task":
-			return addTask(arg);
 		case "recurring":
 			return addRecurring(arg);
 		default:
 			return new InputException("ADD", "INCOMPLETE");
+		}
+	}
+	
+	public InputException addTask(String[] arg) {
+		if (arg.length != 2) {
+			return new InputException("ADD TASK", "INCOMPLETE");
+		} else {
+			return functionChecker.addTaskChecker(arg[1]);
 		}
 	}
 
@@ -57,14 +68,6 @@ public class CommandChecker {
 			} else {
 				return functionChecker.addDeadlineLessChecker(arg[1], arg[2]);
 			}
-		}
-	}
-
-	public InputException addTask(String[] arg) {
-		if (arg.length != 2) {
-			return new InputException("ADD TASK", "INCOMPLETE");
-		} else {
-			return functionChecker.addTaskChecker(arg[1]);
 		}
 	}
 
