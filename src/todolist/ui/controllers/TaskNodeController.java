@@ -64,7 +64,6 @@ public class TaskNodeController {
     private static final String DISPLAY_ITEM_HEADER_CATEGORY = "";
     private static final String COMPLETED_RELATIVE = "completed!";
 
-
     /*** STYLES ***/
 
     // MONTHS
@@ -222,9 +221,9 @@ public class TaskNodeController {
         ObservableNumberValue diff = relativeRangeBox.heightProperty()
                 .add(dateRangeBox.heightProperty().add(categoryBox.heightProperty().add(16)));
         priorityLabel.heightProperty().bind(titleFlow.heightProperty().add(diff));
-        
+
         title.fillProperty().bind(number.textFillProperty());
-        
+
         /** Validation **/
 
         // Ensure integrity of task object
@@ -265,6 +264,17 @@ public class TaskNodeController {
                         @Override
                         public void handle(ActionEvent event) {
                             formatDateField(task, startDateTime, endDateTime);
+                            // Archive Status
+                            if (task.getIsCompleted()) {
+                                statusBacking.setFill(Color.web(COLOR_COMPLETE));
+                                status.setText(DISPLAY_ITEM_ARCHIVED);
+                            } else if (task.getIsExpired()) {
+                                statusBacking.setFill(Color.web(COLOR_OVERDUE));
+                                status.setText(DISPLAY_ITEM_OVERDUE);
+                            } else {
+                                statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
+                                status.setText(DISPLAY_ITEM_UNARCHIVED);
+                            }
                         }
                     }), new KeyFrame(javafx.util.Duration.seconds(UPDATE_INTERVAL)));
 
@@ -273,18 +283,6 @@ public class TaskNodeController {
 
         } catch (IllegalArgumentException iae) {
             throw iae;
-        }
-
-        // Archive Status
-        if (task.getIsCompleted()) {
-            statusBacking.setFill(Color.web(COLOR_COMPLETE));
-            status.setText(DISPLAY_ITEM_ARCHIVED);
-        } else if (task.getIsExpired()) {
-            statusBacking.setFill(Color.web(COLOR_OVERDUE));
-            status.setText(DISPLAY_ITEM_OVERDUE);
-        } else {
-            statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
-            status.setText(DISPLAY_ITEM_UNARCHIVED);
         }
 
         // Recurring Status
@@ -397,7 +395,7 @@ public class TaskNodeController {
         ZoneId defaultZoneId = ZoneId.of(ZoneOffset.systemDefault().getId());
         ZonedDateTime zoneDateTime = LocalDateTime.now().atZone(defaultZoneId);
         ZoneOffset zoneOffset = zoneDateTime.getOffset();
-        
+
         PrettyTime prettyParser = new PrettyTime();
         Instant startInstant = startDateTime.toInstant(zoneOffset);
         Date start = Date.from(startInstant);

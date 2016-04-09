@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.controlsfx.control.NotificationPane;
-
 import com.sun.javafx.css.StyleManager;
 
 import javafx.animation.PauseTransition;
@@ -53,8 +52,6 @@ import todolist.ui.controllers.WeekController;
  */
 public class MainApp extends Application {
 
-    private static final String UI_VIEWS_DEFAULT_THEME_CSS = "ui/views/styles/DefaultTheme.css";
-    private static final String UI_VIEWS_DARK_THEME_CSS = "ui/views/styles/DarkTheme.css";
     // Window constants
     private static final double MIN_HEIGHT = 600;
     private static final double MIN_WIDTH = 400;
@@ -90,7 +87,11 @@ public class MainApp extends Application {
     private static final String DIRECTORY_SIDEBAR = "ui/views/SideBarView.fxml";
     public static final String DIRECTORY_TASKITEM = "ui/views/TaskNode.fxml";
 
-    // Theming
+    // Stylesheets
+    private static final String UI_VIEWS_DEFAULT_THEME_CSS = "ui/views/styles/DefaultTheme.css";
+    private static final String UI_VIEWS_DARK_THEME_CSS = "ui/views/styles/DarkTheme.css";
+
+    // Styles
     public String nightModeTheme = null;
     public String dayModeTheme = null;
     private static final String STYLE_CLASS_ROOT = "root-layout";
@@ -149,12 +150,17 @@ public class MainApp extends Application {
     public UIHandler uiHandlerUnit = null;
 
     // Notification system
+    private static final int NOTIFICATION_PADDING = 50;
     public NotificationPane rootWithNotification = null;
     public PauseTransition delay = null;
     private boolean isFirstNotif = true;
 
     // Logger
     private UtilityLogger logger = null;
+
+    // Command history
+    private ArrayList<String> commandHistory = null;
+    int commandHistoryPointer = -1;
 
     /*** CORE FUNCTIONS ***/
 
@@ -182,91 +188,52 @@ public class MainApp extends Application {
 
         logger = new UtilityLogger();
 
+        commandHistory = new ArrayList<String>();
+
         // Reference and link with Logic component
         logicUnit = new Logic(this);
         uiHandlerUnit = logicUnit.getUIHandler();
 
-        // Load Views
+        // Load views
         loadRootView(primaryStage);
         loadMainView();
         loadTitleBar();
         loadSideBar();
+        initializeTabs();
+        loadNotifBubbles();
 
-        for (int i = 1; i < 6; ++i) {
-            setPageView(i);
-        }
+        // Prepare for user input
+        commandField.requestFocus();
+    }
 
-        setPageView(HOME_TAB);
-
+    /*
+     * loadNotifBubbles updates the sidebar notification bubbles with the latest
+     * respective task count
+     */
+    private void loadNotifBubbles() {
         MainViewController[] controllers = { mainController, overdueController, todayController, weekController,
                 archiveController };
 
         sidebarController.linkBubbles(controllers);
-        
-        commandField.requestFocus();
-
     }
 
     /*
-     * setWindowDimensions initializes the window properties for application
-     * display.
-     * 
-     * @param Stage primaryStage
-     * 
+     * initializeTabs load and initialize the controllers for each tab or page
      */
-    private void setWindowDimensions(Stage primaryStage) {
-        primaryStage.setTitle(WINDOW_TITLE);
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
-    }
-
-    /*** VIEW LOADERS ***/
-
-    /*
-     * loadRootView wraps root view with notification pane and displays it
-     * within a preset window.
-     * 
-     * @param Stage primaryStage is the display window for mounting the root
-     * view
-     */
-    private void loadRootView(Stage primaryStage) {
-        try {
-
-            this.setPrimaryStage(primaryStage);
-            // Acquire FXML and CSS component for root layout
-            rootView = (BorderPane) FXMLLoader.load(MainApp.class.getResource(DIRECTORY_ROOT));
-            rootView.getStyleClass().add(STYLE_CLASS_ROOT);
-
-            // Setup notification system
-            setupNotificationPane();
-            setWindowDimensions(primaryStage);
-
-            // Display wrapper notification scene
-            Scene scene = new Scene(rootWithNotification, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-            // Stylesheet Handling
-            nightModeTheme = MainApp.class.getResource(UI_VIEWS_DARK_THEME_CSS).toExternalForm();
-            dayModeTheme = MainApp.class.getResource(UI_VIEWS_DEFAULT_THEME_CSS).toExternalForm();
-            Application.setUserAgentStylesheet(null);
-            StyleManager.getInstance().addUserAgentStylesheet(dayModeTheme);
-            scene.getStylesheets().add(dayModeTheme);
-
-            // Shortcuts Handling
-            addShortcuts(scene);
-
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-            // Show Welcome Text
-            notifyWithText(NOTIFICATION_WELCOME, true);
-
-        } catch (IOException ioException) {
-            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_ROOT);
-            ioException.printStackTrace();
-            System.exit(1);
+    private void initializeTabs() {
+        for (int i = HOME_TAB; i <= DONE_TAB; ++i) {
+            setPageView(i);
         }
+
+        setPageView(HOME_TAB);
     }
 
+    /*
+     * addShortcuts sets key listeners for the pre-defined keyboard shortcuts
+     * 
+     * @param Scene scene
+     * 
+     */
     private void addShortcuts(Scene scene) {
         KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN);
         KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
@@ -280,7 +247,6 @@ public class MainApp extends Application {
                 }
             }
         });
-
         scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -317,6 +283,68 @@ public class MainApp extends Application {
     }
 
     /*
+     * setWindowDimensions initializes the window properties for application
+     * display.
+     * 
+     * @param Stage primaryStage
+     * 
+     */
+    private void setWindowDimensions(Stage primaryStage) {
+        primaryStage.setTitle(WINDOW_TITLE);
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
+    }
+
+    /*** VIEW LOADERS ***/
+
+    /*
+     * loadRootView wraps root view with notification pane and displays it
+     * within a preset window.
+     * 
+     * @param Stage primaryStage is the display window for mounting the root
+     * view
+     */
+    private void loadRootView(Stage primaryStage) {
+        try {
+
+            this.setPrimaryStage(primaryStage);
+
+            // Acquire FXML and CSS component for root layout
+            rootView = (BorderPane) FXMLLoader.load(MainApp.class.getResource(DIRECTORY_ROOT));
+            rootView.getStyleClass().add(STYLE_CLASS_ROOT);
+
+            // Setup notification system
+            setupNotificationPane();
+            setWindowDimensions(primaryStage);
+
+            // Display wrapper notification scene
+            Scene scene = new Scene(rootWithNotification, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+            // Stylesheet Handling
+            nightModeTheme = MainApp.class.getResource(UI_VIEWS_DARK_THEME_CSS).toExternalForm();
+            dayModeTheme = MainApp.class.getResource(UI_VIEWS_DEFAULT_THEME_CSS).toExternalForm();
+            Application.setUserAgentStylesheet(null);
+            StyleManager.getInstance().addUserAgentStylesheet(dayModeTheme);
+            scene.getStylesheets().add(dayModeTheme);
+
+            // Shortcuts Handling
+            addShortcuts(scene);
+
+            // Display
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+            // Show Welcome Text
+            notifyWithText(NOTIFICATION_WELCOME, true);
+
+        } catch (IOException ioException) {
+            logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_ROOT);
+            ioException.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /*
      * loadCommandLine embeds the command line in place in the root view and
      * sets the callback function for text input.
      * 
@@ -324,6 +352,36 @@ public class MainApp extends Application {
     private void loadCommandLine() {
         commandField = (TextField) mainView.getBottom();
         mainController.setCommandLineCallback(commandField);
+
+        // Cycle through history of commands
+        KeyCodeCombination scrollHistoryUp = new KeyCodeCombination(KeyCode.UP, KeyCombination.ALT_DOWN);
+        KeyCodeCombination scrollHistoryDown = new KeyCodeCombination(KeyCode.DOWN, KeyCombination.ALT_DOWN);
+
+        commandField.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (scrollHistoryUp.match(event)) {
+                    // ... decrement pointer
+                    if (commandHistoryPointer > 0) {
+                        commandHistoryPointer -= 1;
+                        commandField.setText(commandHistory.get(commandHistoryPointer));
+                        commandField.selectAll();
+                    }
+                } else if(scrollHistoryDown.match(event)) {
+                    // ... increment pointer
+                    if (commandHistoryPointer < commandHistory.size() - 1) {
+                        commandHistoryPointer += 1;
+                        commandField.setText(commandHistory.get(commandHistoryPointer));
+                        commandField.selectAll();
+                    }
+                } else {
+                    // Reset on other input
+                    commandHistoryPointer = commandHistory.size();
+                }
+            }
+        });
+
+        /* Reserved command for demo purposes */
         // mainController.setCommandLineCallbackDemo(commandField);
     }
 
@@ -394,7 +452,6 @@ public class MainApp extends Application {
      */
     private void loadMainView() {
         try {
-
             // Acquire FXML and CSS component for main view
             FXMLLoader loader = new FXMLLoader();
             mainView = (BorderPane) getView(loader, DIRECTORY_MAIN);
@@ -403,6 +460,7 @@ public class MainApp extends Application {
             mainController = loader.getController();
             mainController.setMainApp(this);
             mainController.setPageIndex(HOME_TAB);
+
             loadCommandLine();
             uiHandlerUnit.refresh();
 
@@ -526,22 +584,6 @@ public class MainApp extends Application {
     }
 
     /*
-     * loadHelpView loads the help page into the main display area
-     */
-    // private void loadHelpView() {
-    // // Acquire FXML and CSS component for main view
-    // FXMLLoader loader = new FXMLLoader();
-    // try {
-    // helpView = (BorderPane) getView(loader, DIRECTORY_HELP);
-    // loadMainView();
-    // mainView.setCenter(helpView);
-    // } catch (IOException ioException) {
-    // logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_HELP);
-    // ioException.printStackTrace();
-    // }
-    // }
-
-    /*
      * loadPage sets the current page index to the given index
      * 
      * @param index is the given candidate index to navigate to
@@ -583,8 +625,8 @@ public class MainApp extends Application {
             loadSettingsView();
             break;
         case HELP_TAB:
-            // loadHelpView();
             loadHelpPopup();
+            // Persist on the current page
             setPageView(sidebarController.getIndex());
             break;
         default:
@@ -592,11 +634,10 @@ public class MainApp extends Application {
         }
     }
 
+    /*
+     * loadHelpPopup displays a help table popover for easy reference.
+     */
     private void loadHelpPopup() {
-        // Notifications.create()
-        // .title("Title Text")
-        // .text("Hello World 0!")
-        // .showWarning();
 
         // Acquire FXML and CSS component for main view
         FXMLLoader loader = new FXMLLoader();
@@ -615,6 +656,12 @@ public class MainApp extends Application {
 
     }
 
+    /*
+     * getPage returns the current page index.
+     * 
+     * @return int page
+     * 
+     */
     public int getPage() {
         if (sidebarController != null) {
             return sidebarController.getIndex();
@@ -629,10 +676,9 @@ public class MainApp extends Application {
      * setupNotificationPane intializes the notification system and wraps it
      * around the root display view
      */
-
     private void setupNotificationPane() {
         Label label = new Label();
-        label.setPadding(new Insets(50));
+        label.setPadding(new Insets(NOTIFICATION_PADDING));
 
         BorderPane borderPane = new BorderPane(label);
         rootWithNotification = new NotificationPane(borderPane);
@@ -688,37 +734,7 @@ public class MainApp extends Application {
         MainViewController[] controllers = { mainController, overdueController, todayController, weekController,
                 archiveController };
 
-        // switch (getPage()) {
-        // case 1:
-        // if (mainController != null) {
-        // mainController.setTasks(listOfTasks);
-        // }
-        // break;
-        // case 2:
-        // if (overdueController != null) {
-        // overdueController.setTasks(listOfTasks);
-        // }
-        // break;
-        // case 3:
-        // if (todayController != null) {
-        // todayController.setTasks(listOfTasks);
-        // }
-        // break;
-        // case 4:
-        // if (weekController != null) {
-        // weekController.setTasks(listOfTasks);
-        // }
-        // break;
-        // case 5:
-        // if (archiveController != null) {
-        // archiveController.setTasks(listOfTasks);
-        // }
-        // break;
-        // default:
-        // if (mainController != null) {
-        // mainController.setTasks(listOfTasks);
-        // }
-        // }
+        // Update all controllers on new list to display
         if (mainController != null) {
             mainController.setTasks(listOfTasks);
         }
@@ -739,6 +755,7 @@ public class MainApp extends Application {
             sidebarController.linkBubbles(controllers);
         }
 
+        mainController.refreshReminders();
     }
 
     /*
@@ -807,15 +824,8 @@ public class MainApp extends Application {
 
     }
 
-    /*
-     * getTaskAt returns the task at the position specified in the list view, or
-     * null if it is not found.
-     * 
-     * @param int pos
-     * 
-     * @return Task task
-     * 
-     */
+    /*** GETTERS AND SETTERS ***/
+
     public Task getTaskAt(int pos) {
         switch (getPage()) {
         case 1:
@@ -871,4 +881,9 @@ public class MainApp extends Application {
     public SideBarController getSideBarController() {
         return sidebarController;
     }
+
+    public ArrayList<String> getCommandHistory() {
+        return commandHistory;
+    }
+
 }

@@ -17,7 +17,8 @@ public class CaseSwitcher {
 
 	private boolean isInteger(String s) {
 		try {
-			int i = Integer.parseInt(s);
+			@SuppressWarnings("unused")
+            int i = Integer.parseInt(s);
 			return true;
 		} catch (NumberFormatException er) {
 			return false;
@@ -34,10 +35,13 @@ public class CaseSwitcher {
 	}
 
 	public void forceExecute(TokenizedCommand command) {
-		logic.stepForward();
 
 		String action = command.getAction();
 		String arg[] = command.getArgs();
+		
+		if(!action.equals("undo") && !action.equals("redo")) {
+			logic.stepForward();
+		}
 
 		switch (action) {
 

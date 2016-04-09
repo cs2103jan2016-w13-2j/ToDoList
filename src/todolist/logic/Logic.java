@@ -31,6 +31,7 @@ public class Logic {
 	private CaseSwitcher caseSwitcher;
 	private int steps;
 	private Logger logger = Logger.getLogger("Logic Logger");
+	ArrayList<Task>[] snapshot;
 
 	private static String LOGGING_ADDING_FLOATING_TASK = "tring to add floating task: ";
 	private static String LOGGING_ADDING_EVENT = "tring to add event: ";
@@ -48,6 +49,8 @@ public class Logic {
 		this.uiHandler = new UIHandler(dataBase, mainApp, this);
 		this.caseSwitcher = new CaseSwitcher(this);
 		this.steps = 0;
+		snapshot = new ArrayList[1000];
+		snapshot[0] = dataBase.retrieveAll();
 	}
 
 	public void clean() {
@@ -85,10 +88,8 @@ public class Logic {
 	 * @return void
 	 */
 	public void stepForward() {
-
-		dataBase.takeSnapshot();
 		this.steps++;
-
+		snapshot[steps] = dataBase.retrieveAll();
 	}
 
 	/**
@@ -873,17 +874,14 @@ public class Logic {
 	 * @return Boolean
 	 */
 	public Boolean undo(int undostep) {
-
+		Boolean undoResponse = false;
 		if (steps - undostep < 0) {
 			uiHandler.sendMessage("Undo was unsuccessful. No actions to undo!", true);
 		}
 
-		Boolean undoResponse = dataBase.retrieveHistory(steps - undostep);
-		System.out.println("retrieveHistory::::" + undoResponse);
-		// System.out.println("undo now at " + steps);
 		steps = steps - undostep;
 
-		System.out.println("logic" + steps);
+		undoResponse = dataBase.recover(snapshot[steps]);
 
 		if (undoResponse) {
 			uiHandler.sendMessage("Undo #" + undostep + " step(s) successfully!", true);
@@ -903,8 +901,13 @@ public class Logic {
 	 */
 	public Boolean redo(int redostep) {
 		Boolean redoResponse = false;
-		redoResponse = dataBase.retrieveHistory(steps + redostep);
 		steps = steps + redostep;
+		redoResponse = dataBase.recover(snapshot[steps]);
+		if (redoResponse) {
+			uiHandler.sendMessage("Redo #" + redostep + " step(s) successfully!", true);
+		} else {
+			uiHandler.sendMessage("Redo was unsuccessful. Try again!", true);
+		}
 		uiHandler.refresh();
 		return redoResponse;
 	}

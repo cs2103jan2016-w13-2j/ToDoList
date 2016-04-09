@@ -1,20 +1,29 @@
 package todolist.ui.controllers;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import org.controlsfx.control.Notifications;
+
 import todolist.MainApp;
 import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
+import todolist.model.Reminder;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
-
+import todolist.ui.TaskWrapper.TaskType;
 import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,6 +34,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.util.Callback;
 
 //@@author A0123994W
@@ -45,6 +55,14 @@ public class MainViewController {
     private static final String MESSAGE_HIGHLIGHT_ITEM_NOT_FOUND = "Item to be highlighted cannot be found in display task list.";
     private static final String NIGHT_MODE = "night-mode";
     private static final String DAY_MODE = "day-mode";
+
+    // Reminders
+    protected static final String REMINDER_EVENT = "Remember to attend your event [%1$s] ! All the best!";
+    protected static final String REMINDER_DEADLINE = "[%1$s] will be due soon! You can do it!";
+    protected static final String REMINDER_OTHER = "Please be reminded to [%1$s] !";
+    protected static final String REMINDER_HEADER = "ToDoList Reminder: ";
+    private static final String DIRECTORY_REMINDER_SOUND = "ui/views/assets/notification-sound-ting.mp3";
+    private static ArrayList<Timeline> reminders = null;
 
     // Model data
     protected ObservableList<TaskWrapper> tasksToDisplay = null;
@@ -78,7 +96,7 @@ public class MainViewController {
         tasksToDisplay = FXCollections.observableArrayList();
         listView = new ListView<TaskWrapper>();
         logger = new UtilityLogger();
-
+        reminders = new ArrayList<Timeline>();
     }
 
     /*
@@ -142,6 +160,8 @@ public class MainViewController {
 
                     commandField.clear();
                     logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
+                    
+                    mainApplication.getCommandHistory().add(commandString);                   
 
                     // System.out.println(commandString);
 
@@ -318,7 +338,6 @@ public class MainViewController {
         }
 
         listView.getItems().addAll(arrayOfWrappers);
-        
 
         logger.logAction(Component.UI, MESSAGE_UPDATED_MAIN_TASKLIST);
     }
@@ -394,6 +413,87 @@ public class MainViewController {
             return itemList.get(pos - 1).getTaskObject();
         } else {
             return null;
+        }
+    }
+
+    /*
+     * refreshReminders updates all the reminders to be triggered
+     */
+    public void refreshReminders() {
+        // Identify tasks with reminders switched on
+        FilteredList<TaskWrapper> tasksToRemind = new FilteredList<TaskWrapper>(getTaskListView().getItems(),
+                task -> task.getReminder() != null && !task.getIsCompleted() && task.getReminder().getStatus());
+
+        // Stop all current reminders
+        for (Timeline reminder : reminders) {
+            reminder.stop();
+        }
+
+        // Clear current reminders
+        reminders.clear();
+
+        // Set current reminders
+        for (TaskWrapper task : tasksToRemind) {
+            Reminder taskReminder = task.getReminder();
+            LocalDateTime remindTime = taskReminder.getTime();
+
+            // Event without pre-defined reminder time
+            if (remindTime == null) {
+                remindTime = task.getStartTime();
+            }
+            // Deadline without pre-defined reminder time
+            if (remindTime == null) {
+                remindTime = task.getEndTime();
+            }
+
+            // Schedule reminder
+            scheduleReminder(task, remindTime);
+        }
+    }
+
+    /*
+     * scheduleReminder sets the task reminder to trigger at the given timing.
+     * 
+     * @param TaskWrapper task, LocalDateTime remindTime
+     *
+     */
+    static public void scheduleReminder(TaskWrapper task, LocalDateTime remindTime) {
+        if (remindTime != null && remindTime.isAfter(LocalDateTime.now())) {
+            long difference = LocalDateTime.now().until(remindTime, ChronoUnit.SECONDS);
+            Timeline timer = new Timeline(new KeyFrame(Duration.seconds(difference), new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    setReminderNotifPop(task);
+                }
+
+                private void setReminderNotifPop(TaskWrapper task) {
+
+                    String output = null;
+                    Notifications notification = Notifications.create();
+
+                    // FORMAT HERE //
+                    notification.title(REMINDER_HEADER + task.getTaskTitle());
+                    if (task.getTaskType() == TaskType.EVENT) {
+                        output = String.format(REMINDER_EVENT, task.getTaskTitle());
+                    } else if (task.getTaskType() == TaskType.DEADLINE) {
+                        output = String.format(REMINDER_DEADLINE, task.getTaskTitle());
+                    } else {
+                        output = String.format(REMINDER_OTHER, task.getTaskTitle());
+                    }
+                    notification.text(output);
+                    notification.hideAfter(Duration.minutes(5));
+
+                    AudioClip notificationSound = new AudioClip(
+                            MainApp.class.getResource(DIRECTORY_REMINDER_SOUND).toExternalForm());
+                    notificationSound.play();
+
+                    notification.show();
+                }
+            }));
+            timer.setCycleCount(1);
+            timer.play();
+            reminders.add(timer);
         }
     }
 
