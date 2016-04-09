@@ -38,10 +38,6 @@ public class CaseSwitcher {
 
 		String action = command.getAction();
 		String arg[] = command.getArgs();
-		
-		if(!action.equals("undo") && !action.equals("redo")) {
-			logic.stepForward();
-		}
 
 		switch (action) {
 
@@ -231,6 +227,10 @@ public class CaseSwitcher {
 			break;
 		default:
 			
+		}
+		
+		if(!action.equals("undo") && !action.equals("redo")) {
+			logic.stepForward();
 		}
 	}
 }

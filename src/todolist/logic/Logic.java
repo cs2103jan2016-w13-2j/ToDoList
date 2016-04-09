@@ -877,6 +877,7 @@ public class Logic {
 		Boolean undoResponse = false;
 		if (steps - undostep < 0) {
 			uiHandler.sendMessage("Undo was unsuccessful. No actions to undo!", true);
+			return false;
 		}
 
 		steps = steps - undostep;
@@ -901,6 +902,11 @@ public class Logic {
 	 */
 	public Boolean redo(int redostep) {
 		Boolean redoResponse = false;
+		if(snapshot[steps + redostep] == null) {
+			uiHandler.sendMessage("Redo was unsuccessful. No actions to redo!", true);
+			return false;
+		}
+
 		steps = steps + redostep;
 		redoResponse = dataBase.recover(snapshot[steps]);
 		if (redoResponse) {
