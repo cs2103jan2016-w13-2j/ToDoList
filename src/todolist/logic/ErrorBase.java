@@ -121,6 +121,10 @@ public class ErrorBase {
 				"set recurring invalid interval");
 		errorBase.put(("SET RECURRING" + "TASK NOT EXIST"), 
 				"set recurring task not exist");
+		errorBase.put(("REMOVE RECURRING" + "INVALID INTERVAL"), 
+				"set recurring invalid interval");
+		errorBase.put(("REMOVE RECURRING" + "TASK NOT EXIST"), 
+				"set recurring task not exist");
 		errorBase.put(("LABEL" + "TASK NOT EXIST"), 
 				"label task not exist");
 		errorBase.put(("EDIT" + "FIELD NOT EXIST"), 

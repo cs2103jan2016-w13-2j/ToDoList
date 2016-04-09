@@ -110,14 +110,26 @@ public class CommandChecker {
 			return new InputException("EDIT", "INCOMPLETE");
 
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("EDIT", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.editChecker(task.getName().getName(), arg[1], arg[2]);
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("EDIT", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.editChecker(taskname,arg[1], arg[2]);
 			} else {
 				return functionChecker.editChecker(arg[0], arg[1], arg[2]);
 			}
@@ -128,14 +140,26 @@ public class CommandChecker {
 		if (arg.length != 1) {
 			return new InputException("DELETE", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("DELETE", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.deleteChecker(task.getName().getName());
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("DELETE", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.deleteChecker(taskname);
 			} else {
 				return functionChecker.deleteChecker(arg[0]);
 			}
@@ -167,17 +191,29 @@ public class CommandChecker {
 	}
 
 	public InputException label(String[] arg) {
-		if (arg.length != 2) {
+		if (arg.length != 1) {
 			return new InputException("LABEL", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("LABEL", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.labelChecker(task.getName().getName(), arg[1]);
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("LABEL", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.labelChecker(taskname, arg[1]);
 			} else {
 				return functionChecker.labelChecker(arg[0], arg[1]);
 			}
@@ -188,14 +224,26 @@ public class CommandChecker {
 		if (arg.length != 2) {
 			return new InputException("SET-RECURRING", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("SET-RECURRING", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.setRecurringChecker(task.getName().getName(), true, arg[1]);
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("SET-RECURRING", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.setRecurringChecker(taskname, true, arg[1]);
 			} else {
 				return functionChecker.setRecurringChecker(arg[0], true, arg[1]);
 			}
@@ -204,16 +252,28 @@ public class CommandChecker {
 
 	public InputException removeRecurring(String[] arg) {
 		if (arg.length != 2) {
-			return new InputException("SET-RECURRING", "INCOMPLETE");
+			return new InputException("REMOVE-RECURRING", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("REMOVE-RECURRING", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.setRecurringChecker(task.getName().getName(), false, arg[1]);
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("REMOVE-RECURRING", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.setRecurringChecker(taskname, false, arg[1]);
 			} else {
 				return functionChecker.setRecurringChecker(arg[0], false, arg[1]);
 			}
@@ -224,14 +284,26 @@ public class CommandChecker {
 		if (arg.length != 3) {
 			return new InputException("POSTPONE", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("POSTPONE", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.postponeChecker(task.getName().getName(), arg[1], arg[2]);
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("POSTPONE", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.postponeChecker(taskname, arg[1], arg[2]);
 			} else {
 				return functionChecker.postponeChecker(arg[0], arg[1], arg[2]);
 			}
@@ -242,14 +314,26 @@ public class CommandChecker {
 		if (arg.length != 3) {
 			return new InputException("FORWARD", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("FORWARD", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.forwardChecker(task.getName().getName(), arg[1], arg[2]);
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("FORWARD", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.forwardChecker(taskname, arg[1], arg[2]);
 			} else {
 				return functionChecker.forwardChecker(arg[0], arg[1], arg[2]);
 			}
@@ -264,14 +348,26 @@ public class CommandChecker {
 		if (arg.length != 1) {
 			return new InputException("REMIND", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("REMIND", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.remindChecker(task.getName().getName());
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("REMIND", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.remindChecker(taskname);
 			} else {
 				return functionChecker.remindChecker(arg[0]);
 			}
@@ -290,14 +386,26 @@ public class CommandChecker {
 		if (arg.length != 3) {
 			return new InputException("REMIND-BEF", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("REMIND-BEF", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.remindBefChecker(task.getName().getName(), arg[1], arg[2]);
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("REMIND-BEF", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.remindBefChecker(taskname,arg[1], arg[2]);
 			} else {
 				return functionChecker.remindBefChecker(arg[0], arg[1], arg[2]);
 			}
@@ -308,14 +416,26 @@ public class CommandChecker {
 		if (arg.length != 1) {
 			return new InputException("DONE", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("DONE", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.doneChecker(task.getName().getName());
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("DONE", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.doneChecker(taskname);
 			} else {
 				return functionChecker.doneChecker(arg[0]);
 			}
@@ -326,14 +446,26 @@ public class CommandChecker {
 		if (arg.length != 1) {
 			return new InputException("UNDONE", "INCOMPLETE");
 		} else {
-			if (isInteger(arg[0])) {
-				int index = Integer.parseInt(arg[0]);
-				Task task = logic.getMainApp().getTaskAt(index);
-				if (task == null) {
-					return new InputException("UNDONE", "NOT EXIST");
+			String temp[] = arg[0].split(",");
+			int[] index = new int[temp.length];
+			Boolean flag = true;
+			for (int i = 0; i < temp.length; i++) {
+				if (isInteger(temp[i])) {
+					index[i] = Integer.parseInt(temp[i]);
 				} else {
-					return functionChecker.undoneChecker(task.getName().getName());
+					flag = false;
 				}
+			}
+
+			if (flag) {
+				for (int i = 0; i < index.length; i++) {
+					Task task = logic.getMainApp().getTaskAt(index[i]);
+					if (task == null) {
+						return new InputException("DONE", "TASK NOT EXIST");
+					}
+				}
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				return functionChecker.undoneChecker(taskname);
 			} else {
 				return functionChecker.undoneChecker(arg[0]);
 			}
