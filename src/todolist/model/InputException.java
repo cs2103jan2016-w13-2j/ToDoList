@@ -2,6 +2,7 @@ package todolist.model;
 
 import todolist.logic.ErrorBase;
 
+//@@author A0130620B
 public class InputException {
 	String commandType = null;
 	String errorType = null;
