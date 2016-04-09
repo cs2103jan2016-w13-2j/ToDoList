@@ -457,6 +457,12 @@ public class Logic {
 		Boolean deleteResponse = dataBase.delete(tempTask);
 
 		Boolean addResponse = false;
+		
+		if(tempTask.getReminder().getStatus()) {
+			LocalDateTime oldReminderTime = tempTask.getReminder().getTime();
+			LocalDateTime newReminderTime = oldReminderTime.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
+			tempTask.setReminder(new Reminder(true, newReminderTime));
+		}
 
 		if (tempTask.getStartTime() == null) {
 			LocalDateTime tempEndTime = tempTask.getEndTime();
@@ -482,7 +488,7 @@ public class Logic {
 			uiHandler.highLight(tempTask);
 			uiHandler.sendMessage("[" + title + "] has been postponed! [not what you want? try 'undo']", true);
 		}
-
+		
 		return deleteResponse && addResponse;
 	}
 	
@@ -500,6 +506,12 @@ public class Logic {
 		Boolean deleteResponse = dataBase.delete(tempTask);
 
 		Boolean addResponse = false;
+		
+		if(tempTask.getReminder().getStatus()) {
+			LocalDateTime oldReminderTime = tempTask.getReminder().getTime();
+			LocalDateTime newReminderTime = oldReminderTime.minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
+			tempTask.setReminder(new Reminder(true, newReminderTime));
+		}
 
 		if (tempTask.getStartTime() == null) {
 			LocalDateTime tempEndTime = tempTask.getEndTime();
