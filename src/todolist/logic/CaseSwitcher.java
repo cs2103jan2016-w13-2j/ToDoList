@@ -1,10 +1,10 @@
+//@@author A0130620B
 package todolist.logic;
 
 import todolist.model.InputException;
 import todolist.model.Task;
 import todolist.model.TokenizedCommand;
 
-//@@author A0130620B
 public class CaseSwitcher {
 
 	private Logic logic;
@@ -38,10 +38,6 @@ public class CaseSwitcher {
 
 		String action = command.getAction();
 		String arg[] = command.getArgs();
-		
-		if(!action.equals("undo") && !action.equals("redo")) {
-			logic.stepForward();
-		}
 
 		switch (action) {
 
@@ -231,6 +227,10 @@ public class CaseSwitcher {
 			break;
 		default:
 			
+		}
+		
+		if(!action.equals("undo") && !action.equals("redo")) {
+			logic.stepForward();
 		}
 	}
 }

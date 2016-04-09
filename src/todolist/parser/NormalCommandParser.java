@@ -1,10 +1,10 @@
+//@@author A0130620B
 package todolist.parser;
 
 import java.util.ArrayList;
 
 import todolist.model.TokenizedCommand;
 
-//@@author A0130620B
 public class NormalCommandParser {
 
     public NormalCommandParser() {

@@ -1,6 +1,6 @@
+//@@author A0130620B
 package todolist.model;
 
-//@@author A0130620B
 public class Name implements Comparable<Name>{
 
 	private String name;

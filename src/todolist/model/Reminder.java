@@ -1,8 +1,8 @@
+//@@author A0130620B
 package todolist.model;
 
 import java.time.LocalDateTime;
 
-//@@author A0130620B
 public class Reminder {
     
     private Boolean switcher = null;

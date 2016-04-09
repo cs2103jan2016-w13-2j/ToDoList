@@ -1,9 +1,9 @@
+//@@author A0130620B
 package todolist.logic;
 
 import java.util.HashMap;
 import java.util.Map;
 
-//@@author A0130620B
 public class ErrorBase {
 
 	static Map<String, String> errorBase = new HashMap<String, String>();

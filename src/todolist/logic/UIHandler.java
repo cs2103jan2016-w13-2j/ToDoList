@@ -1,3 +1,4 @@
+//@@author A0130620B
 package todolist.logic;
 
 import java.util.ArrayList;
@@ -6,7 +7,6 @@ import todolist.MainApp;
 import todolist.model.Task;
 import todolist.storage.DataBase;
 
-//@@author A0130620B
 public class UIHandler {
 
     private DataBase dataBase;
