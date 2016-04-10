@@ -154,14 +154,6 @@ public class ErrorBase {
 	}
 
 	public String getErrorMessage(String commandType, String errorType) {
-		for (Map.Entry<String,String> entry : errorBase.entrySet()) {
-			  String key = entry.getKey();
-			  String value = entry.getValue();
-			  System.out.println(key + " " + value);
-			  // do stuff
-			}
-		System.out.println(errorBase.containsKey((commandType + errorType)));
-		System.out.println(commandType + errorType);
 		return errorBase.get((commandType + errorType));
 	}
 }
