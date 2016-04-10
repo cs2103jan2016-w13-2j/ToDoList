@@ -45,7 +45,7 @@
 				<ListView fx:id="listView" maxHeight="1.7976931348623157E308"
 					prefHeight="200.0" prefWidth="200.0">
 					<placeholder>
-						<Label style="-fx-font-weight: bold;" text="not sure how to use me? enter 'tab help' !" />
+						<Label style="-fx-font-weight: bold;" text="not sure how to use me? enter 'help' !" />
 					</placeholder>
 					<opaqueInsets>
 						<Insets left="5.0" right="5.0" top="5.0" />
