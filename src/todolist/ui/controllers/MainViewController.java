@@ -73,7 +73,7 @@ public class MainViewController {
     protected ObservableList<TaskWrapper> tasksToDisplay = null;
 
     // Main application linkback
-    private MainApp mainApplication = null;
+    protected MainApp mainApplication = null;
     private UIHandler uiHandler = null;
 
     /*** Views ***/
@@ -113,8 +113,8 @@ public class MainViewController {
      * 
      */
     public void setMainApp(MainApp mainApp, UIHandler uiHandlerUnit) {
-        mainApplication = mainApp;
-        uiHandler = uiHandlerUnit;
+        setMainApplication(mainApp);
+        setUiHandler(uiHandlerUnit);
     }
 
     /*
@@ -166,24 +166,24 @@ public class MainViewController {
                     commandField.clear();
                     logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
 
-                    mainApplication.getCommandHistoryBackward().push(commandString);
+                    getMainApplication().getCommandHistoryBackward().push(commandString);
 
                     if (commandString.equals(NIGHT_MODE)) {
-                        Scene scene = mainApplication.getPrimaryStage().getScene();
+                        Scene scene = getMainApplication().getPrimaryStage().getScene();
                         scene.getStylesheets().remove(dayMode);
                         scene.getStylesheets().add(nightMode);
-                        mainApplication.getPrimaryStage().setScene(scene);
-                        mainApplication.getPrimaryStage().show();
+                        getMainApplication().getPrimaryStage().setScene(scene);
+                        getMainApplication().getPrimaryStage().show();
 
                     } else if (commandString.equals(DAY_MODE)) {
-                        Scene scene = mainApplication.getPrimaryStage().getScene();
+                        Scene scene = getMainApplication().getPrimaryStage().getScene();
                         scene.getStylesheets().remove(nightMode);
                         scene.getStylesheets().add(dayMode);
-                        mainApplication.getPrimaryStage().setScene(scene);
-                        mainApplication.getPrimaryStage().show();
+                        getMainApplication().getPrimaryStage().setScene(scene);
+                        getMainApplication().getPrimaryStage().show();
 
                     } else {
-                        uiHandler.process(commandString);
+                        getUiHandler().process(commandString);
                         logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
                     }
 
@@ -240,7 +240,7 @@ public class MainViewController {
                         if (commandString.equals("Start demo")) {
                             isDemoing = true;
                         } else {
-                            uiHandler.process(commandString);
+                            getUiHandler().process(commandString);
                             logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
                         }
                     } catch (Exception exception) {
@@ -276,7 +276,7 @@ public class MainViewController {
                             animation.setOnFinished(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
-                                    uiHandler.process(commandString);
+                                    getUiHandler().process(commandString);
                                 }
                             });
 
@@ -532,5 +532,21 @@ public class MainViewController {
         box.visibleProperty().bind(Bindings.isEmpty(listView.getItems()));
         listView.setPlaceholder(box);
 
+    }
+
+    public MainApp getMainApplication() {
+        return mainApplication;
+    }
+
+    public void setMainApplication(MainApp mainApplication) {
+        this.mainApplication = mainApplication;
+    }
+
+    public UIHandler getUiHandler() {
+        return uiHandler;
+    }
+
+    public void setUiHandler(UIHandler uiHandler) {
+        this.uiHandler = uiHandler;
     }
 }

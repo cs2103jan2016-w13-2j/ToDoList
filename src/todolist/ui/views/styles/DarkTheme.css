@@ -122,9 +122,6 @@
     -fx-background-radius: 2.0em;
 }
 
-
-
-
 .list-cell {
     -fx-background-color: transparent;
     -fx-padding: 6.5 6.5 0.0 6.5;
@@ -133,6 +130,7 @@
 
 .list-cell:filled:selected:focused > #task-hbox-item {
     -fx-background-color: #EB586F;
+    -fx-background-color: #4AA0D5;
     /*-fx-text-fill: #FEFAEC;*/
 }
 
@@ -146,6 +144,7 @@
 
 .list-cell:filled > #task-hbox-item {
     -fx-background-color: #506F86;
+    -fx-background-color: #7E858B;
     /*-fx-text-fill: #FEFAEC;*/
 }
 
@@ -253,7 +252,7 @@
   	-fx-text-fill: #454553;
 }
 
-.label {
+#settingsLabel {
 	-fx-text-fill: #FEFAEC;
 }
 

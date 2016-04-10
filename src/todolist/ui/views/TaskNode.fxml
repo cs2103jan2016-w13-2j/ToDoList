@@ -128,25 +128,40 @@
 				<Insets left="15.0" right="15.0" />
 			</HBox.margin>
 		</StackPane>
-		<VBox fx:id="indicatorsHolder" maxHeight="1.7976931348623157E308"
-			maxWidth="-Infinity" prefWidth="20.0" spacing="7.0">
+		<VBox fx:id="indicatorsHolder" alignment="TOP_RIGHT" maxHeight="1.7976931348623157E308"
+			maxWidth="-Infinity" prefWidth="70.0" spacing="7.0">
 			<children>
-				<ImageView fx:id="recurringIndicator" fitHeight="10.0"
-					fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
-					<image>
-						<Image url="@assets/recurring-indicator.png" />
-					</image>
+				<HBox alignment="CENTER_RIGHT" spacing="3.0">
 					<VBox.margin>
 						<Insets right="10.0" top="10.0" />
 					</VBox.margin>
-				</ImageView>
-				<ImageView fx:id="reminderIndicator" fitHeight="10.0"
-					fitWidth="10.0" layoutX="10.0" layoutY="20.0" pickOnBounds="true"
-					preserveRatio="true">
-					<image>
-						<Image url="@assets/reminder-indicator.png" />
-					</image>
-				</ImageView>
+					<children>
+						<Label fx:id="recurInterval">
+							<font>
+								<Font name="System Bold" size="10.0" />
+							</font>
+						</Label>
+						<ImageView fx:id="recurringIndicator" fitHeight="10.0"
+							fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@assets/recurring-indicator.png" />
+							</image>
+						</ImageView>
+					</children>
+				</HBox>
+				<HBox alignment="TOP_RIGHT">
+					<children>
+						<ImageView fx:id="reminderIndicator" fitHeight="10.0"
+							fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@assets/reminder-indicator.png" />
+							</image>
+						</ImageView>
+					</children>
+					<VBox.margin>
+						<Insets right="10.0" />
+					</VBox.margin>
+				</HBox>
 			</children>
 		</VBox>
 	</children>

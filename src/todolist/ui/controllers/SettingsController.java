@@ -25,6 +25,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import todolist.MainApp;
+import todolist.logic.UIHandler;
 import todolist.ui.TaskWrapper;
 
 //@@author A0123994W
@@ -51,6 +54,12 @@ public class SettingsController extends MainViewController {
     @FXML
     private VBox box = null;
 
+    @FXML
+    private Text directoryDisplay = null;
+    
+    @FXML
+    private Text soundStatus = null;
+
     // Logger messages
     private static final String MESSAGE_UPDATED_SETTINGS_TASKLIST = "Updated display [OPTIONS].";
 
@@ -63,6 +72,18 @@ public class SettingsController extends MainViewController {
         // Initialise models
         tasksToDisplay = FXCollections.observableArrayList();
         listView = new ListView<TaskWrapper>();
+    }
+
+    /*
+     * setMainApp takes a MainApp reference and stores it locally as the
+     * mainApplication reference.
+     * 
+     * @param MainApp mainApp is the reference provided to the calling function
+     * 
+     */
+    public void setMainApp(MainApp mainApp, UIHandler uiHandlerUnit) {
+        setMainApplication(mainApp);
+        setUiHandler(uiHandlerUnit);
     }
 
     /*
@@ -146,8 +167,12 @@ public class SettingsController extends MainViewController {
 
     }
 
-    public void plotGraph(ObservableList<TaskWrapper> observableList) {
-
+    public void setupPage(ObservableList<TaskWrapper> observableList) {
+        String path = getUiHandler().getPath();
+        directoryDisplay.setText(path);
+        
+        
+        
         NumberAxis xAxis = new NumberAxis();
         CategoryAxis yAxis = new CategoryAxis();
         StackedBarChart<Number, String> timeTable = new StackedBarChart<Number, String>(xAxis, yAxis);
@@ -160,12 +185,11 @@ public class SettingsController extends MainViewController {
         friday = String.format(friday, LocalDateTime.now().withDayOfWeek(5).toString(format));
         saturday = String.format(saturday, LocalDateTime.now().withDayOfWeek(6).toString(format));
         sunday = String.format(sunday, LocalDateTime.now().withDayOfWeek(7).toString(format));
-        
-        
+
         yAxis.setCategories(FXCollections.observableArrayList(sunday, saturday, friday, thursday, wednesday, tuesday,
                 monday, undated));
         HashMap<String, int[]> reference = new HashMap<String, int[]>();
-        
+
         // ... filter list if necessary
         for (TaskWrapper task : observableList) {
             String catName = "uncategorised";
@@ -173,7 +197,7 @@ public class SettingsController extends MainViewController {
                 catName = task.getCategory().getCategory();
             }
             int[] sameCatTasks = reference.get(catName);
-            
+
             // New category encountered
             if (sameCatTasks == null) {
                 sameCatTasks = new int[8];
@@ -195,7 +219,7 @@ public class SettingsController extends MainViewController {
         for (java.util.Map.Entry<String, int[]> entry : reference.entrySet()) {
             int[] sameCatTasks = entry.getValue();
             XYChart.Series<Number, String> series = new XYChart.Series<Number, String>();
-            series.setName(entry.getKey());       
+            series.setName(entry.getKey());
             series.getData().add(new XYChart.Data<Number, String>(sameCatTasks[0], undated));
             series.getData().add(new XYChart.Data<Number, String>(sameCatTasks[1], monday));
             series.getData().add(new XYChart.Data<Number, String>(sameCatTasks[2], tuesday));
@@ -207,10 +231,14 @@ public class SettingsController extends MainViewController {
 
             timeTable.getData().add(series);
         }
-                
+
         timeTable.backgroundProperty().set(Background.EMPTY);
 
         box.getChildren().set(1, timeTable);
 
+    }
+    
+    public void setSoundStatus(String status) {
+        soundStatus.setText(status); 
     }
 }

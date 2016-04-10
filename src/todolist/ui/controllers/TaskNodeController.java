@@ -171,6 +171,9 @@ public class TaskNodeController {
     private ImageView recurringIndicator = null;
     @FXML
     private ImageView reminderIndicator = null;
+    @FXML
+    private Label recurInterval = null;
+    
 
     // Date-Time Field Live Update Interval (in seconds)
     private static final int UPDATE_INTERVAL = 5;
@@ -287,6 +290,7 @@ public class TaskNodeController {
 
         // Recurring Status
         recurringIndicator.setVisible(task.getIsRecurring());
+        recurInterval.setText(task.getInterval());
 
         // Reminder Status
         if (reminder == null) {

@@ -35,7 +35,7 @@
 			<content>
 				<VBox fx:id="box" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
 					<children>
-						<Label text="Week Ahead">
+						<Label id="settingsLabel" text="Week Ahead">
 							<font>
 								<Font name="System Bold" size="16.0" />
 							</font>
@@ -49,7 +49,7 @@
 								<NumberAxis side="LEFT" />
 							</yAxis>
 						</StackedBarChart>
-						<Label text="Options">
+						<Label id="settingsLabel" text="Options">
 							<font>
 								<Font name="System Bold" size="16.0" />
 							</font>
@@ -62,15 +62,16 @@
 									maxWidth="1.7976931348623157E308" minHeight="-Infinity"
 									prefHeight="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
 									<children>
-										<Label prefWidth="150.0" text="Current Directory">
+										<Label id="settingsLabel" prefWidth="150.0" text="Current Directory">
 											<font>
 												<Font name="System Bold" size="12.0" />
 											</font>
 										</Label>
 										<TextFlow>
 											<children>
-												<Text id="infofield" fill="#7a9eaf" strokeType="OUTSIDE"
-													strokeWidth="0.0" text="Unknown" wrappingWidth="177.87000274658203">
+												<Text id="infofield" fx:id="directoryDisplay" fill="#7a9eaf"
+													strokeType="OUTSIDE" strokeWidth="0.0" text="Unknown"
+													wrappingWidth="177.87000274658203">
 													<font>
 														<Font size="14.0" />
 													</font>
@@ -89,15 +90,15 @@
 									maxWidth="1.7976931348623157E308" minHeight="-Infinity"
 									prefHeight="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
 									<children>
-										<Label prefWidth="150.0" text="Sound Effects">
+										<Label id="settingsLabel" prefWidth="150.0" text="Sound Effects">
 											<font>
 												<Font name="System Bold" size="12.0" />
 											</font>
 										</Label>
 										<TextFlow>
 											<children>
-												<Text id="infofield" fill="#7a9eaf" strokeType="OUTSIDE"
-													strokeWidth="0.0" text="Unknown">
+												<Text id="infofield" fx:id="soundStatus" fill="#7a9eaf"
+													strokeType="OUTSIDE" strokeWidth="0.0" text="Sound ON">
 													<font>
 														<Font size="14.0" />
 													</font>
@@ -116,7 +117,7 @@
 									maxWidth="1.7976931348623157E308" minHeight="-Infinity"
 									prefHeight="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
 									<children>
-										<Label prefWidth="150.0" text="Reminder Ringtone">
+										<Label id="settingsLabel" prefWidth="150.0" text="Reminder Ringtone">
 											<font>
 												<Font name="System Bold" size="12.0" />
 											</font>
@@ -124,7 +125,7 @@
 										<TextFlow>
 											<children>
 												<Text id="infofield" fill="#7a9eaf" strokeType="OUTSIDE"
-													strokeWidth="0.0" text="Unknown" wrappingWidth="168.87000274658203">
+													strokeWidth="0.0" text="TING!" wrappingWidth="168.87000274658203">
 													<font>
 														<Font size="14.0" />
 													</font>

@@ -12,6 +12,10 @@ import com.sun.javafx.css.StyleManager;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -183,6 +187,8 @@ public class MainApp extends Application {
             "filter", "redo", "undo", "reset", "forward", "postpone", "remind", "set-recurring", "open", "task",
             "event", "deadline" };
 
+    private BooleanProperty IS_MUTE = new SimpleBooleanProperty(false);
+
     ObservableList<String> keywords = null;
 
     /*** CORE FUNCTIONS ***/
@@ -259,6 +265,20 @@ public class MainApp extends Application {
     private void addShortcuts(Scene scene) {
         KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN);
         KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
+        KeyCodeCombination toggleMute = new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN);
+        
+        IS_MUTE.addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    settingsController.setSoundStatus("Sound OFF");
+                } else {
+                    settingsController.setSoundStatus("Sound ON");
+
+                }
+            }
+        });
 
         scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
             @Override
@@ -299,6 +319,15 @@ public class MainApp extends Application {
                         commandField.requestFocus();
                         logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
                     }
+                }
+            }
+        });
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (toggleMute.match(event)) {
+                    IS_MUTE.set(!IS_MUTE.get());
                 }
             }
         });
@@ -837,11 +866,15 @@ public class MainApp extends Application {
         if (!isFirstNotif) {
             AudioClip notificationSound = new AudioClip(
                     this.getClass().getResource(DIRECTORY_NOTIFICATION_SOUND).toExternalForm());
-            notificationSound.play();
+            if (!IS_MUTE.get()) {
+                notificationSound.play();
+            }
         } else {
             AudioClip notificationSound = new AudioClip(
                     this.getClass().getResource(DIRECTORY_WELCOME_SOUND).toExternalForm());
-            notificationSound.play();
+            if (!IS_MUTE.get()) {
+                notificationSound.play();
+            }
             isFirstNotif = !isFirstNotif;
         }
 
@@ -888,8 +921,8 @@ public class MainApp extends Application {
         }
 
         mainController.refreshReminders();
-//        settingsController.loadCalendar(mainController.getTaskListView().getItems());
-        settingsController.plotGraph(mainController.getTaskListView().getItems());
+        // settingsController.loadCalendar(mainController.getTaskListView().getItems());
+        settingsController.setupPage(mainController.getTaskListView().getItems());
     }
 
     /*
@@ -1036,4 +1069,7 @@ public class MainApp extends Application {
         return APPLICATION_ICON;
     }
 
+    public boolean isMute() {
+        return IS_MUTE.get();
+    }
 }
