@@ -139,7 +139,11 @@ public class FunctionChecker {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
-					return new InputException();
+					if(isFloating(title)) {
+						return new InputException("REMIND BEF", "FLOATING TASK");
+					} else {
+						return new InputException();
+					}
 				} else {
 					return new InputException("REMIND BEF", "INVALID TIME UNIT");
 				}
@@ -163,19 +167,23 @@ public class FunctionChecker {
 				case "task":
 					return addTaskChecker(arg[1]);
 				default:
-					return new InputException("ADD REMIND", "INVALID TYPE");
+					return new InputException("ADD REMIND BEF", "INVALID TYPE");
 				}
 			} else {
-				return new InputException("REMIND BEF", "INVALID TIME UNIT");
+				return new InputException("ADD REMIND BEF", "INVALID TIME UNIT");
 			}
 		} else {
-			return new InputException("REMIND BEF", "INVALID QUANTITY");
+			return new InputException("ADD REMIND BEF", "INVALID QUANTITY");
 		}
 	}
 
 	public InputException remindChecker(String title) {
 		if (!noRepeat(title)) {
-			return new InputException();
+			if(isFloating(title)) {
+				return new InputException("REMIND", "FLOATING TASK");
+			} else {
+				return new InputException();
+			}
 		} else {
 			return new InputException("REMIND", "TASK NOT EXIST");
 		}
@@ -185,7 +193,11 @@ public class FunctionChecker {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
-					return new InputException();
+					if(isFloating(title)) {
+						return new InputException("FORWARD", "FLOATING TASK");
+					} else {
+						return new InputException();
+					}
 				} else {
 					return new InputException("FORWARD", "INVALID TIME UNIT");
 				}
@@ -201,7 +213,11 @@ public class FunctionChecker {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
-					return new InputException();
+					if(isFloating(title)) {
+						return new InputException("POSTPONE", "FLOATING TASK");
+					} else {
+						return new InputException();
+					}
 				} else {
 					return new InputException("POSTPONE", "INVALID TIME UNIT");
 				}
@@ -296,8 +312,12 @@ public class FunctionChecker {
 
 	public InputException setRecurringChecker(String title, Boolean status, String interval) {
 		if (!noRepeat(title)) {
-			if (validInterval(interval)) {
-				return new InputException();
+			if ((status && validInterval(interval)) || (!status)) {
+				if(isFloating(title)) {
+					return new InputException("SET RECURRING", "FLOATING TASK");
+				} else {
+					return new InputException();
+				}
 			} else {
 				return new InputException("SET RECURRING", "INVALID INTERVAL");
 			}
@@ -505,6 +525,15 @@ public class FunctionChecker {
 			int i = Integer.parseInt(s);
 			return true;
 		} catch (NumberFormatException er) {
+			return false;
+		}
+	}
+	
+	private boolean isFloating(String title) {
+		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
+		if(tempTask.getEndTime() == null) {
+			return true;
+		} else {
 			return false;
 		}
 	}

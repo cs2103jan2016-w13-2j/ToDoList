@@ -251,7 +251,7 @@ public class CommandChecker {
 	}
 
 	public InputException removeRecurring(String[] arg) {
-		if (arg.length != 2) {
+		if (arg.length != 1) {
 			return new InputException("REMOVE-RECURRING", "INCOMPLETE");
 		} else {
 			String temp[] = arg[0].split(",");
@@ -273,9 +273,9 @@ public class CommandChecker {
 					}
 				}
 				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
-				return functionChecker.setRecurringChecker(taskname, false, arg[1]);
+				return functionChecker.setRecurringChecker(taskname, false, null);
 			} else {
-				return functionChecker.setRecurringChecker(arg[0], false, arg[1]);
+				return functionChecker.setRecurringChecker(arg[0], false, null);
 			}
 		}
 	}
