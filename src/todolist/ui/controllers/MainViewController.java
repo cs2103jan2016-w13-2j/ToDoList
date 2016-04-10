@@ -24,6 +24,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.Transition;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -527,7 +528,9 @@ public class MainViewController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        
+        box.visibleProperty().bind(Bindings.isEmpty(listView.getItems()));
         listView.setPlaceholder(box);
+
     }
 }

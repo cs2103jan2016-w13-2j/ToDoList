@@ -888,7 +888,8 @@ public class MainApp extends Application {
         }
 
         mainController.refreshReminders();
-        settingsController.loadCalendar(mainController.getTaskListView().getItems());
+//        settingsController.loadCalendar(mainController.getTaskListView().getItems());
+        settingsController.plotGraph(mainController.getTaskListView().getItems());
     }
 
     /*
