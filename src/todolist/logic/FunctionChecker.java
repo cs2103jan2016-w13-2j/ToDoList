@@ -312,7 +312,7 @@ public class FunctionChecker {
 
 	public InputException setRecurringChecker(String title, Boolean status, String interval) {
 		if (!noRepeat(title)) {
-			if (validInterval(interval)) {
+			if ((status && validInterval(interval)) || (!status)) {
 				if(isFloating(title)) {
 					return new InputException("SET RECURRING", "FLOATING TASK");
 				} else {
