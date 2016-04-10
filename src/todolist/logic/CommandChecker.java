@@ -191,7 +191,7 @@ public class CommandChecker {
 	}
 
 	public InputException label(String[] arg) {
-		if (arg.length != 1) {
+		if (arg.length != 2) {
 			return new InputException("LABEL", "INCOMPLETE");
 		} else {
 			String temp[] = arg[0].split(",");
