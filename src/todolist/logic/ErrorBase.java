@@ -135,6 +135,22 @@ public class ErrorBase {
 				"delete task not exist");
 		errorBase.put(("ADD REMIND" + "INVALID TYPE"), 
 				"add remind invalid type");
+		errorBase.put(("ADD REMIND BEF"+"INVALID TYPE"), 
+				"add remind bef invalid type");
+		errorBase.put(("ADD REMIND BEF"+"INVALID TIME UNIT"), 
+				"add remind bef invalid time unit");
+		errorBase.put(("ADD REMIND BEF"+"INVALID QUANTITY"), 
+				"add remind bef invalid quantity");
+		errorBase.put(("REMIND"+"FLOATING TASK"), 
+				"cant remind floating task");
+		errorBase.put(("FORWARD"+ "FLOATING TASK"), 
+				"cant forwad floating task");
+		errorBase.put(("POSTPONE"+ "FLOATING TASK"), 
+				"cant postpone floating task");
+		errorBase.put(("REMIND BEF"+ "FLOATING TASK"), 
+				"cant remind bef floating task");
+		errorBase.put(("SET RECURRING"+"FLOATING TASK"), 
+				"cant set recurring floating task");
 	}
 
 	public String getErrorMessage(String commandType, String errorType) {
