@@ -245,6 +245,7 @@ public class CommandChecker {
 				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
 				return functionChecker.setRecurringChecker(taskname, true, arg[1]);
 			} else {
+			    System.out.println(arg[0] + "     " + arg[1]);
 				return functionChecker.setRecurringChecker(arg[0], true, arg[1]);
 			}
 		}

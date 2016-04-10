@@ -221,5 +221,20 @@
 	-fx-font-weight: bold;
 	-fx-font-family: calibri;
 	-fx-font-style: italic;
-	-fx-text-fill: light grey;
+	-fx-fill: light grey;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0.0;
+}
+
+.axis {
+    -fx-tick-label-font-size: 0.7em;
+    -fx-tick-label-font-weight: bold;
 }

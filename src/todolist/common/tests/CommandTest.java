@@ -16,7 +16,6 @@ import todolist.MainApp;
 import todolist.logic.Logic;
 import todolist.logic.MainAppStub;
 import todolist.model.Task;
-import todolist.model.TokenizedCommand;
 
 public class CommandTest {
 	

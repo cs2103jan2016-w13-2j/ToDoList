@@ -230,5 +230,33 @@
 	-fx-font-weight: bold;
 	-fx-font-family: calibri;
 	-fx-font-style: italic;
-	-fx-text-fill: light grey;
+	-fx-text-fill: #FEFAEC;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0.0;
+}
+
+.axis{
+    -fx-tick-label-font-size: 0.7em;
+    -fx-tick-label-font-weight: bold;
+    -fx-tick-label-fill: #FEFAEC;
+}
+
+.chart-legend > .label{
+  	-fx-text-fill: #454553;
+}
+
+.label {
+	-fx-text-fill: #FEFAEC;
+}
+
+#infofield {
+	-fx-text-fill: #FEFAEC;
 }

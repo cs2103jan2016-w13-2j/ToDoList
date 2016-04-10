@@ -335,7 +335,22 @@ public class FunctionChecker {
 	}
 
 	public InputException sortChecker(String fieldName, String order) {
-		return new InputException();
+		if(validOrder(order)) {
+			switch(fieldName) {
+			case "title":
+				return new InputException();
+			case "category":
+				return new InputException();
+			case "start":
+				return new InputException();
+			case "end":
+				return new InputException();
+				default :
+					return new InputException("SORT", "INVALID FIELDNAME");
+			}
+		} else {
+			return new InputException("SORT", "INVALID ORDER");
+		}
 	}
 
 	public InputException filterChecker(String[] arg) {
@@ -532,6 +547,14 @@ public class FunctionChecker {
 	private boolean isFloating(String title) {
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		if(tempTask.getEndTime() == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean validOrder(String order) {
+		if(order.equalsIgnoreCase("ascending") || order.equalsIgnoreCase("descending")) {
 			return true;
 		} else {
 			return false;

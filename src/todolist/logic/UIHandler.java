@@ -22,6 +22,10 @@ public class UIHandler {
     public void process(String input) {
         logic.process(input);
     }
+    
+    public String getPath() {
+    	return dataBase.getPath();
+    }
 
     public void refresh() {
         mainApp.setDisplayTasks(dataBase.retrieveAll());

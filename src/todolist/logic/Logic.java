@@ -9,10 +9,10 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import todolist.MainApp;
+import todolist.common.UtilityLogger;
+import todolist.common.UtilityLogger.Component;
 import todolist.model.Category;
 import todolist.model.Name;
 import todolist.model.Reminder;
@@ -30,16 +30,20 @@ public class Logic {
 	private MainParser mainParser;
 	private CaseSwitcher caseSwitcher;
 	private int steps;
-	private Logger logger = Logger.getLogger("Logic Logger");
+	private UtilityLogger logger;
 	ArrayList<Task>[] snapshot;
 
-	private static String LOGGING_ADDING_FLOATING_TASK = "tring to add floating task: ";
-	private static String LOGGING_ADDING_EVENT = "tring to add event: ";
-	private static String LOGGING_ADDING_DEADLINE = "tring to add deadline: ";
-	private static String LOGGING_EDITING_TASK = "tring to edit task: ";
-	private static String LOGGING_SEARCHING_TASK = "tring to search task: ";
-	private static String LOGGING_DELETING_TASK = "tring to delete task: ";
-	
+	private static String MESSAGE_ADDING_FLOATING_TASK = "tring to add floating task: ";
+	private static String MESSAGE_ADDING_EVENT = "tring to add event: ";
+	private static String MESSAGE_ADDING_DEADLINE = "tring to add deadline: ";
+	private static String MESSAGE_ADDING_RECURRING_EVENT = "tring to add recurring event: ";
+	private static String MESSAGE_ADDING_RECURRING_DEADLINE = "tring to add reucrring deadline: ";
+	private static String MESSAGE_EDITING_TASK = "tring to edit task: ";
+	private static String MESSAGE_SEARCHING_TASK = "tring to search task: ";
+	private static String MESSAGE_SORTING_TASK = "tring to sort task: ";
+	private static String MESSAGE_DELETING_TASK = "tring to delete task: ";
+	protected static Component COMPONENT_LOGIC = UtilityLogger.Component.Logic;
+
 	@SuppressWarnings("unchecked")
 	public Logic(MainApp mainApp) {
 		this.setMainApp(mainApp);
@@ -50,8 +54,9 @@ public class Logic {
 		this.steps = 0;
 		snapshot = new ArrayList[1000];
 		snapshot[0] = dataBase.retrieveAll();
+		logger = new UtilityLogger();
 	}
-	
+
 	/**
 	 * This method takes in raw user input and process it by calling parser
 	 *
@@ -71,7 +76,7 @@ public class Logic {
 	 * @return Boolean
 	 */
 	public Boolean addTask(String title) {
-		logger.log(Level.INFO, LOGGING_ADDING_FLOATING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_FLOATING_TASK + title);
 
 		Name name = new Name(title);
 		Task newEvent = new Task(name, null, null, null, null, false, false, null);
@@ -92,7 +97,7 @@ public class Logic {
 	 * @return Boolean
 	 */
 	public Boolean addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
-		logger.log(Level.INFO, LOGGING_ADDING_EVENT + title + startDate + startTime + quantity + timeUnit);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_EVENT + title);
 
 		Name name = new Name(title);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -127,7 +132,7 @@ public class Logic {
 	 */
 	public Boolean addEventLess(String title, String fuzzyTime, String quantity, String timeUnit) {
 
-		logger.log(Level.INFO, LOGGING_ADDING_EVENT + title + fuzzyTime + quantity + timeUnit);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_EVENT + title);
 
 		LocalDateTime start = fuzzyParseTime(fuzzyTime);
 		LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
@@ -160,7 +165,7 @@ public class Logic {
 	 */
 	public Boolean addDeadline(String title, String endDate, String endTime) {
 
-		logger.log(Level.INFO, LOGGING_ADDING_DEADLINE + title + endDate + endTime);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_DEADLINE + title);
 
 		Name name = new Name(title);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -187,24 +192,24 @@ public class Logic {
 	 */
 	public Boolean addDeadlineLess(String title, String fuzzyTime) {
 
-			logger.log(Level.INFO, LOGGING_ADDING_DEADLINE + title + fuzzyTime);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_DEADLINE + title);
 
-			Name name = new Name(title);
-			LocalDateTime end = fuzzyParseTime(fuzzyTime);
-			Task newEvent = new Task(name, null, end, null, null, false, false, null);
+		Name name = new Name(title);
+		LocalDateTime end = fuzzyParseTime(fuzzyTime);
+		Task newEvent = new Task(name, null, end, null, null, false, false, null);
 
-			if (!end.isAfter(LocalDateTime.now())) {
-				uiHandler.sendMessage("[" + title + "] is a task in the past", true);
-			}
+		if (!end.isAfter(LocalDateTime.now())) {
+			uiHandler.sendMessage("[" + title + "] is a task in the past", true);
+		}
 
-			Boolean addResponse = dataBase.add(newEvent);
-			uiHandler.refresh();
-			uiHandler.highLight(newEvent);
-			uiHandler.sendMessage("A new deadline [" + newEvent.getName().getName()
-					+ "] has been created successfully. [not what you want? try 'undo']", true);
-			return addResponse;
+		Boolean addResponse = dataBase.add(newEvent);
+		uiHandler.refresh();
+		uiHandler.highLight(newEvent);
+		uiHandler.sendMessage("A new deadline [" + newEvent.getName().getName()
+				+ "] has been created successfully. [not what you want? try 'undo']", true);
+		return addResponse;
 	}
-	
+
 	/**
 	 * This method adds an recurring event
 	 *
@@ -213,11 +218,13 @@ public class Logic {
 	 */
 	public Boolean addRecurringEvent(String interval, String title, String startDate, String startTime, String quantity,
 			String timeUnit) {
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_RECURRING_EVENT + title);
+
 		Boolean addResponse = addEvent(title, startDate, startTime, quantity, timeUnit);
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
 	}
-	
+
 	/**
 	 * This method adds an recurring event.(less argument and fuzzy time)
 	 *
@@ -226,6 +233,8 @@ public class Logic {
 	 */
 	public Boolean addRecurringEventLess(String interval, String title, String fuzzyTime, String quantity,
 			String timeUnit) {
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_RECURRING_EVENT + title);
+
 		Boolean addResponse = addEventLess(title, fuzzyTime, quantity, timeUnit);
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
@@ -238,11 +247,12 @@ public class Logic {
 	 * @return void
 	 */
 	public Boolean addRecurringDeadline(String interval, String title, String endDate, String endTime) {
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_RECURRING_DEADLINE + title);
+		
 		Boolean addResponse = addDeadline(title, endDate, endTime);
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
 	}
-
 
 	/**
 	 * This method adds an recurring deadline.(less argument and fuzzy time)
@@ -251,11 +261,13 @@ public class Logic {
 	 * @return Boolean
 	 */
 	public Boolean addRecurringDeadlineLess(String interval, String title, String fuzzyTime) {
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_RECURRING_DEADLINE + title);
+
 		Boolean addResponse = addDeadlineLess(title, fuzzyTime);
 		Boolean setRecurringResponse = setRecurring(title, true, interval);
 		return addResponse && setRecurringResponse;
 	}
-	
+
 	/**
 	 * This method edits a task.
 	 *
@@ -264,7 +276,7 @@ public class Logic {
 	 */
 	public Boolean edit(String title, String fieldName, String newValue) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
@@ -288,7 +300,7 @@ public class Logic {
 				tempTask.setStartTime(start);
 			} else {
 				start = LocalDateTime.parse(newValue, formatter);
-				if(tempTask.getEndTime() == null) {
+				if (tempTask.getEndTime() == null) {
 					tempTask.setStartTime(start);
 					tempTask.setEndTime(start);
 				} else {
@@ -320,7 +332,7 @@ public class Logic {
 
 		return deleteResponse && addResponse;
 	}
-	
+
 	/**
 	 * This method takes in the title of a task and deletes it.
 	 *
@@ -329,7 +341,7 @@ public class Logic {
 	 */
 	public Boolean delete(String title) {
 
-		logger.log(Level.INFO, LOGGING_DELETING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_DELETING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
@@ -339,7 +351,7 @@ public class Logic {
 
 		return deleteResponse;
 	}
-	
+
 	/**
 	 * This method takes in the title of a task and displays it.
 	 *
@@ -353,17 +365,17 @@ public class Logic {
 			input = input + " " + keyword[i];
 		}
 
-		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + input);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_SEARCHING_TASK + input);
 
 		ArrayList<Task> tempTaskList = dataBase.smartSearch(keyword);
 
 		uiHandler.display(tempTaskList);
 		uiHandler.sendMessage("Here are your search results for '" + input + "'! [to clear this search, type 'reset']",
 				true);
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * This method takes in the name of a category and displays tasks of that
 	 * category.
@@ -373,7 +385,7 @@ public class Logic {
 	 */
 	public Boolean filter(String category) {
 
-		logger.log(Level.INFO, LOGGING_SEARCHING_TASK + category);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_SEARCHING_TASK + category);
 
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("CATEGORY", category));
 
@@ -383,7 +395,7 @@ public class Logic {
 				true);
 		return true;
 	}
-	
+
 	/**
 	 * This method sorts all tasks in according to the field name and order.
 	 *
@@ -391,13 +403,15 @@ public class Logic {
 	 * @return Boolean
 	 */
 	public Boolean sort(String fieldName, String order) {
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_SORTING_TASK + fieldName);
+		
 		dataBase.sort(fieldName, order);
 		uiHandler.refresh();
 		uiHandler.sendMessage(
 				"Ta-da! Your tasks have been sorted by " + fieldName + "! [not what you want? try 'undo']", true);
 		return true;
 	}
-	
+
 	/**
 	 * This method takes in the title of a task and labels it with a category.
 	 *
@@ -406,7 +420,7 @@ public class Logic {
 	 */
 	public Boolean label(String title, String category) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
@@ -421,7 +435,7 @@ public class Logic {
 
 		return deleteResponse && addResponse;
 	}
-	
+
 	/**
 	 * This method edits the recurring status of a task.
 	 *
@@ -429,8 +443,9 @@ public class Logic {
 	 * @return Boolean
 	 */
 	public Boolean setRecurring(String title, Boolean status, String interval) {
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
-
+		
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+		
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
 		if (tempTask.getEndTime() == null) {
@@ -451,7 +466,7 @@ public class Logic {
 
 		return deleteResponse && addResponse;
 	}
-	
+
 	/**
 	 * This method postpones a task by a duration.
 	 *
@@ -460,14 +475,14 @@ public class Logic {
 	 */
 	public Boolean postpone(String title, String quantity, String timeUnit) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
 
 		Boolean addResponse = false;
-		
-		if(tempTask.getReminder() != null && tempTask.getReminder().getStatus()) {
+
+		if (tempTask.getReminder() != null && tempTask.getReminder().getStatus()) {
 			LocalDateTime oldReminderTime = tempTask.getReminder().getTime();
 			LocalDateTime newReminderTime = oldReminderTime.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 			tempTask.setReminder(new Reminder(true, newReminderTime));
@@ -497,10 +512,10 @@ public class Logic {
 			uiHandler.highLight(tempTask);
 			uiHandler.sendMessage("[" + title + "] has been postponed! [not what you want? try 'undo']", true);
 		}
-		
+
 		return deleteResponse && addResponse;
 	}
-	
+
 	/**
 	 * This method forwards a task by a duration.
 	 *
@@ -509,14 +524,14 @@ public class Logic {
 	 */
 	public Boolean forward(String title, String quantity, String timeUnit) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
 
 		Boolean addResponse = false;
-		
-		if(tempTask.getReminder() != null && tempTask.getReminder().getStatus()) {
+
+		if (tempTask.getReminder() != null && tempTask.getReminder().getStatus()) {
 			LocalDateTime oldReminderTime = tempTask.getReminder().getTime();
 			LocalDateTime newReminderTime = oldReminderTime.minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 			tempTask.setReminder(new Reminder(true, newReminderTime));
@@ -550,7 +565,7 @@ public class Logic {
 
 		return deleteResponse && addResponse;
 	}
-	
+
 	/**
 	 * This method adds a task with remind and triggers the remind at the
 	 * deadline.
@@ -579,7 +594,7 @@ public class Logic {
 
 		return addResponse;
 	}
-	
+
 	/**
 	 * This method adds remind to an existing task and triggers the remind at
 	 * the deadline.
@@ -589,11 +604,11 @@ public class Logic {
 	 */
 	public Boolean remind(String title) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
 
 		return remindBef(title, "0", "minute");
 	}
-	
+
 	/**
 	 * This method adds remind to an existing task and triggers the remind a
 	 * duration before the deadline.
@@ -603,7 +618,7 @@ public class Logic {
 	 */
 	public Boolean remindBef(String title, String quantity, String timeUnit) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		LocalDateTime reminderTime = null;
@@ -635,7 +650,7 @@ public class Logic {
 
 		return deleteResponse && addResponse;
 	}
-	
+
 	/**
 	 * This method adds a task with remind and triggers the remind a duration
 	 * before the deadline.
@@ -665,7 +680,7 @@ public class Logic {
 
 		return addResponse;
 	}
-	
+
 	/**
 	 * This method takes in the title of a task and marks it as done.
 	 *
@@ -674,14 +689,14 @@ public class Logic {
 	 */
 	public Boolean done(String title) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
 
 		tempTask.setDoneStatus(true);
 		String tempName = tempTask.getName().getName();
-		
+
 		if (tempTask.getRecurringStatus()) {
 			tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
 		}
@@ -731,7 +746,7 @@ public class Logic {
 	 */
 	public Boolean undone(String title) {
 
-		logger.log(Level.INFO, LOGGING_EDITING_TASK + title);
+		logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
@@ -746,7 +761,7 @@ public class Logic {
 
 		return deleteResponse && addResponse;
 	}
-	
+
 	/**
 	 * This method terminates the application.
 	 *
@@ -756,7 +771,7 @@ public class Logic {
 	public void exit() {
 		System.exit(0);
 	}
-	
+
 	/**
 	 * This method takes in an integer and undo that number of steps.
 	 *
@@ -784,7 +799,7 @@ public class Logic {
 		uiHandler.refresh();
 		return redoResponse;
 	}
-	
+
 	/**
 	 * This method resets the view
 	 *
@@ -796,7 +811,7 @@ public class Logic {
 		uiHandler.sendMessage("View refreshed. All search and filter results are cleared!", true);
 		return true;
 	}
-	
+
 	/**
 	 * This method save all the tasks to a new file path
 	 *
@@ -806,7 +821,7 @@ public class Logic {
 	public boolean setNewFile(String path) {
 		return dataBase.setNewFile(path);
 	}
-	
+
 	/**
 	 * This method opens a file from a given new file path
 	 *
@@ -816,7 +831,7 @@ public class Logic {
 	public Boolean openNewFile(String path) {
 		return dataBase.openNewFile(path);
 	}
-	
+
 	/**
 	 * This method call UIHandler to change tab
 	 *
@@ -848,9 +863,10 @@ public class Logic {
 			break;
 		}
 	}
-	
+
 	/**
-	 * This method call UIHandler to display a message when flexi command cannot be parsed
+	 * This method call UIHandler to display a message when flexi command cannot
+	 * be parsed
 	 *
 	 * 
 	 * @return Boolean
@@ -859,7 +875,7 @@ public class Logic {
 		uiHandler.sendMessage("Sorry! I don't understand what you are talking about!", true);
 		return true;
 	}
-	
+
 	/**
 	 * This method clears all the tasks
 	 *
@@ -870,7 +886,7 @@ public class Logic {
 		this.dataBase.clear();
 		return true;
 	}
-	
+
 	/**
 	 * This method returns the current UIHandler
 	 *
@@ -880,7 +896,7 @@ public class Logic {
 	public UIHandler getUIHandler() {
 		return uiHandler;
 	}
-	
+
 	/**
 	 * This method returns the current main app
 	 *
@@ -900,9 +916,10 @@ public class Logic {
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
-	
+
 	/**
-	 * This method takes in an integer, increases the internal step counter and takes a snapshot
+	 * This method takes in an integer, increases the internal step counter and
+	 * takes a snapshot
 	 *
 	 * 
 	 * @return Boolean
@@ -922,7 +939,7 @@ public class Logic {
 	public int checkStep() {
 		return this.steps;
 	}
-	
+
 	/**
 	 * This method returns the snapshot array
 	 *
@@ -985,7 +1002,7 @@ public class Logic {
 		}
 		return LocalDateTime.parse(myTime, formatter);
 	}
-	
+
 	/**
 	 * This method gets the current time stamp
 	 *
