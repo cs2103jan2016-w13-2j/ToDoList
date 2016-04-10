@@ -37,7 +37,16 @@ public class DataBase {
 	private static String MESSAGE_SUCCESSFULLY_DELETE_TASK = "The task is deleted from database: ";
 	private static String MESSAGE_RETRIEVE_TASK = "trying to retrieve: ";
 	private static String MESSAGE_SETTING_NEW_PATH = "trying to set new path: ";
+	private static String MESSAGE_SMART_SEARCH = "tring to smart search for task:  ";
+	private static String MESSAGE_SUCCESSFULLY_SMART_SEARCH_TASK = "successfully smart search for task: ";
+	private static String MESSAGE_NO_RESULT_SMART_SEARCH_TASK = "no result for smart search for task: ";
 	private static String MESSAGE_SUCCESSFULLY_SET_PATH = "successfully set new path: ";
+	private static String MESSAGE_FAIL_SET_PATH = "fail to set new path: ";
+	private static String MESSAGE_OPEN_NEW_FILE = "trying to open a new file in new directory: ";
+	private static String MESSAGE_SUCCESSFULLY_OPEN_NEW_FILE = "successfully open new file in new directory: ";
+	private static String MESSAGE_FAIL_OPEN_NEW_FILE = "fail to open new file in the new directory: ";
+	private static String MESSAGE_SORT = "trying to sort based on %1$ in %2s order";
+	
 	private static String ERROR_REPEATED_TASK = "The task has already existed: ";
 	private static String ERROR_TASK_NOT_EXIST = "The task to delete does not exist: ";
 
@@ -189,8 +198,17 @@ public class DataBase {
 	 */
 	public ArrayList<Task> smartSearch(String[] keywords) {
 		assert (keywords != null);
+		
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_SMART_SEARCH + keywords.toString());
+		
 		ArrayList<Task> resultList = retriever.smartRetrieve(taskList, keywords);
-
+		
+		if(resultList.isEmpty()) {
+			logger.logAction(COMPONENT_STORAGE, MESSAGE_NO_RESULT_SMART_SEARCH_TASK + keywords.toString());
+		}else {
+			logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_SMART_SEARCH_TASK + keywords.toString());
+		}
+		
 		return resultList;
 	}
 
@@ -212,6 +230,9 @@ public class DataBase {
 		isSet = fh.setFile(newFilePath);
 
 		if (!isSet) {
+			
+			logger.logAction(COMPONENT_STORAGE, MESSAGE_FAIL_SET_PATH + newFilePath);
+			
 			return false;
 		}
 		
@@ -230,12 +251,18 @@ public class DataBase {
 	public boolean openNewFile(String newFilePath) {
 		assert (newFilePath != null);
 		
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_OPEN_NEW_FILE + newFilePath);
+		
 		boolean isOpen = false;
 		isOpen = fh.openFile(newFilePath);
 		
 		if (!isOpen) {
+			
+			logger.logAction(COMPONENT_STORAGE, MESSAGE_FAIL_OPEN_NEW_FILE + newFilePath);
 			return false;
 		}
+		
+		logger.logAction(COMPONENT_STORAGE, MESSAGE_SUCCESSFULLY_OPEN_NEW_FILE + newFilePath);
 		
 		this.loadFromFile();
 		
@@ -264,6 +291,9 @@ public class DataBase {
 	 *            order or descending order
 	 */
 	public void sort(String fieldName, String order) {
+		
+		logger.logAction(COMPONENT_STORAGE, String.format(MESSAGE_SORT, fieldName, order));
+		
 		taskList = sorter.sortHandler(taskList, fieldName, order);
 	}
 }

@@ -500,7 +500,7 @@ public class CommandTest {
     
     
     /*
-     * 13. test delete function
+     * 15. test delete function
      */
     @Test
     public void testDelete() {
@@ -518,7 +518,7 @@ public class CommandTest {
     }
     
     /*
-     * 14. test edit function: edit title of the task
+     * 16. test edit function: edit title of the task
      */
     @Test
     public void testEdit() {
@@ -542,7 +542,7 @@ public class CommandTest {
     }
     
     /*
-     * 15/16. test edit function: edit the start/end time of the task
+     * 17/18. test edit function: edit the start/end time of the task
      */
     @Test
     public void testEdit2() {
@@ -574,7 +574,7 @@ public class CommandTest {
     }
     
     /*
-     * 17/18. test edit function: remove start/end time
+     * 19/20. test edit function: remove start/end time
      */
     @Test
     public void testEdit3() {
@@ -606,7 +606,7 @@ public class CommandTest {
     }
 
     /*
-     * 19. test label function: label the task to certain category
+     * 21. test label function: label the task to certain category
      */
     @Test
     public void testLabel() {
@@ -630,7 +630,7 @@ public class CommandTest {
     }
 
     /*
-     * 20. test remind function: set reminder to an event
+     * 22. test remind function: set reminder to an event
      */
     @Test
     public void testRemind() {
@@ -653,7 +653,7 @@ public class CommandTest {
     }
     
     /*
-     * 21. test remind function: set reminder to an event
+     * 23. test remind function: set reminder to an event
      */
     @Test
     public void testDone() {
@@ -680,7 +680,7 @@ public class CommandTest {
     }
     
     /*
-     * 22. test undo/redo function
+     * 24. test undo/redo function
      */
     @Test
     public void testUndo() {
@@ -722,7 +722,7 @@ public class CommandTest {
     }
     
     /*
-     * 23. test set-recurring function
+     * 25. test set-recurring function
      */
     @Test
     public void testSetRemoveRecurring() {
@@ -751,7 +751,7 @@ public class CommandTest {
     }
     
     /*
-     * 24. test set-recurring function
+     * 26. test set-recurring function
      */
     @Test
     public void testRemoveRecurring() {
@@ -772,7 +772,7 @@ public class CommandTest {
     }
     
     /*
-     * 25/26. test postpone/forward function
+     * 27/28. test postpone/forward function
      */
     @Test
     public void testPostponeForward() {
@@ -799,12 +799,5 @@ public class CommandTest {
         //check the start and end time        
         assertTrue(taskList.get(0).getStartTime().equals(startdate.get(0)));
         assertTrue(taskList.get(0).getEndTime().equals(enddate.get(0))); 
-    }
-   
-    
-    
-    
-    
-    
-
+    }  
 }

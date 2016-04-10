@@ -22,7 +22,7 @@ public class TaskSorter {
 		
         taskList = tasks;
         
-		switch (fieldName) {
+		switch (fieldName.toLowerCase()) {
 		case "start":
 			sort_StartDate(taskList);
 			break;
@@ -39,7 +39,7 @@ public class TaskSorter {
 			
 		}
 		
-		if(order.equals("descending")) {
+		if(order.equalsIgnoreCase("descending")) {
 			Collections.reverse(taskList);
 		}
 		
