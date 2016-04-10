@@ -47,9 +47,10 @@ public class FileHandler {
 	 *         file is empty, return an empty arraylist.
 	 */
 	public ArrayList<Task> read() {
+		
 		ArrayList<Task> taskList = new ArrayList<Task>();
 		File path = new File(FILEPATH);
-		System.out.println(FILEPATH);
+
 		if (isFileReady(path) && !isFileEmpty(path)) {
 			try {
 				FileReader fr = new FileReader(FILEPATH);

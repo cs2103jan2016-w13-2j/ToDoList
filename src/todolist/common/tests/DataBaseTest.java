@@ -19,10 +19,6 @@ import todolist.storage.DataBase;
 
 public class DataBaseTest {
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-
 	private DataBase db;
 	private ArrayList<String> name;
 	private ArrayList<String> date;
@@ -113,7 +109,7 @@ public class DataBaseTest {
 	}
 	
 	@Test
-	/**
+	/*
 	 * test add event to the database
 	 * 
 	 */
@@ -139,7 +135,7 @@ public class DataBaseTest {
 		
 	}
     
-	/**
+	/*
 	 * test delete an (existing) event from database
 	 */
 	@Test
@@ -157,7 +153,7 @@ public class DataBaseTest {
 		assertTrue(db.taskList.isEmpty());
 	}
 	
-	/**
+	/*
 	 * test delete an (not existing) event from database
 	 */
 	@Test
@@ -170,7 +166,7 @@ public class DataBaseTest {
 		assertFalse(db.delete(taskToDelete));
 	}
 	
-    /**
+    /*
      * test check existence for an event (existing) in the database
      */
 	@Test
@@ -185,7 +181,7 @@ public class DataBaseTest {
 		}
 		
 	}
-	/**
+	/*
      * test check existence for an event (not existing) in the database
      */
 	@Test
@@ -199,7 +195,7 @@ public class DataBaseTest {
 		assertFalse(db.checkExistence(taskToCheck));
 	}
     
-	/**
+	/*
 	 * test retrieve by (existing) name
 	 */
 	@Test
@@ -221,7 +217,7 @@ public class DataBaseTest {
 		}		
 	}
 	
-	/**
+	/*
 	 * test retrieve by (not existing) name
 	 */
 	@Test
@@ -237,7 +233,7 @@ public class DataBaseTest {
 		assertTrue(isEqual);
 	}
 	
-	/**
+	/*
 	 * test retrieve by (existing) category
 	 */
 	@Test
@@ -252,7 +248,7 @@ public class DataBaseTest {
 		assertEquals(taskList.size(), 10);
 	}
 	
-	/**
+	/*
 	 * test retrieve by (not existing) category
 	 */
 	@Test
@@ -269,7 +265,7 @@ public class DataBaseTest {
 		assertEquals(expected, isEqual);
 	}
     
-	/**
+	/*
 	 * test retrieveSmartSearch function
 	 */
 	@Test
@@ -290,7 +286,7 @@ public class DataBaseTest {
         assertTrue(isEqual);
 	}
 	
-	/**
+	/*
 	 * test retrieveSmartSearch function
 	 */
 	@Test
@@ -313,7 +309,7 @@ public class DataBaseTest {
         assertTrue(isEqual);
 	}
 	
-	/**
+	/*
 	 * test retrieveAll function
 	 */
 	@Test
@@ -334,7 +330,7 @@ public class DataBaseTest {
 	}
 	
 	
-	/**
+	/*
 	 * test change directory method
 	 */
 	@Test 

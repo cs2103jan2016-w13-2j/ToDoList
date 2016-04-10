@@ -21,7 +21,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (in the future)
 	 */
 	@Test
-	public void test_ParseAdd1() {
+	public void testParseAdd1() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 2019-05-01 16:00 2 hour";
 	    String date = "2019-05-01";
@@ -53,7 +53,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (in the future)
 	 */
 	@Test
-	public void test_ParseAdd2() {
+	public void testParseAdd2() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 2019-05-01 16:00 2 hour";
 	    String date = "2019-05-01";
@@ -86,7 +86,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (in the past)
 	 */
 	@Test
-	public void test_ParseAdd3() {
+	public void testParseAdd3() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 2100-05-01 16:00 2 hour";
 	    String date = "2100-05-01";
@@ -118,7 +118,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (in the past)
 	 */
 	@Test
-	public void test_ParseEvent4() {
+	public void testParseEvent4() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 1970-01-01 16:00 2 hour";
 	    String date = "1970-01-01";
@@ -150,7 +150,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (with keyword 'add')
 	 */
 	@Test
-	public void test_ParseEvent5() {
+	public void testParseEvent5() {
 		//parse the command
 		String input = "add event \"add amount to bank account\" 2017-01-01 16:00 2 hour";
 	    String date = "2017-01-01";
@@ -182,7 +182,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (without the 'year')
 	 */
 	@Test
-	public void test_ParseEvent6() {
+	public void testParseEvent6() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 05-01 16:00 2 hour";
 	    String date = "05-01";
@@ -215,7 +215,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add event (without the 'year' & 'start time') ,
 	 */
 	@Test
-	public void test_ParseEvent7() {
+	public void testParseEvent7() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 05-01 2 hour";
 	    String date = "05-01";
@@ -246,7 +246,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for add deadline
 	 */
 	@Test
-	public void test_Deadline1() {
+	public void testDeadline1() {
 		//parse the command
 		String input = "add deadline \"submit proposal\" 2017-01-01 23:59";
 	    String date = "2017-01-01";
@@ -272,7 +272,7 @@ public class NormalCommandParserTest {
 	 * test normal-command for delete a task
 	 */
 	@Test
-	public void test_delete() {
+	public void testDelete() {
 		//parse the command
 		String input = "delete \"title\"";
 		TokenizedCommand command = normalCommandParser.parse(input);
@@ -284,11 +284,6 @@ public class NormalCommandParserTest {
 		String[] tokonizedCommand = command.getArgs();
 		//check the type of the task
 		assertTrue(tokonizedCommand[0].equals("title"));
-	}
-	
-	
-
-	
-	
+	}	
     
 }

@@ -60,7 +60,8 @@ public class CommandTest {
 		input.add(14, "edit firsttitle title newtitle");
 		input.add(15, "edit firsttitle start-time 2017-01-02-13:00");
 		input.add(16, "edit firsttitle end-time 2017-01-03-13:00");
-		
+		input.add(17, "add-remind deadline \"to be reminded\" 05-01 14:00");
+		input.add(18, "add recurring deadline 2-hour title 2017-01-01 14:00");		
 	}
 	
 	private void initialiseName() {
@@ -77,7 +78,7 @@ public class CommandTest {
 		name.add(10, "a floating task");
 		name.add(11, "try tutorial question");
 		name.add(12, "try to add amount to bank account");
-		//name.add(13, "try tutorial question");		
+		name.add(13, "to be reminded");		
 	}
 	
 	private void initialiseStartdate() {
@@ -101,6 +102,7 @@ public class CommandTest {
 		enddate.add(7, parseDate("2100-01-01 12:00"));
 		enddate.add(8, parseDate(tmr_string() + " " + "23:59"));
 		enddate.add(9, parseDate(today_string() + " " + "23:59"));
+		
 	}
 	
 	
@@ -454,34 +456,46 @@ public class CommandTest {
     	isEqual = thisTask.getName().getName().trim().equals(name.get(12));
     	assertTrue(isEqual);             
     }
+    
+	/*
+     * 13. test add function: add a deadline with reminder
+     */
+    @Test
+    public void testAddCommand13() {
+    	logic.clean();
+
+    	logic.process(input.get(17));
+
+    	//check size of database
+    	ArrayList<Task> taskList = logic.dataBase.retrieveAll();
+    	assertEquals(1, taskList.size());
+
+    	Task thisTask = taskList.get(0);
+    	// check name of the task
+    	boolean isEqual;
+    	isEqual = thisTask.getName().getName().trim().equals(name.get(13));
+    	assertTrue(isEqual);
+    	
+    	//check the status of reminder
+    	assertTrue(thisTask.getReminder().getStatus()); 
+    }
         
 	/*
-     * 12. test add recurring event command with start time in the future
+     * 14. test add recurring deadline
      */
-    /*@Test
-    public void testAddRecurring_Event1() {
+    @Test
+    public void testAddCommand14() {
         logic.clean();
 
-        String name = "title";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-        LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-        // add in the command to add a new event
-        logic.process("add-recurring event title 2017-01-01 14:00 ");
+        logic.process(input.get(18));
 
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
-        Boolean isEqual = taskList.size() == 1;
-        assertTrue(isEqual);
-        // check name of the task
-        isEqual = taskList.get(0).getName().getName().equals(name);
-        assertTrue(isEqual);
-        // check start time
-        isEqual = taskList.get(0).getStartTime().isEqual(start);
-        assertTrue(isEqual);
-        // check end time
-        isEqual = taskList.get(0).getEndTime().isEqual(end);
-        assertTrue(isEqual);
+        assertEquals(1, taskList.size());
+        
+        //check recurring status
+        assertTrue(taskList.get(0).getRecurringStatus());
+        
     }
     
     
@@ -711,7 +725,7 @@ public class CommandTest {
      * 23. test set-recurring function
      */
     @Test
-    public void testSet_Remove_Recurring() {
+    public void testSetRemoveRecurring() {
         logic.clean();
         
         //add tasks
@@ -731,7 +745,7 @@ public class CommandTest {
         taskList = logic.dataBase.retrieveAll();
         assertTrue(taskList.size() == 1);
         //check the recurring status and interval
-        System.out.println("kkkk" + taskList.get(0).getInterval());
+ 
         assertFalse(taskList.get(0).getRecurringStatus());
         assertTrue(taskList.get(0).getInterval() == null); 
     }
@@ -740,7 +754,7 @@ public class CommandTest {
      * 24. test set-recurring function
      */
     @Test
-    public void testRemove_Recurring() {
+    public void testRemoveRecurring() {
         logic.clean();
         
         //add tasks
@@ -761,7 +775,7 @@ public class CommandTest {
      * 25/26. test postpone/forward function
      */
     @Test
-    public void testPostpone_Forward() {
+    public void testPostponeForward() {
         logic.clean();
         
         //add tasks

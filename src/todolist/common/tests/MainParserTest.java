@@ -24,7 +24,7 @@ public class MainParserTest {
 	 * 1. test normal-command for add event
 	 */
 	@Test
-	public void test_Add_Event1() {
+	public void testAddEvent1() {
 		//parse the command
 		String input = "add event \"cs2013 lecture\" 2019-05-01 16:00 2 hour";
 	    String date = "2019-05-01";
@@ -56,7 +56,7 @@ public class MainParserTest {
 	 * 2. test normal-command for add event (with keyword 'add')
 	 */
 	@Test
-	public void test_Add_Event2() {
+	public void testAddEvent2() {
 		//parse the command
 		String input = "add event \"add amount to bank account\" 2017-01-01 16:00 2 hour";
 	    String date = "2017-01-01";
@@ -88,7 +88,7 @@ public class MainParserTest {
 	 * 3. test normal-command for add deadline
 	 */
 	@Test
-	public void test_Add_Deadline() {
+	public void testAddDeadline() {
 		//parse the command
 		String input = "add deadline \"submit proposal\" 2017-01-01 23:59";
 	    String date = "2017-01-01";
@@ -114,7 +114,7 @@ public class MainParserTest {
 	 * 3. test normal-command for add floating task
 	 */
 	@Test
-	public void test_Add_floating() {
+	public void testAddFloating() {
 		//parse the command
 		String input = "add deadline \"submit proposal\" 2017-01-01 23:59";
 	    String date = "2017-01-01";
@@ -140,7 +140,7 @@ public class MainParserTest {
 	 * 5. test flexi-command for add event
 	 */
 	@Test
-	public void test_flexi_Add_Event() {
+	public void testFlexiAddEvent() {
 		//parse the command
 		String input = "2013 lecture 4/12/16 4pm to 6pm";
 	    String date = "2016-04-12";
@@ -173,7 +173,7 @@ public class MainParserTest {
 	 * 6. test flexi-command for add floating task
 	 */
 	@Test
-	public void test_flexi_Add_Task() {
+	public void testFlexiAddTask() {
 		//parse the command
 		String input = "attend lecture";
 		TokenizedCommand command = mainparser.parse(input);
@@ -193,7 +193,7 @@ public class MainParserTest {
 	 * 7. test flexi-command for add deadline
 	 */
 	@Test
-	public void test_flexi_Add_deadline() {
+	public void testFlexiAddDeadline() {
 		//parse the command
 		String input = "sumbit proposal tmr 2359";
 		LocalDateTime date = LocalDateTime.now();

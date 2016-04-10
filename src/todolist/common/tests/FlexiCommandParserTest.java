@@ -25,7 +25,7 @@ public class FlexiCommandParserTest {
 	 * test flexi-command for add deadline
 	 */
 	@Test
-	public void test_ParseDeadline() {
+	public void testParseDeadline() {
 		//parse the command
 		String input = "sumbit proposal tmr 2359";
 		LocalDateTime date = LocalDateTime.now();
@@ -55,7 +55,7 @@ public class FlexiCommandParserTest {
 	 * test flexi-command for add deadline (with key word today)
 	 */
 	@Test
-	public void test_ParseDeadline2() {
+	public void testParseDeadline2() {
 		//parse the command
 		String input = "sumbit proposal by today";//should be by 2359 today
 		LocalDateTime date = LocalDateTime.now();
@@ -87,7 +87,7 @@ public class FlexiCommandParserTest {
 	 * test flexi-command for add deadline (with key word 'lunch')
 	 */
 	@Test
-	public void test_ParseDeadline3() {
+	public void testParseDeadline3() {
 		//parse the command
 		String input = "i want to eat lunch tmr";//should be by 1300 tmr
 		LocalDateTime date = LocalDateTime.now();
@@ -117,7 +117,7 @@ public class FlexiCommandParserTest {
 	 * test flexi-command for add deadline (with key word 'dinner')
 	 */
 	@Test
-	public void test_ParseDeadline4() {
+	public void testParseDeadline4() {
 		//parse the command
 		String input = "i want to eat dinner tmr";//should be by 1900 tmr
 		LocalDateTime date = LocalDateTime.now();
@@ -147,7 +147,7 @@ public class FlexiCommandParserTest {
 	 * test flexi-command for add deadline (with key word 'breakfast')
 	 */
 	@Test
-	public void test_ParseDeadline5() {
+	public void testParseDeadline5() {
 		//parse the command
 		String input = "i want to eat dinner tmr";//should be by 0900 tmr
 		LocalDateTime date = LocalDateTime.now();
@@ -177,7 +177,7 @@ public class FlexiCommandParserTest {
 	 * test flexi-command for add event
 	 */
 	@Test
-	public void test_ParseEvent() {
+	public void testParseEvent() {
 		//parse the command
 		String input = "2013 lecture 4/12/16 4pm to 6pm";
 	    String date = "2016-04-12";
@@ -209,7 +209,7 @@ public class FlexiCommandParserTest {
 	 * test flexi-command for add floating task
 	 */
 	@Test
-	public void test_ParseTask() {
+	public void testParseTask() {
 		//parse the command
 		String input = "attend lecture";
 		TokenizedCommand command = flexiParser.parse(input);
@@ -223,9 +223,6 @@ public class FlexiCommandParserTest {
 		assertTrue(tokonizedCommand[0].equals("task"));
 		//check the title of the task
 		assertTrue(tokonizedCommand[1].trim().equals("attend lecture".trim()));
-	}
-	
-	
-	
+	}	
 
 }
