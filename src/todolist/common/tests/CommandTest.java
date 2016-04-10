@@ -590,31 +590,31 @@ public class CommandTest {
         isEqual = taskList.get(0).getEndTime() == null;
         assertTrue(isEqual);      
     }
-    
+
     /*
      * 19. test label function: label the task to certain category
      */
-  //  @Test
-//    public void testLabel() {
-//        logic.clean();
-//        
-//        //add a task
-//        logic.process(input.get(0));
-//        ArrayList<Task> taskList = logic.dataBase.retrieveAll();       
-//        //assertTrue(taskList.size() == 1);
-//        
-//        //edit the start time
-//        logic.process("label firsttitle cat1");
-//        
-//        //check that the task is still there 
-//        taskList = logic.dataBase.retrieveAll();
-//        //assertTrue(taskList.size() == 1);
-//        
-//        //check label of the task
-//        boolean isEqual = taskList.get(0).getCategory().getCategory().equals("cat1");;
-//        //assertTrue(isEqual); 
-//    }
-    
+    @Test
+    public void testLabel() {
+    	logic.clean();
+
+    	//add a task
+    	logic.process(input.get(0));
+    	ArrayList<Task> taskList = logic.dataBase.retrieveAll();       
+    	assertTrue(taskList.size() == 1);
+
+    	//edit the start time
+    	logic.process("label firsttitle cat1");
+
+    	//check that the task is still there 
+    	taskList = logic.dataBase.retrieveAll();
+    	assertTrue(taskList.size() == 1);
+
+    	//check label of the task
+    	boolean isEqual = taskList.get(0).getCategory().getCategory().equals("cat1");;
+    	assertTrue(isEqual); 
+    }
+
     /*
      * 20. test remind function: set reminder to an event
      */
@@ -711,7 +711,7 @@ public class CommandTest {
      * 23. test set-recurring function
      */
     @Test
-    public void testSet_Recurring() {
+    public void testSet_Remove_Recurring() {
         logic.clean();
         
         //add tasks
@@ -726,13 +726,42 @@ public class CommandTest {
         //check the recurring status and interval
         assertTrue(taskList.get(0).getRecurringStatus());
         assertTrue(taskList.get(0).getInterval().equals("3-month")); 
+        
+        logic.process("remove-recurring  " + name.get(0));
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        //check the recurring status and interval
+        System.out.println("kkkk" + taskList.get(0).getInterval());
+        assertFalse(taskList.get(0).getRecurringStatus());
+        assertTrue(taskList.get(0).getInterval() == null); 
     }
     
     /*
-     * 24/25. test postpone/forward function
+     * 24. test set-recurring function
      */
     @Test
-    public void testPostpone() {
+    public void testRemove_Recurring() {
+        logic.clean();
+        
+        //add tasks
+        logic.process(input.get(0));        
+        ArrayList<Task> taskList = null;
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+           
+        logic.process("remove-recurring " + name.get(0));
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        //check the recurring status and interval
+        assertFalse(taskList.get(0).getRecurringStatus());
+        assertTrue(taskList.get(0).getInterval() == null); 
+    }
+    
+    /*
+     * 25/26. test postpone/forward function
+     */
+    @Test
+    public void testPostpone_Forward() {
         logic.clean();
         
         //add tasks
@@ -748,8 +777,17 @@ public class CommandTest {
         //check the start and end time        
         assertTrue(taskList.get(0).getStartTime().equals(startdate.get(0).plus(Long.parseLong("2"), ChronoUnit.DAYS)));
         assertTrue(taskList.get(0).getEndTime().equals(enddate.get(0).plus(Long.parseLong("2"), ChronoUnit.DAYS))); 
+        
+        logic.process("forward " + name.get(0) + " 2 day");
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        
+        //check the start and end time        
+        assertTrue(taskList.get(0).getStartTime().equals(startdate.get(0)));
+        assertTrue(taskList.get(0).getEndTime().equals(enddate.get(0))); 
     }
    
+    
     
     
     
