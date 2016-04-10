@@ -146,10 +146,8 @@ public class DataBaseTest {
 	public void testDelete1() {
 		db.clear();
 		
-		// add one event
 		addEvents();
 
-		// delete the task
 		for(int i = 0; i < eventList.size(); i++) {
 			assertTrue(db.delete(eventList.get(i)));
 		}
@@ -166,10 +164,8 @@ public class DataBaseTest {
 	public void testDelete2() {
 		db.clear();
 		
-		//add event to the database
 		addEvents();
 		
-		//delete an event not in the database
 		Task taskToDelete = createTask("title not exit", date.get(0), date.get(0), null);
 		assertFalse(db.delete(taskToDelete));
 	}

@@ -58,7 +58,9 @@ public class CommandTest {
 		input.add(12, "try to add amount to bank account");
 		input.add(13, "delete firsttitle");
 		input.add(14, "edit firsttitle title newtitle");
-
+		input.add(15, "edit firsttitle start-time 2017-01-02-13:00");
+		input.add(16, "edit firsttitle end-time 2017-01-03-13:00");
+		
 	}
 	
 	private void initialiseName() {
@@ -502,7 +504,7 @@ public class CommandTest {
     }
     
     /*
-     * 14. test edit function
+     * 14. test edit function: edit title of the task
      */
     @Test
     public void testEdit() {
@@ -526,7 +528,7 @@ public class CommandTest {
     }
     
     /*
-     * 15. test edit function
+     * 15/16. test edit function: edit the start/end time of the task
      */
     @Test
     public void testEdit2() {
@@ -537,19 +539,220 @@ public class CommandTest {
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();       
         assertTrue(taskList.size() == 1);
         
-        //edit the title
-        logic.process(input.get(14));
+        //edit the start time
+        logic.process(input.get(15));
         
         //check that the task is still there 
         taskList = logic.dataBase.retrieveAll();
         assertTrue(taskList.size() == 1);
         
-        //check name of the task
-        boolean isEqual = taskList.get(0).getName().getName().equals("newtitle");
-        assertTrue(isEqual);
+        //check start time of the task
+        boolean isEqual = taskList.get(0).getStartTime().toString().equals("2017-01-02T13:00");
+        assertTrue(isEqual); 
         
+        //edit the end time
+        logic.process(input.get(16));
+        
+        //check end time of the task
+        taskList = logic.dataBase.retrieveAll();
+        isEqual = taskList.get(0).getEndTime().toString().equals("2017-01-03T13:00");
+        assertTrue(isEqual);      
     }
+    
+    /*
+     * 17/18. test edit function: remove start/end time
+     */
+    @Test
+    public void testEdit3() {
+        logic.clean();
+        
+        //add a task
+        logic.process(input.get(0));
+        ArrayList<Task> taskList = logic.dataBase.retrieveAll();       
+        assertTrue(taskList.size() == 1);
+        
+        //edit the start time
+        logic.process("edit firsttitle start-time remove");
+        
+        //check that the task is still there 
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        
+        //check start time of the task
+        boolean isEqual = taskList.get(0).getStartTime() == null;
+        assertTrue(isEqual); 
+        
+        //edit the end time
+        logic.process("edit firsttitle end-time remove");
+        
+        //check end time of the task
+        taskList = logic.dataBase.retrieveAll();
+        isEqual = taskList.get(0).getEndTime() == null;
+        assertTrue(isEqual);      
+    }
+    
+    /*
+     * 19. test label function: label the task to certain category
+     */
+  //  @Test
+//    public void testLabel() {
+//        logic.clean();
+//        
+//        //add a task
+//        logic.process(input.get(0));
+//        ArrayList<Task> taskList = logic.dataBase.retrieveAll();       
+//        //assertTrue(taskList.size() == 1);
+//        
+//        //edit the start time
+//        logic.process("label firsttitle cat1");
+//        
+//        //check that the task is still there 
+//        taskList = logic.dataBase.retrieveAll();
+//        //assertTrue(taskList.size() == 1);
+//        
+//        //check label of the task
+//        boolean isEqual = taskList.get(0).getCategory().getCategory().equals("cat1");;
+//        //assertTrue(isEqual); 
+//    }
+    
+    /*
+     * 20. test remind function: set reminder to an event
+     */
+    @Test
+    public void testRemind() {
+        logic.clean();
+        
+        //add a task
+        logic.process(input.get(0));
+        ArrayList<Task> taskList = logic.dataBase.retrieveAll();       
+        assertTrue(taskList.size() == 1);
+        
+        //edit the start time
+        logic.process("remind firsttitle");
+        
+        //check that the task is still there 
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        
+        //check label of the task
+        assertTrue(taskList.get(0).getReminder().getStatus()); 
+    }
+    
+    /*
+     * 21. test remind function: set reminder to an event
+     */
+    @Test
+    public void testDone() {
+        logic.clean();
+        
+        //add a task
+        logic.process(input.get(0));
+        ArrayList<Task> taskList = logic.dataBase.retrieveAll();       
+        assertTrue(taskList.size() == 1);
+        
+        //edit the start time
+        logic.process("done firsttitle");
+        
+        //check that the task is still there 
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        
+        //check done status of the task
+        assertTrue(taskList.get(0).getDoneStatus()); 
+        
+        logic.process("undone firsttitle");
+        taskList = logic.dataBase.retrieveAll();
+        assertFalse(taskList.get(0).getDoneStatus());       
+    }
+    
+    /*
+     * 22. test undo/redo function
+     */
+    @Test
+    public void testUndo() {
+        logic.clean();
+        
+        //add tasks
+        logic.process(input.get(0));
+        logic.process(input.get(1));        
+        ArrayList<Task> taskList = null;
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 2);
+        
+        //delete tasks         
+        logic.process(input.get(13));
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
 
+        logic.process("undo 1");
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 2);
+        
+        logic.process("redo 1");
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1); 
+        
+        //add another two task
+        logic.process(input.get(2));
+        logic.process(input.get(3));
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 3);
+        
+        logic.process("undo 2");
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        
+        logic.process("redo 2");
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 3);      
+    }
+    
+    /*
+     * 23. test set-recurring function
+     */
+    @Test
+    public void testSet_Recurring() {
+        logic.clean();
+        
+        //add tasks
+        logic.process(input.get(0));        
+        ArrayList<Task> taskList = null;
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+           
+        logic.process("set-recurring " + name.get(0) + " 3-month");
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        //check the recurring status and interval
+        assertTrue(taskList.get(0).getRecurringStatus());
+        assertTrue(taskList.get(0).getInterval().equals("3-month")); 
+    }
+    
+    /*
+     * 24/25. test postpone/forward function
+     */
+    @Test
+    public void testPostpone() {
+        logic.clean();
+        
+        //add tasks
+        logic.process(input.get(0));        
+        ArrayList<Task> taskList = null;
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+           
+        logic.process("postpone " + name.get(0) + " 2 day");
+        taskList = logic.dataBase.retrieveAll();
+        assertTrue(taskList.size() == 1);
+        
+        //check the start and end time        
+        assertTrue(taskList.get(0).getStartTime().equals(startdate.get(0).plus(Long.parseLong("2"), ChronoUnit.DAYS)));
+        assertTrue(taskList.get(0).getEndTime().equals(enddate.get(0).plus(Long.parseLong("2"), ChronoUnit.DAYS))); 
+    }
+   
+    
+    
+    
     
 
 }

@@ -30,11 +30,11 @@ import java.util.ArrayList;
  */
 public class FileHandler {
 	private static String PATH_UPDATEDDIRECTORY = "updatedDirectory.txt";
-	private static String FILENAME = "/taskStorage.txt";
+	private static String FILENAME = "taskStorage.txt";
 	private static String FILEPATH = "taskStorage.txt";
 
 	private Gson gson = new Gson();
-
+    
 	public FileHandler() {
 		checkForUpdatedDirectory();
 	}
@@ -176,7 +176,16 @@ public class FileHandler {
 	}
 
 	public String getPath() {
-		return FILEPATH;
+		
+		if(FILEPATH.equalsIgnoreCase("taskStorage.txt")) {
+			
+			Path currentRelativePath = Paths.get("");
+			String currentDirectory = currentRelativePath.toAbsolutePath().toString();
+			return currentDirectory + "/" + FILENAME;
+			
+		}else {			
+			return FILEPATH;
+		}
 	}
 
 	// helper methods
