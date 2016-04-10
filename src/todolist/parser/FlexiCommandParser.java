@@ -191,6 +191,15 @@ public class FlexiCommandParser {
 		if (result.startsWith("From ") || result.startsWith("from ")) {
 			result = result.substring(6);
 		}
+		
+		if(result.endsWith(" ")) {
+			result = result.substring(0, result.length() - 2);
+		}
+		
+		if(result.startsWith(" ")) {
+			result = result.substring(1);
+		}
+		
 		return result;
 	}
 
