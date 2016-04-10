@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="1.7976931348623157E308"
+	maxWidth="1.7976931348623157E308" spacing="10.0" styleClass=".vbox"
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
+			preserveRatio="true" VBox.vgrow="ALWAYS">
+			<image>
+				<Image url="@assets/mainview-placeholder.png" />
+			</image>
+		</ImageView>
+		<Label id="placeholder" alignment="CENTER" contentDisplay="CENTER"
+			maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+			prefHeight="37.0" prefWidth="200.0"
+			text="not sure how to use me? enter 'tab help' !" textAlignment="CENTER"
+			textFill="#0000004d">
+		</Label>
+	</children>
+</VBox>

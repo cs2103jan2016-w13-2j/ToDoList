@@ -2,47 +2,134 @@
 
 <!-- @@author A0123994W -->
 
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-	minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0"
-	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="todolist.ui.controllers.MainViewController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="300.0" prefHeight="540.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.SettingsController">
 	<center>
-		<TitledPane alignment="CENTER" animated="false"
-			collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-			BorderPane.alignment="TOP_CENTER">
-			<content>
-				<ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0">
-					<placeholder>
-						<Label style="-fx-font-weight: bold;" text="no settings for now ... get back to work!" />
-					</placeholder>
-					<opaqueInsets>
-						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-					</opaqueInsets>
-					<padding>
-						<Insets bottom="5.0" />
-					</padding>
-				</ListView>
-			</content>
+		<TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="TOP_CENTER">
 			<graphic>
-				<HBox id="titled-pane-hbox" alignment="CENTER" maxHeight="1.7976931348623157E308"
-					maxWidth="1.7976931348623157E308" spacing="10.0">
+				<HBox id="titled-pane-hbox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
 					<children>
-						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD"
-							strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;"
-							text="settings" textAlignment="CENTER" />
+						<Text id="titled-pane-hbox-text" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="settings" textAlignment="CENTER" />
 					</children>
 				</HBox>
 			</graphic>
+			<content>
+				<VBox fx:id="box" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+					<children>
+						<Label text="Week Ahead">
+							<font>
+								<Font name="System Bold" size="16.0" />
+							</font>
+						</Label>
+						<StackedBarChart fx:id="timeTable" alternativeColumnFillVisible="true" categoryGap="5.0" VBox.vgrow="ALWAYS">
+							<xAxis>
+								<CategoryAxis side="BOTTOM" />
+							</xAxis>
+							<yAxis>
+								<NumberAxis side="LEFT" />
+							</yAxis>
+						</StackedBarChart>
+						<Label text="Options">
+							<font>
+								<Font name="System Bold" size="16.0" />
+							</font>
+						</Label>
+						<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="150.0">
+							<children>
+								<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+									<children>
+										<Label prefWidth="150.0" text="Current Directory">
+											<font>
+												<Font name="System Bold" size="12.0" />
+											</font>
+										</Label>
+										<TextFlow>
+											<children>
+												<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Workspace: /Users/Larry/..." wrappingWidth="177.87000274658203">
+													<font>
+														<Font size="10.0" />
+													</font>
+												</Text>
+											</children>
+										</TextFlow>
+									</children>
+								</VBox>
+								<ToggleButton mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" text="Reset">
+									<font>
+										<Font size="12.0" />
+									</font>
+								</ToggleButton>
+							</children>
+						</HBox>
+						<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="150.0">
+							<children>
+								<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+									<children>
+										<Label prefWidth="150.0" text="Sound Effects">
+											<font>
+												<Font name="System Bold" size="12.0" />
+											</font>
+										</Label>
+										<TextFlow>
+											<children>
+												<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Toggle to enable or disable sounds">
+													<font>
+														<Font size="10.0" />
+													</font>
+												</Text>
+											</children>
+										</TextFlow>
+									</children>
+								</VBox>
+								<ToggleButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" text="Mute">
+									<font>
+										<Font size="12.0" />
+									</font>
+								</ToggleButton>
+							</children>
+						</HBox>
+						<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="150.0">
+							<children>
+								<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+									<children>
+										<Label prefWidth="150.0" text="Reminder Ringtone">
+											<font>
+												<Font name="System Bold" size="12.0" />
+											</font>
+										</Label>
+										<TextFlow>
+											<children>
+												<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current Source: ..." wrappingWidth="168.87000274658203">
+													<font>
+														<Font size="10.0" />
+													</font>
+												</Text>
+											</children>
+										</TextFlow>
+									</children>
+								</VBox>
+								<ToggleButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" text="Reset">
+									<font>
+										<Font size="12.0" />
+									</font>
+								</ToggleButton>
+							</children>
+						</HBox>
+					</children>
+				</VBox>
+			</content>
 		</TitledPane>
 	</center>
 </BorderPane>

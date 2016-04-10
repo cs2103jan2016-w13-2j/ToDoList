@@ -6,17 +6,20 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.textfield.TextFields;
 
 import com.sun.javafx.css.StyleManager;
 
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -29,7 +32,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
 import todolist.logic.Logic;
@@ -40,6 +42,7 @@ import todolist.ui.controllers.ArchiveController;
 import todolist.ui.controllers.HelpModalController;
 import todolist.ui.controllers.MainViewController;
 import todolist.ui.controllers.OverdueController;
+import todolist.ui.controllers.SettingsController;
 import todolist.ui.controllers.SideBarController;
 import todolist.ui.controllers.TodayController;
 import todolist.ui.controllers.WeekController;
@@ -154,6 +157,7 @@ public class MainApp extends Application {
     private TodayController todayController;
     private WeekController weekController;
     private ArchiveController archiveController;
+    private SettingsController settingsController;
     private HelpModalController helpModal;
 
     // Other components
@@ -179,6 +183,8 @@ public class MainApp extends Application {
             "filter", "redo", "undo", "reset", "forward", "postpone", "remind", "set-recurring", "open", "task",
             "event", "deadline" };
 
+    ObservableList<String> keywords = null;
+
     /*** CORE FUNCTIONS ***/
 
     /*
@@ -198,7 +204,7 @@ public class MainApp extends Application {
 
         // Setting application icon
         com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
-        java.awt.Image image = Toolkit.getDefaultToolkit().getImage(MainApp.class.getResource(APPLICATION_ICON));
+        java.awt.Image image = Toolkit.getDefaultToolkit().getImage(MainApp.class.getResource(getApplicationIcon()));
         application.setDockIconImage(image);
 
         // Initializing utilities
@@ -367,15 +373,18 @@ public class MainApp extends Application {
      */
     private void loadCommandLine() {
 
+        if (keywords == null) {
+            keywords = FXCollections.observableArrayList();
+
+            for (String str : suggestions) {
+                keywords.add(str);
+            }
+        }
+
         if (commandField == null) {
             commandField = (TextField) mainView.getBottom();
 
-            // AutoCompletionBinding<String> binding =
-            // TextFields.bindAutoCompletion(commandField, suggestions);
-
-            // ... From current caret position to last space ... search word
-
-            // ... Populate, anchor and display ContextMenu if applicable
+            TextFields.bindAutoCompletion(commandField, suggestions);
 
             mainController.setCommandLineCallback(commandField, dayModeTheme, nightModeTheme);
 
@@ -383,7 +392,10 @@ public class MainApp extends Application {
             KeyCodeCombination scrollHistoryUp = new KeyCodeCombination(KeyCode.UP, KeyCombination.ALT_DOWN);
             KeyCodeCombination scrollHistoryDown = new KeyCodeCombination(KeyCode.DOWN, KeyCombination.ALT_DOWN);
 
-            commandField.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            ContextMenu menu = new ContextMenu();
+            commandField.setContextMenu(menu);
+
+            commandField.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
 
@@ -405,15 +417,17 @@ public class MainApp extends Application {
 
                     } else if (scrollHistoryUp.match(event) || scrollHistoryDown.match(event)) {
                         // do nothing ...
+
                     } else {
 
                         // Reset on other input
                         while (!commandHistoryForward.isEmpty()) {
                             commandHistoryBackward.push(commandHistoryForward.pop());
                         }
-
                     }
+
                 }
+
             });
         }
 
@@ -501,6 +515,7 @@ public class MainApp extends Application {
                 mainController = loader.getController();
                 mainController.setMainApp(this, uiHandlerUnit);
                 mainController.setPageIndex(HOME_TAB);
+                mainController.setPlaceHolder("ui/views/MainViewPlaceHolder.fxml");
             }
 
             rootView.setCenter(mainView);
@@ -508,7 +523,7 @@ public class MainApp extends Application {
             if (commandField == null) {
                 loadCommandLine();
             }
-//            uiHandlerUnit.refresh();
+            // uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
             logger.logError(UtilityLogger.Component.UI, MESSAGE_ERROR_LOAD_MAIN);
@@ -538,6 +553,7 @@ public class MainApp extends Application {
                 overdueController = loader.getController();
                 overdueController.setMainApp(this, uiHandlerUnit);
                 overdueController.setPageIndex(EXPIRED_TAB);
+                overdueController.setPlaceHolder("ui/views/OverduePlaceHolder.fxml");
             }
 
             // uiHandlerUnit.refresh();
@@ -567,6 +583,7 @@ public class MainApp extends Application {
                 todayController = loader.getController();
                 todayController.setMainApp(this, uiHandlerUnit);
                 todayController.setPageIndex(TODAY_TAB);
+                todayController.setPlaceHolder("ui/views/TodayPlaceHolder.fxml");
             }
 
             // uiHandlerUnit.refresh();
@@ -597,6 +614,8 @@ public class MainApp extends Application {
                 weekController = loader.getController();
                 weekController.setMainApp(this, uiHandlerUnit);
                 weekController.setPageIndex(WEEK_TAB);
+                weekController.setPlaceHolder("ui/views/WeekPlaceHolder.fxml");
+
             }
 
             // uiHandlerUnit.refresh();
@@ -626,6 +645,8 @@ public class MainApp extends Application {
                 archiveController = loader.getController();
                 archiveController.setMainApp(this, uiHandlerUnit);
                 archiveController.setPageIndex(DONE_TAB);
+                archiveController.setPlaceHolder("ui/views/ArchivePlaceHolder.fxml");
+
             }
 
             // uiHandlerUnit.refresh();
@@ -647,6 +668,15 @@ public class MainApp extends Application {
             }
 
             // loadMainView();
+            if (settingsController == null) {
+                // Set up display logic for main view
+                settingsController = loader.getController();
+                settingsController.setMainApp(this, uiHandlerUnit);
+                settingsController.setPageIndex(OPTIONS_TAB);
+                settingsController.setPlaceHolder("ui/views/SettingsPlaceHolder.fxml");
+
+            }
+
             mainView.setCenter(settingsView);
 
             // uiHandlerUnit.refresh();
@@ -858,7 +888,7 @@ public class MainApp extends Application {
         }
 
         mainController.refreshReminders();
-
+        settingsController.loadCalendar(mainController.getTaskListView().getItems());
     }
 
     /*
@@ -999,6 +1029,10 @@ public class MainApp extends Application {
 
     public static int getDefaultTab() {
         return DEFAULT_TAB;
+    }
+
+    public static String getApplicationIcon() {
+        return APPLICATION_ICON;
     }
 
 }

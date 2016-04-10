@@ -225,3 +225,10 @@
     -fx-text-fill: white;
     -fx-font-size: 8.0px;
 }
+
+#placeholder {
+	-fx-font-weight: bold;
+	-fx-font-family: calibri;
+	-fx-font-style: italic;
+	-fx-text-fill: light grey;
+}

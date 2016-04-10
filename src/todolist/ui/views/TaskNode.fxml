@@ -23,8 +23,9 @@
 		<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity"
 			minWidth="-Infinity" prefWidth="5.0">
 			<children>
-				<Rectangle fx:id="priorityLabel" fill="#1f93ff00" height="80.0"
-					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0" />
+				<Rectangle fx:id="priorityLabel" fill="#1f93ff00" height="92.0"
+					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0"
+					AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
 			</children>
 		</AnchorPane>
 		<StackPane fx:id="numberLabel" prefWidth="50.0">

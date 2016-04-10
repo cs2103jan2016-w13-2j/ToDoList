@@ -1,6 +1,7 @@
 package todolist.ui.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -29,6 +30,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -109,9 +111,9 @@ public class MainViewController {
      * @param MainApp mainApp is the reference provided to the calling function
      * 
      */
-    public void setMainApp(MainApp mainApp,  UIHandler uiHandlerUnit) {
+    public void setMainApp(MainApp mainApp, UIHandler uiHandlerUnit) {
         mainApplication = mainApp;
-        uiHandler = uiHandlerUnit;     
+        uiHandler = uiHandlerUnit;
     }
 
     /*
@@ -162,8 +164,8 @@ public class MainViewController {
 
                     commandField.clear();
                     logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
-                    
-                    mainApplication.getCommandHistoryBackward().push(commandString);                   
+
+                    mainApplication.getCommandHistoryBackward().push(commandString);
 
                     if (commandString.equals(NIGHT_MODE)) {
                         Scene scene = mainApplication.getPrimaryStage().getScene();
@@ -513,5 +515,19 @@ public class MainViewController {
 
     public int getPageIndex() {
         return index;
+    }
+
+    public void setPlaceHolder(String glyphSource) {
+
+        VBox box = null;
+        try {
+            box = (VBox) FXMLLoader.load(MainApp.class.getResource(glyphSource));
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        listView.setPlaceholder(box);
     }
 }
