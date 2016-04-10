@@ -285,10 +285,16 @@ public class Logic {
 			LocalDateTime start = null;
 			if (newValue.equals("remove")) {
 				start = null;
+				tempTask.setStartTime(start);
 			} else {
 				start = LocalDateTime.parse(newValue, formatter);
+				if(tempTask.getEndTime() == null) {
+					tempTask.setStartTime(start);
+					tempTask.setEndTime(start);
+				} else {
+					tempTask.setStartTime(start);
+				}
 			}
-			tempTask.setStartTime(start);
 			break;
 		case "end-time":
 			LocalDateTime end = null;
@@ -296,10 +302,13 @@ public class Logic {
 			if (newValue.equals("remove")) {
 				end = null;
 				start = null;
+				tempTask.setStartTime(start);
+				tempTask.setEndTime(end);
+
 			} else {
 				end = LocalDateTime.parse(newValue, formatter);
+				tempTask.setEndTime(end);
 			}
-			tempTask.setEndTime(end);
 			break;
 		}
 
