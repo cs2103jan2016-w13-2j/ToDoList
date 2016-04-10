@@ -458,7 +458,7 @@ public class Logic {
 
 		Boolean addResponse = false;
 		
-		if(tempTask.getReminder().getStatus()) {
+		if(tempTask.getReminder() != null && tempTask.getReminder().getStatus()) {
 			LocalDateTime oldReminderTime = tempTask.getReminder().getTime();
 			LocalDateTime newReminderTime = oldReminderTime.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 			tempTask.setReminder(new Reminder(true, newReminderTime));
@@ -507,7 +507,7 @@ public class Logic {
 
 		Boolean addResponse = false;
 		
-		if(tempTask.getReminder().getStatus()) {
+		if(tempTask.getReminder() != null && tempTask.getReminder().getStatus()) {
 			LocalDateTime oldReminderTime = tempTask.getReminder().getTime();
 			LocalDateTime newReminderTime = oldReminderTime.minus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 			tempTask.setReminder(new Reminder(true, newReminderTime));
