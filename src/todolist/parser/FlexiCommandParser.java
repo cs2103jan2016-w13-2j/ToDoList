@@ -60,10 +60,11 @@ public class FlexiCommandParser {
 		if (dates == null || dates.size() == 0) {
 			return addTask(input);
 		} else {
+
 			result = removeTimeInfo(input, column, length);
 
 			if (dates.size() == 1) {
-				return addDeadline(result, dates);
+				return addDeadline(input, result, dates);
 			} else {
 				return addEvent(result, dates);
 			}
@@ -77,7 +78,7 @@ public class FlexiCommandParser {
 		return new TokenizedCommand("add", new String[] { "task", input });
 	}
 
-	private TokenizedCommand addDeadline(String input, List<Date> dates) {
+	private TokenizedCommand addDeadline(String original, String input, List<Date> dates) {
 		String result = input;
 
 		Date deadline = dates.get(0);
@@ -91,7 +92,7 @@ public class FlexiCommandParser {
 
 		String deadlineTime = decimalFormatter.format(end.getHour()) + ":" + decimalFormatter.format(end.getMinute());
 
-		deadlineTime = searchKeywordToday(input, end, deadlineTime);
+		deadlineTime = searchKeywordToday(original, end, deadlineTime);
 
 		result = keywordFilter(result);
 
