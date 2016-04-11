@@ -17,8 +17,7 @@
 		</ImageView>
 		<Label id="placeholder" alignment="CENTER" contentDisplay="CENTER"
 			maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-			prefHeight="37.0" prefWidth="200.0"
-			text="not sure how to use me? enter 'help' !" textAlignment="CENTER"
-			textFill="#0000004d" />
+			prefHeight="37.0" prefWidth="200.0" text="not sure how to use me? enter 'help' !"
+			textAlignment="CENTER" textFill="#0000004d" />
 	</children>
 </VBox>
