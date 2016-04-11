@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+
 import todolist.common.UtilityLogger.Component;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
@@ -56,18 +57,21 @@ public class WeekController extends MainViewController {
         // List provided by logic must be valid
         assert (tasks != null);
 
+        // Prepare to load updated list of tasks
         ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
         listView.getItems().clear();
 
         // Convert Task to TaskWrapper for display handling
         for (int i = 0; i < tasks.size(); ++i) {
             Task task = tasks.get(i);
+            // To qualify, task must be within current week and ongoing
             if (isWithinWeek(task) && !isCompleted(task)) {
                 TaskWrapper wrappedTask = new TaskWrapper(tasks.get(i));
                 arrayOfWrappers.add(wrappedTask);
             }
         }
 
+        // Load up new list to model
         listView.getItems().addAll(arrayOfWrappers);
         logger.logAction(Component.UI, MESSAGE_UPDATED_WEEK_TASKLIST);
     }

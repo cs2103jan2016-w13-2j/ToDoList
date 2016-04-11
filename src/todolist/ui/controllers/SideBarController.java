@@ -34,13 +34,13 @@ public class SideBarController {
 
     /*** VIEWS ***/
 
-    // HOME TAB
+    // ALL TAB
     @FXML
-    private Button home = null;
+    private Button all = null;
     @FXML
-    private ImageView homeIcon = null;
+    private ImageView allIcon = null;
     @FXML
-    private Label homeBubble = null;
+    private Label allBubble = null;
 
     // EXPIRED TAB
     @FXML
@@ -132,7 +132,7 @@ public class SideBarController {
      */
     private void setButtonArray() {
         buttonArray = new Button[NUMBER_BUTTONS];
-        buttonArray[0] = home;
+        buttonArray[0] = all;
         buttonArray[1] = expired;
         buttonArray[2] = today;
         buttonArray[3] = week;
@@ -170,7 +170,7 @@ public class SideBarController {
      */
     private void setButtonHash() {
         buttonHash = new HashMap<Button, Integer>();
-        buttonHash.put(home, 1);
+        buttonHash.put(all, 1);
         buttonHash.put(expired, 2);
         buttonHash.put(today, 3);
         buttonHash.put(week, 4);
@@ -264,7 +264,7 @@ public class SideBarController {
     public String getTabName(int indexNumber) {
         switch (indexNumber) {
         case 1:
-            return "HOME";
+            return "ALL";
         case 2:
             return "EXPIRED";
         case 3:
@@ -284,7 +284,7 @@ public class SideBarController {
 
     public void linkBubbles(MainViewController[] controllers) {
         // Bubble Array
-        Label[] bubbles = { homeBubble, expiredBubble, todayBubble, weekBubble, doneBubble };
+        Label[] bubbles = { allBubble, expiredBubble, todayBubble, weekBubble, doneBubble };
 
         for (int i = 0; i < controllers.length; ++i) {
             MainViewController controller = controllers[i];

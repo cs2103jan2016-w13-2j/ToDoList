@@ -143,7 +143,7 @@ public class MainApp extends Application {
     private BorderPane helpView;
 
     // Page view index
-    private static final int HOME_TAB = 1;
+    private static final int ALL_TAB = 1;
     private static final int EXPIRED_TAB = 2;
     private static final int TODAY_TAB = 3;
     private static final int WEEK_TAB = 4;
@@ -295,7 +295,7 @@ public class MainApp extends Application {
                 if (focusOnList.match(event)) {
                     int page = sidebarController.getIndex();
                     switch (page) {
-                    case HOME_TAB:
+                    case ALL_TAB:
                         mainController.getTaskListView().requestFocus();
                         logger.logAction(UtilityLogger.Component.UI, FOCUS_LIST);
                         break;
@@ -543,7 +543,7 @@ public class MainApp extends Application {
                 // Set up display logic for main view
                 mainController = loader.getController();
                 mainController.setMainApp(this, uiHandlerUnit);
-                mainController.setPageIndex(HOME_TAB);
+                mainController.setPageIndex(ALL_TAB);
                 mainController.setPlaceHolder("ui/views/MainViewPlaceHolder.fxml");
             }
 
@@ -745,7 +745,7 @@ public class MainApp extends Application {
         int page = index;
 
         switch (page) {
-        case HOME_TAB:
+        case ALL_TAB:
             if (index != oldIndex) {
                 loadMainView();
             }

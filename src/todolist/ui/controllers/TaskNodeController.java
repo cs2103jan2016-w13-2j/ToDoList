@@ -22,6 +22,7 @@ import todolist.ui.TaskWrapper;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableNumberValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -50,6 +51,21 @@ import javafx.scene.text.TextFlow;
  */
 public class TaskNodeController {
 
+    // Defaults and Tags
+    private static final int HOURS_PER_DAY = 24;
+    private static final Font FONT_RELATIVE_DESCRIPTOR = Font.font("Calibri", FontPosture.ITALIC, 14);
+    private static final String TAG_DEADLINE_DUE = "deadline due ";
+    private static final String TAG_REPLACE_FROM_NOW = "from now";
+    private static final String TAG_ENDED = "ended ";
+    private static final String TAG_ENDS = "ends in %1$s";
+    private static final String TAG_STARTED = "event started ";
+    private static final String TAG_LONG = "%1$slong";
+    private static final String TAG_EVENT_STARTS = "event starts ";
+    private static final String TAG_EMPTY = "";
+    private static final String TAG_AD_HOC = "ad-hoc task";
+    private static final String TAG_ANYTIME = "Anytime";
+    private static final String TAG_NOT_AVAILABLE = "Not Available";
+    
     /*** STATIC MESSAGES ***/
 
     // ERRORS
@@ -61,13 +77,13 @@ public class TaskNodeController {
     private static final String DISPLAY_ITEM_UNARCHIVED = "ONGOING";
     private static final String DISPLAY_ITEM_ARCHIVED = "DONE";
     private static final String DISPLAY_ITEM_OVERDUE = "OVERDUE";
-    private static final String DISPLAY_ITEM_HEADER_CATEGORY = "";
+    private static final String DISPLAY_ITEM_HEADER_CATEGORY = TAG_EMPTY;
     private static final String COMPLETED_RELATIVE = "completed!";
 
     /*** STYLES ***/
 
     // MONTHS
-    private static final String[] months = { "", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+    private static final String[] months = { TAG_EMPTY, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
             "Nov", "Dec" };
 
     // COLORS
@@ -99,9 +115,13 @@ public class TaskNodeController {
 
     /*** TASK ITEM COMPONENTS ***/
 
+    // Task model
     private TaskWrapper task = null;
+
+    // Task index number
     private int index = -1;
 
+    // Task types
     private static enum TASK_TYPE {
         FLOAT, DEADLINE, EVENT, OTHER
     };
@@ -173,10 +193,11 @@ public class TaskNodeController {
     private ImageView reminderIndicator = null;
     @FXML
     private Label recurInterval = null;
-    
 
     // Date-Time Field Live Update Interval (in seconds)
     private static final int UPDATE_INTERVAL = 5;
+
+    // Time Zone Offset (from UTC)
     private static final int ZONE_OFFSET = 8;
 
     /*
@@ -215,89 +236,198 @@ public class TaskNodeController {
 
         String taskTitle = task.getTaskTitle();
         Category category = task.getCategory();
-        String categoryName = null;
         Reminder reminder = task.getReminder();
         LocalDateTime startDateTime = task.getStartTime();
         LocalDateTime endDateTime = task.getEndTime();
 
-        // Scale label height
-        ObservableNumberValue diff = relativeRangeBox.heightProperty()
-                .add(dateRangeBox.heightProperty().add(categoryBox.heightProperty().add(16)));
-        priorityLabel.heightProperty().bind(titleFlow.heightProperty().add(diff));
+        /** Preparation **/
 
-        title.fillProperty().bind(number.textFillProperty());
+        // Prepare to scale label height relative to text wrapping
+        bindPriorityLabelHeight();
 
-        /** Validation **/
+        /** Validate and theme **/
 
         // Ensure integrity of task object
         assert (task != null);
 
         // Index Number
-        if (indexNumber <= 0) {
-            logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_INDEX);
-            throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_INDEX);
-        } else {
-            number.setText(Integer.toString(indexNumber));
-        }
+        validateAndFormatIndexNumber(indexNumber);
 
         // Title
-        if (taskTitle == null) {
-            logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_TITLE);
-            throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_TITLE);
-        } else {
-            title.setText(taskTitle);
-        }
+        validateAndFormatTitle(taskTitle);
 
         // Category
-        if (category == null) {
-            categoryName = new String(NULL_DISPLAY_ITEM_CATEGORY);
-            categorySprite.setFill(Color.web(COLOR_UNKNOWN));
-        } else {
-            categoryName = DISPLAY_ITEM_HEADER_CATEGORY + category.getCategory();
-            Color catColor = Color.web(colorsHex[Math.abs(categoryName.hashCode()) % colorsHex.length]);
-            categorySprite.setFill(catColor);
-        }
+        validateAndFormatCategory(category);
 
-        this.category.setText(categoryName);
-
-        // Dates
+        // Actively update date-time related fields and colors
         try {
-            final Timeline timeline = new Timeline(
-                    new KeyFrame(javafx.util.Duration.ZERO, new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            formatDateField(task, startDateTime, endDateTime);
-                            // Archive Status
-                            if (task.getIsCompleted()) {
-                                statusBacking.setFill(Color.web(COLOR_COMPLETE));
-                                status.setText(DISPLAY_ITEM_ARCHIVED);
-                            } else if (task.getIsExpired()) {
-                                statusBacking.setFill(Color.web(COLOR_OVERDUE));
-                                status.setText(DISPLAY_ITEM_OVERDUE);
-                            } else {
-                                statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
-                                status.setText(DISPLAY_ITEM_UNARCHIVED);
-                            }
-                        }
-                    }), new KeyFrame(javafx.util.Duration.seconds(UPDATE_INTERVAL)));
 
-            timeline.setCycleCount(Animation.INDEFINITE);
-            timeline.play();
+            // Set up callback for date-time field updates
+            KeyFrame updateFrame = new KeyFrame(javafx.util.Duration.ZERO, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    formatDateField(task, startDateTime, endDateTime);
+                    // Archive Status
+                    if (task.getIsCompleted()) {
+                        setTaskStatusCompleted();
+                    } else if (task.getIsExpired()) {
+                        setTaskStatusExpired();
+                    } else {
+                        setTaskStatusOngoing();
+                    }
+                }
+
+                private void setTaskStatusOngoing() {
+                    statusBacking.setFill(Color.web(COLOR_INCOMPLETE));
+                    status.setText(DISPLAY_ITEM_UNARCHIVED);
+                }
+
+                private void setTaskStatusExpired() {
+                    statusBacking.setFill(Color.web(COLOR_OVERDUE));
+                    status.setText(DISPLAY_ITEM_OVERDUE);
+                }
+
+                private void setTaskStatusCompleted() {
+                    statusBacking.setFill(Color.web(COLOR_COMPLETE));
+                    status.setText(DISPLAY_ITEM_ARCHIVED);
+                }
+            });
+
+            // Set up pause interval
+            KeyFrame intervalFrame = new KeyFrame(javafx.util.Duration.seconds(UPDATE_INTERVAL));
+
+            // Run update on separate thread(s)
+            updateDateTimeThreaded(updateFrame, intervalFrame);
 
         } catch (IllegalArgumentException iae) {
             throw iae;
         }
 
         // Recurring Status
-        recurringIndicator.setVisible(task.getIsRecurring());
-        recurInterval.setText(task.getInterval());
+        setRecurringStatus();
 
         // Reminder Status
+        setReminderStatus(reminder);
+    }
+
+    /*
+     * updateDateTimeThreaded is a busy update function that will animate the two given frames infinitely.
+     * The first frame contains a callback function that will update the date-time related fields accordingly.
+     * (Not the most efficient)
+     * 
+     * @param KeyFrame updateFrame, KeyFrame intervalFrame
+     * 
+     */
+    private void updateDateTimeThreaded(KeyFrame updateFrame, KeyFrame intervalFrame) {
+        Timeline timeline = new Timeline(updateFrame, intervalFrame);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    /*
+     * ValidateAndFormatCategory will take in a category and format the category field accordingly.
+     * 
+     * @param Category category
+     * 
+     */
+    private void validateAndFormatCategory(Category category) {
+        String categoryName;
+        if (category == null) {
+            categoryName = new String(NULL_DISPLAY_ITEM_CATEGORY);
+            categorySprite.setFill(Color.web(COLOR_UNKNOWN));
+        } else {
+            categoryName = DISPLAY_ITEM_HEADER_CATEGORY + category.getCategory();
+            Color categoryHexColor = getColorForCategory(categoryName);
+            categorySprite.setFill(categoryHexColor);
+        }
+        this.category.setText(categoryName);
+    }
+
+    /*
+     * validateAndFormatTitle will take in a title and format the title field accordingly.
+     * 
+     * @param String taskTitle
+     * 
+     */
+    private void validateAndFormatTitle(String taskTitle) {
+        
+        // Synchronize title color with index number color
+        title.fillProperty().bind(number.textFillProperty());
+        
+        if (taskTitle == null) {
+            logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_TITLE);
+            throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_TITLE);
+        } else {
+            title.setText(taskTitle);
+        }
+    }
+
+    /*
+     * validateAndFormatIndexNumber will take in an index and format the index field accordingly.
+     * 
+     * @param int indexNumber
+     * 
+     */
+    private void validateAndFormatIndexNumber(int indexNumber) {
+        if (indexNumber <= 0) {
+            logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_INDEX);
+            throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_INDEX);
+        } else {
+            number.setText(Integer.toString(indexNumber));
+        }
+    }
+
+    /*
+     * setReminderStatus will take in a reminder and format the reminder flag indicator accordingly.
+     * 
+     * @param Reminder reminder
+     * 
+     */
+    private void setReminderStatus(Reminder reminder) {
         if (reminder == null) {
             reminderIndicator.setVisible(false);
         } else {
             reminderIndicator.setVisible(reminder.getStatus());
         }
+    }
+
+    /*
+     * setRecurringStatus will check if a task is recurring and toggle the recurrence flag indicator accordingly.
+     * 
+     */
+    private void setRecurringStatus() {
+        recurringIndicator.setVisible(task.getIsRecurring());
+        recurInterval.setText(task.getInterval());
+    }
+
+    /*
+     * getColorForCategory will calculate a color index and return a color that expresses the category name.
+     * 
+     * @param String categoryName
+     * 
+     * @return Color categoryColor
+     * 
+     */
+    private Color getColorForCategory(String categoryName) {
+        int hashModColorIndex = Math.abs(categoryName.hashCode()) % colorsHex.length;
+        String colorDescriptor = colorsHex[hashModColorIndex];
+        Color categoryHexColor = Color.web(colorDescriptor);
+        return categoryHexColor;
+    }
+
+    /*
+     * bindPriorityLabelHeight binds the priority label to the node height loosely. (Still experimental)
+     * 
+     */
+    private void bindPriorityLabelHeight() {
+        DoubleBinding categoryWithOffsetHeight = categoryBox.heightProperty().add(16);
+        DoubleBinding categoryAndDateWithOffsetHeight = dateRangeBox.heightProperty().add(categoryWithOffsetHeight);
+        ObservableNumberValue categoryAndDateAndTitleWithOffset = relativeRangeBox.heightProperty()
+                .add(categoryAndDateWithOffsetHeight);
+        DoubleBinding totalInfoFieldHeight = titleFlow.heightProperty().add(categoryAndDateAndTitleWithOffset);
+
+        // Binding
+        priorityLabel.heightProperty().bind(totalInfoFieldHeight);
     }
 
     /*
@@ -320,40 +450,67 @@ public class TaskNodeController {
      */
     public void formatDateField(TaskWrapper task, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         TASK_TYPE taskType = checkTaskType(startDateTime, endDateTime);
-        String outputDate = "";
-        String relativeText = "ad-hoc task";
+        String outputDate = TAG_EMPTY;
+        String relativeText = TAG_AD_HOC;
 
         switch (taskType) {
 
         case FLOAT:
-            outputDate = "Anytime";
+            outputDate = TAG_ANYTIME;
             break;
         case DEADLINE:
-            outputDate = formatDeadlineRange(endDateTime);
+            // Formatting of deadline date
+            outputDate = formatDeadlineRange(endDateTime);            
+            //  Set relative descriptor
             relativeText = formatDeadlineRelativeText(endDateTime);
             break;
-        case EVENT:
-            // Smart formatting of range
-            if (startDateTime.getDayOfYear() == endDateTime.getDayOfYear()
-                    && startDateTime.getYear() == endDateTime.getYear()) {
+        case EVENT:            
+            // Smart formatting of range for same-day events
+            if (isSameDay(startDateTime, endDateTime)) {
                 outputDate = formatEventRangeSameDay(startDateTime, endDateTime);
+            // Normal formatting of range for multi-day events
             } else {
                 outputDate = formatEventRangeDiffDay(startDateTime, endDateTime);
-            }
+            }            
+            // Set relative descriptor
             relativeText = formatEventRelativeText(startDateTime, endDateTime);
+            
             break;
         default:
-            outputDate = "Not Available";
+            // Formatting of date-time range for unknown types
+            outputDate = TAG_NOT_AVAILABLE;
         }
 
-        setStyle(startDateTime, endDateTime, task.getIsCompleted());
+        // Set styles
+        setDateTimeRelStyle(startDateTime, endDateTime, task.getIsCompleted());
 
         if (task.getIsCompleted()) {
             relativeText = COMPLETED_RELATIVE;
         }
+        setDateTimeRelativeFields(outputDate, relativeText);
+    }
+
+    /*
+     * setDateTimeRelativeFields takes in an outputDate and relative text and sets the flag accordingly
+     * 
+     * @param String outputDate, String relativeText
+     * 
+     */
+    private void setDateTimeRelativeFields(String outputDate, String relativeText) {
         this.relativeRange.setText(relativeText);
         dateRange.setText(outputDate);
-        this.relativeRange.setFont(Font.font("Calibri", FontPosture.ITALIC, 14));
+        this.relativeRange.setFont(FONT_RELATIVE_DESCRIPTOR);
+    }
+
+    /*
+     * isSameDay takes in a start and end date-time and checks if the start and end date-time falls on the same day 
+     * 
+     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * 
+     */
+    private boolean isSameDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return startDateTime.getDayOfYear() == endDateTime.getDayOfYear()
+                && startDateTime.getYear() == endDateTime.getYear();
     }
 
     /*
@@ -400,6 +557,7 @@ public class TaskNodeController {
         ZonedDateTime zoneDateTime = LocalDateTime.now().atZone(defaultZoneId);
         ZoneOffset zoneOffset = zoneDateTime.getOffset();
 
+        // Type conversions for handling
         PrettyTime prettyParser = new PrettyTime();
         Instant startInstant = startDateTime.toInstant(zoneOffset);
         Date start = Date.from(startInstant);
@@ -411,25 +569,29 @@ public class TaskNodeController {
         // Set output for the start of event
         startOutput = prettyParser.format(start);
 
-        String relativeStart = "event starts ";
-        String relativeEnd = "%1$slong";
+        // String formatting
+        String relativeStart = TAG_EVENT_STARTS;
+        String relativeEnd = TAG_LONG;
 
         // Start reference date varies, depending if event has already begun
         if (hasStarted(startDateTime)) {
             prettyParser.setReference(now);
-            relativeStart = "event started ";
-            relativeEnd = "ends in %1$s";
-
+            relativeStart = TAG_STARTED;
+            relativeEnd = TAG_ENDS;
+        // Change point of reference if event has yet to start
         } else {
             prettyParser.setReference(start);
         }
 
+        // End modifiers
         if (endDateTime.isBefore(LocalDateTime.now())) {
-            relativeEnd = "ended " + prettyParser.format(end);
+            relativeEnd = TAG_ENDED + prettyParser.format(end);
         }
 
-        durationOutput = prettyParser.format(end).replace("from now", "");
+        // Format PrettyTime output for display
+        durationOutput = prettyParser.format(end).replace(TAG_REPLACE_FROM_NOW, TAG_EMPTY);
 
+        // Format and display relative descriptor
         return relativeStart + startOutput + ", " + String.format(relativeEnd, durationOutput);
     }
 
@@ -447,7 +609,7 @@ public class TaskNodeController {
         Instant endInstant = endDateTime.toInstant(ZoneOffset.ofHours(ZONE_OFFSET));
         Date end = Date.from(endInstant);
 
-        return "deadline due " + prettyParser.format(end);
+        return TAG_DEADLINE_DUE + prettyParser.format(end);
     }
 
     /*
@@ -470,11 +632,21 @@ public class TaskNodeController {
      * @return String dateTimeRange
      */
     private String formatEventRangeDiffDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.getDayOfMonth() + "-" + months[startDateTime.getMonthValue()] + "-"
-                + startDateTime.getYear() + ", "
-                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
-                + endDateTime.getDayOfMonth() + "-" + months[endDateTime.getMonthValue()] + "-" + endDateTime.getYear()
-                + ", " + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+        return startDateTime.getDayOfMonth() 
+                + "-" 
+                + months[startDateTime.getMonthValue()] 
+                + "-"
+                + startDateTime.getYear() 
+                + ", "
+                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) 
+                + " to "
+                + endDateTime.getDayOfMonth() 
+                + "-" 
+                + months[endDateTime.getMonthValue()] 
+                + "-" 
+                + endDateTime.getYear()
+                + ", " 
+                + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     /*
@@ -486,9 +658,14 @@ public class TaskNodeController {
      * @return String dateTimeRange
      */
     private String formatEventRangeSameDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.getDayOfMonth() + "-" + months[startDateTime.getMonthValue()] + "-"
-                + startDateTime.getYear() + ", "
-                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
+        return startDateTime.getDayOfMonth() 
+                + "-" 
+                + months[startDateTime.getMonthValue()] 
+                + "-"
+                + startDateTime.getYear() 
+                + ", "
+                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) 
+                + " to "
                 + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
@@ -500,8 +677,13 @@ public class TaskNodeController {
      * @return String dateTimeRange
      */
     private String formatDeadlineRange(LocalDateTime endDateTime) {
-        return endDateTime.getDayOfMonth() + "-" + months[endDateTime.getMonthValue()] + "-" + endDateTime.getYear()
-                + ", " + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+        return endDateTime.getDayOfMonth() 
+                + "-" 
+                + months[endDateTime.getMonthValue()] 
+                + "-" 
+                + endDateTime.getYear()
+                + ", " 
+                + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     /** STYLING FUNCTIONS **/
@@ -527,7 +709,7 @@ public class TaskNodeController {
 
         if (startDateTime.isBefore(LocalDateTime.now())) {
             priorityLabel.setFill(Color.web(COLOR_OVERDUE));
-        } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), startDateTime) <= 24) {
+        } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), startDateTime) <= HOURS_PER_DAY) {
             priorityLabel.setFill(Color.web(COLOR_TODAY));
         } else {
             priorityLabel.setFill(Color.web(COLOR_SPARE));
@@ -545,7 +727,7 @@ public class TaskNodeController {
 
         if (endDateTime.isBefore(LocalDateTime.now())) {
             priorityLabel.setFill(Color.web(COLOR_OVERDUE));
-        } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24) {
+        } else if (ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= HOURS_PER_DAY) {
             priorityLabel.setFill(Color.web(COLOR_TODAY));
         } else {
             priorityLabel.setFill(Color.web(COLOR_SPARE));
@@ -568,22 +750,45 @@ public class TaskNodeController {
      * isCompleted
      * 
      */
-    private void setStyle(LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isCompleted) {
+    private void setDateTimeRelStyle(LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isCompleted) {
 
-        if (endDateTime != null && endDateTime.isBefore(LocalDateTime.now()) && !isCompleted) {
+        // Overdue Priority
+        if (isOverdue(endDateTime, isCompleted)) {
             numLabelBase.setFill(Color.web(COLOR_OVERDUE));
             priorityLabel.setFill(Color.web(COLOR_OVERDUE));
-            // dateRangeSprite.setFill(Color.web(COLOR_OVERDUE));
-        } else if (endDateTime != null && ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24
-                && !isCompleted) {
+        // Today Priority
+        } else if (isToday(endDateTime, isCompleted)) {
             numLabelBase.setFill(Color.web(COLOR_TODAY));
             priorityLabel.setFill(Color.web(COLOR_TODAY));
-            // dateRangeSprite.setFill(Color.web(COLOR_TODAY));
+        // Normal Priority
         } else {
             numLabelBase.setFill(Color.web(COLOR_SPARE));
             priorityLabel.setFill(Color.web(COLOR_SPARE));
-            // dateRangeSprite.setFill(Color.web(COLOR_SPARE));
         }
 
+    }
+
+    /*
+     * isToday checks if the current task is an ongoing task due today
+     * 
+     * @param LocalDateTime endDateTime, boolean isCompleted
+     * 
+     * @return boolean isToday
+     * 
+     */
+    private boolean isToday(LocalDateTime endDateTime, boolean isCompleted) {
+        return endDateTime != null && ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24
+                && !isCompleted;
+    }
+
+    /*
+     * isOverdue checks if the current task is an expired task due before today
+     * 
+     * @param LocalDateTime endDateTime, boolean isCompleted
+     * 
+     * @return boolean isOverdue
+     */
+    private boolean isOverdue(LocalDateTime endDateTime, boolean isCompleted) {
+        return endDateTime != null && endDateTime.isBefore(LocalDateTime.now()) && !isCompleted;
     }
 }

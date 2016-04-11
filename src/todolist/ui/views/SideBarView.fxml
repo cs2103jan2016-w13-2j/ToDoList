@@ -22,10 +22,10 @@
 				<Insets top="20.0" />
 			</VBox.margin>
 			<children>
-				<Button fx:id="home" contentDisplay="TOP" mnemonicParsing="false"
+				<Button fx:id="all" contentDisplay="TOP" mnemonicParsing="false"
 					prefHeight="50.0" prefWidth="50.0" text="ALL">
 					<graphic>
-						<ImageView id="home-icon" fx:id="homeIcon" fitHeight="30.0"
+						<ImageView id="home-icon" fx:id="allIcon" fitHeight="30.0"
 							fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
 							<viewport>
 								<Rectangle2D />
@@ -36,7 +36,7 @@
 						</ImageView>
 					</graphic>
 				</Button>
-				<Label id="bubble" fx:id="homeBubble" alignment="TOP_RIGHT"
+				<Label id="bubble" fx:id="allBubble" alignment="TOP_RIGHT"
 					contentDisplay="RIGHT" ellipsisString="&gt;10K" maxHeight="-Infinity"
 					minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT"
 					prefHeight="15.0" text="0" textAlignment="CENTER"

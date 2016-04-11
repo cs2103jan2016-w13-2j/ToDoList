@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+
 import todolist.common.UtilityLogger.Component;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
@@ -55,6 +56,7 @@ public class TodayController extends MainViewController {
         // List provided by logic must be valid
         assert (tasks != null);
 
+        // Prepare to load new list of tasks
         ArrayList<TaskWrapper> arrayOfWrappers = new ArrayList<TaskWrapper>();
         listView.getItems().clear();
 
@@ -67,6 +69,7 @@ public class TodayController extends MainViewController {
             }
         }
 
+        // Load up updated list of tasks
         listView.getItems().addAll(arrayOfWrappers);
         logger.logAction(Component.UI, MESSAGE_UPDATED_TODAY_TASKLIST);
 
@@ -81,7 +84,8 @@ public class TodayController extends MainViewController {
      * 
      */
     private boolean isToday(Task task) {
-        return task.getEndTime() != null && task.getEndTime().getYear() == LocalDateTime.now().getYear()
+        return task.getEndTime() != null 
+                && task.getEndTime().getYear() == LocalDateTime.now().getYear()
                 && task.getEndTime().getDayOfYear() == LocalDateTime.now().getDayOfYear();
     }
 }
