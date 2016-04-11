@@ -716,7 +716,7 @@ public class Logic {
 
 		Boolean addResponse = dataBase.add(tempTask);
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM h:ma");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM h:mma");
 
 		String remindTimeString = reminderTime.format(formatter);
 
