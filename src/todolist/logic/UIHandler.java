@@ -30,6 +30,10 @@ public class UIHandler {
 	public void refresh() {
 		mainApp.setDisplayTasks(dataBase.retrieveAll());
 	}
+	
+	public ArrayList<Task> getAllTask() {
+		return dataBase.retrieveAll();
+	}
 
 	protected void sendMessage(String message, boolean autohide) {
 		mainApp.notifyWithText(message, autohide);
