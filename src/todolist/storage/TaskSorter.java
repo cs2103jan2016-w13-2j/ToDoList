@@ -13,12 +13,12 @@ public class TaskSorter {
 	
 	private ArrayList<Task> taskList;
 	
-    public TaskSorter() {
+    protected TaskSorter() {
     	taskList = new ArrayList<Task>();
     }
     
     
-	public ArrayList<Task> sortHandler(ArrayList<Task> tasks, String fieldName, String order) {
+	protected ArrayList<Task> sortHandler(ArrayList<Task> tasks, String fieldName, String order) {
 		
         taskList = tasks;
         
@@ -60,18 +60,23 @@ public class TaskSorter {
         public int compare(Task t1, Task t2) {
         	
             LocalDateTime firstDate = ((todolist.model.Task) t1).getStartTime();
+            
             LocalDateTime secondDate = ((todolist.model.Task) t2).getStartTime();
             
             if (firstDate == null && secondDate == null) {
             	
                 String t1_Name = ((todolist.model.Task) t1).getName().getName();
+                
                 String t2_Name = ((todolist.model.Task) t2).getName().getName();
                 
                 return t1_Name.compareToIgnoreCase(t2_Name);
+                
             } else if (firstDate == null) {
                 return -1;
+                
             } else if (secondDate == null) {
                 return 1;
+                
             } else {
                 return firstDate.compareTo(secondDate);
             }
@@ -91,16 +96,22 @@ public class TaskSorter {
         public int compare(Task t1, Task t2) {
         	
             LocalDateTime firstDate = ((todolist.model.Task) t1).getEndTime();
+            
             LocalDateTime secondDate = ((todolist.model.Task) t2).getEndTime();
             
             if (firstDate == null && secondDate == null) {
                 String t1_Name = ((todolist.model.Task) t1).getName().getName();
+                
                 String t2_Name = ((todolist.model.Task) t2).getName().getName();
+                
                 return t1_Name.compareToIgnoreCase(t2_Name);
+                
             } else if (firstDate == null) {
                 return -1;
+                
             } else if (secondDate == null) {
                 return 1;
+                
             } else {
                 return firstDate.compareTo(secondDate);
             }
@@ -119,6 +130,7 @@ public class TaskSorter {
         public int compare(Task t1, Task t2) {
         	
             String firstCategory = ((todolist.model.Task) t1).getCategory().getCategory();
+            
             String secondCategory = ((todolist.model.Task) t2).getCategory().getCategory();
             
             return firstCategory.compareToIgnoreCase(secondCategory);
@@ -137,6 +149,7 @@ public class TaskSorter {
         public int compare(Task t1, Task t2) {
         	
             String firstName = ((todolist.model.Task) t1).getName().getName();
+            
             String secondName = ((todolist.model.Task) t2).getName().getName();
             
             return firstName.compareToIgnoreCase(secondName);

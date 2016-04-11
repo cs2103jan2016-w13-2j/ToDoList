@@ -72,14 +72,17 @@ public class DataBase {
 	private void writeToFile() {
 		fh.write(taskList);
 	}
-
+    
+	/**
+	 * This method is to clear the database and the local file
+	 */
 	public void clear() {
 		taskList = new ArrayList<Task>();
 		
 		writeToFile();
 	}
-
-	public void loadFromFile() {
+    	
+	protected void loadFromFile() {
 		taskList = fh.read();
 	}
 
@@ -193,8 +196,8 @@ public class DataBase {
 	 * search for tasks whose names containing the passed in string as a
 	 * substring
 	 * 
-	 * @param command
-	 * @return arraylist list of result tasks
+	 * @param  keywords   array of keywords to search for
+	 * @return resultList arraylist list of result tasks
 	 */
 	public ArrayList<Task> smartSearch(String[] keywords) {
 		assert (keywords != null);
@@ -215,11 +218,9 @@ public class DataBase {
 	/**
 	 * This method is to set new file for the storage of data.
 	 *
-	 * @param newFile
-	 *            the string that contains the new path and file name
+	 * @param newFile   the string that contains the new path and file name
 	 *
-	 * @return true if the directory exists and the new file is set.
-	 * @throw Exception if the path is invalid
+	 * @return boolean  return true if the directory exists and the new file is set.
 	 */
 	public boolean setNewFile(String newFilePath) {
 		assert (newFilePath != null);
@@ -244,9 +245,11 @@ public class DataBase {
 	}
     
 	/**
-	 * open a new file for task storage in another directory
-	 * @param newFilePath  the new directory to store the tasks
-	 * @return  boolean   true if the a new file is created in the new directory;
+	 * This method opens a new file for task storage in another directory
+	 * 
+	 * @param newFilePath  the new directory to open the new file or create a new file to store the tasks
+	 * 
+	 * @return  boolean    true if the a new file is created in the new directory;
 	 */
 	public boolean openNewFile(String newFilePath) {
 		assert (newFilePath != null);

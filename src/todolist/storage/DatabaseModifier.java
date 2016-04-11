@@ -12,8 +12,8 @@ public class DatabaseModifier {
     public static String EXCEPTION_TASKNOTEXIST = "The task to delete does not exist!";
 
     private ArrayList<Task> taskList;
-
-    public DatabaseModifier() {
+   
+    protected DatabaseModifier() {
         taskList = new ArrayList<Task>();
     }
 
@@ -48,13 +48,13 @@ public class DatabaseModifier {
     /**
      * delete the specific task from the list of tasks
      * 
-     * @param tasks
-     *            list of tasks from where the task to be deleted
-     * @param taskToDelete
-     *            the task to be deleted
-     * @return the list of
-     * @throws IOException
-     *             when the task to delete not in the task list
+     * @param tasks         list of tasks from where the task to be deleted
+     * 
+     * @param taskToDelete  the task to be deleted
+     * 
+     * @return taskList     the list of task after deleting the required task
+     * 
+     * @throws IOException  when the task to delete not in the task list
      */
     public ArrayList<Task> deleteTask(ArrayList<Task> tasks, Task taskToDelete) throws IOException {
         taskList = tasks;
@@ -83,7 +83,11 @@ public class DatabaseModifier {
         	
             Task currentTask = taskList.get(i);
 
-            if (currentTask.getName().getName().equalsIgnoreCase(taskToDelete.getName().getName())) {
+            String nameOfCurrentTask = currentTask.getName().getName();
+            
+            String nameOfTaskToDelete = taskToDelete.getName().getName();
+            
+            if (nameOfCurrentTask.equalsIgnoreCase(nameOfTaskToDelete)) {
                 return i;
             }
         }

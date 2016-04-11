@@ -8,7 +8,13 @@ import todolist.model.SearchCommand;
 import todolist.model.Task;
 
 public class TaskRetriever {
-
+    
+	private static final String NAME = "name";
+	private static final String VIEW = "view";
+	private static final String CATEGORY = "category";
+	private static final String ARCHIVE = "archive";
+	private static final String OVERDUE = "overdue";
+	
     private static enum FilterType {
         VIEW, CATEGORY, NAME, END_DATE, START_DATE;
     }
@@ -19,16 +25,17 @@ public class TaskRetriever {
 
     private ArrayList<Task> taskList;
 
-    public TaskRetriever() {
+    protected TaskRetriever() {
         taskList = new ArrayList<Task>();
     }
 
-    public ArrayList<Task> retrieveHandler(ArrayList<Task> tasks, SearchCommand command) {
+    protected ArrayList<Task> retrieveHandler(ArrayList<Task> tasks, SearchCommand command) {
         assert (command instanceof SearchCommand);
 
         taskList = tasks;
 
         ArrayList<Task> resultList = new ArrayList<Task>();
+        
         FilterType type = getFilterType(command);
         
         switch (type) {
@@ -68,15 +75,15 @@ public class TaskRetriever {
     }
 
     private boolean isName(String type) {
-        return type.equalsIgnoreCase("name");
+        return type.equalsIgnoreCase(NAME);
     }
 
     private boolean isView(String type) {
-        return type.equalsIgnoreCase("view");
+        return type.equalsIgnoreCase(VIEW);
     }
 
     private boolean isCategory(String type) {
-        return type.equalsIgnoreCase("category");
+        return type.equalsIgnoreCase(CATEGORY);
     }
 
     private ArrayList<Task> retrieve_View(SearchCommand command) {
@@ -104,6 +111,7 @@ public class TaskRetriever {
         for (Task eachTask : taskList) {
         	
             if (eachTask.getDoneStatus()) {
+            	
                 resultList.add(eachTask);
             }
         }
@@ -118,6 +126,7 @@ public class TaskRetriever {
         	
             if (isTaskOverdue(eachTask.getEndTime())) {
                 resultList.add(eachTask);
+                
             }
         }
         
@@ -133,6 +142,7 @@ public class TaskRetriever {
     }
 
     private ViewType determineViewType(String content) {
+    	
         if (isOverdue(content)) {
             return ViewType.OVERDUE;
         }
@@ -145,11 +155,11 @@ public class TaskRetriever {
     }
 
     private boolean isArchive(String content) {
-        return content.equalsIgnoreCase("archive");
+        return content.equalsIgnoreCase(ARCHIVE);
     }
 
     private boolean isOverdue(String content) {
-        return content.equalsIgnoreCase("overdue");
+        return content.equalsIgnoreCase(OVERDUE);
     }
 
     private ArrayList<Task> retrieve_Name(SearchCommand command) {
@@ -176,22 +186,24 @@ public class TaskRetriever {
     	}
     	 		
     	resultList = retrieveByTokenizedName(taskList, keywords);
-        System.out.println(resultList.size());
+
         return resultList;
     }
 
     private ArrayList<Task> retrieveByTokenizedName(ArrayList<Task> taskList2, String[] keywords) {
 		ArrayList<Task> resultList = new ArrayList<Task>();
+		
 		int[] numMatch = new int[taskList2.size()];
 		
-		if(keywords.length == 1) {
+		if(keywords.length == 1) {			
 			resultList = retrieveByInitial(taskList2, keywords[0]);
-			System.out.println("after initial: " + resultList.size());
+			
 		}
 		
 		for (int i = 0; i < taskList2.size(); i++) {
 			
-        	Task eachTask = taskList2.get(i);        	
+        	Task eachTask = taskList2.get(i);
+        	
         	String eachName = eachTask.getName().getName();  
         	
         	numMatch[i] = findNumMatch(keywords, eachName); 
@@ -206,21 +218,25 @@ public class TaskRetriever {
 				}
 			}			
 		}		
-
 		return resultList;
 	}
 
 	private int findNumMatch(String[] keywords, String eachName) {
 		int counter = 0;
+		
 		String[] splitedName = eachName.trim().split(" ");
 		
 		for(int i = 0; i < keywords.length; i++) {
 			for(int j = 0; j < splitedName.length; j++) {
+				
 				String eachNameWord = splitedName[j].toLowerCase();
+				
 				String eachKeyword = keywords[i].toLowerCase();
 				
 				if(eachNameWord.equalsIgnoreCase(eachKeyword)) {
+					
 					counter++;
+					
 					break;
 			    }			
 			}
