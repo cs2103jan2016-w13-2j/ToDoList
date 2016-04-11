@@ -74,6 +74,9 @@ public class CaseSwitcher {
 		case "remind":
 			caseExecuter.remind(arg);
 			break;
+		case "remove-remind":
+			caseExecuter.removeRemind(arg);
+			break;
 		case "remind-bef":
 			caseExecuter.addRemindBef(arg);
 			break;
