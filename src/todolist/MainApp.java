@@ -190,9 +190,13 @@ public class MainApp extends Application {
     int commandHistoryPointer = -1;
 
     // Autocomplete dictionary
-    private static final String[] suggestions = { "add", "edit", "delete", "mark", "done", "undone", "sort", "search",
-            "filter", "redo", "undo", "reset", "forward", "postpone", "remind", "set-recurring", "open", "task",
-            "event", "deadline" };
+    private static final String[] suggestions = { "add", "edit", "delete", "search", "filter", "sort", "label",
+            "postpone", "forward", "add-remind", "remind", "add-remind-bef", "remind-bef", "remove-remind", "done",
+            "undone", "exit", "undo", "redo", "reset", "tab", "tab all", "tab today", "tab expired", "tab week",
+            "tab done", "tab options", "tab help", "set-recurring", "remove-recurring", "create", "schedule", "cancel",
+            "remove", "modify", "change", "replace", "archive", "complete", "finish", "shelf", "unarchive",
+            "incomplete", "unfinish", "unshelf", "delay", "advance", "categorize", "tag", "load", "open", "save",
+            "help" };
 
     // Mute property
     private BooleanProperty IS_MUTE = new SimpleBooleanProperty(false);
@@ -1061,7 +1065,8 @@ public class MainApp extends Application {
     }
 
     /*
-     * getHelpModal returns a HelpModalController that controls the logic for help display.
+     * getHelpModal returns a HelpModalController that controls the logic for
+     * help display.
      * 
      * @return HelpModalController helpModalController
      * 
@@ -1071,7 +1076,8 @@ public class MainApp extends Application {
     }
 
     /*
-     * setHelpModal sets the given helpModalController as the helpModalController for the help table.
+     * setHelpModal sets the given helpModalController as the
+     * helpModalController for the help table.
      * 
      * @param HelpModalController helpModalController
      * 
@@ -1081,7 +1087,8 @@ public class MainApp extends Application {
     }
 
     /*
-     * getSideBarController returns the current sideBarController that controls the logic of the sidebar.
+     * getSideBarController returns the current sideBarController that controls
+     * the logic of the sidebar.
      * 
      * @return SideBarController sidebarController
      * 
@@ -1091,7 +1098,8 @@ public class MainApp extends Application {
     }
 
     /*
-     * getCommandHistoryBackward returns the stack of command history saved before the current visited entry.
+     * getCommandHistoryBackward returns the stack of command history saved
+     * before the current visited entry.
      * 
      * @return Stack<String> commandHistoryBackward
      */
@@ -1100,7 +1108,8 @@ public class MainApp extends Application {
     }
 
     /*
-     * getCommandHistoryForward returns the stack of command history saved after the current visited entry.
+     * getCommandHistoryForward returns the stack of command history saved after
+     * the current visited entry.
      * 
      * @return Stack<String> commandHistoryForward
      */
@@ -1118,7 +1127,8 @@ public class MainApp extends Application {
     }
 
     /*
-     * getSuggestions returns the array of suggestions that displays for autocomplete. 
+     * getSuggestions returns the array of suggestions that displays for
+     * autocomplete.
      * 
      * @return String[] suggestions
      */
