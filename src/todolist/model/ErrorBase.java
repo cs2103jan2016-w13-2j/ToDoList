@@ -49,7 +49,7 @@ public class ErrorBase {
 		errorBase.put(("TAB" + "INCOMPLETE"),
 				"Your command to CHANGE TAB was incomplete! Please check HELP for formats.");
 		errorBase.put(("ADD" + "REPEAT TITLE"), "You might have added this task before! Try a different TASK TITLE.");
-		errorBase.put(("SORT" + "NO FIELD"), "Your command to SORT was incomplete! Please check HELP for formats.");
+		errorBase.put(("SORT" + "INCOMPLETE"), "Your command to SORT was incomplete! Please check HELP for formats.");
 		errorBase.put(("ADD EVENT" + "INVALID TIME UNIT"),
 				"You have specified a TIME UNIT that I don't understand! Try {minute, hour, day, week, month, year}.");
 		errorBase.put(("ADD EVENT" + "INVALID QUANTITY"),
