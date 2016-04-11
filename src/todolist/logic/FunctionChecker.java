@@ -291,7 +291,7 @@ public class FunctionChecker {
 
 	public InputException tabChecker(String workplace) {
 		switch (workplace) {
-		case "home":
+		case "all":
 			return new InputException();
 		case "expired":
 			return new InputException();

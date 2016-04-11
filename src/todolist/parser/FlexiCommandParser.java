@@ -24,6 +24,10 @@ public class FlexiCommandParser {
 
 	public TokenizedCommand parse(String input) {
 		
+	    input = input.replaceAll("\"", "");
+	    
+	    input = input.trim();
+	 
 		String temp[] = input.split(" ");
 		
 		if(input.equals("")) {
@@ -112,6 +116,8 @@ public class FlexiCommandParser {
 				}
 
 				result = keywordFilter(result);
+				
+				System.out.println(result+"hello");
 
 				if (result.toLowerCase().contains("breakfast")) {
 					deadlineTime = "09:00";
@@ -195,15 +201,7 @@ public class FlexiCommandParser {
 			result = result.substring(6);
 		}
 		
-		if(result.endsWith(" ")) {
-			result = result.substring(0, result.length() - 2);
-		}
-		
-		if(result.startsWith(" ")) {
-			result = result.substring(1);
-		}
-		
-		return result;
+		return result.trim();
 	}
 
 	private long getDateDiff(Date date1, Date date2) {

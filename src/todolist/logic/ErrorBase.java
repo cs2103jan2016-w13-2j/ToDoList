@@ -10,147 +10,139 @@ public class ErrorBase {
 
 	public ErrorBase() {
 		errorBase.put(("ADD" + "INCOMPLETE"),
-				"Your command was incomplete! To create a task, you will first need to specify the type of task that you wish to create.");
+				"Your command to ADD was incomplete! Please specify a TASK TYPE.");
 		errorBase.put(("ADD EVENT" + "INCOMPLETE"),
-				"Your command was incomplete! To add an event, try: add event [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day].");
+				"Your command to ADD EVENT was incomplete! Try FLEXICOMMAND or check HELP for formats.");
 		errorBase.put(("ADD DEADLINE" + "INCOMPLETE"),
-				"Your command was incomplete! To add a deadline, try: add deadline [title] [YYYY-MM-DD] [HH:MM]");
+				"Your command to ADD DEADLINE was incomplete! Try FLEXICOMMAND or check HELP for formats.");
 		errorBase.put(("ADD TASK" + "INCOMPLETE"),
-				"Your command was incomplete! To add an un-dated task: add task [title]");
+				"Your command to ADD TASK was incomplete! Try FLEXICOMMAND or check HELP for formats.");
 		errorBase.put(("ADD RECURRING EVENT" + "INCOMPLETE"),
-				"Your command was incomplete! To add a recurring event, try: add recurring event [7-day] [title] [YYYY-MM-DD] [HH:MM] [number] [hour | day]");
+				"Your command to ADD RECURRING EVENT was incomplete! Try FLEXICOMMAND or check HELP for formats.");
 		errorBase.put(("ADD RECURRING DEADLINE" + "INCOMPLETE"),
-				"Your command was incomplete! To add a recurring deadline, try: add recurring deadline [7-day] [title] [YYYY-MM-DD] [HH:MM]");
+				"Your command to ADD RECURRING DEADLINE was incomplete! Try FLEXICOMMAND or check HELP for formats.");
 		errorBase.put(("EDIT" + "INCOMPLETE"),
-				"Your command was incomplete! To edit a task, try: edit [title] [field-name] [new-value]");
+				"Your command to EDIT TASK was incomplete! Please check HELP for formats.");
 		errorBase.put(("FILTER" + "INCOMPLETE"),
-				"Your command was incomplete! To apply a filter, try: filter [category-name]");
+				"Your command to FILTER (CATEGORY) was incomplete! Please check HELP for formats.");
 		errorBase.put(("SET-RECURRING" + "INCOMPLETE"),
-				"Your command was incomplete! To set a task to repeat, try: set-recurring [title] [interval]");
+				"Your command to SET RECURRENCE was incomplete! Please check HELP for formats.");
 		errorBase.put(("LABEL" + "INCOMPLETE"),
-				"Your command was incomplete! To categorise or label a task, try: label [title] [category-name]");
+				"Your command to LABEL CATEGORY was incomplete! Please check HELP for formats.");
 		errorBase.put(("REMOVE-RECURRING" + "INCOMPLETE"),
-				"Your command was incomplete! To stop a task from repeating, try: remove-recurring [title]");
+				"Your command to REMOVE RECURRENCE was incomplete! Please check HELP for formats.");
 		errorBase.put(("POSTPONE" + "INCOMPLETE"),
-				"Your command was incomplete! To postpone a task, try: postpone [title] [number] [hour | day]");
+				"Your command to POSTPONE TASK was incomplete! Please check HELP for formats.");
 		errorBase.put(("FORWARD" + "INCOMPLETE"),
-				"Your command was incomplete! To forward a task, try: forward [title] [number] [hour | day]");
+				"Your command to FORWARD TASK was incomplete! Please check HELP for formats.");
 		errorBase.put(("REMIND" + "INCOMPLETE"),
-				"Your command was incomplete! To get ToDoList to remind you on a task, try: remind [title]");
+				"Your command to SET REMINDER was incomplete! Please check HELP for formats.");
 		errorBase.put(("REMIND-BEF" + "INCOMPLETE"),
-				"Your command was incomplete! To get ToDoList to remind you on a task sometime before it is due, try: remind-bef [title] [number] [hour | day]");
+				"Your command to SET ADVANCE REMINDER was incomplete! Please check HELP for formats.");
 		errorBase.put(("DONE" + "INCOMPLETE"),
-				"Your command was incomplete! To archive a completed task, try: done [title]");
+				"Your command to ARCHIVE was incomplete! Please check HELP for formats.");
 		errorBase.put(("UNDONE" + "INCOMPLETE"),
-				"Your command was incomplete! To un-archive an ongoing task, try: undone [title]");
+				"Your command to UN-ARCHIVE was incomplete! Please check HELP for formats.");
 		errorBase.put(("UNDO" + "INCOMPLETE"),
-				"Your command was incomplete! To undo a few action(s), try: undo [number-of-actions]");
+				"Your command to UNDO ACTION was incomplete! Please check HELP for formats.");
 		errorBase.put(("REDO" + "INCOMPLETE"),
-				"Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]");
+				"Your command to REVERT ACTION was incomplete! Please check HELP for formats.");
 		errorBase.put(("TAB" + "INCOMPLETE"),
-				"Your command was incomplete! To navigate to a certain page, try: tab [page-name] (as reflected on the tab bar)");
-		errorBase.put(("REDO" + "INCOMPLETE"),
-				"Your command was incomplete! To redo a few action(s), try: redo [number-of-actions]");
+				"Your command to CHANGE TAB was incomplete! Please check HELP for formats.");
 		errorBase.put(("ADD" + "REPEAT TITLE"), 
-				"You have added a task with same name before! Try another name!");
+				"You might have added this task before! Try a different TASK TITLE.");
 		errorBase.put(("SORT" + "NO FIELD"), 
-				"Please specify a sorting order! Try sort ['start' | 'end' | 'category' | 'name'], followed by [ascending | descending].");
-		errorBase.put(("ADD" + "REPEAT TITLE"), 
-				"Task exist liao change change lah");
+				"Your command to SORT was incomplete! Please check HELP for formats.");
 		errorBase.put(("ADD EVENT" + "INVALID TIME UNIT"), 
-				"add event unit not correct lah");
+				"You have specified a TIME UNIT that I don't understand! Try {minute, hour, day, week, month, year}.");
 		errorBase.put(("ADD EVENT" + "INVALID QUANTITY"), 
-				"add event event quantity");
+                "You have specified a TIME QUANTITY that I don't understand! Try using whole numbers instead.");
 		errorBase.put(("ADD EVENT" + "INVALID START TIME"), 
-				"add event invalid start time");
+                "You have specified a START TIME that I don't understand! Please check HELP for formats.");
 		errorBase.put(("ADD EVENT" + "INVALID START DATE"), 
-				"add event invalid start date");
+                "You have specified a START DATE that I don't understand! Please check HELP for formats.");
 		errorBase.put(("ADD DEADLINE" + "INVALID END TIME"), 
-				"add deadline invalid end time");
+                "You have specified an invalid END TIME! ToDoList does not support time-travelling yet ...");
 		errorBase.put(("ADD DEADLINE" + "INVLAID END DATE"), 
-				"invalid end date");
+                "You have specified an invalid END DATE! ToDoList does not support time-travelling yet ...");
 		errorBase.put(("ADD RECURRING EVENT" + "INVALID INTERVAL"), 
-				"invalid interval");
+                "You have specified an invalid EVENT RECURRENCE INTERVAL! Please check HELP for formats.");
 		errorBase.put(("ADD RECURRING DEADLINE" + "INVALID INTERVAL"), 
-				"invalid interval");
+                "You have specified an invalid DEADLINE RECURRENCE INTERVAL! Please check HELP for formats.");
 		errorBase.put(("REMIND BEF" + "INVALID TIME UNIT"), 
-				"remind bef invalid time unit");
+                "You have specified a TIME UNIT that I don't understand! Try {minute, hour, day, week, month, year}.");
 		errorBase.put(("REMIND BEF" + "INVALID QUANTITY"), 
-				"remind bef invalid time quantity");
+                "You have specified a TIME QUANTITY that I don't understand! Try using whole numbers instead.");
 		errorBase.put(("REMIND BEF" + "TASK NOT EXIST"), 
-				"remind bef task not exist");
+				"The task that you want to set ADVANCE REMINDER for does not exist! Try another?");
 		errorBase.put(("ADD REMIND" + "INVALID TYPE"), 
-				"add remind invalid type");
-		errorBase.put(("REMIND BEF" + "INVALID TIME UNIT"), 
-				"remind bef invalid unit");
-		errorBase.put(("REMIND BEF" + "INVALID QUANTITY"), 
-				"remind bef invalid quantity");
+				"You may only SET REMINDER for an EVENT or DEADLINE! Try creating an EVENT or DEADLINE instead!");
 		errorBase.put(("REMIND" + "TASK NOT EXIST"), 
-				"remind task not exist");
+                "The task that you want to set REMINDER for does not exist! Try another?");
 		errorBase.put(("FORWARD" + "INVALID TIME UNIT"), 
-				"forward invalid time unit");
+                "You have specified a TIME UNIT that I don't understand! Try {minute, hour, day, week, month, year}.");
 		errorBase.put(("FORWARD" + "INVALID QUANTITY"), 
-				"forward invalid quantity");
+                "You have specified a TIME QUANTITY that I don't understand! Try using whole numbers instead.");
 		errorBase.put(("FORWARD" + "NOT EXIST"), 
-				"froward task not exist");
+                "The task that you want to set FORWARD does not exist! Try another?");
 		errorBase.put(("POSTPONE" + "INVALID TIME UNIT"), 
-				"postpone  invalid time unit");
+                "You have specified a TIME UNIT that I don't understand! Try {minute, hour, day, week, month, year}.");
 		errorBase.put(("POSTPONE" + "INVALID QUANTITY"), 
-				"postpone invalid quantity");
+                "You have specified a TIME QUANTITY that I don't understand! Try using whole numbers instead.");
 		errorBase.put(("POSTPONE" + "NOT EXIST"), 
-				"postpone task not exit");
+                "The task that you want to set POSTPONE for does not exist! Try another?");
 		errorBase.put(("REDO" + "NO ACTION TO REDO"), 
-				"redo no more action to redo");
+                "There are no actions to REVERT!");
 		errorBase.put(("REDO" + "STEP NOT POSITIVE"), 
-				"step must be positive integer");
+                "Uh-oh! I encountered some problems reverting your action. I will scold my makers for you.");
 		errorBase.put(("REDO" + "AUGUMENT NOT INTEGER"), 
-				"redo not integer");
+				"You may only specify a whole number following the REDO command! Please refer to HELP for formats.");
 		errorBase.put(("UNDO" + "NO ACTION TO UNDO"), 
-				"undo no more action to undo");
+                "There are no actions to UNDO!");
 		errorBase.put(("UNDO" + "STEP NOT POSITIVE"), 
-				"undo step not positive");
+                "Uh-oh! I encountered some problems undoing your action. I will scold my developers for you.");
 		errorBase.put(("UNDO" + "AUGUMENT NOT INTEGER"), 
-				"undo not integer");
+                "You may only specify a whole number following the UNDO command! Please refer to HELP for formats.");
 		errorBase.put(("UNDONE" + "NOT EXIST"), 
-				"undone task not exist");
+                "The task that you want to UNARCHIVE does not exist! Try another?");
 		errorBase.put(("DONE" + "NOT EXIST"), 
-				"done task not exist");
+                "The task that you want to ARCHIVE does not exist! Try another?");
 		errorBase.put(("TAB" + "WORDPLACE NOT EXIST"), 
-				"tab work place not exist");
+                "The TAB you are looking for does not exist! Try another?");
 		errorBase.put(("SET RECURRING" + "INVALID INTERVAL"), 
-				"set recurring invalid interval");
+				"You have specified a TIME INTERVAL that I don't understand! Try [WHOLE NUMBER]-[TIME UNIT]. ");
 		errorBase.put(("SET RECURRING" + "TASK NOT EXIST"), 
-				"set recurring task not exist");
+                "The task that you want to SET RECURRENCE for does not exist! Try another?");
 		errorBase.put(("REMOVE RECURRING" + "INVALID INTERVAL"), 
-				"set recurring invalid interval");
+                "You have specified a TIME INTERVAL that I don't understand! Try [WHOLE NUMBER]-[TIME UNIT]. ");
 		errorBase.put(("REMOVE RECURRING" + "TASK NOT EXIST"), 
-				"set recurring task not exist");
+                "The task that you want to REMOVE RECURRENCE from does not exist! Try another?");
 		errorBase.put(("LABEL" + "TASK NOT EXIST"), 
-				"label task not exist");
+                "The task that you want to LABEL CATEGORY does not exist! Try another?");
 		errorBase.put(("EDIT" + "FIELD NOT EXIST"), 
-				"edit field not exist");
+                "The FIELD that you want to EDIT for this task does not exist! Please refer to HELP for formats.");
 		errorBase.put(("EDIT" + "TASK NOT EXIST"), 
-				"edit task not exist");
+                "The TASK that you want to EDIT does not exist! Try another?");
 		errorBase.put(("DELETE" + "TASK NOT EXIST"), 
-				"delete task not exist");
+                "The TASK that you want to DELETE does not exist! Try another?");
 		errorBase.put(("ADD REMIND" + "INVALID TYPE"), 
-				"add remind invalid type");
+                "You may only SET REMINDER for an EVENT or DEADLINE! Try creating an EVENT or DEADLINE instead!");
 		errorBase.put(("ADD REMIND BEF"+"INVALID TYPE"), 
-				"add remind bef invalid type");
+                "You may only SET ADVANCE REMINDER for an EVENT or DEADLINE! Try creating an EVENT or DEADLINE instead!");
 		errorBase.put(("ADD REMIND BEF"+"INVALID TIME UNIT"), 
-				"add remind bef invalid time unit");
+                "You have specified a TIME UNIT that I don't understand! Try {minute, hour, day, week, month, year}.");
 		errorBase.put(("ADD REMIND BEF"+"INVALID QUANTITY"), 
-				"add remind bef invalid quantity");
+                "You have specified a TIME QUANTITY that I don't understand! Try using whole numbers instead.");
 		errorBase.put(("REMIND"+"FLOATING TASK"), 
-				"cant remind floating task");
+                "You may only SET REMINDER for an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 		errorBase.put(("FORWARD"+ "FLOATING TASK"), 
-				"cant forwad floating task");
+                "You may only FORWARD an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 		errorBase.put(("POSTPONE"+ "FLOATING TASK"), 
-				"cant postpone floating task");
+                "You may only POSTPONE an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 		errorBase.put(("REMIND BEF"+ "FLOATING TASK"), 
-				"cant remind bef floating task");
+                "You may only SET REMINDER for an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 		errorBase.put(("SET RECURRING"+"FLOATING TASK"), 
-				"cant set recurring floating task");
+                "You may only SET RECURRENCE for an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 	}
 
 	public String getErrorMessage(String commandType, String errorType) {
