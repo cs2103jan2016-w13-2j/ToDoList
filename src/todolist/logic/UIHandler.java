@@ -31,19 +31,19 @@ public class UIHandler {
         mainApp.setDisplayTasks(dataBase.retrieveAll());
     }
 
-    public void sendMessage(String message, boolean autohide) {
+    protected void sendMessage(String message, boolean autohide) {
         mainApp.notifyWithText(message, autohide);
     }
 
-    public void highLight(Task task) {
+    protected void highLight(Task task) {
         mainApp.highlightItem(task);
     }
 
-    public void display(ArrayList<Task> taskList) {
+    protected void display(ArrayList<Task> taskList) {
         mainApp.setDisplayTasks(taskList);
     }
 
-    public void tab(int index) {
+    protected void tab(int index) {
         mainApp.loadPage(index);
     }
 }

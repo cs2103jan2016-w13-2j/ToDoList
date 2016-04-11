@@ -10,13 +10,13 @@ public class CommandChecker {
 	private DataBase dataBase;
 	private FunctionChecker functionChecker;
 
-	public CommandChecker(Logic logic, DataBase dataBase) {
+	protected CommandChecker(Logic logic, DataBase dataBase) {
 		this.logic = logic;
 		this.dataBase = dataBase;
 		this.functionChecker = new FunctionChecker(this.logic, this.dataBase);
 	}
 
-	public InputException add(String[] arg) {
+	protected InputException add(String[] arg) {
 		String type = "null";
 		if (arg.length == 0) {
 			return new InputException("ADD", "INCOMPLETE");
@@ -38,7 +38,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException addTask(String[] arg) {
+	protected InputException addTask(String[] arg) {
 		if (arg.length != 2) {
 			return new InputException("ADD TASK", "INCOMPLETE");
 		} else {
@@ -46,7 +46,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException addEvent(String[] arg) {
+	protected InputException addEvent(String[] arg) {
 		if (arg.length != 6 && arg.length != 5) {
 			return new InputException("ADD EVENT", "INCOMPLETE");
 		} else {
@@ -58,7 +58,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException addDeadline(String[] arg) {
+	protected InputException addDeadline(String[] arg) {
 		if (arg.length != 4 && arg.length != 3) {
 			return new InputException("ADD DEADLINE", "INCOMPLETE");
 		} else {
@@ -70,7 +70,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException addRecurring(String[] arg) {
+	protected InputException addRecurring(String[] arg) {
 		switch (arg[1]) {
 		case "event":
 			return addRecurringEvent(arg);
@@ -81,7 +81,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException addRecurringEvent(String[] arg) {
+	protected InputException addRecurringEvent(String[] arg) {
 		if (arg.length != 8 && arg.length != 7) {
 			return new InputException("ADD RECURRING EVENT", "INCOMPLETE");
 		} else {
@@ -93,7 +93,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException addRecurringDeadline(String[] arg) {
+	protected InputException addRecurringDeadline(String[] arg) {
 		if (arg.length != 6 && arg.length != 5) {
 			return new InputException("ADD RECURRING DEADLINE", "INCOMPLETE");
 		} else {
@@ -105,7 +105,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException edit(String[] arg) {
+	protected InputException edit(String[] arg) {
 		if (arg.length != 3) {
 			return new InputException("EDIT", "INCOMPLETE");
 
@@ -136,7 +136,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException delete(String[] arg) {
+	protected InputException delete(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("DELETE", "INCOMPLETE");
 		} else {
@@ -166,7 +166,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException search(String[] arg) {
+	protected InputException search(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("SEARCH", "INCOMPLETE");
 		} else {
@@ -174,7 +174,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException filter(String[] arg) {
+	protected InputException filter(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("FILTER", "INCOMPLETE");
 		} else {
@@ -182,7 +182,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException sort(String[] arg) {
+	protected InputException sort(String[] arg) {
 		if (arg.length != 2) {
 			return new InputException("SORT", "INCOMPLETE");
 		} else {
@@ -190,7 +190,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException label(String[] arg) {
+	protected InputException label(String[] arg) {
 		if (arg.length != 2) {
 			return new InputException("LABEL", "INCOMPLETE");
 		} else {
@@ -220,7 +220,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException setRecurring(String[] arg) {
+	protected InputException setRecurring(String[] arg) {
 		if (arg.length != 2) {
 			return new InputException("SET-RECURRING", "INCOMPLETE");
 		} else {
@@ -251,7 +251,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException removeRecurring(String[] arg) {
+	protected InputException removeRecurring(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("REMOVE-RECURRING", "INCOMPLETE");
 		} else {
@@ -281,7 +281,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException postpone(String[] arg) {
+	protected InputException postpone(String[] arg) {
 		if (arg.length != 3) {
 			return new InputException("POSTPONE", "INCOMPLETE");
 		} else {
@@ -311,7 +311,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException forward(String[] arg) {
+	protected InputException forward(String[] arg) {
 		if (arg.length != 3) {
 			return new InputException("FORWARD", "INCOMPLETE");
 		} else {
@@ -341,11 +341,11 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException addRemind(String[] arg) {
+	protected InputException addRemind(String[] arg) {
 		return functionChecker.addRemindChecker(arg);
 	}
 
-	public InputException remind(String[] arg) {
+	protected InputException remind(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("REMIND", "INCOMPLETE");
 		} else {
@@ -375,7 +375,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException addRemindBef(String[] arg) {
+	protected InputException addRemindBef(String[] arg) {
 		String[] restOfArgs = new String[arg.length - 2];
 		for (int i = 0; i < arg.length; i++) {
 			restOfArgs[i] = arg[i + 2];
@@ -383,7 +383,7 @@ public class CommandChecker {
 		return functionChecker.addRemindBefChecker(arg[0], arg[1], restOfArgs);
 	}
 
-	public InputException remindBef(String[] arg) {
+	protected InputException remindBef(String[] arg) {
 		if (arg.length != 3) {
 			return new InputException("REMIND-BEF", "INCOMPLETE");
 		} else {
@@ -413,7 +413,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException done(String[] arg) {
+	protected InputException done(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("DONE", "INCOMPLETE");
 		} else {
@@ -443,7 +443,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException undone(String[] arg) {
+	protected InputException undone(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("UNDONE", "INCOMPLETE");
 		} else {
@@ -473,11 +473,11 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException exit(String[] arg) {
+	protected InputException exit(String[] arg) {
 		return functionChecker.exitChecker(arg);
 	}
 
-	public InputException undo(String[] arg) {
+	protected InputException undo(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("UNDO", "INCOMPLETE");
 		} else {
@@ -485,7 +485,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException redo(String[] arg) {
+	protected InputException redo(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("REDO", "INCOMPLETE");
 		} else {
@@ -493,14 +493,14 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException reset(String[] arg) {
+	protected InputException reset(String[] arg) {
 		if (arg.length != 0) {
 			return new InputException("RESET", "INVALID ARGUMENT");
 		}
 		return functionChecker.resetChecker();
 	}
 
-	public InputException tab(String[] arg) {
+	protected InputException tab(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("TAB", "INCOMPLETE");
 		} else {
@@ -508,15 +508,15 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException open(String[] arg) {
+	protected InputException open(String[] arg) {
 		return functionChecker.openChecker(arg[0]);
 	}
 
-	public InputException save(String[] arg) {
+	protected InputException save(String[] arg) {
 		return functionChecker.saveChecker(arg[0]);
 	}
 
-	public InputException invalid(String[] arg) {
+	protected InputException invalid(String[] arg) {
 		return functionChecker.invalidChecker(arg[0]);
 	}
 
@@ -530,7 +530,7 @@ public class CommandChecker {
 		}
 	}
 
-	public InputException help(String[] arg) {
+	protected InputException help(String[] arg) {
 		return new InputException();
 	}
 }

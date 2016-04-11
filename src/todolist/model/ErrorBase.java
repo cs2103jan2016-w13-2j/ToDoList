@@ -1,12 +1,12 @@
 //@@author A0130620B
-package todolist.logic;
+package todolist.model;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ErrorBase {
 
-	static Map<String, String> errorBase = new HashMap<String, String>();
+	protected static Map<String, String> errorBase = new HashMap<String, String>();
 
 	public ErrorBase() {
 		errorBase.put(("ADD" + "INCOMPLETE"),
@@ -145,7 +145,7 @@ public class ErrorBase {
                 "You may only SET RECURRENCE for an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 	}
 
-	public String getErrorMessage(String commandType, String errorType) {
+	protected String getErrorMessage(String commandType, String errorType) {
 		return errorBase.get((commandType + errorType));
 	}
 }

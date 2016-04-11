@@ -15,12 +15,12 @@ public class FunctionChecker {
 	private Logic logic;
 	private DataBase dataBase;
 
-	public FunctionChecker(Logic logic, DataBase dataBase) {
+	protected FunctionChecker(Logic logic, DataBase dataBase) {
 		this.logic = logic;
 		this.dataBase = dataBase;
 	}
 
-	public InputException addTaskChecker(String title) {
+	protected InputException addTaskChecker(String title) {
 		if (noRepeat(title)) {
 			return new InputException();
 		} else {
@@ -28,7 +28,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addEventChecker(String title, String startDate, String startTime, String quantity,
+	protected InputException addEventChecker(String title, String startDate, String startTime, String quantity,
 			String timeUnit) {
 		if (noRepeat(title)) {
 			if (validFuzzyDate(startDate)) {
@@ -53,7 +53,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addEventLessChecker(String title, String fuzzyTime, String quantity, String timeUnit) {
+	protected InputException addEventLessChecker(String title, String fuzzyTime, String quantity, String timeUnit) {
 		if (noRepeat(title)) {
 			if (validFuzzyTime(fuzzyTime)) {
 				if (validQuantity(quantity)) {
@@ -73,7 +73,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addDeadlineChecker(String title, String endDate, String endTime) {
+	protected InputException addDeadlineChecker(String title, String endDate, String endTime) {
 		if (noRepeat(title)) {
 			if (validFuzzyDate(endDate)) {
 				if (validTime(endTime)) {
@@ -89,7 +89,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addDeadlineLessChecker(String title, String fuzzyTime) {
+	protected InputException addDeadlineLessChecker(String title, String fuzzyTime) {
 		if (noRepeat(title)) {
 			if (validFuzzyTime(fuzzyTime)) {
 				return new InputException();
@@ -101,7 +101,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addRecurringEventChecker(String interval, String title, String startDate, String startTime,
+	protected InputException addRecurringEventChecker(String interval, String title, String startDate, String startTime,
 			String quantity, String timeUnit) {
 		if (validInterval(interval)) {
 			return addEventChecker(title, startDate, startTime, quantity, timeUnit);
@@ -110,7 +110,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addRecurringEventLessChecker(String interval, String title, String fuzzyTime, String quantity,
+	protected InputException addRecurringEventLessChecker(String interval, String title, String fuzzyTime, String quantity,
 			String timeUnit) {
 		if (validInterval(interval)) {
 			return addEventLessChecker(title, fuzzyTime, quantity, timeUnit);
@@ -119,7 +119,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addRecurringDeadlineChecker(String interval, String title, String endDate, String endTime) {
+	protected InputException addRecurringDeadlineChecker(String interval, String title, String endDate, String endTime) {
 		if (validInterval(interval)) {
 			return addDeadlineChecker(title, endDate, endTime);
 		} else {
@@ -127,7 +127,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addRecurringDeadlineLessChecker(String interval, String title, String fuzzyTime) {
+	protected InputException addRecurringDeadlineLessChecker(String interval, String title, String fuzzyTime) {
 		if (validInterval(interval)) {
 			return addDeadlineLessChecker(title, fuzzyTime);
 		} else {
@@ -135,7 +135,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException remindBefChecker(String title, String quantity, String timeUnit) {
+	protected InputException remindBefChecker(String title, String quantity, String timeUnit) {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
@@ -155,7 +155,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException addRemindBefChecker(String quantity, String timeUnit, String[] arg) {
+	protected InputException addRemindBefChecker(String quantity, String timeUnit, String[] arg) {
 		if (validQuantity(quantity)) {
 			if (validUnit(timeUnit)) {
 				String type = arg[0];
@@ -177,7 +177,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException remindChecker(String title) {
+	protected InputException remindChecker(String title) {
 		if (!noRepeat(title)) {
 			if(isFloating(title)) {
 				return new InputException("REMIND", "FLOATING TASK");
@@ -189,7 +189,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException forwardChecker(String title, String quantity, String timeUnit) {
+	protected InputException forwardChecker(String title, String quantity, String timeUnit) {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
@@ -209,7 +209,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException postponeChecker(String title, String quantity, String timeUnit) {
+	protected InputException postponeChecker(String title, String quantity, String timeUnit) {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
@@ -229,7 +229,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException redoChecker(String redostep) {
+	protected InputException redoChecker(String redostep) {
 		if (isInteger(redostep)) {
 			if (Integer.parseInt(redostep) > 0) {
 				if (logic.getSnapshot()[logic.checkStep() + Integer.parseInt(redostep)] == null) {
@@ -245,7 +245,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException undoChecker(String undostep) {
+	protected InputException undoChecker(String undostep) {
 		if (isInteger(undostep)) {
 			if (Integer.parseInt(undostep) > 0) {
 				if (logic.checkStep() - Integer.parseInt(undostep) < 0) {
@@ -261,7 +261,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException undoneChecker(String title) {
+	protected InputException undoneChecker(String title) {
 		if (!noRepeat(title)) {
 			return new InputException();
 		} else {
@@ -269,7 +269,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException doneChecker(String title) {
+	protected InputException doneChecker(String title) {
 		if (!noRepeat(title)) {
 			return new InputException();
 		} else {
@@ -277,19 +277,19 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException openChecker(String path) {
+	protected InputException openChecker(String path) {
 		return new InputException();
 	}
 
-	public InputException saveChecker(String path) {
+	protected InputException saveChecker(String path) {
 		return new InputException();
 	}
 
-	public InputException invalidChecker(String arg) {
+	protected InputException invalidChecker(String arg) {
 		return new InputException();
 	}
 
-	public InputException tabChecker(String workplace) {
+	protected InputException tabChecker(String workplace) {
 		switch (workplace) {
 		case "all":
 			return new InputException();
@@ -310,7 +310,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException setRecurringChecker(String title, Boolean status, String interval) {
+	protected InputException setRecurringChecker(String title, Boolean status, String interval) {
 		if (!noRepeat(title)) {
 			if ((status && validInterval(interval)) || (!status)) {
 				if(isFloating(title)) {
@@ -326,7 +326,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException labelChecker(String title, String category) {
+	protected InputException labelChecker(String title, String category) {
 		if (!noRepeat(title)) {
 			return new InputException();
 		} else {
@@ -334,7 +334,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException sortChecker(String fieldName, String order) {
+	protected InputException sortChecker(String fieldName, String order) {
 		if(validOrder(order)) {
 			switch(fieldName) {
 			case "title":
@@ -353,15 +353,15 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException filterChecker(String[] arg) {
+	protected InputException filterChecker(String[] arg) {
 		return new InputException();
 	}
 
-	public InputException searchChecker(String[] arg) {
+	protected InputException searchChecker(String[] arg) {
 		return new InputException();
 	}
 
-	public InputException editChecker(String title, String fieldName, String newValue) {
+	protected InputException editChecker(String title, String fieldName, String newValue) {
 		if (!noRepeat(title)) {
 			switch (fieldName) {
 			case "title":
@@ -382,7 +382,7 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException deleteChecker(String title) {
+	protected InputException deleteChecker(String title) {
 		if (!noRepeat(title)) {
 			return new InputException();
 		} else {
@@ -390,15 +390,15 @@ public class FunctionChecker {
 		}
 	}
 
-	public InputException resetChecker() {
+	protected InputException resetChecker() {
 		return new InputException();
 	}
 
-	public InputException exitChecker(String[] arg) {
+	protected InputException exitChecker(String[] arg) {
 		return new InputException();
 	}
 
-	public InputException addRemindChecker(String[] arg) {
+	protected InputException addRemindChecker(String[] arg) {
 		String type = arg[0];
 		switch (type) {
 		case "event":

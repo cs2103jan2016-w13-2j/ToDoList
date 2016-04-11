@@ -12,14 +12,14 @@ public class CaseSwitcher {
 	private InputErrorChecker inputErrorChecker;
 	private CaseExecuter caseExecuter;
 
-	public CaseSwitcher(Logic logic, DataBase dataBase) {
+	protected CaseSwitcher(Logic logic, DataBase dataBase) {
 		this.logic = logic;
 		this.dataBase = dataBase;
 		this.inputErrorChecker = new InputErrorChecker(this.logic, this.dataBase);
 		this.caseExecuter = new CaseExecuter(logic);
 	}
 
-	public void execute(TokenizedCommand command) {
+	protected void execute(TokenizedCommand command) {
 		InputException inputException = inputErrorChecker.validate(command);
 		if (inputException.getCorrectness()) {
 			forceExecute(command);
@@ -28,7 +28,7 @@ public class CaseSwitcher {
 		}
 	}
 
-	public void forceExecute(TokenizedCommand command) {
+	protected void forceExecute(TokenizedCommand command) {
 
 		String action = command.getAction();
 		String arg[] = command.getArgs();

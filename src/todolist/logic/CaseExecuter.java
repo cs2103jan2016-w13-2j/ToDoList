@@ -4,11 +4,11 @@ package todolist.logic;
 public class CaseExecuter {
 	private Logic logic;
 
-	public CaseExecuter(Logic logic) {
+	protected CaseExecuter(Logic logic) {
 		this.logic = logic;
 	}
 
-	public void add(String[] arg) {
+	protected void add(String[] arg) {
 		String type = arg[0];
 		switch (type) {
 		case "task":
@@ -27,11 +27,11 @@ public class CaseExecuter {
 		}
 	}
 
-	public void addTask(String[] arg) {
+	protected void addTask(String[] arg) {
 		logic.addTask(arg[1]);
 	}
 
-	public void addEvent(String[] arg) {
+	protected void addEvent(String[] arg) {
 		if (arg.length == 6) {
 			logic.addEvent(arg[1], arg[2], arg[3], arg[4], arg[5]);
 		} else {
@@ -39,7 +39,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void addDeadline(String[] arg) {
+	protected void addDeadline(String[] arg) {
 		if (arg.length == 4) {
 			logic.addDeadline(arg[1], arg[2], arg[3]);
 		} else {
@@ -47,7 +47,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void addRecurring(String[] arg) {
+	protected void addRecurring(String[] arg) {
 		switch (arg[1]) {
 		case "event":
 			addRecurringEvent(arg);
@@ -59,7 +59,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void addRecurringEvent(String[] arg) {
+	protected void addRecurringEvent(String[] arg) {
 		if (arg.length == 8) {
 			logic.addRecurringEvent(arg[2], arg[3], arg[4], arg[5], arg[6], arg[7]);
 		} else {
@@ -67,7 +67,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void addRecurringDeadline(String[] arg) {
+	protected void addRecurringDeadline(String[] arg) {
 		if (arg.length == 6) {
 			logic.addRecurringDeadline(arg[2], arg[3], arg[4], arg[5]);
 		} else {
@@ -75,7 +75,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void edit(String[] arg) {
+	protected void edit(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -98,7 +98,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void delete(String[] arg) {
+	protected void delete(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -121,19 +121,19 @@ public class CaseExecuter {
 		}
 	}
 
-	public void search(String[] arg) {
+	protected void search(String[] arg) {
 		logic.search(arg);
 	}
 
-	public void filter(String[] arg) {
+	protected void filter(String[] arg) {
 		logic.filter(arg[0]);
 	}
 
-	public void sort(String[] arg) {
+	protected void sort(String[] arg) {
 		logic.sort(arg[0], arg[1]);
 	}
 
-	public void label(String[] arg) {
+	protected void label(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -156,7 +156,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void setRecurring(String[] arg) {
+	protected void setRecurring(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -179,7 +179,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void removeRecurring(String[] arg) {
+	protected void removeRecurring(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -202,7 +202,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void postpone(String[] arg) {
+	protected void postpone(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -225,7 +225,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void forward(String[] arg) {
+	protected void forward(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -248,11 +248,11 @@ public class CaseExecuter {
 		}
 	}
 
-	public void addRemind(String[] arg) {
+	protected void addRemind(String[] arg) {
 		logic.addRemind(arg);
 	}
 
-	public void remind(String[] arg) {
+	protected void remind(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -275,7 +275,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void addRemindBef(String[] arg) {
+	protected void addRemindBef(String[] arg) {
 		String[] restOfArgs = new String[arg.length - 2];
 		for (int i = 0; i < arg.length; i++) {
 			restOfArgs[i] = arg[i + 2];
@@ -283,7 +283,7 @@ public class CaseExecuter {
 		logic.addRemindBef(arg[0], arg[1], restOfArgs);
 	}
 
-	public void remindBef(String[] arg) {
+	protected void remindBef(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -306,7 +306,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void done(String[] arg) {
+	protected void done(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -329,7 +329,7 @@ public class CaseExecuter {
 		}
 	}
 
-	public void undone(String[] arg) {
+	protected void undone(String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
 		String name[] = new String[temp.length];
@@ -352,43 +352,43 @@ public class CaseExecuter {
 		}
 	}
 
-	public void exit(String[] arg) {
+	protected void exit(String[] arg) {
 		logic.exit();
 	}
 
-	public void undo(String[] arg) {
+	protected void undo(String[] arg) {
 		logic.undo(Integer.parseInt(arg[0]));
 	}
 
-	public void redo(String[] arg) {
+	protected void redo(String[] arg) {
 		logic.redo(Integer.parseInt(arg[0]));
 	}
 
-	public void reset(String[] arg) {
+	protected void reset(String[] arg) {
 		logic.reset();
 	}
 
-	public void save(String[] arg) {
+	protected void save(String[] arg) {
 		logic.setNewFile(arg[0]);
 	}
 
-	public void open(String[] arg) {
+	protected void open(String[] arg) {
 		logic.openNewFile(arg[0]);
 	}
 
-	public void tab(String[] arg) {
+	protected void tab(String[] arg) {
 		logic.tab(arg[0]);
 	}
 
-	public void help(String[] arg) {
+	protected void help(String[] arg) {
 		logic.tab("help");
 	}
 
-	public void invalid(String[] arg) {
+	protected void invalid(String[] arg) {
 		logic.invalid(arg[0]);
 	}
 
-	public void clean(String[] arg) {
+	protected void clean(String[] arg) {
 		logic.clean();
 	}
 

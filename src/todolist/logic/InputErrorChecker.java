@@ -10,13 +10,13 @@ public class InputErrorChecker {
 	private DataBase dataBase;
 	private CommandChecker commandChecker;
 
-	public InputErrorChecker(Logic logic, DataBase dataBase) {
+	protected InputErrorChecker(Logic logic, DataBase dataBase) {
 		this.logic = logic;
 		this.dataBase = dataBase;
 		commandChecker = new CommandChecker(this.logic, this.dataBase);
 	}
 	
-	public InputException validate(TokenizedCommand command) {
+	protected InputException validate(TokenizedCommand command) {
 		String action = command.getAction();
 		String arg[] = command.getArgs();
 

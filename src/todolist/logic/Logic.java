@@ -1056,10 +1056,6 @@ public class Logic {
                 myTime = LocalDateTime.now().getYear() + "-"
                         + decimalFormatter.format(LocalDateTime.now().getMonthValue()) + "-"
                         + decimalFormatter.format(LocalDateTime.now().getDayOfMonth()) + " " + fuzzyTime;
-                // System.out.println(myTime);
-            } else {
-                // Use logger here
-//                uiHandler.sendMessage("no time or date detected", true);
             }
         }
         return LocalDateTime.parse(myTime, formatter);

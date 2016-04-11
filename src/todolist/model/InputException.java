@@ -1,8 +1,6 @@
 //@@author A0130620B
 package todolist.model;
 
-import todolist.logic.ErrorBase;
-
 public class InputException {
 	String commandType = null;
 	String errorType = null;
