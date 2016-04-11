@@ -68,8 +68,10 @@ public class DataBase {
 
 		loadFromFile();		
 	}
-
-	private void writeToFile() {
+    /**
+     * This method write the the list of the tasks into local file
+     */
+	public void writeToFile() {
 		fh.write(taskList);
 	}
     
@@ -81,8 +83,11 @@ public class DataBase {
 		
 		writeToFile();
 	}
-    	
-	protected void loadFromFile() {
+    
+	/**
+	 * This method read from local file
+	 */
+	public void loadFromFile() {
 		taskList = fh.read();
 	}
 
