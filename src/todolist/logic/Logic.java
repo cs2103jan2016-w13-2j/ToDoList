@@ -115,28 +115,6 @@ public class Logic {
         return addResponse;
     }
 
-    private String truncateTitle(String title) {
-        if (title.length() > TITLE_CAP_SIZE) {
-            title = TITLE_TRUNCATION + title.substring(title.length() - TITLE_CAP_SIZE);
-        }
-
-        return title;
-    }
-
-    private String truncateTitle(String[] title) {
-        String titleString = "";
-        for (String section : title) {
-            titleString += section + " ";
-        }
-
-        titleString = titleString.trim();
-        if (titleString.length() > TITLE_CAP_SIZE) {
-            titleString = TITLE_TRUNCATION + titleString.substring(titleString.length() - TITLE_CAP_SIZE);
-        }
-
-        return titleString;
-    }
-
     /**
      * This method adds a new event with start date and duration
      *
@@ -1123,5 +1101,33 @@ public class Logic {
         default:
             return null;
         }
+    }
+    
+    /**
+     * This method truncates the title to fit it into notification
+     *
+     * 
+     * @return Boolean
+     */
+    private String truncateTitle(String title) {
+        if (title.length() > TITLE_CAP_SIZE) {
+            title = TITLE_TRUNCATION + title.substring(title.length() - TITLE_CAP_SIZE);
+        }
+
+        return title;
+    }
+
+    private String truncateTitle(String[] title) {
+        String titleString = "";
+        for (String section : title) {
+            titleString += section + " ";
+        }
+
+        titleString = titleString.trim();
+        if (titleString.length() > TITLE_CAP_SIZE) {
+            titleString = TITLE_TRUNCATION + titleString.substring(titleString.length() - TITLE_CAP_SIZE);
+        }
+
+        return titleString;
     }
 }
