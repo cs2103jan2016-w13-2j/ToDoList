@@ -168,7 +168,7 @@ public class CommandChecker {
 			return functionChecker.indexChecker("REMOVE-RECURRING", arg);
 		}
 	}
-	
+
 	protected InputException removeRemind(String[] arg) {
 		if (arg.length != 1) {
 			return new InputException("REMOVE-REMIND", "INCOMPLETE");

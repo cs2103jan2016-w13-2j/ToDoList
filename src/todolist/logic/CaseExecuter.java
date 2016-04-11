@@ -142,7 +142,7 @@ public class CaseExecuter {
 		actionOnIndex("REMIND-BEF", arg);
 
 	}
-	
+
 	public void removeRemind(String[] arg) {
 		actionOnIndex("REMOVE-REMIND", arg);
 
@@ -196,7 +196,7 @@ public class CaseExecuter {
 	protected void clean(String[] arg) {
 		logic.clean();
 	}
-	
+
 	private void actionOnIndex(String type, String[] arg) {
 		String temp[] = arg[0].split(",");
 		int index = -1;
@@ -219,7 +219,7 @@ public class CaseExecuter {
 			typeCaseSwitcher(type, arg[0], arg);
 		}
 	}
-	
+
 	private void typeCaseSwitcher(String type, String taskname, String[] arg) {
 		switch (type) {
 		case "EDIT":
@@ -259,7 +259,7 @@ public class CaseExecuter {
 			logic.undone(taskname);
 			break;
 		default:
-			
+
 		}
 	}
 

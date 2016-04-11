@@ -269,7 +269,7 @@ public class FunctionChecker {
 			return new InputException("UNDONE", "NOT EXIST");
 		}
 	}
-	
+
 	protected InputException removeRemindChecker(String title) {
 		if (!noRepeat(title)) {
 			return new InputException();
@@ -440,7 +440,7 @@ public class FunctionChecker {
 			return typeCaseSwitcher(type, arg[0], arg);
 		}
 	}
-	
+
 	private InputException checkInView(int[] index, String type, String[] arg) {
 		for (int i = 0; i < index.length; i++) {
 			Task task = logic.getMainApp().getTaskAt(index[i]);

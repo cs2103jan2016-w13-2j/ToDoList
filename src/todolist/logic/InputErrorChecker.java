@@ -15,7 +15,7 @@ public class InputErrorChecker {
 		this.dataBase = dataBase;
 		commandChecker = new CommandChecker(this.logic, this.dataBase);
 	}
-	
+
 	protected InputException validate(TokenizedCommand command) {
 		String action = command.getAction();
 		String arg[] = command.getArgs();

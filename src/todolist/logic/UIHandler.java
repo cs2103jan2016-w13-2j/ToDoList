@@ -9,41 +9,41 @@ import todolist.storage.DataBase;
 
 public class UIHandler {
 
-    private DataBase dataBase;
-    private MainApp mainApp;
-    private Logic logic;
+	private DataBase dataBase;
+	private MainApp mainApp;
+	private Logic logic;
 
-    public UIHandler(DataBase dataBase, MainApp mainApp, Logic logic) {
-        this.dataBase = dataBase;
-        this.mainApp = mainApp;
-        this.logic = logic;
-    }
+	public UIHandler(DataBase dataBase, MainApp mainApp, Logic logic) {
+		this.dataBase = dataBase;
+		this.mainApp = mainApp;
+		this.logic = logic;
+	}
 
-    public void process(String input) {
-        logic.process(input);
-    }
-    
-    public String getPath() {
-    	return dataBase.getPath();
-    }
+	public void process(String input) {
+		logic.process(input);
+	}
 
-    public void refresh() {
-        mainApp.setDisplayTasks(dataBase.retrieveAll());
-    }
+	public String getPath() {
+		return dataBase.getPath();
+	}
 
-    protected void sendMessage(String message, boolean autohide) {
-        mainApp.notifyWithText(message, autohide);
-    }
+	public void refresh() {
+		mainApp.setDisplayTasks(dataBase.retrieveAll());
+	}
 
-    protected void highLight(Task task) {
-        mainApp.highlightItem(task);
-    }
+	protected void sendMessage(String message, boolean autohide) {
+		mainApp.notifyWithText(message, autohide);
+	}
 
-    protected void display(ArrayList<Task> taskList) {
-        mainApp.setDisplayTasks(taskList);
-    }
+	protected void highLight(Task task) {
+		mainApp.highlightItem(task);
+	}
 
-    protected void tab(int index) {
-        mainApp.loadPage(index);
-    }
+	protected void display(ArrayList<Task> taskList) {
+		mainApp.setDisplayTasks(taskList);
+	}
+
+	protected void tab(int index) {
+		mainApp.loadPage(index);
+	}
 }

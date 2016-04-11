@@ -1130,14 +1130,13 @@ public class Logic {
 		}
 		return LocalDateTime.parse(myTime, formatter);
 	}
-	
+
 	private String getCurrentDate() {
 		DecimalFormat decimalFormatter = new DecimalFormat("00");
-		return LocalDateTime.now().getYear() + "-"
-				+ decimalFormatter.format(LocalDateTime.now().getMonthValue()) + "-"
+		return LocalDateTime.now().getYear() + "-" + decimalFormatter.format(LocalDateTime.now().getMonthValue()) + "-"
 				+ decimalFormatter.format(LocalDateTime.now().getDayOfMonth());
 	}
-	
+
 	private String getCurrentTimeStamp() {
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// dd/MM/yyyy
 		Date now = new Date();
