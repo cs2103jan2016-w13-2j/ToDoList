@@ -59,57 +59,16 @@ public class Task {
 		this.interval = interval;
 	}
 
-	///////////////////////////////////////////
-
 	public Name getName() {
 		return name;
 	}
 
 	public LocalDateTime getStartTime() {
-		/*
-		if (isRecurring && startTime != null) {
-			String temp[] = interval.split("-");
-			String length = temp[0];
-			String unit = temp[1];
-			LocalDateTime now = LocalDateTime.now();
-			while (now.isAfter(startTime)) {
-				startTime = startTime.plus(Long.parseLong(length), generateTimeUnit(unit));
-			}
-			return startTime;
-		} else {
-		*/
-			return startTime;
-		//}
+		return startTime;
 	}
 
 	public LocalDateTime getEndTime() {
-		/*
-		if (isRecurring) {
-			String temp[] = interval.split("-");
-			String length = temp[0];
-			String unit = temp[1];
-
-			if (endTime == null) {
-                throw new RuntimeException();
-            }
-			
-			if (startTime != null) {
-				while (startTime.isAfter(endTime)) {
-					endTime = endTime.plus(Long.parseLong(length), generateTimeUnit(unit));
-				}
-				return endTime;
-			} else {
-				LocalDateTime now = LocalDateTime.now();
-			
-				while (now.isAfter(endTime)) {
-					endTime = endTime.plus(Long.parseLong(length), generateTimeUnit(unit));
-				}
-				return endTime;
-			}
-		} else {
-		*/
-			return endTime;
-		//}
+		return endTime;
 	}
 
 	public Category getCategory() {
@@ -133,7 +92,7 @@ public class Task {
 	}
 
 	@SuppressWarnings("unused")
-    private TemporalUnit generateTimeUnit(String unit) {
+	private TemporalUnit generateTimeUnit(String unit) {
 		switch (unit) {
 		case "day":
 			return ChronoUnit.DAYS;

@@ -110,16 +110,6 @@ public class Logic {
 		LocalDateTime start = LocalDateTime.parse(fuzzyParseDate(startDate) + " " + startTime, formatter);
 		LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
 
-		// if (!start.isAfter(LocalDateTime.now())) {
-		// uiHandler.sendMessage("[" + title + "] is currently ongoing! Please
-		// attend it before it's too late!",
-		// true);
-		// }
-		//
-		// if (!end.isAfter(LocalDateTime.now())) {
-		// uiHandler.sendMessage("[" + title + "] is a task in the past", true);
-		// }
-
 		Task newEvent = new Task(name, start, end, null, null, false, false, null);
 
 		Boolean addResponse = dataBase.add(newEvent);
@@ -155,15 +145,6 @@ public class Logic {
 
 		Name name = new Name(title);
 
-		// if (!start.isAfter(LocalDateTime.now())) {
-		// uiHandler.sendMessage("Oh no! [" + title + "] is currently ongoing!
-		// Please attend it before it's too late!",
-		// true);
-		// }
-		// if (!end.isAfter(LocalDateTime.now())) {
-		// uiHandler.sendMessage("[" + title + "] is a task in the past", true);
-		// }
-
 		Task newEvent = new Task(name, start, end, null, null, false, false, null);
 
 		Boolean addResponse = dataBase.add(newEvent);
@@ -195,10 +176,6 @@ public class Logic {
 		LocalDateTime end = LocalDateTime.parse(fuzzyParseDate(endDate) + " " + endTime, formatter);
 		Task newEvent = new Task(name, null, end, null, null, false, false, null);
 
-		// if (!end.isAfter(LocalDateTime.now())) {
-		// uiHandler.sendMessage("[" + title + "] is a task in the past", true);
-		// }
-
 		Boolean addResponse = dataBase.add(newEvent);
 
 		// UI handling
@@ -225,10 +202,6 @@ public class Logic {
 		Name name = new Name(title);
 		LocalDateTime end = fuzzyParseTime(fuzzyTime);
 		Task newEvent = new Task(name, null, end, null, null, false, false, null);
-
-		// if (!end.isAfter(LocalDateTime.now())) {
-		// uiHandler.sendMessage("[" + title + "] is a task in the past", true);
-		// }
 
 		Boolean addResponse = dataBase.add(newEvent);
 
