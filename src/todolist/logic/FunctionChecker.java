@@ -286,8 +286,8 @@ public class FunctionChecker {
 		return new InputException();
 	}
 
-	protected InputException invalidChecker(String arg) {
-		return new InputException();
+	protected InputException invalidChecker() {
+		return new InputException("PARSER", "INVALID INPUT");
 	}
 
 	protected InputException tabChecker(String workplace) {

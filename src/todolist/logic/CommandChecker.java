@@ -274,7 +274,7 @@ public class CommandChecker {
 	}
 
 	protected InputException invalid(String[] arg) {
-		return functionChecker.invalidChecker(arg[0]);
+		return functionChecker.invalidChecker();
 	}
 
 	protected InputException help(String[] arg) {

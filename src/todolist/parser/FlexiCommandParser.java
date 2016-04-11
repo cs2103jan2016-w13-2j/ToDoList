@@ -71,6 +71,9 @@ public class FlexiCommandParser {
 	}
 
 	private TokenizedCommand addTask(String input) {
+		if (input.equals("")) {
+			return new TokenizedCommand("invalid", null);
+		}
 		return new TokenizedCommand("add", new String[] { "task", input });
 	}
 
@@ -93,6 +96,10 @@ public class FlexiCommandParser {
 		result = keywordFilter(result);
 
 		deadlineTime = searchKeywordTime(result, deadlineTime);
+
+		if (result.equals("")) {
+			return new TokenizedCommand("invalid", null);
+		}
 
 		return new TokenizedCommand("add", new String[] { "deadline", result, deadlineDate, deadlineTime });
 	}
@@ -117,6 +124,10 @@ public class FlexiCommandParser {
 		int interval = (int) getDateDiff(startTimeOriginal, endTimeOriginal) / 1000 / 60;
 
 		result = keywordFilter(result);
+		
+		if (result.equals("")) {
+			return new TokenizedCommand("invalid", null);
+		}
 
 		return new TokenizedCommand("add",
 				new String[] { "event", result, startDate, startTime, Integer.toString(interval), "minute" });

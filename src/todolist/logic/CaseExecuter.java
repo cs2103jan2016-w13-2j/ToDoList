@@ -224,28 +224,40 @@ public class CaseExecuter {
 		switch (type) {
 		case "EDIT":
 			logic.edit(taskname, arg[1], arg[2]);
+			break;
 		case "DELETE":
 			logic.delete(taskname);
+			break;
 		case "LABEL":
 			logic.label(taskname, arg[1]);
+			break;
 		case "SET-RECURRING":
 			logic.setRecurring(taskname, true, arg[1]);
+			break;
 		case "REMOVE-RECURRING":
 			logic.setRecurring(taskname, false, null);
+			break;
 		case "POSTPONE":
 			logic.postpone(taskname, arg[1], arg[2]);
+			break;
 		case "FORWARD":
 			logic.forward(arg[0], arg[1], arg[2]);
+			break;
 		case "REMIND":
 			logic.remind(taskname);
+			break;
 		case "REMIND-BEF":
 			logic.remindBef(taskname, arg[1], arg[2]);
+			break;
 		case "REMOVE-REMIND":
 			logic.removeRemind(taskname);
+			break;
 		case "DONE":
 			logic.done(taskname);
+			break;
 		case "UNDONE":
 			logic.undone(taskname);
+			break;
 		default:
 			
 		}

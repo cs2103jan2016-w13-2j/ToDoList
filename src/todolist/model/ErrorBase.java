@@ -143,6 +143,9 @@ public class ErrorBase {
                 "You may only SET REMINDER for an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 		errorBase.put(("SET RECURRING"+"FLOATING TASK"), 
                 "You may only SET RECURRENCE for an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
+		errorBase.put(("PARSER"+"INVALID INPUT"), 
+                "Sorry! I don't understand this command! Please refer to HELP for formats.");
+		
 	}
 
 	protected String getErrorMessage(String commandType, String errorType) {
