@@ -51,6 +51,8 @@ public class InputErrorChecker {
 			return commandChecker.addRemindBef(arg);
 		case "remind-bef":
 			return commandChecker.remindBef(arg);
+		case "remove-remind":
+			return commandChecker.removeRemind(arg);
 		case "done":
 			return commandChecker.done(arg);
 		case "undone":

@@ -1148,27 +1148,23 @@ public class Logic {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		String myTime = null;
 
-		DecimalFormat decimalFormatter = new DecimalFormat("00");
-
 		if (fuzzyTime.contains("-")) {
-			int count = fuzzyTime.length() - fuzzyTime.replace("-", "").length();
-			if (count == 1) {
-				myTime = LocalDateTime.now().getYear() + "-" + fuzzyTime + " " + "00:00";
-			} else {
-				if (count == 2) {
-					myTime = fuzzyTime + " " + "00:00";
-				}
-			}
+			myTime = fuzzyParseDate(fuzzyTime) + " " + "00:00";
 		} else {
 			if (fuzzyTime.contains(":")) {
-				myTime = LocalDateTime.now().getYear() + "-"
-						+ decimalFormatter.format(LocalDateTime.now().getMonthValue()) + "-"
-						+ decimalFormatter.format(LocalDateTime.now().getDayOfMonth()) + " " + fuzzyTime;
+				myTime = getCurrentDate() + " " + fuzzyTime;
 			}
 		}
 		return LocalDateTime.parse(myTime, formatter);
 	}
-
+	
+	private String getCurrentDate() {
+		DecimalFormat decimalFormatter = new DecimalFormat("00");
+		return LocalDateTime.now().getYear() + "-"
+				+ decimalFormatter.format(LocalDateTime.now().getMonthValue()) + "-"
+				+ decimalFormatter.format(LocalDateTime.now().getDayOfMonth());
+	}
+	
 	private String getCurrentTimeStamp() {
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// dd/MM/yyyy
 		Date now = new Date();

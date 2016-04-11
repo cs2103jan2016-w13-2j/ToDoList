@@ -269,6 +269,14 @@ public class FunctionChecker {
 			return new InputException("UNDONE", "NOT EXIST");
 		}
 	}
+	
+	protected InputException removeRemindChecker(String title) {
+		if (!noRepeat(title)) {
+			return new InputException();
+		} else {
+			return new InputException("REMOVE REMIND", "NOT EXIST");
+		}
+	}
 
 	protected InputException doneChecker(String title) {
 		if (!noRepeat(title)) {
@@ -461,6 +469,8 @@ public class FunctionChecker {
 			return setRecurringChecker(taskname, true, arg[1]);
 		case "REMOVE-RECURRING":
 			return setRecurringChecker(taskname, false, null);
+		case "REMOVE-REMIND":
+			return removeRemindChecker(taskname);
 		case "POSTPONE":
 			return postponeChecker(taskname, arg[1], arg[2]);
 		case "FORWARD":
