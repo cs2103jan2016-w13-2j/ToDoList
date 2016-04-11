@@ -76,49 +76,13 @@ public class CaseExecuter {
 	}
 
 	protected void edit(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("EDIT", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.edit(name[i], arg[1], arg[2]);
-			}
-		} else {
-			logic.edit(arg[0], arg[1], arg[2]);
-		}
 	}
 
 	protected void delete(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("DELETE", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.delete(name[i]);
-			}
-		} else {
-			logic.delete(arg[0]);
-		}
 	}
 
 	protected void search(String[] arg) {
@@ -134,118 +98,28 @@ public class CaseExecuter {
 	}
 
 	protected void label(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("LABEL", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.label(name[i], arg[1]);
-			}
-		} else {
-			logic.label(arg[0], arg[1]);
-		}
 	}
 
 	protected void setRecurring(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("SET-RECURRING", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.setRecurring(name[i], true, arg[1]);
-			}
-		} else {
-			logic.setRecurring(arg[0], true, arg[1]);
-		}
 	}
 
 	protected void removeRecurring(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("REMOVE-RECURRING", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.setRecurring(name[i], false, null);
-			}
-		} else {
-			logic.setRecurring(arg[0], false, null);
-		}
 	}
 
 	protected void postpone(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("POSTPONE", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.postpone(name[i], arg[1], arg[2]);
-			}
-		} else {
-			logic.postpone(arg[0], arg[1], arg[2]);
-		}
 	}
 
 	protected void forward(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("FORWARD", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.forward(name[i], arg[1], arg[2]);
-			}
-		} else {
-			logic.forward(arg[0], arg[1], arg[2]);
-		}
 	}
 
 	protected void addRemind(String[] arg) {
@@ -253,26 +127,7 @@ public class CaseExecuter {
 	}
 
 	protected void remind(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
-
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.remind(name[i]);
-			}
-		} else {
-			logic.remind(arg[0]);
-		}
+		actionOnIndex("REMIND", arg);
 	}
 
 	protected void addRemindBef(String[] arg) {
@@ -284,72 +139,22 @@ public class CaseExecuter {
 	}
 
 	protected void remindBef(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("REMIND-BEF", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.remindBef(name[i], arg[1], arg[2]);
-			}
-		} else {
-			logic.remindBef(arg[0], arg[1], arg[2]);
-		}
+	}
+	
+	public void removeRemind(String[] arg) {
+		actionOnIndex("REMOVE-REMIND", arg);
+
 	}
 
 	protected void done(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
+		actionOnIndex("DONE", arg);
 
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.done(name[i]);
-			}
-		} else {
-			logic.done(arg[0]);
-		}
 	}
 
 	protected void undone(String[] arg) {
-		String temp[] = arg[0].split(",");
-		int index = -1;
-		String name[] = new String[temp.length];
-		Boolean flag = true;
-		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
-				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
-			} else {
-				flag = false;
-			}
-		}
-
-		if (flag) {
-			for (int i = 0; i < name.length; i++) {
-				logic.undone(name[i]);
-			}
-		} else {
-			logic.undone(arg[0]);
-		}
+		actionOnIndex("UNDONE", arg);
 	}
 
 	protected void exit(String[] arg) {
@@ -390,6 +195,60 @@ public class CaseExecuter {
 
 	protected void clean(String[] arg) {
 		logic.clean();
+	}
+	
+	private void actionOnIndex(String type, String[] arg) {
+		String temp[] = arg[0].split(",");
+		int index = -1;
+		String name[] = new String[temp.length];
+		Boolean flag = true;
+		for (int i = 0; i < temp.length; i++) {
+			if (isInteger(temp[i])) {
+				index = Integer.parseInt(temp[i]);
+				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
+			} else {
+				flag = false;
+			}
+		}
+
+		if (flag) {
+			for (int i = 0; i < name.length; i++) {
+				typeCaseSwitcher(type, name[i], arg);
+			}
+		} else {
+			typeCaseSwitcher(type, arg[0], arg);
+		}
+	}
+	
+	private void typeCaseSwitcher(String type, String taskname, String[] arg) {
+		switch (type) {
+		case "EDIT":
+			logic.edit(taskname, arg[1], arg[2]);
+		case "DELETE":
+			logic.delete(taskname);
+		case "LABEL":
+			logic.label(taskname, arg[1]);
+		case "SET-RECURRING":
+			logic.setRecurring(taskname, true, arg[1]);
+		case "REMOVE-RECURRING":
+			logic.setRecurring(taskname, false, null);
+		case "POSTPONE":
+			logic.postpone(taskname, arg[1], arg[2]);
+		case "FORWARD":
+			logic.forward(arg[0], arg[1], arg[2]);
+		case "REMIND":
+			logic.remind(taskname);
+		case "REMIND-BEF":
+			logic.remindBef(taskname, arg[1], arg[2]);
+		case "REMOVE-REMIND":
+			logic.removeRemind(taskname);
+		case "DONE":
+			logic.done(taskname);
+		case "UNDONE":
+			logic.undone(taskname);
+		default:
+			
+		}
 	}
 
 	private boolean isInteger(String s) {
