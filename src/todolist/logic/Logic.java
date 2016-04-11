@@ -1026,6 +1026,8 @@ public class Logic {
 	 */
 	public Boolean clean() {
 		this.dataBase.clear();
+		uiHandler.refresh();
+		uiHandler.sendMessage("View cleaned!", true);
 		return true;
 	}
 
