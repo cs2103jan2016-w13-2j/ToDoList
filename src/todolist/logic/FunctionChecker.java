@@ -474,7 +474,7 @@ public class FunctionChecker {
 		case "POSTPONE":
 			return postponeChecker(taskname, arg[1], arg[2]);
 		case "FORWARD":
-			return forwardChecker(arg[0], arg[1], arg[2]);
+			return forwardChecker(taskname, arg[1], arg[2]);
 		case "REMIND":
 			return remindChecker(taskname);
 		case "REMIND-BEF":
