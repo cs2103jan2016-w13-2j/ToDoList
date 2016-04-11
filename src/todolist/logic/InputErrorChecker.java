@@ -75,9 +75,10 @@ public class InputErrorChecker {
 			return commandChecker.invalid(arg);
 		case "help":
 			return commandChecker.help(arg);
+		case "clean":
+			return commandChecker.clean(arg);
 		default:
-
+			return new InputException("UNKNOWN", "UNKNOWN");
 		}
-		return new InputException("UNKNOWN", "UNKNOWN");
 	}
 }

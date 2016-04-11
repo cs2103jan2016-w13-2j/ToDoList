@@ -484,7 +484,7 @@ public class FunctionChecker {
 		case "UNDONE":
 			return undoneChecker(taskname);
 		default:
-			return new InputException();
+			return new InputException("UNKNOWN", "UNKNOWN");
 		}
 	}
 

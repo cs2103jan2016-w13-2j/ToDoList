@@ -52,7 +52,7 @@ public class MainParser {
 				|| head.equals("shelf") || head.equals("unarchive") || head.equals("incomplete")
 				|| head.equals("unfinish") || head.equals("unshelf") || head.equals("delay") || head.equals("advance")
 				|| head.equals("categorize") || head.equals("tag") || head.equals("load") || head.equals("open")
-				|| head.equals("save") || head.equals("help");
+				|| head.equals("save") || head.equals("help") || head.equals("clean");
 		return type;
 	}
 }

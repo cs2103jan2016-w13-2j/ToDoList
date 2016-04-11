@@ -288,4 +288,8 @@ public class CommandChecker {
 	protected InputException help(String[] arg) {
 		return new InputException();
 	}
+
+	protected InputException clean(String[] arg) {
+		return new InputException();
+	}
 }

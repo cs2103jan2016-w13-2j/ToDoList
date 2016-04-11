@@ -115,6 +115,7 @@ public class CaseSwitcher {
 			break;
 		case "clean":
 			caseExecuter.clean(arg);
+			break;
 		case "help":
 			caseExecuter.help(arg);
 		default:
