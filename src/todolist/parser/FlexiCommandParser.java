@@ -65,8 +65,10 @@ public class FlexiCommandParser {
 
 			if (dates.size() == 1) {
 				return addDeadline(input, result, dates);
-			} else {
+			} else if (dates.size() == 2){
 				return addEvent(result, dates);
+			} else {
+				return addTask(input);
 			}
 		}
 	}
