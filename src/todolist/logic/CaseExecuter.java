@@ -143,7 +143,7 @@ public class CaseExecuter {
 
 	}
 
-	public void removeRemind(String[] arg) {
+	protected void removeRemind(String[] arg) {
 		actionOnIndex("REMOVE-REMIND", arg);
 
 	}
