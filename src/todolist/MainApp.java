@@ -223,10 +223,13 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // Setting application icon
-        com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
-        java.awt.Image image = Toolkit.getDefaultToolkit().getImage(MainApp.class.getResource(getApplicationIcon()));
-        application.setDockIconImage(image);
+        // Setting application icon for MAC
+        if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
+            com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
+            java.awt.Image image = Toolkit.getDefaultToolkit()
+                    .getImage(MainApp.class.getResource(getApplicationIcon()));
+            application.setDockIconImage(image);
+        }
 
         // Initializing utilities
         logger = new UtilityLogger();
