@@ -43,11 +43,11 @@ public class FlexiCommandParser {
 		Parser parser = new Parser(TimeZone.getTimeZone(ZoneOffset.systemDefault()));
 		List<DateGroup> groups = parser.parse(input);
 		List<Date> dates = null;
-		
+
 		int[] column = new int[] { 0, 0 };
 		int[] length = new int[] { 0, 0 };
 		int counter = 0;
-		
+
 		for (DateGroup group : groups) {
 			dates = group.getDates();
 			column[counter] = group.getPosition();
@@ -103,10 +103,10 @@ public class FlexiCommandParser {
 
 		return new TokenizedCommand("add", new String[] { "deadline", result, deadlineDate, deadlineTime });
 	}
-	
+
 	private TokenizedCommand addEvent(String input, List<Date> dates) {
 		String result = input;
-		
+
 		DecimalFormat decimalFormatter = new DecimalFormat("00");
 
 		Date startTimeOriginal = dates.get(0);
@@ -118,13 +118,12 @@ public class FlexiCommandParser {
 		String startDate = start.getYear() + "-" + decimalFormatter.format(start.getMonthValue()) + "-"
 				+ decimalFormatter.format(start.getDayOfMonth());
 
-		String startTime = decimalFormatter.format(start.getHour()) + ":"
-				+ decimalFormatter.format(start.getMinute());
+		String startTime = decimalFormatter.format(start.getHour()) + ":" + decimalFormatter.format(start.getMinute());
 
 		int interval = (int) getDateDiff(startTimeOriginal, endTimeOriginal) / 1000 / 60;
 
 		result = keywordFilter(result);
-		
+
 		if (result.equals("")) {
 			return new TokenizedCommand("invalid", null);
 		}
@@ -143,7 +142,7 @@ public class FlexiCommandParser {
 		}
 		return result;
 	}
-	
+
 	private String searchKeywordToday(String input, LocalDateTime end, String originalDeadline) {
 		String deadlineTime = originalDeadline;
 		if (end.isBefore(LocalDateTime.now().plus(10, ChronoUnit.SECONDS))
@@ -153,10 +152,10 @@ public class FlexiCommandParser {
 		}
 		return deadlineTime;
 	}
-	
+
 	private String searchKeywordTime(String input, String originalDeadline) {
 		String deadlineTime = originalDeadline;
-		
+
 		if (input.toLowerCase().contains("breakfast")) {
 			deadlineTime = "09:00";
 		}
@@ -171,7 +170,7 @@ public class FlexiCommandParser {
 		if (input.toLowerCase().contains("supper")) {
 			deadlineTime = "23:00";
 		}
-		
+
 		return deadlineTime;
 	}
 
