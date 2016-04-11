@@ -21,25 +21,27 @@ public class FlexiCommandParser {
 	public FlexiCommandParser() {
 
 	}
-	
-    /**
-     * This method takes in flexible input and parse it then translates it into tokenized command
-     *
-     * @param raw user input 
-     * @return tokenized add command
-     */
+
+	/**
+	 * This method takes in flexible input and parse it then translates it into
+	 * tokenized command
+	 *
+	 * @param input
+	 *            raw user input
+	 * @return tokenized add command
+	 */
 	public TokenizedCommand parse(String input) {
-		
-	    input = input.replaceAll("\"", "");
-	    
-	    input = input.trim();
-	 
+
+		input = input.replaceAll("\"", "");
+
+		input = input.trim();
+
 		String temp[] = input.split(" ");
-		
-		if(input.equals("")) {
+
+		if (input.equals("")) {
 			return new TokenizedCommand("invalid", temp);
 		}
-		
+
 		Parser parser = new Parser(TimeZone.getTimeZone(ZoneOffset.systemDefault()));
 		List<DateGroup> groups = parser.parse(input);
 		List<Date> dates = null;
@@ -52,7 +54,6 @@ public class FlexiCommandParser {
 			length[counter] = group.getText().length();
 			counter++;
 		}
-
 
 		String result = null;
 
@@ -82,14 +83,15 @@ public class FlexiCommandParser {
 				String deadlineTime = decimalFormatter.format(end.getHour()) + ":"
 						+ decimalFormatter.format(end.getMinute());
 
-				if (end.isBefore(LocalDateTime.now().plus(10, ChronoUnit.SECONDS)) && end.plus(10, ChronoUnit.SECONDS).isAfter(LocalDateTime.now())
+				if (end.isBefore(LocalDateTime.now().plus(10, ChronoUnit.SECONDS))
+						&& end.plus(10, ChronoUnit.SECONDS).isAfter(LocalDateTime.now())
 						&& input.toLowerCase().contains("today")) {
 					deadlineTime = "23:59";
 				}
 
 				result = keywordFilter(result);
-				
-				System.out.println(result+"hello");
+
+				System.out.println(result + "hello");
 
 				if (result.toLowerCase().contains("breakfast")) {
 					deadlineTime = "09:00";
@@ -132,7 +134,7 @@ public class FlexiCommandParser {
 			}
 		}
 	}
-	
+
 	private String keywordFilter(String input) {
 		String result = input;
 		if (result.endsWith(" by ")) {
@@ -146,7 +148,7 @@ public class FlexiCommandParser {
 		if (result.startsWith("From ") || result.startsWith("from ")) {
 			result = result.substring(6);
 		}
-		
+
 		return result.trim();
 	}
 

@@ -9,15 +9,17 @@ public class MainParser {
 	private NormalCommandParser normalCommandParser;
 
 	public MainParser() {
-		this.setFlexiCommandParser(new FlexiCommandParser());
+		this.flexiCommandParser = new FlexiCommandParser();
 		this.normalCommandParser = new NormalCommandParser();
 	}
 
 	/**
 	 * This method takes in a string and parse it.
 	 *
+	 * @param input
+	 *            raw user input
 	 * 
-	 * @return TokenizedCommand
+	 * @return tokenized command
 	 */
 	public TokenizedCommand parse(String input) {
 		if (checkType(input)) {
@@ -29,8 +31,10 @@ public class MainParser {
 	}
 
 	/**
-	 * This method takes in a string and check whether it is a flexi command.
+	 * This method takes in a string and check whether it is a flexible command.
 	 *
+	 * @param input
+	 *            raw user input
 	 * 
 	 * @return Boolean
 	 */
@@ -41,9 +45,9 @@ public class MainParser {
 				|| head.equals("filter") || head.equals("sort") || head.equals("insert")
 				|| head.equals("switchposition") || head.equals("label") || head.equals("postpone")
 				|| head.equals("forward") || head.equals("add-remind") || head.equals("remind")
-				|| head.equals("add-remind-bef") || head.equals("remind-bef") || head.equals("done")
-				|| head.equals("undone") || head.equals("exit") || head.equals("undo") || head.equals("redo")
-				|| head.equals("reset") || head.equals("tab") || head.equals("set-recurring")
+				|| head.equals("add-remind-bef") || head.equals("remind-bef") || head.equals("remove-remind")
+				|| head.equals("done") || head.equals("undone") || head.equals("exit") || head.equals("undo")
+				|| head.equals("redo") || head.equals("reset") || head.equals("tab") || head.equals("set-recurring")
 				|| head.equals("remove-recurring") || head.equals("create") || head.equals("schedule")
 				|| head.equals("cancel") || head.equals("remove") || head.equals("modify") || head.equals("change")
 				|| head.equals("replace") || head.equals("archive") || head.equals("complete") || head.equals("finish")
@@ -52,13 +56,5 @@ public class MainParser {
 				|| head.equals("categorize") || head.equals("tag") || head.equals("load") || head.equals("open")
 				|| head.equals("save") || head.equals("help");
 		return type;
-	}
-
-	public FlexiCommandParser getFlexiCommandParser() {
-		return flexiCommandParser;
-	}
-
-	public void setFlexiCommandParser(FlexiCommandParser flexiCommandParser) {
-		this.flexiCommandParser = flexiCommandParser;
 	}
 }
