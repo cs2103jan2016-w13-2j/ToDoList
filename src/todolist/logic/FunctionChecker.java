@@ -110,8 +110,8 @@ public class FunctionChecker {
 		}
 	}
 
-	protected InputException addRecurringEventLessChecker(String interval, String title, String fuzzyTime, String quantity,
-			String timeUnit) {
+	protected InputException addRecurringEventLessChecker(String interval, String title, String fuzzyTime,
+			String quantity, String timeUnit) {
 		if (validInterval(interval)) {
 			return addEventLessChecker(title, fuzzyTime, quantity, timeUnit);
 		} else {
@@ -119,7 +119,8 @@ public class FunctionChecker {
 		}
 	}
 
-	protected InputException addRecurringDeadlineChecker(String interval, String title, String endDate, String endTime) {
+	protected InputException addRecurringDeadlineChecker(String interval, String title, String endDate,
+			String endTime) {
 		if (validInterval(interval)) {
 			return addDeadlineChecker(title, endDate, endTime);
 		} else {
@@ -139,7 +140,7 @@ public class FunctionChecker {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
-					if(isFloating(title)) {
+					if (isFloating(title)) {
 						return new InputException("REMIND BEF", "FLOATING TASK");
 					} else {
 						return new InputException();
@@ -179,7 +180,7 @@ public class FunctionChecker {
 
 	protected InputException remindChecker(String title) {
 		if (!noRepeat(title)) {
-			if(isFloating(title)) {
+			if (isFloating(title)) {
 				return new InputException("REMIND", "FLOATING TASK");
 			} else {
 				return new InputException();
@@ -193,7 +194,7 @@ public class FunctionChecker {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
-					if(isFloating(title)) {
+					if (isFloating(title)) {
 						return new InputException("FORWARD", "FLOATING TASK");
 					} else {
 						return new InputException();
@@ -213,7 +214,7 @@ public class FunctionChecker {
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
-					if(isFloating(title)) {
+					if (isFloating(title)) {
 						return new InputException("POSTPONE", "FLOATING TASK");
 					} else {
 						return new InputException();
@@ -313,7 +314,7 @@ public class FunctionChecker {
 	protected InputException setRecurringChecker(String title, Boolean status, String interval) {
 		if (!noRepeat(title)) {
 			if ((status && validInterval(interval)) || (!status)) {
-				if(isFloating(title)) {
+				if (isFloating(title)) {
 					return new InputException("SET RECURRING", "FLOATING TASK");
 				} else {
 					return new InputException();
@@ -335,8 +336,8 @@ public class FunctionChecker {
 	}
 
 	protected InputException sortChecker(String fieldName, String order) {
-		if(validOrder(order)) {
-			switch(fieldName) {
+		if (validOrder(order)) {
+			switch (fieldName) {
 			case "title":
 				return new InputException();
 			case "category":
@@ -345,8 +346,8 @@ public class FunctionChecker {
 				return new InputException();
 			case "end":
 				return new InputException();
-				default :
-					return new InputException("SORT", "INVALID FIELDNAME");
+			default:
+				return new InputException("SORT", "INVALID FIELDNAME");
 			}
 		} else {
 			return new InputException("SORT", "INVALID ORDER");
@@ -412,6 +413,71 @@ public class FunctionChecker {
 		}
 	}
 
+	protected InputException indexChecker(String type, String[] arg) {
+		String temp[] = arg[0].split(",");
+		int[] index = new int[temp.length];
+		Boolean flag = true;
+
+		for (int i = 0; i < temp.length; i++) {
+			if (isInteger(temp[i])) {
+				index[i] = Integer.parseInt(temp[i]);
+			} else {
+				flag = false;
+			}
+		}
+
+		if (flag) {
+			return checkInView(index, type, arg);
+		} else {
+			return typeCaseSwitcher(type, arg[0], arg);
+		}
+	}
+	
+	private InputException checkInView(int[] index, String type, String[] arg) {
+		for (int i = 0; i < index.length; i++) {
+			Task task = logic.getMainApp().getTaskAt(index[i]);
+			if (task == null) {
+				return new InputException(type, "TASK NOT EXIST");
+			} else {
+				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				InputException tempException = typeCaseSwitcher(type, taskname, arg);
+				if (!tempException.getCorrectness()) {
+					return tempException;
+				}
+			}
+		}
+		return new InputException();
+	}
+
+	private InputException typeCaseSwitcher(String type, String taskname, String[] arg) {
+		switch (type) {
+		case "EDIT":
+			return editChecker(taskname, arg[1], arg[2]);
+		case "DELETE":
+			return deleteChecker(taskname);
+		case "LABEL":
+			return labelChecker(taskname, arg[1]);
+		case "SET-RECURRING":
+			return setRecurringChecker(taskname, true, arg[1]);
+		case "REMOVE-RECURRING":
+			return setRecurringChecker(taskname, false, null);
+		case "POSTPONE":
+			return postponeChecker(taskname, arg[1], arg[2]);
+		case "FORWARD":
+			return forwardChecker(arg[0], arg[1], arg[2]);
+		case "REMIND":
+			return remindChecker(taskname);
+		case "REMIND-BEF":
+			return remindBefChecker(taskname, arg[1], arg[2]);
+		case "DONE":
+			return doneChecker(taskname);
+		case "UNDONE":
+			return undoneChecker(taskname);
+		default:
+			return new InputException();
+		}
+	}
+
 	private Boolean noRepeat(String title) {
 		ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("NAME", title));
 		if (tempTaskList.size() > 0) {
@@ -421,54 +487,42 @@ public class FunctionChecker {
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private Boolean validDateTime(String date, String time) {
-		String dateTime = date + " " + time;
-		if (date == null) {
+	private Boolean validFuzzyDate(String fuzzyDate) {
+		int count = fuzzyDate.length() - fuzzyDate.replace("-", "").length();
+		if (count == 1) {
+			return validFuzzyDateTwo(fuzzyDate);
+		} else {
+			if (count == 2) {
+				return validFuzzyDateThree(fuzzyDate);
+			}
 			return false;
 		}
+	}
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	private Boolean validFuzzyDateThree(String fuzzyDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		sdf.setLenient(false);
-
 		try {
-			Date newDateTime = sdf.parse(dateTime);
+			@SuppressWarnings("unused")
+			Date newFuzzyDate = sdf.parse(fuzzyDate);
 		} catch (ParseException e) {
-
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
 
-	private Boolean validFuzzyDate(String fuzzyDate) {
-		int count = fuzzyDate.length() - fuzzyDate.replace("-", "").length();
-		if (count == 1) {
-			SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-			sdf.setLenient(false);
-			try {
-				@SuppressWarnings("unused")
-				Date newFuzzyDate = sdf.parse(fuzzyDate);
-			} catch (ParseException e) {
-				e.printStackTrace();
-				return false;
-			}
-			return true;
-		} else {
-			if (count == 2) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				sdf.setLenient(false);
-				try {
-					@SuppressWarnings("unused")
-					Date newFuzzyDate = sdf.parse(fuzzyDate);
-				} catch (ParseException e) {
-					e.printStackTrace();
-					return false;
-				}
-				return true;
-			}
+	private Boolean validFuzzyDateTwo(String fuzzyDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+		sdf.setLenient(false);
+		try {
+			@SuppressWarnings("unused")
+			Date newFuzzyDate = sdf.parse(fuzzyDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
 			return false;
 		}
+		return true;
 	}
 
 	private Boolean validFuzzyTime(String fuzzyTime) {
@@ -543,18 +597,18 @@ public class FunctionChecker {
 			return false;
 		}
 	}
-	
+
 	private boolean isFloating(String title) {
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		if(tempTask.getEndTime() == null) {
+		if (tempTask.getEndTime() == null) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	private boolean validOrder(String order) {
-		if(order.equalsIgnoreCase("ascending") || order.equalsIgnoreCase("descending")) {
+		if (order.equalsIgnoreCase("ascending") || order.equalsIgnoreCase("descending")) {
 			return true;
 		} else {
 			return false;
