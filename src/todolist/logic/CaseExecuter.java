@@ -231,7 +231,7 @@ public class CaseExecuter {
 			logic.postpone(taskname, arg[1], arg[2]);
 			break;
 		case "FORWARD":
-			logic.forward(arg[0], arg[1], arg[2]);
+			logic.forward(taskname, arg[1], arg[2]);
 			break;
 		case "REMIND":
 			logic.remind(taskname);
