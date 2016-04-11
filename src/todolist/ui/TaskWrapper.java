@@ -13,8 +13,9 @@ import todolist.model.Task;
 
 //@@author A0123994W
 
-/*
- * TaskWrapper is the wrapper class for Task class. It wraps each attribute into a property for display.
+/**
+ * TaskWrapper is the wrapper class for Task class. It wraps each attribute into
+ * a property for display.
  * 
  * @author Huang Lie Jun (A0123994W)
  * 
@@ -31,10 +32,11 @@ public class TaskWrapper {
     private ObjectProperty<Boolean> isRecurring;
     private ObjectProperty<String> interval;
 
-    /*
+    /**
      * Constructor builds the TaskWrapper class with the given task.
      * 
-     * @param Task task is the task being wrapped around
+     * @param Task
+     *            task is the task being wrapped around
      * 
      */
     public TaskWrapper(Task task) {
@@ -51,7 +53,7 @@ public class TaskWrapper {
 
     /*** GETTER-SETTER FUNCTIONS ***/
 
-    /*
+    /**
      * getTaskTitleProperty returns the string property of the title.
      * 
      * @return StringProperty taskTitle
@@ -60,16 +62,17 @@ public class TaskWrapper {
         return taskTitle;
     }
 
-    /*
+    /**
      * setTaskTitle takes in a string and sets it as the task title.
      * 
-     * @param String taskTitle
+     * @param String
+     *            taskTitle
      */
     public void setTaskTitle(String taskTitle) {
         this.taskTitle.set(taskTitle);
     }
 
-    /*
+    /**
      * getTaskTitle returns the task title.
      * 
      * @return String taskTitle
@@ -78,7 +81,7 @@ public class TaskWrapper {
         return taskTitle.get();
     }
 
-    /*
+    /**
      * getStartTimeProperty returns the property of the start time.
      * 
      * @return ObjectProperty<LocalDateTime> startTime
@@ -87,16 +90,17 @@ public class TaskWrapper {
         return startTime;
     }
 
-    /*
+    /**
      * setStartTime sets the given startTime as the task start time.
      * 
-     * @param LocalDateTime startTime
+     * @param LocalDateTime
+     *            startTime
      */
     public void setStartTime(LocalDateTime startTime) {
         this.startTime.set(startTime);
     }
 
-    /*
+    /**
      * getStartTime returns the task start time.
      * 
      * @return LocalDateTime startTime
@@ -106,7 +110,7 @@ public class TaskWrapper {
         return startTime.get();
     }
 
-    /*
+    /**
      * getEndTimeProperty returns the property of the end time.
      * 
      * @return ObjectProperty<LocalDateTime> endTime
@@ -115,16 +119,17 @@ public class TaskWrapper {
         return endTime;
     }
 
-    /*
+    /**
      * setEndTime sets the given endTime as the task end time.
      * 
-     * @param LocalDateTime endTime
+     * @param LocalDateTime
+     *            endTime
      */
     public void setEndTime(LocalDateTime endTime) {
         this.endTime.set(endTime);
     }
 
-    /*
+    /**
      * getEndTime returns the task end time.
      * 
      * @return LocalDateTime endTime
@@ -134,7 +139,7 @@ public class TaskWrapper {
         return endTime.get();
     }
 
-    /*
+    /**
      * getCategoryProperty returns the property of the category.
      * 
      * @return ObjectProperty<Category> category
@@ -143,17 +148,18 @@ public class TaskWrapper {
         return category;
     }
 
-    /*
+    /**
      * setCategory sets the task category as the given category.
      * 
-     * @param Category category
+     * @param Category
+     *            category
      * 
      */
     public void setCategory(Category category) {
         this.category.set(category);
     }
 
-    /*
+    /**
      * getCategory returns the category of the task.
      * 
      * @return Category category
@@ -163,7 +169,7 @@ public class TaskWrapper {
         return category.get();
     }
 
-    /*
+    /**
      * getReminderProperty returns the property of the reminder.
      * 
      * @return ObjectProperty<Reminder> reminder
@@ -172,17 +178,18 @@ public class TaskWrapper {
         return reminder;
     }
 
-    /*
+    /**
      * setReminder sets the task reminder as the given reminder.
      * 
-     * @param Reminder reminder
+     * @param Reminder
+     *            reminder
      * 
      */
     public void setReminder(Reminder reminder) {
         this.reminder.set(reminder);
     }
 
-    /*
+    /**
      * getReminder returns the task reminder.
      * 
      * @return Reminder reminder
@@ -192,7 +199,7 @@ public class TaskWrapper {
         return reminder.get();
     }
 
-    /*
+    /**
      * getIsCompletedProperty returns the property of the completion status.
      * 
      * @return ObjectProperty<Boolean> isDone
@@ -201,16 +208,17 @@ public class TaskWrapper {
         return isDone;
     }
 
-    /*
+    /**
      * setIsCompleted sets the completion status of the task.
      * 
-     * @param ObjectProperty<Boolean> isDone
+     * @param ObjectProperty<Boolean>
+     *            isDone
      */
     public void setIsCompleted(ObjectProperty<Boolean> isDone) {
         this.isDone = isDone;
     }
 
-    /*
+    /**
      * getIsCompleted returns the completion status of the task.
      * 
      * @return Boolean isDone
@@ -219,7 +227,7 @@ public class TaskWrapper {
         return isDone.get();
     }
 
-    /*
+    /**
      * getRecurringStatusProperty returns the property of the recurrence status.
      * 
      * @return ObjectProperty<Boolean> isRecurring
@@ -228,17 +236,18 @@ public class TaskWrapper {
         return isRecurring;
     }
 
-    /*
+    /**
      * setIsRecurring sets the recurrence status of the task.
      * 
-     * @param ObjectProperty<Boolean> isRecurring
+     * @param ObjectProperty<Boolean>
+     *            isRecurring
      * 
      */
     public void setIsRecurring(ObjectProperty<Boolean> isRecurring) {
         this.isRecurring = isRecurring;
     }
 
-    /*
+    /**
      * getIsRecurring returns the recurrence status of the task.
      * 
      * @return Boolean isRecurring
@@ -247,7 +256,7 @@ public class TaskWrapper {
         return isRecurring.get();
     }
 
-    /*
+    /**
      * getIntervalProperty returns the property of the recurrence interval.
      * 
      * @return ObjectProperty<String> interval
@@ -256,17 +265,18 @@ public class TaskWrapper {
         return interval;
     }
 
-    /*
+    /**
      * setInterval sets the recurrence interval of the task.
      * 
-     * @param ObjectProperty<String> interval
+     * @param ObjectProperty<String>
+     *            interval
      * 
      */
     public void setInterval(ObjectProperty<String> interval) {
         this.interval = interval;
     }
 
-    /*
+    /**
      * getInterval returns the recurrence interval of the task.
      * 
      * @return String interval
@@ -276,7 +286,7 @@ public class TaskWrapper {
         return interval.get();
     }
 
-    /*
+    /**
      * getTaskObject returns the task object reference.
      * 
      * @return Task task
@@ -286,16 +296,33 @@ public class TaskWrapper {
         return task;
     }
 
+    /**
+     * getIsExpired returns the status of the task
+     * 
+     * @return boolean isExpired
+     */
     public boolean getIsExpired() {
         return getEndTime() != null && getEndTime().isBefore(LocalDateTime.now());
     }
-    
+
+    /**
+     * 
+     * TaskType defines the different types of tasks.
+     * 
+     * @author Huang Lie Jun (A0123994W)
+     *
+     */
     public enum TaskType {
         EVENT, DEADLINE, FLOATING, UNKNOWN
     };
-    
+
+    /**
+     * getTaskType returns the task type of the current task
+     * 
+     * @return TaskType
+     */
     public TaskType getTaskType() {
-        if(getStartTime() != null && getEndTime() != null) {
+        if (getStartTime() != null && getEndTime() != null) {
             return TaskType.EVENT;
         } else if (getStartTime() == null && getEndTime() != null) {
             return TaskType.DEADLINE;

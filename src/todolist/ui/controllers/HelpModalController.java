@@ -23,12 +23,27 @@ import todolist.MainApp;
 import todolist.common.UtilityLogger;
 
 //@@author A0123994W
+/**
+ * HelpModalController controls the display of the modal list view
+ * 
+ * @author Huang Lie Jun (A0123994W)
+ *
+ */
 public class HelpModalController {
 
-    /*
+    /**
      * EntryComparator compares 2 help table entries and sorts them accordingly.
      */
     public class EntryComparator implements Comparator<CommandPair> {
+        /**
+         * compare compares the two CommandPair provided
+         * 
+         * @param CommandPair
+         *            pair1
+         * @param CommandPair
+         *            pair2
+         * @return int compareValue
+         */
         public int compare(CommandPair pair1, CommandPair pair2) {
             if (pair1.getCommand() == pair2.getCommand()) {
                 return 0;
@@ -37,41 +52,77 @@ public class HelpModalController {
         }
     }
 
-    /*
+    /**
      * CommandPair wraps a help table entry.
      */
     private class CommandPair {
         private SimpleStringProperty command = null;
         private SimpleStringProperty format = null;
 
+        /**
+         * CommandPair constructs a new command format pair.
+         * 
+         * @param command
+         * @param format
+         */
         public CommandPair(String command, String format) {
             this.command = new SimpleStringProperty(command);
             this.format = new SimpleStringProperty(format);
         }
 
+        /**
+         * getCommand returns the command field.
+         * 
+         * @return
+         */
         public String getCommand() {
             return command.get();
         }
 
+        /**
+         * setCommand sets the command property as the given command
+         * 
+         * @param command
+         */
         @SuppressWarnings("unused")
         public void setCommand(String command) {
             this.command.set(command);
         }
 
+        /**
+         * getCommandProperty returns the command property.
+         * 
+         * @return StringProperty
+         */
         public StringProperty getCommandProperty() {
             return command;
         }
 
+        /**
+         * getCommandProperty returns the command property.
+         * 
+         * @return String format
+         */
         @SuppressWarnings("unused")
         public String getFormat() {
             return format.get();
         }
 
+        /**
+         * setFormat sets the format using the given string format.
+         * 
+         * @param format
+         */
         @SuppressWarnings("unused")
         public void setFormat(String format) {
             this.format.set(format);
         }
 
+        /**
+         * getFormatProperty returns the current format.
+         * 
+         * @return StringProperty format
+         */
         public StringProperty getFormatProperty() {
             return format;
         }
@@ -90,7 +141,7 @@ public class HelpModalController {
     private BorderPane helpView = null;
     private UtilityLogger logger = null;
     private static PopOver modalPopup = null;
-    
+
     // Initialised status
     private boolean initialized = false;
 
@@ -110,8 +161,9 @@ public class HelpModalController {
 
     ObservableList<CommandPair> entries = null;
 
-    /*
-     * Constructor sets up various elements such as logger and help table entries.
+    /**
+     * Constructor sets up various elements such as logger and help table
+     * entries.
      */
     public HelpModalController() {
         logger = new UtilityLogger();
@@ -119,8 +171,9 @@ public class HelpModalController {
         entries = FXCollections.observableArrayList();
     }
 
-    /*
-     * initializeHelpModal initialises the PopOver for displaying the help table.
+    /**
+     * initializeHelpModal initialises the PopOver for displaying the help
+     * table.
      * 
      * @return boolean isInitialized
      */
@@ -156,10 +209,12 @@ public class HelpModalController {
 
     }
 
-    /*
-     * displayPopup shows the help table, given a source node to display as the table.
+    /**
+     * displayPopup shows the help table, given a source node to display as the
+     * table.
      * 
-     * @param Node pointSource
+     * @param Node
+     *            pointSource
      * 
      */
     public void displayPopup(Node pointSource) {
@@ -173,8 +228,9 @@ public class HelpModalController {
         }
     }
 
-    /*
-     * initialize sets up the table values and factory settings for displaying every entry.
+    /**
+     * initialize sets up the table values and factory settings for displaying
+     * every entry.
      * 
      */
     @FXML
@@ -188,6 +244,7 @@ public class HelpModalController {
      * Is called by the main application to give a reference back to itself.
      * 
      * @param mainApp
+     * @param helpView
      */
     public void setMainApp(MainApp mainApp, BorderPane helpView) {
         this.mainApp = mainApp;
@@ -197,6 +254,9 @@ public class HelpModalController {
         helpTable.setItems(entries);
     }
 
+    /**
+     * populateCheatsheet sets up the cheatsheet database.
+     */
     private void populateCheatsheet() {
 
         actionFormatTable.put("create a new task", "[add|create|schedule] <your-input>");
@@ -244,7 +304,7 @@ public class HelpModalController {
         entries.sort(new EntryComparator());
     }
 
-    /*
+    /**
      * getModalPopup returns a PopOver to access the help table popup.
      * 
      * @return PopOver helpTable

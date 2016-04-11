@@ -43,7 +43,7 @@ import javafx.scene.text.TextFlow;
 
 //@@author A0123994W
 
-/*
+/**
  * TaskNodeController controls and manipulates data for display in task view(s).
  * 
  * @author Huang Lie Jun (A0123994W)
@@ -65,7 +65,7 @@ public class TaskNodeController {
     private static final String TAG_AD_HOC = "ad-hoc task";
     private static final String TAG_ANYTIME = "Anytime";
     private static final String TAG_NOT_AVAILABLE = "Not Available";
-    
+
     /*** STATIC MESSAGES ***/
 
     // ERRORS
@@ -83,8 +83,8 @@ public class TaskNodeController {
     /*** STYLES ***/
 
     // MONTHS
-    private static final String[] months = { TAG_EMPTY, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
-            "Nov", "Dec" };
+    private static final String[] months = { TAG_EMPTY, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+            "Oct", "Nov", "Dec" };
 
     // COLORS
     private static final String[] colorsHex = { "#27E1CE", "#D6EC78", "#FF98DA", "#FA7E0A", "#7A8CF0", "#A45FE6",
@@ -200,8 +200,12 @@ public class TaskNodeController {
     // Time Zone Offset (from UTC)
     private static final int ZONE_OFFSET = 8;
 
-    /*
+    /**
      * Constructor intializes task and index of task.
+     * 
+     * @param task
+     * @param index
+     * @throws IllegalArgumentException
      */
     public TaskNodeController(TaskWrapper task, int index) throws IllegalArgumentException {
         logger = new UtilityLogger();
@@ -226,10 +230,11 @@ public class TaskNodeController {
 
     }
 
-    /*
+    /**
      * validateAndFormatItem checks the validity of the display content and
      * formats it for display.
      * 
+     * @throws IllegalArgumentException
      */
     public void validateAndFormatItem() throws IllegalArgumentException {
         int indexNumber = index + 1;
@@ -310,13 +315,14 @@ public class TaskNodeController {
         setReminderStatus(reminder);
     }
 
-    /*
-     * updateDateTimeThreaded is a busy update function that will animate the two given frames infinitely.
-     * The first frame contains a callback function that will update the date-time related fields accordingly.
-     * (Not the most efficient)
+    /**
+     * updateDateTimeThreaded is a busy update function that will animate the
+     * two given frames infinitely. The first frame contains a callback function
+     * that will update the date-time related fields accordingly. (Not the most
+     * efficient)
      * 
-     * @param KeyFrame updateFrame, KeyFrame intervalFrame
-     * 
+     * @param updateFrame
+     * @param intervalFrame
      */
     private void updateDateTimeThreaded(KeyFrame updateFrame, KeyFrame intervalFrame) {
         Timeline timeline = new Timeline(updateFrame, intervalFrame);
@@ -324,10 +330,12 @@ public class TaskNodeController {
         timeline.play();
     }
 
-    /*
-     * ValidateAndFormatCategory will take in a category and format the category field accordingly.
+    /**
+     * ValidateAndFormatCategory will take in a category and format the category
+     * field accordingly.
      * 
-     * @param Category category
+     * @param Category
+     *            category
      * 
      */
     private void validateAndFormatCategory(Category category) {
@@ -343,17 +351,19 @@ public class TaskNodeController {
         this.category.setText(categoryName);
     }
 
-    /*
-     * validateAndFormatTitle will take in a title and format the title field accordingly.
+    /**
+     * validateAndFormatTitle will take in a title and format the title field
+     * accordingly.
      * 
-     * @param String taskTitle
+     * @param String
+     *            taskTitle
      * 
      */
     private void validateAndFormatTitle(String taskTitle) {
-        
+
         // Synchronize title color with index number color
         title.fillProperty().bind(number.textFillProperty());
-        
+
         if (taskTitle == null) {
             logger.logError(UtilityLogger.Component.UI, ERROR_DISPLAY_ITEM_TITLE);
             throw new IllegalArgumentException(ERROR_DISPLAY_ITEM_TITLE);
@@ -362,10 +372,12 @@ public class TaskNodeController {
         }
     }
 
-    /*
-     * validateAndFormatIndexNumber will take in an index and format the index field accordingly.
+    /**
+     * validateAndFormatIndexNumber will take in an index and format the index
+     * field accordingly.
      * 
-     * @param int indexNumber
+     * @param int
+     *            indexNumber
      * 
      */
     private void validateAndFormatIndexNumber(int indexNumber) {
@@ -377,10 +389,12 @@ public class TaskNodeController {
         }
     }
 
-    /*
-     * setReminderStatus will take in a reminder and format the reminder flag indicator accordingly.
+    /**
+     * setReminderStatus will take in a reminder and format the reminder flag
+     * indicator accordingly.
      * 
-     * @param Reminder reminder
+     * @param Reminder
+     *            reminder
      * 
      */
     private void setReminderStatus(Reminder reminder) {
@@ -391,8 +405,9 @@ public class TaskNodeController {
         }
     }
 
-    /*
-     * setRecurringStatus will check if a task is recurring and toggle the recurrence flag indicator accordingly.
+    /**
+     * setRecurringStatus will check if a task is recurring and toggle the
+     * recurrence flag indicator accordingly.
      * 
      */
     private void setRecurringStatus() {
@@ -400,10 +415,12 @@ public class TaskNodeController {
         recurInterval.setText(task.getInterval());
     }
 
-    /*
-     * getColorForCategory will calculate a color index and return a color that expresses the category name.
+    /**
+     * getColorForCategory will calculate a color index and return a color that
+     * expresses the category name.
      * 
-     * @param String categoryName
+     * @param String
+     *            categoryName
      * 
      * @return Color categoryColor
      * 
@@ -415,8 +432,9 @@ public class TaskNodeController {
         return categoryHexColor;
     }
 
-    /*
-     * bindPriorityLabelHeight binds the priority label to the node height loosely. (Still experimental)
+    /**
+     * bindPriorityLabelHeight binds the priority label to the node height
+     * loosely. (Still experimental)
      * 
      */
     private void bindPriorityLabelHeight() {
@@ -430,7 +448,7 @@ public class TaskNodeController {
         priorityLabel.heightProperty().bind(totalInfoFieldHeight);
     }
 
-    /*
+    /**
      * getNode returns the formatted task view for display.
      * 
      * @return HBox getNode
@@ -439,14 +457,13 @@ public class TaskNodeController {
         return root;
     }
 
-    /*
+    /**
      * formatDateField takes in a task, start date-time, end date-time to format
      * date range field for display.
      * 
-     * @param TaskWrapper task, LocalDateTime startDateTime, LocalDateTime
-     * endDateTime
-     * 
-     * @return String dateTimeField
+     * @param task
+     * @param startDateTime
+     * @param endDateTime
      */
     public void formatDateField(TaskWrapper task, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         TASK_TYPE taskType = checkTaskType(startDateTime, endDateTime);
@@ -460,21 +477,21 @@ public class TaskNodeController {
             break;
         case DEADLINE:
             // Formatting of deadline date
-            outputDate = formatDeadlineRange(endDateTime);            
-            //  Set relative descriptor
+            outputDate = formatDeadlineRange(endDateTime);
+            // Set relative descriptor
             relativeText = formatDeadlineRelativeText(endDateTime);
             break;
-        case EVENT:            
+        case EVENT:
             // Smart formatting of range for same-day events
             if (isSameDay(startDateTime, endDateTime)) {
                 outputDate = formatEventRangeSameDay(startDateTime, endDateTime);
-            // Normal formatting of range for multi-day events
+                // Normal formatting of range for multi-day events
             } else {
                 outputDate = formatEventRangeDiffDay(startDateTime, endDateTime);
-            }            
+            }
             // Set relative descriptor
             relativeText = formatEventRelativeText(startDateTime, endDateTime);
-            
+
             break;
         default:
             // Formatting of date-time range for unknown types
@@ -490,11 +507,12 @@ public class TaskNodeController {
         setDateTimeRelativeFields(outputDate, relativeText);
     }
 
-    /*
-     * setDateTimeRelativeFields takes in an outputDate and relative text and sets the flag accordingly
+    /**
+     * setDateTimeRelativeFields takes in an outputDate and relative text and
+     * sets the flag accordingly.
      * 
-     * @param String outputDate, String relativeText
-     * 
+     * @param outputDate
+     * @param relativeText
      */
     private void setDateTimeRelativeFields(String outputDate, String relativeText) {
         this.relativeRange.setText(relativeText);
@@ -502,25 +520,26 @@ public class TaskNodeController {
         this.relativeRange.setFont(FONT_RELATIVE_DESCRIPTOR);
     }
 
-    /*
-     * isSameDay takes in a start and end date-time and checks if the start and end date-time falls on the same day 
+    /**
+     * isSameDay takes in a start and end date-time and checks if the start and
+     * end date-time falls on the same day.
      * 
-     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
-     * 
+     * @param startDateTime
+     * @param endDateTime
+     * @return boolean isSameDay
      */
     private boolean isSameDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return startDateTime.getDayOfYear() == endDateTime.getDayOfYear()
                 && startDateTime.getYear() == endDateTime.getYear();
     }
 
-    /*
+    /**
      * checkTaskType takes in the start date-time and end date-time to determine
      * the task type.
      * 
-     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
-     * 
+     * @param startDateTime
+     * @param endDateTime
      * @return TASK_TYPE
-     * 
      */
     private TASK_TYPE checkTaskType(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         TASK_TYPE taskType;
@@ -539,12 +558,12 @@ public class TaskNodeController {
 
     /** FORMATTING FUNCTIONS **/
 
-    /*
+    /**
      * formatEventRange
      * 
-     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
-     * 
-     * @return String eventRange
+     * @param startDateTime
+     * @param endDateTime
+     * @return
      */
     private String formatEventRelativeText(LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
@@ -578,7 +597,7 @@ public class TaskNodeController {
             prettyParser.setReference(now);
             relativeStart = TAG_STARTED;
             relativeEnd = TAG_ENDS;
-        // Change point of reference if event has yet to start
+            // Change point of reference if event has yet to start
         } else {
             prettyParser.setReference(start);
         }
@@ -595,10 +614,11 @@ public class TaskNodeController {
         return relativeStart + startOutput + ", " + String.format(relativeEnd, durationOutput);
     }
 
-    /*
+    /**
      * formatDeadlineRange
      * 
-     * @param LocalDateTime endDateTime
+     * @param LocalDateTime
+     *            endDateTime
      * 
      * @return String deadlineRange
      */
@@ -612,10 +632,11 @@ public class TaskNodeController {
         return TAG_DEADLINE_DUE + prettyParser.format(end);
     }
 
-    /*
+    /**
      * hasStarted checks if an event has already begun.
      * 
-     * @param LocalDateTime startDateTime
+     * @param LocalDateTime
+     *            startDateTime
      * 
      * @return boolean hasStarted
      */
@@ -623,72 +644,59 @@ public class TaskNodeController {
         return LocalDateTime.now().isAfter(startDateTime);
     }
 
-    /*
+    /**
      * formatEventRangeDiffDay formats the date-time range for events with start
      * and end date-times on different days
      * 
-     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * @param LocalDateTime
+     *            startDateTime
+     * @param LocalDateTime
+     *            endDateTime
      * 
      * @return String dateTimeRange
      */
     private String formatEventRangeDiffDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.getDayOfMonth() 
-                + "-" 
-                + months[startDateTime.getMonthValue()] 
-                + "-"
-                + startDateTime.getYear() 
-                + ", "
-                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) 
-                + " to "
-                + endDateTime.getDayOfMonth() 
-                + "-" 
-                + months[endDateTime.getMonthValue()] 
-                + "-" 
-                + endDateTime.getYear()
-                + ", " 
-                + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+        return startDateTime.getDayOfMonth() + "-" + months[startDateTime.getMonthValue()] + "-"
+                + startDateTime.getYear() + ", "
+                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
+                + endDateTime.getDayOfMonth() + "-" + months[endDateTime.getMonthValue()] + "-" + endDateTime.getYear()
+                + ", " + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
-    /*
+    /**
      * formatEventRangeSameDay formats the date-time range for events with start
      * and end date-times on the same day
      * 
-     * @param LocalDateTime startDateTime, LocalDateTime endDateTime
+     * @param LocalDateTime
+     *            startDateTime
+     * @param LocalDateTime
+     *            endDateTime
      * 
      * @return String dateTimeRange
      */
     private String formatEventRangeSameDay(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return startDateTime.getDayOfMonth() 
-                + "-" 
-                + months[startDateTime.getMonthValue()] 
-                + "-"
-                + startDateTime.getYear() 
-                + ", "
-                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) 
-                + " to "
+        return startDateTime.getDayOfMonth() + "-" + months[startDateTime.getMonthValue()] + "-"
+                + startDateTime.getYear() + ", "
+                + startDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)) + " to "
                 + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
-    /*
+    /**
      * formatDeadlineRange formats the date-time range for deadlines
      * 
-     * @param LocalDateTime endDateTime
+     * @param LocalDateTime
+     *            endDateTime
      * 
      * @return String dateTimeRange
      */
     private String formatDeadlineRange(LocalDateTime endDateTime) {
-        return endDateTime.getDayOfMonth() 
-                + "-" 
-                + months[endDateTime.getMonthValue()] 
-                + "-" 
-                + endDateTime.getYear()
-                + ", " 
-                + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
+        return endDateTime.getDayOfMonth() + "-" + months[endDateTime.getMonthValue()] + "-" + endDateTime.getYear()
+                + ", " + endDateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
     }
 
     /** STYLING FUNCTIONS **/
 
-    /*
+    /**
      * Apply styles on unknown task type
      * 
      */
@@ -697,10 +705,11 @@ public class TaskNodeController {
         numLabelBase.setFill(Color.web(COLOR_UNKNOWN));
     }
 
-    /*
+    /**
      * Apply styles on event task type
      * 
-     * @param LocalDateTime startDateTime
+     * @param LocalDateTime
+     *            startDateTime
      * 
      */
     @SuppressWarnings("unused")
@@ -716,10 +725,11 @@ public class TaskNodeController {
         }
     }
 
-    /*
+    /**
      * Apply styles on deadline task type
      * 
-     * @param LocalDateTime endDateTime
+     * @param LocalDateTime
+     *            endDateTime
      */
     @SuppressWarnings("unused")
     private void styleDeadline(LocalDateTime endDateTime) {
@@ -734,8 +744,9 @@ public class TaskNodeController {
         }
     }
 
-    /*
+    /**
      * Apply styles on floating task type
+     * 
      */
     @SuppressWarnings("unused")
     private void styleFloatingTask() {
@@ -743,11 +754,15 @@ public class TaskNodeController {
         priorityLabel.setFill(Color.web(COLOR_SPARE));
     }
 
-    /*
+    /**
      * Apply styles on task
      * 
-     * @param LocalDateTime startDateTime, LocalDateTime endDateTime, boolean
-     * isCompleted
+     * @param LocalDateTime
+     *            startDateTime
+     * @param LocalDateTime
+     *            endDateTime
+     * @param boolean
+     *            isCompleted
      * 
      */
     private void setDateTimeRelStyle(LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isCompleted) {
@@ -756,11 +771,11 @@ public class TaskNodeController {
         if (isOverdue(endDateTime, isCompleted)) {
             numLabelBase.setFill(Color.web(COLOR_OVERDUE));
             priorityLabel.setFill(Color.web(COLOR_OVERDUE));
-        // Today Priority
+            // Today Priority
         } else if (isToday(endDateTime, isCompleted)) {
             numLabelBase.setFill(Color.web(COLOR_TODAY));
             priorityLabel.setFill(Color.web(COLOR_TODAY));
-        // Normal Priority
+            // Normal Priority
         } else {
             numLabelBase.setFill(Color.web(COLOR_SPARE));
             priorityLabel.setFill(Color.web(COLOR_SPARE));
@@ -768,23 +783,28 @@ public class TaskNodeController {
 
     }
 
-    /*
+    /**
      * isToday checks if the current task is an ongoing task due today
      * 
-     * @param LocalDateTime endDateTime, boolean isCompleted
+     * @param LocalDateTime
+     *            endDateTime
+     * @param boolean
+     *            isCompleted
      * 
      * @return boolean isToday
      * 
      */
     private boolean isToday(LocalDateTime endDateTime, boolean isCompleted) {
-        return endDateTime != null && ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24
-                && !isCompleted;
+        return endDateTime != null && ChronoUnit.HOURS.between(LocalDateTime.now(), endDateTime) <= 24 && !isCompleted;
     }
 
-    /*
+    /**
      * isOverdue checks if the current task is an expired task due before today
      * 
-     * @param LocalDateTime endDateTime, boolean isCompleted
+     * @param LocalDateTime
+     *            endDateTime
+     * @param boolean
+     *            isCompleted
      * 
      * @return boolean isOverdue
      */

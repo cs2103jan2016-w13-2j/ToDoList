@@ -13,17 +13,19 @@ import todolist.ui.TaskWrapper;
 
 //@@author A0123994W
 
-/* 
- * TodayController controls and manipulates data for display on the main display area, for the today tab.
+/**
+ * TodayController controls and manipulates data for display on the main display
+ * area, for the today tab.
  * 
  * @author Huang Lie Jun (A0123994W)
+ * @see todolist.ui.controllers.MainViewController
  */
 public class TodayController extends MainViewController {
 
     // Logger messages
     private static final String MESSAGE_UPDATED_TODAY_TASKLIST = "Updated display task list [TODAY].";
 
-    /*
+    /**
      * Constructor overrides super constructor and intializes the display task
      * list and list view.
      * 
@@ -34,7 +36,7 @@ public class TodayController extends MainViewController {
         listView = new ListView<TaskWrapper>();
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
      * @see todolist.ui.controllers.MainViewController#initialize()
@@ -44,11 +46,10 @@ public class TodayController extends MainViewController {
         initTaskListView();
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
-     * @see
-     * todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
+     * @see todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
      */
     @Override
     public void setTasks(ArrayList<Task> tasks) {
@@ -75,17 +76,17 @@ public class TodayController extends MainViewController {
 
     }
 
-    /*
+    /**
      * isToday is a utility function that checks if a given task is due today.
      * 
-     * @param Task task is the given task to check
+     * @param Task
+     *            task is the given task to check
      * 
      * @return boolean isToday
      * 
      */
     private boolean isToday(Task task) {
-        return task.getEndTime() != null 
-                && task.getEndTime().getYear() == LocalDateTime.now().getYear()
+        return task.getEndTime() != null && task.getEndTime().getYear() == LocalDateTime.now().getYear()
                 && task.getEndTime().getDayOfYear() == LocalDateTime.now().getDayOfYear();
     }
 }

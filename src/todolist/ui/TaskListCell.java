@@ -5,15 +5,16 @@ import todolist.ui.controllers.TaskNodeController;
 
 //@@author A0123994W
 
-/*
+/**
  * TaskListCell formats task views by assigning every task node to a controller.
  * 
  * @author Huang Lie Jun (A0123994W)
+ * @see javafx.scene.control.ListCell
  * 
  */
 public class TaskListCell extends ListCell<TaskWrapper> {
 
-    /*
+    /**
      * (non-Javadoc)
      * 
      * @see javafx.scene.control.Cell#updateItem(java.lang.Object, boolean)
@@ -26,7 +27,7 @@ public class TaskListCell extends ListCell<TaskWrapper> {
 
             // Link task to graphic node
             try {
-                
+
                 TaskNodeController taskNode = new TaskNodeController(task, this.getIndex());
                 setGraphic(taskNode.getNode());
             } catch (IllegalArgumentException iae) {
@@ -38,7 +39,7 @@ public class TaskListCell extends ListCell<TaskWrapper> {
         }
     }
 
-    /*
+    /**
      * nullifyItem hides empty task views.
      */
     private void nullifyItem() {

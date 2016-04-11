@@ -44,10 +44,12 @@ import javafx.util.Callback;
 
 //@@author A0123994W
 
-/* 
- * MainViewController controls and manipulates data for display on the main display area, for the main tab.
+/**
+ * MainViewController controls and manipulates data for display on the main
+ * display area, for the main tab.
  * 
  * @author Huang Lie Jun (A0123994W)
+ * @see todolist.ui.controllers.MainViewController
  */
 public class MainViewController {
 
@@ -93,7 +95,7 @@ public class MainViewController {
     // @@author A0123994W
     /*** Controller Functions ***/
 
-    /*
+    /**
      * Constructor initializes to contain the display data structure.
      *
      */
@@ -105,31 +107,29 @@ public class MainViewController {
         reminders = new ArrayList<Timeline>();
     }
 
-    /*
+    /**
      * setMainApp takes a MainApp reference and stores it locally as the
      * mainApplication reference.
      * 
-     * @param MainApp mainApp is the reference provided to the calling function
-     * 
+     * @param mainApp
+     * @param uiHandlerUnit
      */
     public void setMainApp(MainApp mainApp, UIHandler uiHandlerUnit) {
         setMainApplication(mainApp);
         setUiHandler(uiHandlerUnit);
     }
 
-    /*
+    /**
      * initialize prepares the task list.
-     * 
      */
     @FXML
     public void initialize() {
         initTaskListView();
     }
 
-    /*
+    /**
      * initTaskListView initializes the task list by setting the list properties
      * and default format.
-     * 
      */
     public void initTaskListView() {
         listView.setCellFactory(new Callback<ListView<TaskWrapper>, javafx.scene.control.ListCell<TaskWrapper>>() {
@@ -144,13 +144,13 @@ public class MainViewController {
 
     }
 
-    /*
+    /**
      * setCommandLineCallback takes in a textfield and sets a function as the
      * action callback function.
      * 
-     * @param TextField commandField is the command line that reads the user
-     * input
-     * 
+     * @param commandField
+     * @param dayMode
+     * @param nightMode
      */
     public void setCommandLineCallback(TextField commandField, String dayMode, String nightMode) {
         // Set Callback for TextField
@@ -185,7 +185,7 @@ public class MainViewController {
                         getMainApplication().getPrimaryStage().setScene(scene);
                         getMainApplication().getPrimaryStage().show();
 
-                    // Call logic component for processing
+                        // Call logic component for processing
                     } else {
                         getUiHandler().process(commandString);
                         logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
@@ -204,6 +204,12 @@ public class MainViewController {
     // @@author A0130620B
     /*** Temporary Functions for Testing ***/
 
+    /**
+     * demoFileHandler is used in demo to manipulate demo data and files.
+     * 
+     * @param path
+     * @return ArrayList<String>
+     */
     public ArrayList<String> demoFileHandler(String path) {
         ArrayList<String> myList = new ArrayList<String>();
         try {
@@ -224,6 +230,11 @@ public class MainViewController {
 
     Boolean isDemoing = false;
 
+    /**
+     * setCommandLineCallbackDemo sets the command callback for demonstration.
+     * 
+     * @param commandField
+     */
     public void setCommandLineCallbackDemo(TextField commandField) {
         // Set Callback for TextField
 
@@ -297,7 +308,7 @@ public class MainViewController {
     // @@author A0123994W
     /*** View Access Functions ***/
 
-    /*
+    /**
      * getTaskListView returns the current list view of tasks.
      * 
      * @return ListView<TaskWrapper> listView
@@ -309,7 +320,7 @@ public class MainViewController {
 
     /*** Model Access Functions ***/
 
-    /*
+    /**
      * getTasks returns the list of tasks stored.
      * 
      * @return ObservableList<TaskWrapper> tasks
@@ -319,13 +330,13 @@ public class MainViewController {
         return tasksToDisplay;
     }
 
-    /*
+    /**
      * setTasks takes a list of tasks and sets it as the list of tasks to
      * display by associating with the list view. This overrides all the tasks
      * in the current list of display tasks.
      * 
-     * @param ArrayList<Task> tasks is the list of tasks to replace the current
-     * display list
+     * @param ArrayList<Task>
+     *            tasks is the list of tasks to replace the current display list
      * 
      */
     public void setTasks(ArrayList<Task> tasks) {
@@ -351,11 +362,12 @@ public class MainViewController {
 
     /*** Utility Functions ***/
 
-    /*
+    /**
      * highlight gets the index of the task to highlight and put that index item
      * on focus.
      * 
-     * @param Task task is the task to be highlighted.
+     * @param Task
+     *            task is the task to be highlighted.
      */
     public void highlight(Task task) {
         int index = searchInList(task);
@@ -370,11 +382,12 @@ public class MainViewController {
         }
     }
 
-    /*
+    /**
      * searchInList takes a task and searches for its position in the current
      * display list.
      * 
-     * @param Task task is the task to locate
+     * @param Task
+     *            task is the task to locate
      * 
      * @return int searchIndex is the position of the task in the list of tasks
      * 
@@ -393,10 +406,11 @@ public class MainViewController {
         return -1;
     }
 
-    /*
+    /**
      * isCompleted checks if a given task has already been completed.
      * 
-     * @param Task task is the given task to check for completion
+     * @param Task
+     *            task is the given task to check for completion
      * 
      * @return boolean isCompleted
      * 
@@ -405,11 +419,12 @@ public class MainViewController {
         return task.getDoneStatus();
     }
 
-    /*
+    /**
      * getTaskAt returns the task at the position specified in the list view, or
      * null if it is not found.
      * 
-     * @param int pos
+     * @param int
+     *            pos
      * 
      * @return Task task
      * 
@@ -423,8 +438,8 @@ public class MainViewController {
         }
     }
 
-    /*
-     * refreshReminders updates all the reminders to be triggered
+    /**
+     * refreshReminders updates all the reminders to be triggered.
      */
     public void refreshReminders() {
         // Identify tasks with reminders switched on
@@ -458,10 +473,11 @@ public class MainViewController {
         }
     }
 
-    /*
+    /**
      * scheduleReminder sets the task reminder to trigger at the given timing.
      * 
-     * @param TaskWrapper task, LocalDateTime remindTime
+     * @param TaskWrapper
+     *            task, LocalDateTime remindTime
      *
      */
     static public void scheduleReminder(TaskWrapper task, LocalDateTime remindTime) {
@@ -503,8 +519,9 @@ public class MainViewController {
         }
     }
 
-    /*
-     * getCompletedCount returns the number of completed tasks in the current display list
+    /**
+     * getCompletedCount returns the number of completed tasks in the current
+     * display list.
      * 
      * @return int completedCount
      * 
@@ -520,29 +537,33 @@ public class MainViewController {
         return count;
     }
 
-    /*
-     * setPageIndex takes in the tab index and sets the page with the index as the current page
+    /**
+     * setPageIndex takes in the tab index and sets the page with the index as
+     * the current page.
      * 
-     * @param int tab
+     * @param int
+     *            tab
      * 
      */
     public void setPageIndex(int tab) {
         index = tab;
     }
 
-    /*
+    /**
      * getPageIndex retrieves the page index of the current page.
      * 
-     * @return 
+     * @return int index
      */
     public int getPageIndex() {
         return index;
     }
 
-    /*
-     * setPlaceHolder takes in a glyphSource directory and sets the glyph as the placeholder for empty list view(s).
+    /**
+     * setPlaceHolder takes in a glyphSource directory and sets the glyph as the
+     * placeholder for empty list view(s).
      * 
-     * @param String glyphSource
+     * @param String
+     *            glyphSource
      * 
      */
     public void setPlaceHolder(String glyphSource) {
@@ -561,7 +582,7 @@ public class MainViewController {
 
     }
 
-    /*
+    /**
      * getMainApplication returns the link-back to the MainApp
      * 
      * @return MainApp mainApplication
@@ -571,17 +592,18 @@ public class MainViewController {
         return mainApplication;
     }
 
-    /*
+    /**
      * setMainApplication takes in the a link to the main application.
      * 
-     * @param MainApp mainApplication
+     * @param MainApp
+     *            mainApplication
      * 
      */
     public void setMainApplication(MainApp mainApplication) {
         this.mainApplication = mainApplication;
     }
 
-    /*
+    /**
      * getUiHandler returns a UIHandler reference.
      * 
      * @return UIHandler uiHandler
@@ -591,10 +613,11 @@ public class MainViewController {
         return uiHandler;
     }
 
-    /*
+    /**
      * setUiHandler takes in the link to a UI handler.
      * 
-     * @param UIHandler uiHandler
+     * @param UIHandler
+     *            uiHandler
      * 
      */
     public void setUiHandler(UIHandler uiHandler) {

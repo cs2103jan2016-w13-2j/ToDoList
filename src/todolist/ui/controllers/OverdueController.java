@@ -12,17 +12,20 @@ import todolist.ui.TaskWrapper;
 
 //@@author A0123994W
 
-/* 
- * OverdueController controls and manipulates data for display on the main display area, for the overdue tab.
+/**
+ * OverdueController controls and manipulates data for display on the main
+ * display area, for the overdue tab.
  * 
  * @author Huang Lie Jun (A0123994W)
+ * @see todolist.ui.controllers.MainViewController
+ *
  */
 public class OverdueController extends MainViewController {
 
     // Logger messages
     private static final String MESSAGE_UPDATED_OVERDUE_TASKLIST = "Updated display task list [OVERDUE].";
 
-    /*
+    /**
      * Constructor overrides super constructor and intializes the display task
      * list and list view.
      * 
@@ -33,7 +36,7 @@ public class OverdueController extends MainViewController {
         listView = new ListView<TaskWrapper>();
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
      * @see todolist.ui.controllers.MainViewController#initialize()
@@ -43,11 +46,10 @@ public class OverdueController extends MainViewController {
         initTaskListView();
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
-     * @see
-     * todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
+     * @see todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
      */
     @Override
     public void setTasks(ArrayList<Task> tasks) {
@@ -72,14 +74,13 @@ public class OverdueController extends MainViewController {
         logger.logAction(Component.UI, MESSAGE_UPDATED_OVERDUE_TASKLIST);
     }
 
-    /*
+    /**
      * isOverdue is a utility function that checks if a given task is expired by
      * checking that the end date-time is not past yet.
      * 
-     * @param Task task is the task to check for expiry
-     * 
+     * @param task
+     *            is the task to check for expiry
      * @return boolean isOverdue is overdue flag
-     * 
      */
     private boolean isOverdue(Task task) {
         return task.getEndTime() != null && task.getEndTime().isBefore(LocalDateTime.now());

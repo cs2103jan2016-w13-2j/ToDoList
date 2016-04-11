@@ -11,17 +11,19 @@ import todolist.ui.TaskWrapper;
 
 //@@author A0123994W
 
-/* 
- * ArchiveController controls and manipulates data for display on the main display area, for the archive tab.
+/**
+ * ArchiveController controls and manipulates data for display on the main
+ * display area, for the archive tab.
  * 
  * @author Huang Lie Jun (A0123994W)
+ * @see todolist.ui.controllers.MainViewController
  */
 public class ArchiveController extends MainViewController {
 
     // Logger messages
     private static final String MESSAGE_UPDATED_ARCHIVED_TASKLIST = "Updated display task list [DONE].";
 
-    /*
+    /**
      * Constructor overrides super constructor and intializes the display task
      * list and list view.
      * 
@@ -32,8 +34,9 @@ public class ArchiveController extends MainViewController {
         listView = new ListView<TaskWrapper>();
     }
 
-    /*
+    /**
      * (non-Javadoc)
+     * 
      * @see todolist.ui.controllers.MainViewController#initialize()
      */
     @FXML
@@ -41,9 +44,11 @@ public class ArchiveController extends MainViewController {
         initTaskListView();
     }
 
-    /*
+    /**
      * (non-Javadoc)
-     * @see todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
+     * 
+     * @see
+     * todolist.ui.controllers.MainViewController#setTasks(java.util.ArrayList)
      */
     @Override
     public void setTasks(ArrayList<Task> tasks) {

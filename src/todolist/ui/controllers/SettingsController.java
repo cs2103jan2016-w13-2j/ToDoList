@@ -25,10 +25,12 @@ import todolist.ui.TaskWrapper;
 
 //@@author A0123994W
 
-/* 
- * SettingsController controls and manipulates data for display on the main display area.
+/**
+ * SettingsController controls and manipulates data for display on the main
+ * display area.
  * 
  * @author Huang Lie Jun (A0123994W)
+ * @see todolist.ui.controllers.MainViewController
  */
 public class SettingsController extends MainViewController {
 
@@ -50,17 +52,16 @@ public class SettingsController extends MainViewController {
 
     @FXML
     private Text directoryDisplay = null;
-    
+
     @FXML
     private Text soundStatus = null;
 
     // Logger messages
     private static final String MESSAGE_UPDATED_SETTINGS = "Updated display [OPTIONS].";
 
-    /*
-     * Constructor overrides super constructor and intializes the display task
+    /**
+     * Constructor: overrides super constructor and intializes the display task
      * list and list view.
-     * 
      */
     public SettingsController() {
         // Initialise models
@@ -68,19 +69,19 @@ public class SettingsController extends MainViewController {
         listView = new ListView<TaskWrapper>();
     }
 
-    /*
+    /**
      * setMainApp takes a MainApp reference and stores it locally as the
      * mainApplication reference.
      * 
-     * @param MainApp mainApp is the reference provided to the calling function
-     * 
+     * @param MainApp
+     *            mainApp is the reference provided to the calling function
      */
     public void setMainApp(MainApp mainApp, UIHandler uiHandlerUnit) {
         setMainApplication(mainApp);
         setUiHandler(uiHandlerUnit);
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
      * @see todolist.ui.controllers.MainViewController#initialize()
@@ -89,43 +90,51 @@ public class SettingsController extends MainViewController {
     public void initialize() {
     }
 
-    /*
-     * getMessageUpdatedSettings returns the standard output message for display when the settings view gets updated.
+    /**
+     * getMessageUpdatedSettings returns the standard output message for display
+     * when the settings view gets updated.
      * 
      * @return String MESSAGE_UPDATED_SETTINGS
-     * 
      */
     public static String getMessageUpdatedSettings() {
         return MESSAGE_UPDATED_SETTINGS;
     }
-    
-    /*
-     * Deprecated. We drop the use of CalendarFX due to the requirement for license.
+
+    /**
+     * Deprecated. We drop the use of CalendarFX due to the requirement for
+     * license.
+     * 
+     * @param observableList
      */
     public void loadCalendar(ObservableList<TaskWrapper> observableList) {
 
     }
 
-    /*
-     * setupPage takes in an observable list of tasks (wrapped) and filters for a neat weekly summary. 
-     * The options area will also be dynamically linked to the relevant listeners for changes and updates.
+    /**
+     * setupPage takes in an array list of tasks and filters for a neat weekly
+     * summary.
      * 
-     * @param ObservableList<TaskWrapper> observableList
-     * 
+     * @param tasks
      */
     public void setupPage(ArrayList<Task> tasks) {
-        
+
         ObservableList<Task> observableList = FXCollections.observableArrayList(tasks);
-        
+
         // Update directory
         updateDirectory();
-        
+
         // Create chart
         StackedBarChart<Number, String> timeTable = buildChart(observableList);
         timeTable.backgroundProperty().set(Background.EMPTY);
         box.getChildren().set(POSITION_CHART_IN_VBOX, timeTable);
     }
 
+    /**
+     * buildChart creates a chart to display the weekly summary.
+     * 
+     * @param observableList
+     * @return StackedBarChart<Number, String>
+     */
     private StackedBarChart<Number, String> buildChart(ObservableList<Task> observableList) {
         NumberAxis xAxis = new NumberAxis();
         CategoryAxis yAxis = new CategoryAxis();
@@ -140,21 +149,21 @@ public class SettingsController extends MainViewController {
 
         // ... filter list if necessary
         LocalDateTime startOfWeek = LocalDateTime.now().withDayOfWeek(1).withTime(0, 0, 0, 0);
-        LocalDateTime endOfWeek = LocalDateTime.now().withDayOfWeek(7).withTime(23, 59, 59, 0);                
-        
+        LocalDateTime endOfWeek = LocalDateTime.now().withDayOfWeek(7).withTime(23, 59, 59, 0);
+
         for (Task task : observableList) {
-            
+
             // Skip deadlines and events that are out of the week zone
             if (isOutOfWeekRange(startOfWeek, endOfWeek, task)) {
                 continue;
             }
-            
+
             // Get category name
             String catName = "uncategorised";
             if (task.getCategory() != null) {
                 catName = task.getCategory().getCategory();
             }
-            
+
             int[] sameCatTasks = reference.get(catName);
 
             // New category encountered
@@ -186,11 +195,21 @@ public class SettingsController extends MainViewController {
         return timeTable;
     }
 
+    /**
+     * updateDirectory
+     */
     private void updateDirectory() {
         String path = getUiHandler().getPath();
         directoryDisplay.setText(path);
     }
 
+    /**
+     * setEntryInSeries
+     * 
+     * @param entry
+     * @param sameCatTasks
+     * @param series
+     */
     private void setEntryInSeries(java.util.Map.Entry<String, int[]> entry, int[] sameCatTasks,
             XYChart.Series<Number, String> series) {
         series.setName(entry.getKey());
@@ -204,10 +223,26 @@ public class SettingsController extends MainViewController {
         series.getData().add(new XYChart.Data<Number, String>(sameCatTasks[7], sunday));
     }
 
+    /**
+     * isOutOfWeekRange
+     * 
+     * @param startOfWeek
+     * @param endOfWeek
+     * @param task
+     * @return boolean
+     */
     private boolean isOutOfWeekRange(LocalDateTime startOfWeek, LocalDateTime endOfWeek, Task task) {
         return task.getEndTime() != null && !isWithinWeek(startOfWeek, endOfWeek, task.getEndTime());
     }
 
+    /**
+     * isWithinWeek
+     * 
+     * @param startOfWeek
+     * @param endOfWeek
+     * @param endTime
+     * @return boolean
+     */
     private boolean isWithinWeek(LocalDateTime startOfWeek, LocalDateTime endOfWeek, java.time.LocalDateTime endTime) {
 
         int millis = 0;
@@ -217,14 +252,19 @@ public class SettingsController extends MainViewController {
         int day = endTime.getDayOfMonth();
         int month = endTime.getMonthValue();
         int year = endTime.getYear();
-        
+
         LocalDateTime endTimeFormatted = new LocalDateTime();
         endTimeFormatted = endTimeFormatted.withDate(year, month, day);
         endTimeFormatted = endTimeFormatted.withTime(hours, minutes, seconds, millis);
-        
-        return endTimeFormatted.isAfter(startOfWeek) && endTimeFormatted.isBefore(endOfWeek);    
+
+        return endTimeFormatted.isAfter(startOfWeek) && endTimeFormatted.isBefore(endOfWeek);
     }
 
+    /**
+     * formatChartLabelsWithDate
+     * 
+     * @param format
+     */
     private void formatChartLabelsWithDate(org.joda.time.format.DateTimeFormatter format) {
         monday = String.format(monday, LocalDateTime.now().withDayOfWeek(1).toString(format));
         tuesday = String.format(tuesday, LocalDateTime.now().withDayOfWeek(2).toString(format));
@@ -234,14 +274,14 @@ public class SettingsController extends MainViewController {
         saturday = String.format(saturday, LocalDateTime.now().withDayOfWeek(6).toString(format));
         sunday = String.format(sunday, LocalDateTime.now().withDayOfWeek(7).toString(format));
     }
-    
-    /*
-     * setSoundStatus takes in a status string descriptor and sets the sound status display text accordingly.
+
+    /**
+     * setSoundStatus takes in a status string descriptor and sets the sound
+     * status display text accordingly.
      * 
-     * @param String status
-     * 
+     * @param status
      */
     public void setSoundStatus(String status) {
-        soundStatus.setText(status); 
+        soundStatus.setText(status);
     }
 }

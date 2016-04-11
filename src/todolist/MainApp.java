@@ -54,12 +54,12 @@ import todolist.ui.controllers.WeekController;
 
 //@@author A0123994W
 
-/*
- * MainApp is the main running class for the application.
- * It provides the user with the graphical user interface to control the application.
+/**
+ * MainApp is the main running class for the application. It provides the user
+ * with the graphical user interface to control the application.
  * 
  * @author Huang Lie Jun (A0123994W)
- * 
+ * @see javafx.application.Application
  */
 public class MainApp extends Application {
 
@@ -206,14 +206,16 @@ public class MainApp extends Application {
 
     /*** CORE FUNCTIONS ***/
 
-    /*
+    /**
      * Starts the application with launch() command.
+     * 
+     * @param args
      */
     public static void main(String[] args) {
         launch(args);
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
      * @see javafx.application.Application#start(javafx.stage.Stage)
@@ -245,9 +247,9 @@ public class MainApp extends Application {
         commandField.requestFocus();
     }
 
-    /*
+    /**
      * loadNotifBubbles updates the sidebar notification bubbles with the latest
-     * respective task count
+     * respective ongoing tasks count
      */
     private void loadNotifBubbles() {
         MainViewController[] controllers = { mainController, overdueController, todayController, weekController,
@@ -256,8 +258,8 @@ public class MainApp extends Application {
         sidebarController.linkBubbles(controllers);
     }
 
-    /*
-     * initializeTabs load and initialize the controllers for each tab or page
+    /**
+     * initializeTabs loads and initializes the controllers for each tab or page
      */
     private void initializeTabs() {
         for (int i = EXPIRED_TAB; i <= OPTIONS_TAB; ++i) {
@@ -269,10 +271,10 @@ public class MainApp extends Application {
         uiHandlerUnit.refresh();
     }
 
-    /*
+    /**
      * addShortcuts sets key listeners for the pre-defined keyboard shortcuts
      * 
-     * @param Scene scene
+     * @param scene
      * 
      */
     private void addShortcuts(Scene scene) {
@@ -346,12 +348,20 @@ public class MainApp extends Application {
         });
     }
 
-    /*
+    /**
      * setWindowDimensions initializes the window properties for application
      * display.
      * 
-     * @param Stage primaryStage
+     * @param Stage
+     *            primaryStage
      * 
+     */
+
+    /**
+     * setWindowDimensions initializes the window properties for application
+     * display.
+     * 
+     * @param primaryStage
      */
     private void setWindowDimensions(Stage primaryStage) {
         primaryStage.setTitle(WINDOW_TITLE);
@@ -361,12 +371,12 @@ public class MainApp extends Application {
 
     /*** VIEW LOADERS ***/
 
-    /*
+    /**
      * loadRootView wraps root view with notification pane and displays it
      * within a preset window.
      * 
-     * @param Stage primaryStage is the display window for mounting the root
-     * view
+     * @param primaryStage
+     *            is the display window for mounting the root view
      */
     private void loadRootView(Stage primaryStage) {
         try {
@@ -408,7 +418,7 @@ public class MainApp extends Application {
         }
     }
 
-    /*
+    /**
      * loadCommandLine embeds the command line in place in the root view and
      * sets the callback function for text input.
      * 
@@ -475,7 +485,7 @@ public class MainApp extends Application {
 
     }
 
-    /*
+    /**
      * loadTitleBar embeds the title bar in place in the root view
      */
     private void loadTitleBar() {
@@ -496,7 +506,7 @@ public class MainApp extends Application {
         }
     }
 
-    /*
+    /**
      * loadSideBar embeds the side bar in place in the root view and initializes
      * the controller (logic) for the side bar
      */
@@ -524,13 +534,15 @@ public class MainApp extends Application {
         }
     }
 
-    /*
+    /**
      * getView takes in a FXML loader and a FXML directory, loads and returns
      * the JavaFX component object from the FXML file.
      * 
-     * @param FXMLLoader loader, String directory
+     * @param loader
+     * @param directory
      * 
-     * @return Node abstractView is the view initialized from the FXML file
+     * @return abstractView is the view initialized from the FXML file
+     * @throws IOException
      */
     private Node getView(FXMLLoader loader, String directory) throws IOException {
         loader.setLocation(MainApp.class.getResource(directory));
@@ -539,8 +551,8 @@ public class MainApp extends Application {
         return abstractView;
     }
 
-    /*
-     * loadMainView loads the main page into the main display area
+    /**
+     * loadMainView loads the main page into the main display area.
      */
     private void loadMainView() {
         try {
@@ -574,8 +586,8 @@ public class MainApp extends Application {
         }
     }
 
-    /*
-     * loadOverdueView loads the overdue page into the main display area
+    /**
+     * loadOverdueView loads the overdue page into the main display area.
      */
     private void loadOverdueView() {
 
@@ -606,8 +618,8 @@ public class MainApp extends Application {
         }
     }
 
-    /*
-     * loadTodayView loads the today page into the main display area
+    /**
+     * loadTodayView loads the today page into the main display area.
      */
     private void loadTodayView() {
         // Acquire FXML and CSS component for main view
@@ -636,8 +648,8 @@ public class MainApp extends Application {
         }
     }
 
-    /*
-     * loadWeekView loads the week page into the main display area
+    /**
+     * loadWeekView loads the week page into the main display area.
      */
     private void loadWeekView() {
         // Acquire FXML and CSS component for main view
@@ -668,8 +680,8 @@ public class MainApp extends Application {
         }
     }
 
-    /*
-     * loadArchiveView loads the archive page into the main display area
+    /**
+     * loadArchiveView loads the archive page into the main display area.
      */
     private void loadArchiveView() {
         // Acquire FXML and CSS component for main view
@@ -699,7 +711,7 @@ public class MainApp extends Application {
     }
 
     /*
-     * loadSettingsView loads the settings page into the main display area
+     * loadSettingsView loads the settings page into the main display area.
      */
     private void loadSettingsView() {
         // Acquire FXML and CSS component for main view
@@ -728,11 +740,11 @@ public class MainApp extends Application {
         }
     }
 
-    /*
-     * loadPage sets the current page index to the given index
+    /**
+     * loadPage sets the current page index to the given index.
      * 
-     * @param index is the given candidate index to navigate to
-     * 
+     * @param index
+     *            is the given candidate index to navigate to.
      */
     public void loadPage(int index) {
         if (index >= SMALLEST_PAGE_INDEX && index <= LARGEST_PAGE_INDEX) {
@@ -747,11 +759,11 @@ public class MainApp extends Application {
 
     }
 
-    /*
-     * setPageView loads the corresponding page into the main display area
+    /**
+     * setPageView loads the corresponding page into the main display area.
      * 
-     * @param index is the page number to load
-     * 
+     * @param index
+     * @param oldIndex
      */
     public void setPageView(int index, int oldIndex) {
 
@@ -799,7 +811,7 @@ public class MainApp extends Application {
 
     }
 
-    /*
+    /**
      * loadHelpPopup displays a help table popover for easy reference.
      */
     private void loadHelpPopup() {
@@ -830,11 +842,10 @@ public class MainApp extends Application {
         rootView.setCenter(mainView);
     }
 
-    /*
+    /**
      * getPage returns the current page index.
      * 
      * @return int page
-     * 
      */
     public int getPage() {
         if (sidebarController != null) {
@@ -846,9 +857,10 @@ public class MainApp extends Application {
 
     /*** NOTIFICATION FUNCTIONS ***/
 
-    /*
+    /**
      * setupNotificationPane intializes the notification system and wraps it
-     * around the root display view
+     * around the root display view.
+     * 
      */
     private void setupNotificationPane() {
         Label label = new Label();
@@ -862,11 +874,13 @@ public class MainApp extends Application {
         rootWithNotification.setContent(rootView);
     }
 
-    /*
+    /**
      * notifyWithText triggers a notification with or without autohide.
      * 
-     * @param String text is the notification text, boolean isAutohide is the
-     * switch for autohiding notification after fixed delay.
+     * @param text
+     *            is the notification text.
+     * @param isAutohide
+     *            is the switch for autohiding notification after fixed delay.
      */
     public void notifyWithText(String text, boolean isAutohide) {
 
@@ -901,11 +915,12 @@ public class MainApp extends Application {
 
     /*** ACCESS FUNCTIONS FOR MODELS ***/
 
-    /*
+    /**
      * setDisplayTasks replaces and overwrites the current list of tasks to
-     * display
+     * display.
      * 
-     * @param ArrayList<Task> listOfTasks is the candidate list of tasks
+     * @param listOfTasks
+     *            is the candidate list of tasks.
      */
     public void setDisplayTasks(ArrayList<Task> listOfTasks) {
 
@@ -937,8 +952,8 @@ public class MainApp extends Application {
         settingsController.setupPage(uiHandlerUnit.getAllTask());
     }
 
-    /*
-     * getDisplayTask returns the current displayed list of wrapped task
+    /**
+     * getDisplayTask returns the current displayed list of wrapped task.
      * 
      * @return ObservableList<TaskWrapper> listOfDisplayedTasks
      */
@@ -961,11 +976,11 @@ public class MainApp extends Application {
 
     /*** HIGHLIGHTER ***/
 
-    /*
+    /**
      * highlightItem sets the corresponding task item on focus.
      * 
-     * @param Task task is the task to be highlighted
-     * 
+     * @param task
+     *            is the task to be highlighted.
      */
     public void highlightItem(Task task) {
         switch (getPage()) {
@@ -1005,12 +1020,11 @@ public class MainApp extends Application {
 
     /*** GETTERS AND SETTERS ***/
 
-    /*
+    /**
      * getTaskAt returns a task given its position in the current displayed
      * list, or a null if such as task does not exist.
      * 
-     * @param int position
-     * 
+     * @param pos
      * @return Task referredTask
      */
     public Task getTaskAt(int pos) {
@@ -1045,59 +1059,55 @@ public class MainApp extends Application {
         }
     }
 
-    /*
+    /**
      * getPrimaryStage returns the current stage that is hosting the display.
      * 
      * @return Stage primaryStage
-     * 
      */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
 
-    /*
+    /**
      * setPrimaryStage sets the current primaryStage as the given stage.
      * 
-     * @param Stage primaryStage
+     * @param primaryStage
      */
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
-    /*
+    /**
      * getHelpModal returns a HelpModalController that controls the logic for
      * help display.
      * 
      * @return HelpModalController helpModalController
-     * 
      */
     public HelpModalController getHelpModal() {
         return helpModal;
     }
 
-    /*
+    /**
      * setHelpModal sets the given helpModalController as the
      * helpModalController for the help table.
      * 
-     * @param HelpModalController helpModalController
-     * 
+     * @param helpModal
      */
     public void setHelpModal(HelpModalController helpModal) {
         this.helpModal = helpModal;
     }
 
-    /*
+    /**
      * getSideBarController returns the current sideBarController that controls
      * the logic of the sidebar.
      * 
      * @return SideBarController sidebarController
-     * 
      */
     public SideBarController getSideBarController() {
         return sidebarController;
     }
 
-    /*
+    /**
      * getCommandHistoryBackward returns the stack of command history saved
      * before the current visited entry.
      * 
@@ -1107,7 +1117,7 @@ public class MainApp extends Application {
         return commandHistoryBackward;
     }
 
-    /*
+    /**
      * getCommandHistoryForward returns the stack of command history saved after
      * the current visited entry.
      * 
@@ -1117,16 +1127,16 @@ public class MainApp extends Application {
         return commandHistoryForward;
     }
 
-    /*
+    /**
      * getHelpTab returns the tab number that refers to the help tab.
      * 
-     * return int HELP_TAB
+     * @return int HELP_TAB
      */
     public static int getHelpTab() {
         return HELP_TAB;
     }
 
-    /*
+    /**
      * getSuggestions returns the array of suggestions that displays for
      * autocomplete.
      * 
@@ -1136,31 +1146,28 @@ public class MainApp extends Application {
         return suggestions;
     }
 
-    /*
+    /**
      * getDefaultTab returns the index referring to the default tab.
      * 
      * @return int defaultTabIndex
-     * 
      */
     public static int getDefaultTab() {
         return DEFAULT_TAB;
     }
 
-    /*
+    /**
      * getApplicationIcon returns the path for the application icon.
      * 
      * @return String applicationIconPath
-     * 
      */
     public static String getApplicationIcon() {
         return APPLICATION_ICON;
     }
 
-    /*
+    /**
      * isMute returns the status of the sound settings.
      * 
      * @return boolean isMute
-     * 
      */
     public boolean isMute() {
         return IS_MUTE.get();
