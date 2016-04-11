@@ -415,7 +415,7 @@ public class Logic {
 
 		// UI handling
 		uiHandler.display(tempTaskList);
-		uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_SEARCH, truncateTitle(keyword)), true);
+		uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_SEARCH, truncateTitle(keyword)), false);
 
 		return true;
 	}
@@ -436,7 +436,7 @@ public class Logic {
 
 		// UI handling
 		uiHandler.display(tempTaskList);
-		uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_FILTER, truncateTitle(category)), true);
+		uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_FILTER, truncateTitle(category)), false);
 
 		return true;
 	}

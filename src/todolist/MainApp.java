@@ -934,7 +934,7 @@ public class MainApp extends Application {
         }
 
         mainController.refreshReminders();
-        settingsController.setupPage(mainController.getTaskListView().getItems());
+        settingsController.setupPage(uiHandlerUnit.getAllTask());
     }
 
     /*

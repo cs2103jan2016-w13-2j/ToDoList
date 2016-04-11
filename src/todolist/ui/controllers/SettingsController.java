@@ -1,5 +1,6 @@
 package todolist.ui.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.joda.time.LocalDateTime;
@@ -19,6 +20,7 @@ import javafx.scene.text.Text;
 
 import todolist.MainApp;
 import todolist.logic.UIHandler;
+import todolist.model.Task;
 import todolist.ui.TaskWrapper;
 
 //@@author A0123994W
@@ -111,7 +113,9 @@ public class SettingsController extends MainViewController {
      * @param ObservableList<TaskWrapper> observableList
      * 
      */
-    public void setupPage(ObservableList<TaskWrapper> observableList) {
+    public void setupPage(ArrayList<Task> tasks) {
+        
+        ObservableList<Task> observableList = FXCollections.observableArrayList(tasks);
         
         // Update directory
         updateDirectory();
@@ -122,7 +126,7 @@ public class SettingsController extends MainViewController {
         box.getChildren().set(POSITION_CHART_IN_VBOX, timeTable);
     }
 
-    private StackedBarChart<Number, String> buildChart(ObservableList<TaskWrapper> observableList) {
+    private StackedBarChart<Number, String> buildChart(ObservableList<Task> observableList) {
         NumberAxis xAxis = new NumberAxis();
         CategoryAxis yAxis = new CategoryAxis();
         StackedBarChart<Number, String> timeTable = new StackedBarChart<Number, String>(xAxis, yAxis);
@@ -138,7 +142,7 @@ public class SettingsController extends MainViewController {
         LocalDateTime startOfWeek = LocalDateTime.now().withDayOfWeek(1).withTime(0, 0, 0, 0);
         LocalDateTime endOfWeek = LocalDateTime.now().withDayOfWeek(7).withTime(23, 59, 59, 0);                
         
-        for (TaskWrapper task : observableList) {
+        for (Task task : observableList) {
             
             // Skip deadlines and events that are out of the week zone
             if (isOutOfWeekRange(startOfWeek, endOfWeek, task)) {
@@ -200,7 +204,7 @@ public class SettingsController extends MainViewController {
         series.getData().add(new XYChart.Data<Number, String>(sameCatTasks[7], sunday));
     }
 
-    private boolean isOutOfWeekRange(LocalDateTime startOfWeek, LocalDateTime endOfWeek, TaskWrapper task) {
+    private boolean isOutOfWeekRange(LocalDateTime startOfWeek, LocalDateTime endOfWeek, Task task) {
         return task.getEndTime() != null && !isWithinWeek(startOfWeek, endOfWeek, task.getEndTime());
     }
 
