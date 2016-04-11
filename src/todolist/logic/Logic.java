@@ -23,31 +23,10 @@ import todolist.parser.MainParser;
 import todolist.storage.DataBase;
 
 public class Logic {
-    private static final String MESSAGE_FAILURE_OPEN_DIR = "I encountered a problem importing your new schedule. Sorry!";
-    private static final String MESSAGE_SUCCESS_OPEN_DIR = "A new schedule has been imported.";
-    private static final String MESSAGE_FAILURE_MOVE_DIR = "I encountered a problem migrating your schedule. Sorry!";
-    private static final String MESSAGE_SUCCESS_MOVE_DIR = "Schedule has been saved to %1$s";
-    private static final String MESSAGE_SUCCESS_REFRESH = "View refreshed. All searches and filters are cleared!";
-    private static final String MESSAGE_SUCCESS_REDO = "You have reverted the last %d called-back action(s).";
-    private static final String MESSAGE_SUCCESS_UNDO = "You have called back the last %d action(s).";
-    private static final String MESSAGE_SUCCESS_UNARCHIVE = "[%1$s] has been unarchived! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_ARCHIVE = "[%1$s] has been archived! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_REMIND = "[%1$s] is set to trigger a reminder on %2$s. (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_FORWARD = "[%1$s] has been brought forward! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_POSTPONE = "[%1$s] has been postponed! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_NON_RECURRING = "[%1$s] is now a one-time-off task. (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_RECURRING = "[%1$s] is now a recurring task. (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_LABEL = "You have tagged [%1$s] as '%2$s'! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_SORT = "Your tasks are now sorted by '%1$s'. (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_FILTER = "Here are the related tasks under: '%1$s'. (to clear a filter, type 'reset')";
-    private static final String MESSAGE_SUCCESS_SEARCH = "Here are your search results for: '%1$s'. (to clear a search, type 'reset')";
-    private static final String MESSAGE_SUCCESS_DELETE = "[%1$s] has been deleted! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_EDIT = "[%1$s] has been edited! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_ADD_DEADLINE = "A new deadline [%1$s] has been created! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_ADD_EVENT = "A new event [%1$s] has been created! (not what you want? try 'undo 1')";
-    private static final String MESSAGE_SUCCESS_ADD_TASK = "A new task [%1$s] has been created! (not what you want? try 'undo 1')";
+
     private static final String TITLE_TRUNCATION = "...";
     private static final int TITLE_CAP_SIZE = 25;
+    
     private MainApp mainApp;
     public DataBase dataBase;
     private UIHandler uiHandler;
@@ -57,15 +36,7 @@ public class Logic {
     private UtilityLogger logger;
     ArrayList<Task>[] snapshot;
 
-    private static String MESSAGE_ADDING_FLOATING_TASK = "tring to add floating task: ";
-    private static String MESSAGE_ADDING_EVENT = "tring to add event: ";
-    private static String MESSAGE_ADDING_DEADLINE = "tring to add deadline: ";
-    private static String MESSAGE_ADDING_RECURRING_EVENT = "tring to add recurring event: ";
-    private static String MESSAGE_ADDING_RECURRING_DEADLINE = "tring to add reucrring deadline: ";
-    private static String MESSAGE_EDITING_TASK = "tring to edit task: ";
-    private static String MESSAGE_SEARCHING_TASK = "tring to search task: ";
-    private static String MESSAGE_SORTING_TASK = "tring to sort task: ";
-    private static String MESSAGE_DELETING_TASK = "tring to delete task: ";
+
     protected static Component COMPONENT_LOGIC = UtilityLogger.Component.Logic;
 
     @SuppressWarnings("unchecked")
@@ -102,7 +73,7 @@ public class Logic {
      * @return Boolean  return true if the task is successfully added
      */
     public Boolean addTask(String title) {
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_FLOATING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_FLOATING_TASK + title);
 
         Name name = new Name(title);
         Task newEvent = new Task(name, null, null, null, null, false, false, null);
@@ -112,7 +83,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_ADD_TASK, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_ADD_TASK, truncateTitle(title)), true);
 
         return addResponse;
     }
@@ -129,7 +100,7 @@ public class Logic {
     * @return Boolean  true if the event is successfully added
     */
     public Boolean addEvent(String title, String startDate, String startTime, String quantity, String timeUnit) {
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_EVENT + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_EVENT + title);
 
         Name name = new Name(title);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -153,7 +124,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_ADD_EVENT, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_ADD_EVENT, truncateTitle(title)), true);
 
         return addResponse;
     }
@@ -170,7 +141,7 @@ public class Logic {
      */
     public Boolean addEventLess(String title, String fuzzyTime, String quantity, String timeUnit) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_EVENT + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_EVENT + title);
 
         LocalDateTime start = fuzzyParseTime(fuzzyTime);
         LocalDateTime end = start.plus(Long.parseLong(quantity), generateTimeUnit(timeUnit));
@@ -193,7 +164,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_ADD_EVENT, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_ADD_EVENT, truncateTitle(title)), true);
 
         return addResponse;
     }
@@ -207,7 +178,7 @@ public class Logic {
      */
     public Boolean addDeadline(String title, String endDate, String endTime) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_DEADLINE + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_DEADLINE + title);
 
         Name name = new Name(title);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -223,7 +194,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_ADD_DEADLINE, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_ADD_DEADLINE, truncateTitle(title)), true);
 
         return addResponse;
     }
@@ -237,7 +208,7 @@ public class Logic {
      */
     public Boolean addDeadlineLess(String title, String fuzzyTime) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_DEADLINE + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_DEADLINE + title);
 
         Name name = new Name(title);
         LocalDateTime end = fuzzyParseTime(fuzzyTime);
@@ -252,7 +223,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(newEvent);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_ADD_DEADLINE, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_ADD_DEADLINE, truncateTitle(title)), true);
 
         return addResponse;
     }
@@ -271,7 +242,7 @@ public class Logic {
      */
     public Boolean addRecurringEvent(String interval, String title, String startDate, String startTime, String quantity,
             String timeUnit) {
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_RECURRING_EVENT + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_RECURRING_EVENT + title);
 
         Boolean addResponse = addEvent(title, startDate, startTime, quantity, timeUnit);
         Boolean setRecurringResponse = setRecurring(title, true, interval);
@@ -290,7 +261,7 @@ public class Logic {
      */
     public Boolean addRecurringEventLess(String interval, String title, String fuzzyTime, String quantity,
             String timeUnit) {
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_RECURRING_EVENT + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_RECURRING_EVENT + title);
 
         Boolean addResponse = addEventLess(title, fuzzyTime, quantity, timeUnit);
         Boolean setRecurringResponse = setRecurring(title, true, interval);
@@ -307,7 +278,7 @@ public class Logic {
      * @return Boolean  true if the recurring deadline is successfully added
      */
     public Boolean addRecurringDeadline(String interval, String title, String endDate, String endTime) {
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_RECURRING_DEADLINE + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_RECURRING_DEADLINE + title);
 
         Boolean addResponse = addDeadline(title, endDate, endTime);
         Boolean setRecurringResponse = setRecurring(title, true, interval);
@@ -323,7 +294,7 @@ public class Logic {
      * @return Boolean   true if the recurring deadline is successfully added
      */
     public Boolean addRecurringDeadlineLess(String interval, String title, String fuzzyTime) {
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_ADDING_RECURRING_DEADLINE + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_ADDING_RECURRING_DEADLINE + title);
 
         Boolean addResponse = addDeadlineLess(title, fuzzyTime);
         Boolean setRecurringResponse = setRecurring(title, true, interval);
@@ -340,7 +311,7 @@ public class Logic {
      */
     public Boolean edit(String title, String fieldName, String newValue) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBase.delete(tempTask);
@@ -393,7 +364,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_EDIT, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_EDIT, truncateTitle(title)), true);
 
         return deleteResponse && addResponse;
     }
@@ -406,14 +377,14 @@ public class Logic {
      */
     public Boolean delete(String title) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_DELETING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_DELETING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBase.delete(tempTask);
 
         // UI handling
         uiHandler.refresh();
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_DELETE, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_DELETE, truncateTitle(title)), true);
 
         return deleteResponse;
     }
@@ -431,13 +402,13 @@ public class Logic {
             input = input + " " + keyword[i];
         }
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_SEARCHING_TASK + input);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_SEARCHING_TASK + input);
 
         ArrayList<Task> tempTaskList = dataBase.smartSearch(keyword);
 
         // UI handling
         uiHandler.display(tempTaskList);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_SEARCH, truncateTitle(keyword)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_SEARCH, truncateTitle(keyword)), true);
 
         return true;
     }
@@ -451,13 +422,13 @@ public class Logic {
      */
     public Boolean filter(String category) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_SEARCHING_TASK + category);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_SEARCHING_TASK + category);
 
         ArrayList<Task> tempTaskList = dataBase.retrieve(new SearchCommand("CATEGORY", category));
 
         // UI handling
         uiHandler.display(tempTaskList);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_FILTER, truncateTitle(category)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_FILTER, truncateTitle(category)), true);
 
         return true;
     }
@@ -470,13 +441,13 @@ public class Logic {
      * @return Boolean    return true if the list of task is successfully sorted
      */
     public Boolean sort(String fieldName, String order) {
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_SORTING_TASK + fieldName);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_SORTING_TASK + fieldName);
 
         dataBase.sort(fieldName, order);
 
         // UI handling
         uiHandler.refresh();
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_SORT, truncateTitle(fieldName)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_SORT, truncateTitle(fieldName)), true);
 
         return true;
     }
@@ -490,7 +461,7 @@ public class Logic {
      */
     public Boolean label(String title, String category) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBase.delete(tempTask);
@@ -501,7 +472,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_LABEL, truncateTitle(title), truncateTitle(category)),
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_LABEL, truncateTitle(title), truncateTitle(category)),
                 true);
 
         return deleteResponse && addResponse;
@@ -517,7 +488,7 @@ public class Logic {
      */
     public Boolean setRecurring(String title, Boolean status, String interval) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBase.delete(tempTask);
@@ -532,9 +503,9 @@ public class Logic {
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
         if (status) {
-            uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_RECURRING, truncateTitle(title)), true);
+            uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_RECURRING, truncateTitle(title)), true);
         } else {
-            uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_NON_RECURRING, truncateTitle(title)), true);
+            uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_NON_RECURRING, truncateTitle(title)), true);
         }
 
         return deleteResponse && addResponse;
@@ -550,7 +521,7 @@ public class Logic {
      */
     public Boolean postpone(String title, String quantity, String timeUnit) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBase.delete(tempTask);
@@ -582,7 +553,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_POSTPONE, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_POSTPONE, truncateTitle(title)), true);
 
         return deleteResponse && addResponse;
     }
@@ -597,7 +568,7 @@ public class Logic {
      */
     public Boolean forward(String title, String quantity, String timeUnit) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBase.delete(tempTask);
@@ -628,7 +599,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_FORWARD, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_FORWARD, truncateTitle(title)), true);
 
         return deleteResponse && addResponse;
     }
@@ -671,7 +642,7 @@ public class Logic {
      */
     public Boolean remind(String title) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         return remindBef(title, "0", "minute");
     }
@@ -687,7 +658,7 @@ public class Logic {
      */
     public Boolean remindBef(String title, String quantity, String timeUnit) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         LocalDateTime reminderTime = null;
@@ -721,7 +692,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_REMIND, truncateTitle(title), truncateTitle(remindTimeString)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_REMIND, truncateTitle(title), truncateTitle(remindTimeString)), true);
 
         return deleteResponse && addResponse;
     }
@@ -766,7 +737,7 @@ public class Logic {
      */
     public Boolean done(String title) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBase.delete(tempTask);
@@ -804,7 +775,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_ARCHIVE, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_ARCHIVE, truncateTitle(title)), true);
 
         return deleteResponse && addResponse;
     }
@@ -817,7 +788,7 @@ public class Logic {
      */
     public Boolean undone(String title) {
 
-        logger.logAction(COMPONENT_LOGIC, MESSAGE_EDITING_TASK + title);
+        logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
         Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
         Boolean deleteResponse = dataBase.delete(tempTask);
@@ -828,7 +799,7 @@ public class Logic {
         // UI handling
         uiHandler.refresh();
         uiHandler.highLight(tempTask);
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_UNARCHIVE, truncateTitle(title)), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_UNARCHIVE, truncateTitle(title)), true);
 
         return deleteResponse && addResponse;
     }
@@ -856,7 +827,7 @@ public class Logic {
         
         // UI handling
         uiHandler.refresh();
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_UNDO, undostep), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_UNDO, undostep), true);
 
         return undoResponse;
     }
@@ -874,7 +845,7 @@ public class Logic {
         
         // UI handling
         uiHandler.refresh();
-        uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_REDO, redostep), true);
+        uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_REDO, redostep), true);
 
         return redoResponse;
     }
@@ -889,7 +860,7 @@ public class Logic {
         
         // UI handling
         uiHandler.refresh();
-        uiHandler.sendMessage(MESSAGE_SUCCESS_REFRESH, true);
+        uiHandler.sendMessage(ResponseMessage.MESSAGE_SUCCESS_REFRESH, true);
         
         return true;
     }
@@ -906,9 +877,9 @@ public class Logic {
         // UI handling
         if (success) {
             uiHandler.refresh();
-            uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_MOVE_DIR, path), true);
+            uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_MOVE_DIR, path), true);
         } else {
-            uiHandler.sendMessage(String.format(MESSAGE_FAILURE_MOVE_DIR, path), true);
+            uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_FAILURE_MOVE_DIR, path), true);
         }
         
         return success;
@@ -926,9 +897,9 @@ public class Logic {
         // UI handling
         if (success) {
             uiHandler.refresh();
-            uiHandler.sendMessage(String.format(MESSAGE_SUCCESS_OPEN_DIR, path), true);
+            uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_OPEN_DIR, path), true);
         } else {
-            uiHandler.sendMessage(String.format(MESSAGE_FAILURE_OPEN_DIR, path), true);
+            uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_FAILURE_OPEN_DIR, path), true);
         }
         
         return success;
