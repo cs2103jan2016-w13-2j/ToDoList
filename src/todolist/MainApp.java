@@ -921,7 +921,6 @@ public class MainApp extends Application {
         }
 
         mainController.refreshReminders();
-        // settingsController.loadCalendar(mainController.getTaskListView().getItems());
         settingsController.setupPage(mainController.getTaskListView().getItems());
     }
 

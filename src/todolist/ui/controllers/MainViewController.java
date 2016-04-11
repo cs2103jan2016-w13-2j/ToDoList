@@ -55,7 +55,7 @@ public class MainViewController {
     private static final String MESSAGE_CALL_LOGIC_COMPONENT = "User input detected at UI component --calling--> Logic component for processing.";
     private static final String MESSAGE_CLEAR_TEXTFIELD = "Text field cleared for next input.";
     private static final String ERROR_PROCESSING_USER_INPUT = "Error processing user input.";
-    private static final String MESSAGE_UPDATED_MAIN_TASKLIST = "Updated display task list [HOME].";
+    private static final String MESSAGE_UPDATED_MAIN_TASKLIST = "Updated display task list [ALL].";
     private static final String MESSAGE_HIGHLIGHT_ITEM = "Item #%1$s in display task list highlighted.";
     private static final String MESSAGE_HIGHLIGHT_ITEM_NOT_FOUND = "Item to be highlighted cannot be found in display task list.";
     private static final String NIGHT_MODE = "night-mode";

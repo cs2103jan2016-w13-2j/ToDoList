@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+
 import todolist.MainApp;
 import todolist.common.UtilityLogger;
 import todolist.ui.TaskWrapper;
@@ -26,11 +29,10 @@ import todolist.ui.TaskWrapper;
  */
 public class SideBarController {
 
+    private static final String BUBBLE_COUNT = "%d";
     /*** TAB STYLES ***/
     private static final String STYLE_TAB_NORMAL = "-fx-background-color: transparent;";
     private static final String STYLE_TAB_FOCUSED = "-fx-background-color: #069A8E;";
-    // private static final String STYLE_TAB_FOCUSED_DARK =
-    // "-fx-background-color: #EB586F;";
 
     /*** VIEWS ***/
 
@@ -116,6 +118,9 @@ public class SideBarController {
         mainApplication = mainApp;
     }
 
+    /*
+     * initialize initialises the controller with neccessary assets 
+     */
     @FXML
     public void initialize() {
         index = MainApp.getDefaultTab();
@@ -147,19 +152,26 @@ public class SideBarController {
     private void setClickTabLogic() {
         for (int i = 0; i < buttonArray.length; ++i) {
             Button button = buttonArray[i];
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    int index = getButtonIndex(button);
-                    mainApplication.loadPage(index);
-                }
-            });
+            setTabButtonCallback(button);
         }
+        setTodayLabelCallback();
+    }
 
+    private void setTodayLabelCallback() {
         todayLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 int index = getButtonIndex(today);
+                mainApplication.loadPage(index);
+            }
+        });
+    }
+
+    private void setTabButtonCallback(Button button) {
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                int index = getButtonIndex(button);
                 mainApplication.loadPage(index);
             }
         });
@@ -282,20 +294,33 @@ public class SideBarController {
         }
     }
 
+    /* 
+     * linkBubbles takes in a few controllers, counts and displays the number of ongoing tasks for the tab under each controller's control.
+     * 
+     * @param MainViewController[] controllers
+     * 
+     */
     public void linkBubbles(MainViewController[] controllers) {
         // Bubble Array
         Label[] bubbles = { allBubble, expiredBubble, todayBubble, weekBubble, doneBubble };
 
+        // Visit the display list of every controller
         for (int i = 0; i < controllers.length; ++i) {
+            
+            // Get current controller
             MainViewController controller = controllers[i];
 
+            // Only obtain filtered list if the controller is initialised
             if (controller != null) {
-                FilteredList<TaskWrapper> incomplete = new FilteredList<TaskWrapper>(
-                        controller.getTaskListView().getItems(), task -> !task.getIsCompleted());
-                bubbles[i].textProperty().bind(Bindings.format("%d", Bindings.size(incomplete)));
+                ObservableList<TaskWrapper> taskList = controller.getTaskListView().getItems();
+                FilteredList<TaskWrapper> incompleteTaskList = new FilteredList<TaskWrapper>(
+                        taskList, task -> !task.getIsCompleted());
+                StringProperty bubbleIndex = bubbles[i].textProperty();
+                bubbleIndex.bind(Bindings.format(BUBBLE_COUNT, Bindings.size(incompleteTaskList)));
                 
             }
             
+            // Hide if the count is zero
             if (Integer.parseInt(bubbles[i].getText()) == 0) {
                 bubbles[i].setVisible(false);
             } else {
