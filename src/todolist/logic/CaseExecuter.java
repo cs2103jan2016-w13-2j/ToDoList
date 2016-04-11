@@ -77,12 +77,10 @@ public class CaseExecuter {
 
 	protected void edit(String[] arg) {
 		actionOnIndex("EDIT", arg);
-
 	}
 
 	protected void delete(String[] arg) {
 		actionOnIndex("DELETE", arg);
-
 	}
 
 	protected void search(String[] arg) {
@@ -99,27 +97,22 @@ public class CaseExecuter {
 
 	protected void label(String[] arg) {
 		actionOnIndex("LABEL", arg);
-
 	}
 
 	protected void setRecurring(String[] arg) {
 		actionOnIndex("SET-RECURRING", arg);
-
 	}
 
 	protected void removeRecurring(String[] arg) {
 		actionOnIndex("REMOVE-RECURRING", arg);
-
 	}
 
 	protected void postpone(String[] arg) {
 		actionOnIndex("POSTPONE", arg);
-
 	}
 
 	protected void forward(String[] arg) {
 		actionOnIndex("FORWARD", arg);
-
 	}
 
 	protected void addRemind(String[] arg) {
@@ -140,17 +133,14 @@ public class CaseExecuter {
 
 	protected void remindBef(String[] arg) {
 		actionOnIndex("REMIND-BEF", arg);
-
 	}
 
 	protected void removeRemind(String[] arg) {
 		actionOnIndex("REMOVE-REMIND", arg);
-
 	}
 
 	protected void done(String[] arg) {
 		actionOnIndex("DONE", arg);
-
 	}
 
 	protected void undone(String[] arg) {
