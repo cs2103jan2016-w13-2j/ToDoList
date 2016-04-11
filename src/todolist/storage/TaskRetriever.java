@@ -43,7 +43,6 @@ public class TaskRetriever {
             resultList = retrieve_Category(command);
             break;
         case NAME:
-            System.out.println("name");
             resultList = retrieve_Name(command);
             break;
         case VIEW:

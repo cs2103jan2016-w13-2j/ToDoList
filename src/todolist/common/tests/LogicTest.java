@@ -186,10 +186,10 @@ public class LogicTest {
 
         String name = "title";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime end = LocalDateTime.parse("2016-04-09" + " " + "12:00", formatter);
+        LocalDateTime end = LocalDateTime.parse("2117-04-02" + " " + "12:00", formatter);
 
         // pass in the command to add a new deadline
-        logic.addRecurringDeadline("7-day", "title", "2016-04-02", "12:00");
+        logic.addRecurringDeadline("7-day", "title", "2117-04-02", "12:00");
 
         // check size of database
         ArrayList<Task> taskList = logic.dataBase.retrieveAll();
@@ -229,25 +229,6 @@ public class LogicTest {
         newEvent = logic.dataBase.retrieve(new SearchCommand("name", "title")).get(0);
         Boolean isEqual = newEvent.getDoneStatus().equals(true);
         assertTrue(isEqual);
-    }
-
-    /**
-     * test the archive function with non-existing task
-     */
-    @Test
-    public void testDone2() {
-        logic.clean();
-
-        // add a new event
-        Name name = new Name("title");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime start = LocalDateTime.parse("2017-01-01" + " " + "14:00", formatter);
-        LocalDateTime end = start.plus(Long.parseLong("1"), ChronoUnit.DAYS);
-        Task newEvent = new Task(name, start, end, null, null, false, false, null);
-        logic.dataBase.add(newEvent);
-
-        // archive a non-existing event
-        assertFalse(logic.done("non-existing-task"));
     }
 
     @Test

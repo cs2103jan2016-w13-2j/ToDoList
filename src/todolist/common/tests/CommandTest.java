@@ -798,5 +798,5 @@ public class CommandTest {
         //check the start and end time        
         assertTrue(taskList.get(0).getStartTime().equals(startdate.get(0)));
         assertTrue(taskList.get(0).getEndTime().equals(enddate.get(0))); 
-    }  
+    }
 }

@@ -201,7 +201,6 @@ public class NormalCommandParserTest {
 		//check the title of the task
 		assertTrue(tokonizedCommand[1].trim().equals("cs2013 lecture".trim()));
 		//check the date
-		System.out.println("start date: " + tokonizedCommand[2]);
 		assertTrue(tokonizedCommand[2].trim().equals(date));
 		//check the start time
 		assertTrue(tokonizedCommand[3].trim().equals(startTime));
@@ -235,10 +234,8 @@ public class NormalCommandParserTest {
 		//check the date
 		assertTrue(tokonizedCommand[2].trim().equals(date));
 		//check timeInterval
-		System.out.println("timeinteval: " + tokonizedCommand[3]);
 		assertTrue(tokonizedCommand[3].trim().equals(timeInterval));
 		//check unit
-		System.out.println("unit: " + tokonizedCommand[4]);
 		assertTrue(tokonizedCommand[4].trim().equals(unit));
 	}
 	
