@@ -1,11 +1,9 @@
-//@@author yuxin
+//@@author A0131334W
 package todolist.storage;
 
 import java.io.BufferedReader;
 import com.google.gson.Gson;
-
 import todolist.model.Task;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,9 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-
-
-//@@author A0131334W
 
 /*
  * This class is to read and write from the file directly. It will be called by the database.
