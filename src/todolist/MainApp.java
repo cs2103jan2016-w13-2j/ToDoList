@@ -1033,30 +1033,31 @@ public class MainApp extends Application {
             if (mainController != null) {
                 return mainController.getTaskAt(pos);
             }
-            // Fallthrough
+            break;
         case 2:
             if (overdueController != null) {
                 return overdueController.getTaskAt(pos);
             }
-            // Fallthrough
+            break;
         case 3:
             if (todayController != null) {
                 return todayController.getTaskAt(pos);
             }
-            // Fallthrough
+            break;
         case 4:
             if (weekController != null) {
                 return weekController.getTaskAt(pos);
             }
-            // Fallthrough
+            break;
         case 5:
             if (archiveController != null) {
                 return archiveController.getTaskAt(pos);
             }
-            // Fallthrough
+            break;
         default:
             return null;
         }
+        return null;
     }
 
     /**

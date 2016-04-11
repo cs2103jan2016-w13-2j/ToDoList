@@ -12,6 +12,7 @@ public final class ResponseMessage {
 	protected static final String MESSAGE_SUCCESS_UNARCHIVE = "[%1$s] has been unarchived! (not what you want? try 'undo 1')";
 	protected static final String MESSAGE_SUCCESS_ARCHIVE = "[%1$s] has been archived! (not what you want? try 'undo 1')";
 	protected static final String MESSAGE_SUCCESS_REMIND = "[%1$s] is set to trigger a reminder on %2$s. (not what you want? try 'undo 1')";
+	protected static final String MESSAGE_SUCCESS_REMOVE_REMIND = "[%1$s]'s reminder is removed. (not what you want? try 'undo 1')";
 	protected static final String MESSAGE_SUCCESS_FORWARD = "[%1$s] has been brought forward! (not what you want? try 'undo 1')";
 	protected static final String MESSAGE_SUCCESS_POSTPONE = "[%1$s] has been postponed! (not what you want? try 'undo 1')";
 	protected static final String MESSAGE_SUCCESS_NON_RECURRING = "[%1$s] is now a one-time-off task. (not what you want? try 'undo 1')";

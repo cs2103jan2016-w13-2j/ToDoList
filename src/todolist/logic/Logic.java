@@ -780,14 +780,18 @@ public class Logic {
 		logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_EDITING_TASK + title);
 
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
-		
+
 		Boolean deleteResponse = dataBase.delete(tempTask);
 
 		tempTask.setReminder(new Reminder(false, null));
 
 		Boolean addResponse = dataBase.add(tempTask);
 
-		return addResponse&&deleteResponse;
+		uiHandler.refresh();
+		uiHandler.highLight(tempTask);
+		uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_REMOVE_REMIND, truncateTitle(title)), true);
+
+		return addResponse && deleteResponse;
 	}
 
 	/**
