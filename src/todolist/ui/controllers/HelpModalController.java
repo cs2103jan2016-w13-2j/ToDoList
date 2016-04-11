@@ -25,15 +25,21 @@ import todolist.common.UtilityLogger;
 //@@author A0123994W
 public class HelpModalController {
 
+    /*
+     * EntryComparator compares 2 help table entries and sorts them accordingly.
+     */
     public class EntryComparator implements Comparator<CommandPair> {
-        public int compare(CommandPair obj1, CommandPair obj2) {
-            if (obj1.getCommand() == obj2.getCommand()) {
+        public int compare(CommandPair pair1, CommandPair pair2) {
+            if (pair1.getCommand() == pair2.getCommand()) {
                 return 0;
             }
-            return obj1.getCommand().compareTo(obj2.getCommand());
+            return pair1.getCommand().compareTo(pair2.getCommand());
         }
     }
 
+    /*
+     * CommandPair wraps a help table entry.
+     */
     private class CommandPair {
         private SimpleStringProperty command = null;
         private SimpleStringProperty format = null;
@@ -71,21 +77,27 @@ public class HelpModalController {
         }
     }
 
+    // Messages and Defaults
     private static final String TITLE_POPUP_HELP = "Help";
-
     protected static final String MESSAGE_HIDE_MODAL = "Help modal popover hidden.";
     protected static final String MESSAGE_DISPLAY_MODAL = "Help modal popover displayed.";
 
+    // Window properties
     private static final double OPACITY = 0.90;
     private static final int BORDER_RADIUS = 10;
 
+    // Elements
     private BorderPane helpView = null;
     private UtilityLogger logger = null;
     private static PopOver modalPopup = null;
+    
+    // Initialised status
     private boolean initialized = false;
 
+    // Action Format HELP table
     private HashMap<String, String> actionFormatTable = null;
 
+    // HELP table elements
     @FXML
     private TableView<CommandPair> helpTable = null;
     @FXML
@@ -98,14 +110,23 @@ public class HelpModalController {
 
     ObservableList<CommandPair> entries = null;
 
+    /*
+     * Constructor sets up various elements such as logger and help table entries.
+     */
     public HelpModalController() {
         logger = new UtilityLogger();
         actionFormatTable = new HashMap<String, String>();
         entries = FXCollections.observableArrayList();
     }
 
+    /*
+     * initializeHelpModal initialises the PopOver for displaying the help table.
+     * 
+     * @return boolean isInitialized
+     */
     public boolean initializeHelpModal() {
 
+        // Sets up modal
         modalPopup = new PopOver();
         modalPopup.setContentNode(helpView);
         modalPopup.setCornerRadius(BORDER_RADIUS);
@@ -115,6 +136,7 @@ public class HelpModalController {
         modalPopup.setOpacity(OPACITY);
         modalPopup.setArrowSize(0);
 
+        // Allow ESC to close popup
         for (Node component : helpView.getChildren()) {
             component.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 
@@ -128,11 +150,18 @@ public class HelpModalController {
             });
         }
 
+        // Sets initialised flag after PopOver is created
         initialized = true;
         return initialized;
 
     }
 
+    /*
+     * displayPopup shows the help table, given a source node to display as the table.
+     * 
+     * @param Node pointSource
+     * 
+     */
     public void displayPopup(Node pointSource) {
         if (initialized) {
             populateCheatsheet();
@@ -144,6 +173,10 @@ public class HelpModalController {
         }
     }
 
+    /*
+     * initialize sets up the table values and factory settings for displaying every entry.
+     * 
+     */
     @FXML
     private void initialize() {
         // Initialize the person table with the two columns.
@@ -211,6 +244,11 @@ public class HelpModalController {
         entries.sort(new EntryComparator());
     }
 
+    /*
+     * getModalPopup returns a PopOver to access the help table popup.
+     * 
+     * @return PopOver helpTable
+     */
     public PopOver getModalPopup() {
         return modalPopup;
     }

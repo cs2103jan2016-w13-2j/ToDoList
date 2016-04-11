@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-
-import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,6 +18,8 @@ import todolist.model.Task;
 import todolist.ui.TaskListCell;
 import todolist.ui.TaskWrapper;
 import todolist.ui.TaskWrapper.TaskType;
+
+import javafx.util.Duration;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -163,11 +163,14 @@ public class MainViewController {
                 // Pass command line input for processing
                 try {
 
+                    // Clear field
                     commandField.clear();
                     logger.logAction(Component.UI, MESSAGE_CLEAR_TEXTFIELD);
 
+                    // Save field to history
                     getMainApplication().getCommandHistoryBackward().push(commandString);
 
+                    // Day and night mode theming
                     if (commandString.equals(NIGHT_MODE)) {
                         Scene scene = getMainApplication().getPrimaryStage().getScene();
                         scene.getStylesheets().remove(dayMode);
@@ -182,6 +185,7 @@ public class MainViewController {
                         getMainApplication().getPrimaryStage().setScene(scene);
                         getMainApplication().getPrimaryStage().show();
 
+                    // Call logic component for processing
                     } else {
                         getUiHandler().process(commandString);
                         logger.logComponentCall(Component.UI, MESSAGE_CALL_LOGIC_COMPONENT);
@@ -213,7 +217,7 @@ public class MainViewController {
             }
             scr.close();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return myList;
     }
@@ -499,6 +503,12 @@ public class MainViewController {
         }
     }
 
+    /*
+     * getCompletedCount returns the number of completed tasks in the current display list
+     * 
+     * @return int completedCount
+     * 
+     */
     public int getCompletedCount() {
         int count = 0;
         for (TaskWrapper task : listView.getItems()) {
@@ -510,14 +520,31 @@ public class MainViewController {
         return count;
     }
 
+    /*
+     * setPageIndex takes in the tab index and sets the page with the index as the current page
+     * 
+     * @param int tab
+     * 
+     */
     public void setPageIndex(int tab) {
         index = tab;
     }
 
+    /*
+     * getPageIndex retrieves the page index of the current page.
+     * 
+     * @return 
+     */
     public int getPageIndex() {
         return index;
     }
 
+    /*
+     * setPlaceHolder takes in a glyphSource directory and sets the glyph as the placeholder for empty list view(s).
+     * 
+     * @param String glyphSource
+     * 
+     */
     public void setPlaceHolder(String glyphSource) {
 
         VBox box = null;
@@ -528,24 +555,48 @@ public class MainViewController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
         box.visibleProperty().bind(Bindings.isEmpty(listView.getItems()));
         listView.setPlaceholder(box);
 
     }
 
+    /*
+     * getMainApplication returns the link-back to the MainApp
+     * 
+     * @return MainApp mainApplication
+     * 
+     */
     public MainApp getMainApplication() {
         return mainApplication;
     }
 
+    /*
+     * setMainApplication takes in the a link to the main application.
+     * 
+     * @param MainApp mainApplication
+     * 
+     */
     public void setMainApplication(MainApp mainApplication) {
         this.mainApplication = mainApplication;
     }
 
+    /*
+     * getUiHandler returns a UIHandler reference.
+     * 
+     * @return UIHandler uiHandler
+     * 
+     */
     public UIHandler getUiHandler() {
         return uiHandler;
     }
 
+    /*
+     * setUiHandler takes in the link to a UI handler.
+     * 
+     * @param UIHandler uiHandler
+     * 
+     */
     public void setUiHandler(UIHandler uiHandler) {
         this.uiHandler = uiHandler;
     }

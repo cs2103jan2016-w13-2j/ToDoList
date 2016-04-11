@@ -36,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
 import todolist.logic.Logic;
@@ -62,6 +63,12 @@ import todolist.ui.controllers.WeekController;
  */
 public class MainApp extends Application {
 
+    private static final String PLACEHOLDER_SETTINGS = "ui/views/SettingsPlaceHolder.fxml";
+    private static final String PLACEHOLDER_ARCHIVE = "ui/views/ArchivePlaceHolder.fxml";
+    private static final String PLACEHOLDER_WEEK = "ui/views/WeekPlaceHolder.fxml";
+    private static final String PLACEHOLDER_TODAY = "ui/views/TodayPlaceHolder.fxml";
+    private static final String PLACEHOLDER_OVERDUE = "ui/views/OverduePlaceHolder.fxml";
+    private static final String PLACEHOLDER_MAIN = "ui/views/MainViewPlaceHolder.fxml";
     // Window constants
     private static final double MIN_HEIGHT = 600;
     private static final double MIN_WIDTH = 400;
@@ -187,8 +194,10 @@ public class MainApp extends Application {
             "filter", "redo", "undo", "reset", "forward", "postpone", "remind", "set-recurring", "open", "task",
             "event", "deadline" };
 
+    // Mute property
     private BooleanProperty IS_MUTE = new SimpleBooleanProperty(false);
 
+    // Dictionary
     ObservableList<String> keywords = null;
 
     /*** CORE FUNCTIONS ***/
@@ -266,7 +275,7 @@ public class MainApp extends Application {
         KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN);
         KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
         KeyCodeCombination toggleMute = new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN);
-        
+
         IS_MUTE.addListener(new ChangeListener<Boolean>() {
 
             @Override
@@ -544,7 +553,7 @@ public class MainApp extends Application {
                 mainController = loader.getController();
                 mainController.setMainApp(this, uiHandlerUnit);
                 mainController.setPageIndex(ALL_TAB);
-                mainController.setPlaceHolder("ui/views/MainViewPlaceHolder.fxml");
+                mainController.setPlaceHolder(PLACEHOLDER_MAIN);
             }
 
             rootView.setCenter(mainView);
@@ -582,7 +591,7 @@ public class MainApp extends Application {
                 overdueController = loader.getController();
                 overdueController.setMainApp(this, uiHandlerUnit);
                 overdueController.setPageIndex(EXPIRED_TAB);
-                overdueController.setPlaceHolder("ui/views/OverduePlaceHolder.fxml");
+                overdueController.setPlaceHolder(PLACEHOLDER_OVERDUE);
             }
 
             // uiHandlerUnit.refresh();
@@ -612,7 +621,7 @@ public class MainApp extends Application {
                 todayController = loader.getController();
                 todayController.setMainApp(this, uiHandlerUnit);
                 todayController.setPageIndex(TODAY_TAB);
-                todayController.setPlaceHolder("ui/views/TodayPlaceHolder.fxml");
+                todayController.setPlaceHolder(PLACEHOLDER_TODAY);
             }
 
             // uiHandlerUnit.refresh();
@@ -643,7 +652,7 @@ public class MainApp extends Application {
                 weekController = loader.getController();
                 weekController.setMainApp(this, uiHandlerUnit);
                 weekController.setPageIndex(WEEK_TAB);
-                weekController.setPlaceHolder("ui/views/WeekPlaceHolder.fxml");
+                weekController.setPlaceHolder(PLACEHOLDER_WEEK);
 
             }
 
@@ -674,7 +683,7 @@ public class MainApp extends Application {
                 archiveController = loader.getController();
                 archiveController.setMainApp(this, uiHandlerUnit);
                 archiveController.setPageIndex(DONE_TAB);
-                archiveController.setPlaceHolder("ui/views/ArchivePlaceHolder.fxml");
+                archiveController.setPlaceHolder(PLACEHOLDER_ARCHIVE);
 
             }
 
@@ -702,7 +711,7 @@ public class MainApp extends Application {
                 settingsController = loader.getController();
                 settingsController.setMainApp(this, uiHandlerUnit);
                 settingsController.setPageIndex(OPTIONS_TAB);
-                settingsController.setPlaceHolder("ui/views/SettingsPlaceHolder.fxml");
+                settingsController.setPlaceHolder(PLACEHOLDER_SETTINGS);
 
             }
 
@@ -992,6 +1001,14 @@ public class MainApp extends Application {
 
     /*** GETTERS AND SETTERS ***/
 
+    /*
+     * getTaskAt returns a task given its position in the current displayed
+     * list, or a null if such as task does not exist.
+     * 
+     * @param int position
+     * 
+     * @return Task referredTask
+     */
     public Task getTaskAt(int pos) {
         switch (getPage()) {
         case 1:
@@ -1024,50 +1041,117 @@ public class MainApp extends Application {
         }
     }
 
+    /*
+     * getPrimaryStage returns the current stage that is hosting the display.
+     * 
+     * @return Stage primaryStage
+     * 
+     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
 
+    /*
+     * setPrimaryStage sets the current primaryStage as the given stage.
+     * 
+     * @param Stage primaryStage
+     */
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
+    /*
+     * getHelpModal returns a HelpModalController that controls the logic for help display.
+     * 
+     * @return HelpModalController helpModalController
+     * 
+     */
     public HelpModalController getHelpModal() {
         return helpModal;
     }
 
+    /*
+     * setHelpModal sets the given helpModalController as the helpModalController for the help table.
+     * 
+     * @param HelpModalController helpModalController
+     * 
+     */
     public void setHelpModal(HelpModalController helpModal) {
         this.helpModal = helpModal;
     }
 
+    /*
+     * getSideBarController returns the current sideBarController that controls the logic of the sidebar.
+     * 
+     * @return SideBarController sidebarController
+     * 
+     */
     public SideBarController getSideBarController() {
         return sidebarController;
     }
 
+    /*
+     * getCommandHistoryBackward returns the stack of command history saved before the current visited entry.
+     * 
+     * @return Stack<String> commandHistoryBackward
+     */
     public Stack<String> getCommandHistoryBackward() {
         return commandHistoryBackward;
     }
 
+    /*
+     * getCommandHistoryForward returns the stack of command history saved after the current visited entry.
+     * 
+     * @return Stack<String> commandHistoryForward
+     */
     public Stack<String> getCommandHistoryForward() {
         return commandHistoryForward;
     }
 
+    /*
+     * getHelpTab returns the tab number that refers to the help tab.
+     * 
+     * return int HELP_TAB
+     */
     public static int getHelpTab() {
         return HELP_TAB;
     }
 
+    /*
+     * getSuggestions returns the array of suggestions that displays for autocomplete. 
+     * 
+     * @return String[] suggestions
+     */
     public static String[] getSuggestions() {
         return suggestions;
     }
 
+    /*
+     * getDefaultTab returns the index referring to the default tab.
+     * 
+     * @return int defaultTabIndex
+     * 
+     */
     public static int getDefaultTab() {
         return DEFAULT_TAB;
     }
 
+    /*
+     * getApplicationIcon returns the path for the application icon.
+     * 
+     * @return String applicationIconPath
+     * 
+     */
     public static String getApplicationIcon() {
         return APPLICATION_ICON;
     }
 
+    /*
+     * isMute returns the status of the sound settings.
+     * 
+     * @return boolean isMute
+     * 
+     */
     public boolean isMute() {
         return IS_MUTE.get();
     }
