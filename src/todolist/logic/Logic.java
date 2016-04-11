@@ -402,12 +402,9 @@ public class Logic {
 	 *            the keyword in title to search for
 	 * @return Boolean return true if there is at one search result
 	 */
-	public Boolean search(String[] keyword) {
-		String input = keyword[0];
-
-		for (int i = 1; i < keyword.length; i++) {
-			input = input + " " + keyword[i];
-		}
+	public Boolean search(String input) {
+		
+		String[] keyword = input.split(" ");
 
 		logger.logAction(COMPONENT_LOGIC, ResponseMessage.MESSAGE_SEARCHING_TASK + input);
 

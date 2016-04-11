@@ -24,6 +24,8 @@ public class ErrorBase {
 				"Your command to EDIT TASK was incomplete! Please check HELP for formats.");
 		errorBase.put(("FILTER" + "INCOMPLETE"),
 				"Your command to FILTER (CATEGORY) was incomplete! Please check HELP for formats.");
+		errorBase.put(("SEARCH" + "INCOMPLETE"),
+				"Your command to SEARCH (KEYWORD) was incomplete! Please check HELP for formats.");
 		errorBase.put(("SET-RECURRING" + "INCOMPLETE"),
 				"Your command to SET RECURRENCE was incomplete! Please check HELP for formats.");
 		errorBase.put(("LABEL" + "INCOMPLETE"),

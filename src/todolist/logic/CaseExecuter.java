@@ -84,7 +84,7 @@ public class CaseExecuter {
 	}
 
 	protected void search(String[] arg) {
-		logic.search(arg);
+		logic.search(arg[0]);
 	}
 
 	protected void filter(String[] arg) {
