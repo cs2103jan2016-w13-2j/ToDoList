@@ -311,7 +311,6 @@ public class HelpModalController {
 		actionFormatTable.put("[UP-ARROW | DOWN-ARROW]", "[keyboard shortcut] browsing the task list");
 		actionFormatTable.put("[ALT + UP | ALT + DOWN]", "[keyboard shortcut] browsing command history");
 		actionFormatTable.put("[ESC]", "[keyboard shortcut] closing popups for help and reminders");
-		actionFormatTable.put("[TAB] | [F1 | F2 | ... | F7]", "[keyboard shortcut] browsing tabs or pages");
 		actionFormatTable.put("[CRTL + K] for command and [CRTL + L] for list", "[keyboard shortcut] change context between command field and task list");
 		actionFormatTable.put("[CRTL + M]", "[keyboard shortcut] mute/unmute");
 		
