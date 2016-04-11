@@ -33,9 +33,7 @@ public class FlexiCommandParser {
 	public TokenizedCommand parse(String input) {
 
 		input = input.replaceAll("\"", "");
-
 		input = input.trim();
-
 		String temp[] = input.split(" ");
 
 		if (input.equals("")) {
@@ -45,9 +43,11 @@ public class FlexiCommandParser {
 		Parser parser = new Parser(TimeZone.getTimeZone(ZoneOffset.systemDefault()));
 		List<DateGroup> groups = parser.parse(input);
 		List<Date> dates = null;
+		
 		int[] column = new int[] { 0, 0 };
 		int[] length = new int[] { 0, 0 };
 		int counter = 0;
+		
 		for (DateGroup group : groups) {
 			dates = group.getDates();
 			column[counter] = group.getPosition();
@@ -58,81 +58,110 @@ public class FlexiCommandParser {
 		String result = null;
 
 		if (dates == null || dates.size() == 0) {
-			return new TokenizedCommand("add", new String[] { "task", input });
+			return addTask(input);
 		} else {
-			if (column[1] == 0) {
-				System.out.println(input.substring(0, column[0] - 1));
-				System.out.println(input.substring(column[0] + length[0] - 1));
-
-				result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0] - 1);
-			} else {
-				result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0], column[1] - 1)
-						+ input.substring(column[1] + length[1] - 1);
-			}
+			result = removeTimeInfo(input, column, length);
 
 			if (dates.size() == 1) {
-				Date deadline = dates.get(0);
-
-				Instant instant = Instant.ofEpochMilli(deadline.getTime());
-				LocalDateTime end = LocalDateTime.ofInstant(instant, ZoneOffset.systemDefault());
-
-				DecimalFormat decimalFormatter = new DecimalFormat("00");
-				String deadlineDate = end.getYear() + "-" + decimalFormatter.format(end.getMonthValue()) + "-"
-						+ decimalFormatter.format(end.getDayOfMonth());
-
-				String deadlineTime = decimalFormatter.format(end.getHour()) + ":"
-						+ decimalFormatter.format(end.getMinute());
-
-				if (end.isBefore(LocalDateTime.now().plus(10, ChronoUnit.SECONDS))
-						&& end.plus(10, ChronoUnit.SECONDS).isAfter(LocalDateTime.now())
-						&& input.toLowerCase().contains("today")) {
-					deadlineTime = "23:59";
-				}
-
-				result = keywordFilter(result);
-
-				System.out.println(result + "hello");
-
-				if (result.toLowerCase().contains("breakfast")) {
-					deadlineTime = "09:00";
-				}
-
-				if (result.toLowerCase().contains("lunch")) {
-					deadlineTime = "13:00";
-				}
-
-				if (result.toLowerCase().contains("dinner")) {
-					deadlineTime = "19:00";
-				}
-				if (result.toLowerCase().contains("supper")) {
-					deadlineTime = "23:00";
-				}
-
-				return new TokenizedCommand("add", new String[] { "deadline", result, deadlineDate, deadlineTime });
-
+				return addDeadline(result, dates);
 			} else {
-				DecimalFormat decimalFormatter = new DecimalFormat("00");
-
-				Date startTimeOriginal = dates.get(0);
-				Date endTimeOriginal = dates.get(1);
-
-				Instant startInstant = Instant.ofEpochMilli(startTimeOriginal.getTime());
-				LocalDateTime start = LocalDateTime.ofInstant(startInstant, ZoneId.systemDefault());
-
-				String startDate = start.getYear() + "-" + decimalFormatter.format(start.getMonthValue()) + "-"
-						+ decimalFormatter.format(start.getDayOfMonth());
-
-				String startTime = decimalFormatter.format(start.getHour()) + ":"
-						+ decimalFormatter.format(start.getMinute());
-
-				int interval = (int) getDateDiff(startTimeOriginal, endTimeOriginal) / 1000 / 60;
-
-				result = keywordFilter(result);
-
-				return new TokenizedCommand("add",
-						new String[] { "event", result, startDate, startTime, Integer.toString(interval), "minute" });
+				return addEvent(result, dates);
 			}
 		}
+	}
+
+	private TokenizedCommand addTask(String input) {
+		return new TokenizedCommand("add", new String[] { "task", input });
+	}
+
+	private TokenizedCommand addDeadline(String input, List<Date> dates) {
+		String result = input;
+
+		Date deadline = dates.get(0);
+
+		Instant instant = Instant.ofEpochMilli(deadline.getTime());
+		LocalDateTime end = LocalDateTime.ofInstant(instant, ZoneOffset.systemDefault());
+
+		DecimalFormat decimalFormatter = new DecimalFormat("00");
+		String deadlineDate = end.getYear() + "-" + decimalFormatter.format(end.getMonthValue()) + "-"
+				+ decimalFormatter.format(end.getDayOfMonth());
+
+		String deadlineTime = decimalFormatter.format(end.getHour()) + ":" + decimalFormatter.format(end.getMinute());
+
+		deadlineTime = searchKeywordToday(input, end, deadlineTime);
+
+		result = keywordFilter(result);
+
+		deadlineTime = searchKeywordTime(result, deadlineTime);
+
+		return new TokenizedCommand("add", new String[] { "deadline", result, deadlineDate, deadlineTime });
+	}
+	
+	private TokenizedCommand addEvent(String input, List<Date> dates) {
+		String result = input;
+		
+		DecimalFormat decimalFormatter = new DecimalFormat("00");
+
+		Date startTimeOriginal = dates.get(0);
+		Date endTimeOriginal = dates.get(1);
+
+		Instant startInstant = Instant.ofEpochMilli(startTimeOriginal.getTime());
+		LocalDateTime start = LocalDateTime.ofInstant(startInstant, ZoneId.systemDefault());
+
+		String startDate = start.getYear() + "-" + decimalFormatter.format(start.getMonthValue()) + "-"
+				+ decimalFormatter.format(start.getDayOfMonth());
+
+		String startTime = decimalFormatter.format(start.getHour()) + ":"
+				+ decimalFormatter.format(start.getMinute());
+
+		int interval = (int) getDateDiff(startTimeOriginal, endTimeOriginal) / 1000 / 60;
+
+		result = keywordFilter(result);
+
+		return new TokenizedCommand("add",
+				new String[] { "event", result, startDate, startTime, Integer.toString(interval), "minute" });
+	}
+
+	private String removeTimeInfo(String input, int[] column, int[] length) {
+		String result = input;
+		if (column[1] == 0) {
+			result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0] - 1);
+		} else {
+			result = input.substring(0, column[0] - 1) + input.substring(column[0] + length[0], column[1] - 1)
+					+ input.substring(column[1] + length[1] - 1);
+		}
+		return result;
+	}
+	
+	private String searchKeywordToday(String input, LocalDateTime end, String originalDeadline) {
+		String deadlineTime = originalDeadline;
+		if (end.isBefore(LocalDateTime.now().plus(10, ChronoUnit.SECONDS))
+				&& end.plus(10, ChronoUnit.SECONDS).isAfter(LocalDateTime.now())
+				&& input.toLowerCase().contains("today")) {
+			deadlineTime = "23:59";
+		}
+		return deadlineTime;
+	}
+	
+	private String searchKeywordTime(String input, String originalDeadline) {
+		String deadlineTime = originalDeadline;
+		
+		if (input.toLowerCase().contains("breakfast")) {
+			deadlineTime = "09:00";
+		}
+
+		if (input.toLowerCase().contains("lunch")) {
+			deadlineTime = "13:00";
+		}
+
+		if (input.toLowerCase().contains("dinner")) {
+			deadlineTime = "19:00";
+		}
+		if (input.toLowerCase().contains("supper")) {
+			deadlineTime = "23:00";
+		}
+		
+		return deadlineTime;
 	}
 
 	private String keywordFilter(String input) {
