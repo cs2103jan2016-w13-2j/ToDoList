@@ -156,17 +156,20 @@ public class FunctionChecker {
 		}
 	}
 
-	protected InputException addRemindBefChecker(String quantity, String timeUnit, String[] arg) {
+	protected InputException addRemindBefChecker(String type, String title, String[] arg) {
+	    String quantity = arg[arg.length - 2];
+	    String timeUnit = arg[arg.length - 1];
+
+
 		if (validQuantity(quantity)) {
 			if (validUnit(timeUnit)) {
-				String type = arg[0];
 				switch (type) {
 				case "event":
-					return addEventChecker(arg[1], arg[2], arg[3], arg[4], arg[5]);
+					return addEventChecker(title, arg[0], arg[1], arg[2], arg[3]);
 				case "deadline":
-					return addDeadlineChecker(arg[1], arg[2], arg[3]);
+					return addDeadlineChecker(title, arg[0], arg[1]);
 				case "task":
-					return addTaskChecker(arg[1]);
+					return addTaskChecker(title);
 				default:
 					return new InputException("ADD REMIND BEF", "INVALID TYPE");
 				}
@@ -431,6 +434,7 @@ public class FunctionChecker {
 				index[i] = Integer.parseInt(temp[i]);
 			} else {
 				flag = false;
+				System.out.println("\n THIS IS NOT A NUMBER (WHILE CHECKING MULTIPLE)");
 			}
 		}
 
