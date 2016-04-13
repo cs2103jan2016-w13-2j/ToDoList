@@ -425,13 +425,18 @@ public class FunctionChecker {
 	}
 
 	protected InputException indexChecker(String type, String[] arg) {
+        for (int i = 1; i < arg.length; ++i) {
+            arg[0] += " " + arg[i];
+        }
 		String temp[] = arg[0].split(",");
+	
 		int[] index = new int[temp.length];
 		Boolean flag = true;
 
 		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index[i] = Integer.parseInt(temp[i]);
+		    String currentStr = temp[i].trim();
+			if (isInteger(currentStr)) {
+				index[i] = Integer.parseInt(currentStr);
 			} else {
 				flag = false;
 				System.out.println("\n THIS IS NOT A NUMBER (WHILE CHECKING MULTIPLE)");
@@ -449,7 +454,7 @@ public class FunctionChecker {
 		for (int i = 0; i < index.length; i++) {
 			Task task = logic.getMainApp().getTaskAt(index[i]);
 			if (task == null) {
-				return new InputException(type, "TASK NOT EXIST");
+				return new InputException(type, "NOT EXIST");
 			} else {
 				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
 				InputException tempException = typeCaseSwitcher(type, taskname, arg);

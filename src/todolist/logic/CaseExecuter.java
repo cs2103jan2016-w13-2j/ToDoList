@@ -193,8 +193,10 @@ public class CaseExecuter {
 		String name[] = new String[temp.length];
 		Boolean flag = true;
 		for (int i = 0; i < temp.length; i++) {
-			if (isInteger(temp[i])) {
-				index = Integer.parseInt(temp[i]);
+		    String trimmed = temp[i].trim();
+		    System.out.println(trimmed);
+			if (isInteger(trimmed)) {
+				index = Integer.parseInt(trimmed);
 				name[i] = logic.getMainApp().getTaskAt(index).getName().getName();
 			} else {
 				flag = false;

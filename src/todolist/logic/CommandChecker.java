@@ -122,9 +122,12 @@ public class CommandChecker {
 	}
 
 	protected InputException search(String[] arg) {
-		if (arg.length != 1) {
+		if (arg.length < 1) {
 			return new InputException("SEARCH", "INCOMPLETE");
 		} else {
+		    for (int i = 1; i < arg.length; ++i) {
+		        arg[0] += " " + arg[i];
+		    }
 			return functionChecker.searchChecker(arg);
 		}
 	}
@@ -222,7 +225,7 @@ public class CommandChecker {
 	}
 
 	protected InputException done(String[] arg) {
-		if (arg.length != 1) {
+		if (arg.length < 1) {
 			return new InputException("DONE", "INCOMPLETE");
 		} else {
 			return functionChecker.indexChecker("DONE", arg);
@@ -230,7 +233,7 @@ public class CommandChecker {
 	}
 
 	protected InputException undone(String[] arg) {
-		if (arg.length != 1) {
+		if (arg.length < 1) {
 			return new InputException("UNDONE", "INCOMPLETE");
 		} else {
 			return functionChecker.indexChecker("UNDONE", arg);
