@@ -321,17 +321,11 @@ public class Logic {
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 		switch (fieldName) {
 		case "title":
 			tempTask.setName(new Name(newValue));
-			break;
-		case "done":
-			tempTask.setDoneStatus(true);
-			break;
-		case "undone":
-			tempTask.setDoneStatus(false);
 			break;
 		case "start-time":
 			LocalDateTime start = null;
@@ -345,6 +339,9 @@ public class Logic {
 					tempTask.setEndTime(start);
 				} else {
 					tempTask.setStartTime(start);
+					if(tempTask.getEndTime().isBefore(start)) {
+						tempTask.setEndTime(start);
+					}
 				}
 			}
 			break;
@@ -359,6 +356,9 @@ public class Logic {
 
 			} else {
 				end = LocalDateTime.parse(newValue, formatter);
+				if(tempTask.getStartTime().isAfter(end)) {
+					tempTask.setStartTime(end);
+				}
 				tempTask.setEndTime(end);
 			}
 			break;
@@ -828,9 +828,16 @@ public class Logic {
 				LocalDateTime oldStartTime = tempTask.getStartTime();
 				newStartTime = oldStartTime.plus(Long.parseLong(length), generateTimeUnit(unit));
 			}
-
-			Task newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
-					tempTask.getReminder(), false, true, interval);
+			
+			Task newTempTask = null;
+			if(tempTask.getReminder() != null && tempTask.getReminder().getStatus()) {
+				Reminder newReminder = new Reminder(true, tempTask.getReminder().getTime().plus(Long.parseLong(length), generateTimeUnit(unit)));
+				newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
+						newReminder, false, true, interval);
+			} else {
+				newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
+						tempTask.getReminder(), false, true, interval);
+			}
 			addResponse = dataBase.add(newTempTask);
 
 		}

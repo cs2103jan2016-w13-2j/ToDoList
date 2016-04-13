@@ -21,18 +21,51 @@ public class FunctionChecker {
 	}
 
 	protected InputException addTaskChecker(String title) {
-		if (noRepeat(title)) {
-			return new InputException();
+		if (!title.equals("")) {
+			if (noRepeat(title)) {
+				return new InputException();
+			} else {
+				return new InputException("ADD", "REPEAT TITLE");
+			}
 		} else {
-			return new InputException("ADD", "REPEAT TITLE");
+			return new InputException("ADD", "EMPTY TITLE");
 		}
 	}
 
 	protected InputException addEventChecker(String title, String startDate, String startTime, String quantity,
 			String timeUnit) {
-		if (noRepeat(title)) {
-			if (validFuzzyDate(startDate)) {
-				if (validTime(startTime)) {
+		if (!title.equals("")) {
+			if (noRepeat(title)) {
+				if (validFuzzyDate(startDate)) {
+					if (validTime(startTime)) {
+						if (validQuantity(quantity)) {
+							if (validUnit(timeUnit)) {
+								return new InputException();
+							} else {
+								return new InputException("ADD EVENT", "INVALID TIME UNIT");
+							}
+						} else {
+							return new InputException("ADD EVENT", "INVALID QUANTITY");
+						}
+					} else {
+						return new InputException("ADD EVENT", "INVALID START TIME");
+					}
+				} else {
+					return new InputException("ADD EVENT", "INVALID START DATE");
+				}
+			} else {
+				return new InputException("ADD", "REPEAT TITLE");
+			}
+		} else {
+			return new InputException("ADD", "EMPTY TITLE");
+		}
+
+	}
+
+	protected InputException addEventLessChecker(String title, String fuzzyTime, String quantity, String timeUnit) {
+		if (!title.equals("")) {
+			if (noRepeat(title)) {
+				if (validFuzzyTime(fuzzyTime)) {
 					if (validQuantity(quantity)) {
 						if (validUnit(timeUnit)) {
 							return new InputException();
@@ -46,93 +79,98 @@ public class FunctionChecker {
 					return new InputException("ADD EVENT", "INVALID START TIME");
 				}
 			} else {
-				return new InputException("ADD EVENT", "INVALID START DATE");
+				return new InputException("ADD EVENT", "INVLAID TIME");
 			}
 		} else {
-			return new InputException("ADD", "REPEAT TITLE");
+			return new InputException("ADD", "EMPTY TITLE");
 		}
-	}
 
-	protected InputException addEventLessChecker(String title, String fuzzyTime, String quantity, String timeUnit) {
-		if (noRepeat(title)) {
-			if (validFuzzyTime(fuzzyTime)) {
-				if (validQuantity(quantity)) {
-					if (validUnit(timeUnit)) {
-						return new InputException();
-					} else {
-						return new InputException("ADD EVENT", "INVALID TIME UNIT");
-					}
-				} else {
-					return new InputException("ADD EVENT", "INVALID QUANTITY");
-				}
-			} else {
-				return new InputException("ADD EVENT", "INVALID START TIME");
-			}
-		} else {
-			return new InputException("ADD EVENT", "INVLAID TIME");
-		}
 	}
 
 	protected InputException addDeadlineChecker(String title, String endDate, String endTime) {
-		if (noRepeat(title)) {
-			if (validFuzzyDate(endDate)) {
-				if (validTime(endTime)) {
+		if (!title.equals("")) {
+			if (noRepeat(title)) {
+				if (validFuzzyDate(endDate)) {
+					if (validTime(endTime)) {
+						return new InputException();
+					} else {
+						return new InputException("ADD DEADLINE", "INVALID END TIME");
+					}
+				} else {
+					return new InputException("ADD DEADLINE", "INVLAID END DATE");
+				}
+			} else {
+				return new InputException("ADD", "REPEAT TITLE");
+			}
+		} else {
+			return new InputException("ADD", "EMPTY TITLE");
+		}
+	}
+
+	protected InputException addDeadlineLessChecker(String title, String fuzzyTime) {
+		if (!title.equals("")) {
+			if (noRepeat(title)) {
+				if (validFuzzyTime(fuzzyTime)) {
 					return new InputException();
 				} else {
 					return new InputException("ADD DEADLINE", "INVALID END TIME");
 				}
 			} else {
-				return new InputException("ADD DEADLINE", "INVLAID END DATE");
+				return new InputException("ADD", "REPEAT TITLE");
 			}
 		} else {
-			return new InputException("ADD", "REPEAT TITLE");
-		}
-	}
-
-	protected InputException addDeadlineLessChecker(String title, String fuzzyTime) {
-		if (noRepeat(title)) {
-			if (validFuzzyTime(fuzzyTime)) {
-				return new InputException();
-			} else {
-				return new InputException("ADD DEADLINE", "INVALID END TIME");
-			}
-		} else {
-			return new InputException("ADD", "REPEAT TITLE");
+			return new InputException("ADD", "EMPTY TITLE");
 		}
 	}
 
 	protected InputException addRecurringEventChecker(String interval, String title, String startDate, String startTime,
 			String quantity, String timeUnit) {
-		if (validInterval(interval)) {
-			return addEventChecker(title, startDate, startTime, quantity, timeUnit);
+		if (!title.equals("")) {
+			if (validInterval(interval)) {
+				return addEventChecker(title, startDate, startTime, quantity, timeUnit);
+			} else {
+				return new InputException("ADD RECURRING EVENT", "INVALID INTERVAL");
+			}
 		} else {
-			return new InputException("ADD RECURRING EVENT", "INVALID INTERVAL");
+			return new InputException("ADD", "EMPTY TITLE");
 		}
 	}
 
 	protected InputException addRecurringEventLessChecker(String interval, String title, String fuzzyTime,
 			String quantity, String timeUnit) {
-		if (validInterval(interval)) {
-			return addEventLessChecker(title, fuzzyTime, quantity, timeUnit);
+		if (!title.equals("")) {
+			if (validInterval(interval)) {
+				return addEventLessChecker(title, fuzzyTime, quantity, timeUnit);
+			} else {
+				return new InputException("ADD RECURRING EVENT", "INVALID INTERVAL");
+			}
 		} else {
-			return new InputException("ADD RECURRING EVENT", "INVALID INTERVAL");
+			return new InputException("ADD", "EMPTY TITLE");
 		}
 	}
 
 	protected InputException addRecurringDeadlineChecker(String interval, String title, String endDate,
 			String endTime) {
-		if (validInterval(interval)) {
-			return addDeadlineChecker(title, endDate, endTime);
+		if (!title.equals("")) {
+			if (validInterval(interval)) {
+				return addDeadlineChecker(title, endDate, endTime);
+			} else {
+				return new InputException("ADD RECURRING DEADLINE", "INVALID INTERVAL");
+			}
 		} else {
-			return new InputException("ADD RECURRING DEADLINE", "INVALID INTERVAL");
+			return new InputException("ADD", "EMPTY TITLE");
 		}
 	}
 
 	protected InputException addRecurringDeadlineLessChecker(String interval, String title, String fuzzyTime) {
-		if (validInterval(interval)) {
-			return addDeadlineLessChecker(title, fuzzyTime);
+		if (!title.equals("")) {
+			if (validInterval(interval)) {
+				return addDeadlineLessChecker(title, fuzzyTime);
+			} else {
+				return new InputException("ADD RECURRING DEADLINE", "INVALID INTERVAL");
+			}
 		} else {
-			return new InputException("ADD RECURRING DEADLINE", "INVALID INTERVAL");
+			return new InputException("ADD", "EMPTY TITLE");
 		}
 	}
 
@@ -374,15 +412,19 @@ public class FunctionChecker {
 		if (!noRepeat(title)) {
 			switch (fieldName) {
 			case "title":
-				return new InputException();
-			case "done":
-				return new InputException();
-			case "undone":
-				return new InputException();
+				return addTaskChecker(newValue);
 			case "start-time":
-				return new InputException();
+				if(validDateTime(newValue)) {
+					return new InputException();
+				} else {
+					return new InputException("EDIT", "WRONG DATE TIME FORMAT");
+				}	
 			case "end-time":
-				return new InputException();
+				if(validDateTime(newValue)) {
+					return new InputException();
+				} else {
+					return new InputException("EDIT", "WRONG DATE TIME FORMAT");
+				}
 			default:
 				return new InputException("EDIT", "FIELD NOT EXIST");
 			}
@@ -528,6 +570,19 @@ public class FunctionChecker {
 		try {
 			@SuppressWarnings("unused")
 			Date newFuzzyDate = sdf.parse(fuzzyDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	private Boolean validDateTime(String dateTime) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		sdf.setLenient(false);
+		try {
+			@SuppressWarnings("unused")
+			Date newDateTime = sdf.parse(dateTime);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return false;

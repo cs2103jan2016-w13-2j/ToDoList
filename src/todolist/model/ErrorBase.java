@@ -138,6 +138,10 @@ public class ErrorBase {
 				"You may only SET RECURRENCE for an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 		errorBase.put(("PARSER" + "INVALID INPUT"),
 				"Sorry! I don't understand this command! Please refer to HELP for formats.");
+		errorBase.put(("ADD"+"EMPTY TITLE"),
+				"Sorry! Title cannot be empty");
+		errorBase.put(("EDIT"+"WRONG DATE TIME FORMAT"),
+				"Sorry! Wrong date time format");
 	}
 
 	protected String getErrorMessage(String commandType, String errorType) {
