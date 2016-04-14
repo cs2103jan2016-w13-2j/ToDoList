@@ -97,7 +97,7 @@ public class MainApp extends Application {
 
     // Notification messages and delay constant
     private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
-    private static final int DELAY_PERIOD = 5;
+    private static final int DELAY_PERIOD = 10;
 
     // Root view directories
     private static final String DIRECTORY_ROOT = "ui/views/RootLayout.fxml";
@@ -418,8 +418,8 @@ public class MainApp extends Application {
      */
     private void setWindowDimensions(Stage primaryStage) {
         primaryStage.setTitle(WINDOW_TITLE);
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.minHeightProperty().set(MIN_HEIGHT);
+        primaryStage.minWidthProperty().set(MIN_WIDTH);
     }
 
     /*** VIEW LOADERS ***/
@@ -456,6 +456,9 @@ public class MainApp extends Application {
 
             // Shortcuts Handling
             addShortcuts(scene);
+            
+            rootView.setMinHeight(primaryStage.getMinHeight() - 20);
+            rootView.setMinWidth(primaryStage.getMinWidth() - 20);
 
             // Display
             primaryStage.setScene(scene);
@@ -960,6 +963,9 @@ public class MainApp extends Application {
 
         // Set autohide with delay factor
         if (isAutohide) {
+            if (delay != null) {
+                delay.stop();
+            }
             delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
             delay.setOnFinished(e -> rootWithNotification.hide());
             delay.play();

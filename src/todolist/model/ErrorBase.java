@@ -139,11 +139,12 @@ public class ErrorBase {
 		errorBase.put(("PARSER" + "INVALID INPUT"),
 				"Sorry! I don't understand this command! Please refer to HELP for formats.");
 		errorBase.put(("ADD"+"EMPTY TITLE"),
-				"Sorry! Title cannot be empty");
+				"Sorry! Title cannot be empty or space(s). Please try again.");
 		errorBase.put(("EDIT"+"WRONG DATE TIME FORMAT"),
-				"Sorry! Wrong date time format");
+				"Sorry! I don't understand this date-time format. Please try again.");
 		errorBase.put(("INDEX"+"REPEAT"),
 				"Sorry! You have inputed repeated indices");
+
 	}
 
 	protected String getErrorMessage(String commandType, String errorType) {

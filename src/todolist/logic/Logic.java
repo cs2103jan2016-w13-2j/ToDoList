@@ -1044,7 +1044,7 @@ public class Logic {
 	public Boolean clean() {
 		this.dataBase.clear();
 		uiHandler.refresh();
-		uiHandler.sendMessage("View cleaned!", true);
+		uiHandler.sendMessage("Schedule cleaned! All the tasks are deleted from your schedule. (not what you want? try 'undo 1')", true);
 		return true;
 	}
 
