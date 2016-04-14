@@ -562,10 +562,11 @@ public class FunctionChecker {
 	}
 
 	private Boolean validFuzzyDateThree(String fuzzyDate) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
+		System.out.println(fuzzyDate);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");		
 		try {
 			@SuppressWarnings("unused")
-			LocalDateTime newFuzzyDate = LocalDateTime.parse(fuzzyDate, formatter);
+			LocalDateTime newFuzzyDate = LocalDateTime.parse(fuzzyDate + " 00:00", formatter);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -574,10 +575,11 @@ public class FunctionChecker {
 	}
 
 	private Boolean validFuzzyDateTwo(String fuzzyDate) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");		
+		System.out.println(fuzzyDate);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");		
 		try {
 			@SuppressWarnings("unused")
-			LocalDateTime newFuzzyDate = LocalDateTime.parse(fuzzyDate, formatter);
+			LocalDateTime newFuzzyDate = LocalDateTime.parse("2000-"+fuzzyDate+" 00:00", formatter);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -610,10 +612,10 @@ public class FunctionChecker {
 	}
 
 	private Boolean validTime(String time) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");		
 		try {
 			@SuppressWarnings("unused")
-			LocalDateTime newTime = LocalDateTime.parse(time, formatter);
+			LocalDateTime newTime = LocalDateTime.parse("2000-01-01 " + time, formatter);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
