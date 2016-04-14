@@ -303,5 +303,6 @@ public class DataBase {
 		logger.logAction(COMPONENT_STORAGE, String.format(MESSAGE_SORT, fieldName, order));
 		
 		taskList = sorter.sortHandler(taskList, fieldName, order);
+		writeToFile();
 	}
 }
