@@ -1,10 +1,9 @@
 //@@author A0130620B
 package todolist.logic;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 import todolist.model.InputException;
 import todolist.model.SearchCommand;
@@ -21,6 +20,7 @@ public class FunctionChecker {
 	}
 
 	protected InputException addTaskChecker(String title) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (noRepeat(title)) {
 				return new InputException();
@@ -34,6 +34,7 @@ public class FunctionChecker {
 
 	protected InputException addEventChecker(String title, String startDate, String startTime, String quantity,
 			String timeUnit) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (noRepeat(title)) {
 				if (validFuzzyDate(startDate)) {
@@ -63,6 +64,7 @@ public class FunctionChecker {
 	}
 
 	protected InputException addEventLessChecker(String title, String fuzzyTime, String quantity, String timeUnit) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (noRepeat(title)) {
 				if (validFuzzyTime(fuzzyTime)) {
@@ -88,6 +90,7 @@ public class FunctionChecker {
 	}
 
 	protected InputException addDeadlineChecker(String title, String endDate, String endTime) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (noRepeat(title)) {
 				if (validFuzzyDate(endDate)) {
@@ -108,6 +111,7 @@ public class FunctionChecker {
 	}
 
 	protected InputException addDeadlineLessChecker(String title, String fuzzyTime) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (noRepeat(title)) {
 				if (validFuzzyTime(fuzzyTime)) {
@@ -125,6 +129,7 @@ public class FunctionChecker {
 
 	protected InputException addRecurringEventChecker(String interval, String title, String startDate, String startTime,
 			String quantity, String timeUnit) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (validInterval(interval)) {
 				return addEventChecker(title, startDate, startTime, quantity, timeUnit);
@@ -138,6 +143,7 @@ public class FunctionChecker {
 
 	protected InputException addRecurringEventLessChecker(String interval, String title, String fuzzyTime,
 			String quantity, String timeUnit) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (validInterval(interval)) {
 				return addEventLessChecker(title, fuzzyTime, quantity, timeUnit);
@@ -151,6 +157,7 @@ public class FunctionChecker {
 
 	protected InputException addRecurringDeadlineChecker(String interval, String title, String endDate,
 			String endTime) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (validInterval(interval)) {
 				return addDeadlineChecker(title, endDate, endTime);
@@ -163,6 +170,7 @@ public class FunctionChecker {
 	}
 
 	protected InputException addRecurringDeadlineLessChecker(String interval, String title, String fuzzyTime) {
+		title = title.trim();
 		if (!title.equals("")) {
 			if (validInterval(interval)) {
 				return addDeadlineLessChecker(title, fuzzyTime);
@@ -175,6 +183,7 @@ public class FunctionChecker {
 	}
 
 	protected InputException remindBefChecker(String title, String quantity, String timeUnit) {
+		title = title.trim();
 		if (!noRepeat(title)) {
 			if (validQuantity(quantity)) {
 				if (validUnit(timeUnit)) {
@@ -409,6 +418,7 @@ public class FunctionChecker {
 	}
 
 	protected InputException editChecker(String title, String fieldName, String newValue) {
+		newValue = newValue.trim();
 		if (!noRepeat(title)) {
 			switch (fieldName) {
 			case "title":
@@ -552,12 +562,11 @@ public class FunctionChecker {
 	}
 
 	private Boolean validFuzzyDateThree(String fuzzyDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		sdf.setLenient(false);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");		
 		try {
 			@SuppressWarnings("unused")
-			Date newFuzzyDate = sdf.parse(fuzzyDate);
-		} catch (ParseException e) {
+			LocalDateTime newFuzzyDate = LocalDateTime.parse(fuzzyDate, formatter);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -565,12 +574,11 @@ public class FunctionChecker {
 	}
 
 	private Boolean validFuzzyDateTwo(String fuzzyDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-		sdf.setLenient(false);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");		
 		try {
 			@SuppressWarnings("unused")
-			Date newFuzzyDate = sdf.parse(fuzzyDate);
-		} catch (ParseException e) {
+			LocalDateTime newFuzzyDate = LocalDateTime.parse(fuzzyDate, formatter);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -578,12 +586,11 @@ public class FunctionChecker {
 	}
 	
 	private Boolean validDateTime(String dateTime) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		sdf.setLenient(false);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");		
 		try {
 			@SuppressWarnings("unused")
-			Date newDateTime = sdf.parse(dateTime);
-		} catch (ParseException e) {
+			LocalDateTime newDateTime = LocalDateTime.parse(dateTime, formatter);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -603,12 +610,11 @@ public class FunctionChecker {
 	}
 
 	private Boolean validTime(String time) {
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-		sdf.setLenient(false);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");		
 		try {
 			@SuppressWarnings("unused")
-			Date newTime = sdf.parse(time);
-		} catch (ParseException e) {
+			LocalDateTime newTime = LocalDateTime.parse(time, formatter);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
