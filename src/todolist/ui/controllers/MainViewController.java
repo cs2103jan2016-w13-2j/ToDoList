@@ -505,11 +505,19 @@ public class MainViewController {
                         output = String.format(REMINDER_OTHER, task.getTaskTitle());
                     }
                     notification.text(output);
-                    notification.hideAfter(Duration.minutes(5));
+                    notification.hideAfter(Duration.INDEFINITE);
+
+                    notification.onAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            notification.hideAfter(Duration.seconds(5));
+                        }
+                    });
 
                     AudioClip notificationSound = new AudioClip(
                             MainApp.class.getResource(DIRECTORY_REMINDER_SOUND).toExternalForm());
                     notificationSound.play();
+
                     notification.show();
                 }
             }));

@@ -284,6 +284,8 @@ public class MainApp extends Application {
         KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN);
         KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
         KeyCodeCombination toggleMute = new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN);
+        KeyCodeCombination minimize = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN);
+        KeyCodeCombination maximize = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
 
         IS_MUTE.addListener(new ChangeListener<Boolean>() {
 
@@ -297,6 +299,53 @@ public class MainApp extends Application {
                 }
             }
         });
+        
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (minimize.match(event)) {
+                    
+                    commandField.requestFocus();
+                    
+                    boolean state = primaryStage.iconifiedProperty().get();
+                    primaryStage.setIconified(!state);
+                }
+            }
+        });
+        
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (maximize.match(event)) {
+                    
+                    commandField.requestFocus();
+                    
+                    boolean state = primaryStage.isFullScreen();
+                    primaryStage.setFullScreen(!state);
+                }
+            }
+        });
+        
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (focusOnCommand.match(event)) {
+                    commandField.requestFocus();
+                    logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
+                }
+            }
+        });
+        
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (focusOnCommand.match(event)) {
+                    commandField.requestFocus();
+                    logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
+                }
+            }
+        });
+        
 
         scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
             @Override
@@ -307,6 +356,7 @@ public class MainApp extends Application {
                 }
             }
         });
+        
         scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -612,7 +662,7 @@ public class MainApp extends Application {
                 overdueController.setPageIndex(EXPIRED_TAB);
                 overdueController.setPlaceHolder(PLACEHOLDER_OVERDUE);
             }
-
+            
             // uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
