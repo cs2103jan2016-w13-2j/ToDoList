@@ -567,7 +567,7 @@ public class FunctionChecker {
 	}
 
 	private Boolean validFuzzyDateThree(String fuzzyDate) {
-		System.out.println(fuzzyDate);
+//		System.out.println(fuzzyDate);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");		
 		try {
 			@SuppressWarnings("unused")
@@ -580,7 +580,7 @@ public class FunctionChecker {
 	}
 
 	private Boolean validFuzzyDateTwo(String fuzzyDate) {
-		System.out.println(fuzzyDate);
+//		System.out.println(fuzzyDate);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");		
 		try {
 			@SuppressWarnings("unused")
