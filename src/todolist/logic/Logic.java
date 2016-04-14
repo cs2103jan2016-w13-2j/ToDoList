@@ -807,13 +807,7 @@ public class Logic {
 
 		tempTask.setDoneStatus(true);
 		String tempName = tempTask.getName().getName();
-
-		if (tempTask.getRecurringStatus()) {
-			tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
-		}
-
-		Boolean addResponse = dataBase.add(tempTask);
-
+		
 		if (tempTask.getRecurringStatus()) {
 
 			String interval = tempTask.getInterval();
@@ -838,9 +832,21 @@ public class Logic {
 				newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
 						tempTask.getReminder(), false, true, interval);
 			}
-			addResponse = dataBase.add(newTempTask);
+			
+			@SuppressWarnings("unused")
+			Boolean addResponse = dataBase.add(newTempTask);
 
 		}
+		
+		if (tempTask.getRecurringStatus()) {
+			tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
+			tempTask.setRecurring(false);
+		}
+		
+		tempTask.setReminder(new Reminder(false, null));
+
+		Boolean addResponse = dataBase.add(tempTask);
+
 
 		// UI handling
 		uiHandler.refresh();
