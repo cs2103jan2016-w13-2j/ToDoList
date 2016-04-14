@@ -841,6 +841,7 @@ public class Logic {
 		if (tempTask.getRecurringStatus()) {
 			tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
 			tempTask.setRecurring(false);
+			tempTask.setInterval(null);
 		}
 		
 		tempTask.setReminder(new Reminder(false, null));
