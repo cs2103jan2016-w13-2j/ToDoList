@@ -63,7 +63,8 @@ public class Logic {
 			TokenizedCommand tokenizedCommand = mainParser.parse(input);
 			caseSwitcher.execute(tokenizedCommand);
 		} catch (Exception e) {
-			uiHandler.sendMessage("Sorry! I can't do this", true);
+			uiHandler.sendMessage("Sorry! I can't do this.", true);
+			e.printStackTrace();
 		}
 	}
 
