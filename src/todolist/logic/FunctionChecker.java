@@ -481,6 +481,11 @@ public class FunctionChecker {
 		for (int i = 0; i < temp.length; i++) {
 			if (isInteger(temp[i])) {
 				index[i] = Integer.parseInt(temp[i]);
+				for(int j = 0; j < i; j++) {
+					if(index[j] == index[i]) {
+						return new InputException("INDEX", "REPEAT");
+					}
+				}
 			} else {
 				flag = false;
 			}

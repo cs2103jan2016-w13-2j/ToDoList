@@ -142,6 +142,8 @@ public class ErrorBase {
 				"Sorry! Title cannot be empty");
 		errorBase.put(("EDIT"+"WRONG DATE TIME FORMAT"),
 				"Sorry! Wrong date time format");
+		errorBase.put(("INDEX"+"REPEAT"),
+				"Sorry! You have inputed repeated indices");
 	}
 
 	protected String getErrorMessage(String commandType, String errorType) {
