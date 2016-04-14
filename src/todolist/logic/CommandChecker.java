@@ -76,7 +76,7 @@ public class CommandChecker {
 		case "deadline":
 			return addRecurringDeadline(arg);
 		default:
-			return new InputException("ADD RECURRING", "INCOMPLETE");
+			return new InputException("ADD", "INCOMPLETE");
 		}
 	}
 
