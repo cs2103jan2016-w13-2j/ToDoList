@@ -59,8 +59,12 @@ public class Logic {
 	 * @return void
 	 */
 	public void process(String input) {
-		TokenizedCommand tokenizedCommand = mainParser.parse(input);
-		caseSwitcher.execute(tokenizedCommand);
+		try{
+			TokenizedCommand tokenizedCommand = mainParser.parse(input);
+			caseSwitcher.execute(tokenizedCommand);
+		} catch (Exception e) {
+			uiHandler.sendMessage("Sorry! I can't do this", true);
+		}
 	}
 
 	/**
