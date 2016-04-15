@@ -286,7 +286,7 @@ public class LogicTest {
     	result = logic.edit("title", "done",null);
     	assertTrue(result);
         
-        result = logic.dataBase.taskList.get(0).getDoneStatus();
+        result = !logic.dataBase.taskList.get(0).getDoneStatus();
         assertTrue(result);
     }
     
@@ -300,9 +300,9 @@ public class LogicTest {
         LocalDateTime end = LocalDateTime.parse("2016-04-01" + " " + "14:00", formatter);
     	//add a task and then edit its name
     	boolean result = true;
-    	result = logic.addDeadline("title","2016-03-31","13:00");
+    	result = logic.addEvent("title","2016-03-31","13:00", "2", "hour");
     	assertTrue(result);
-    	result = logic.edit("title", "end-time", "2016-04-01-14:00");
+    	result = logic.edit("title", "end-time", "2016-04-01 14:00");
     	assertTrue(result);
         
         result = logic.dataBase.taskList.get(0).getName().getName().equals("title");

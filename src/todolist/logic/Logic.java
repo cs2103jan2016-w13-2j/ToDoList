@@ -989,7 +989,7 @@ public class Logic {
 			uiHandler.refresh();
 			uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_OPEN_DIR, path), true);
 		} else {
-			uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_FAILURE_OPEN_DIR, path), true);
+			uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_OPEN_DIR, path), true);
 		}
 
 		return success;

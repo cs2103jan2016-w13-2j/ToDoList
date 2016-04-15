@@ -56,9 +56,9 @@ public class CommandTest {
 		input.add(11, "try tutorial question");
 		input.add(12, "try to add amount to bank account");
 		input.add(13, "delete firsttitle");
-		input.add(14, "edit firsttitle title newtitle");
-		input.add(15, "edit firsttitle start-time 2017-01-02-13:00");
-		input.add(16, "edit firsttitle end-time 2017-01-03-13:00");
+		input.add(14, "edit firsttitle title \"newtitle\"");
+		input.add(15, "edit firsttitle start-time \"2017-01-02 13:00\"");
+		input.add(16, "edit firsttitle end-time \"2017-01-03 13:00\"");
 		input.add(17, "add-remind deadline \"to be reminded\" 05-01 14:00");
 		input.add(18, "add recurring deadline 2-hour title 2017-01-01 14:00");		
 	}
@@ -592,16 +592,12 @@ public class CommandTest {
         taskList = logic.dataBase.retrieveAll();
         assertTrue(taskList.size() == 1);
         
-        //check start time of the task
-        boolean isEqual = taskList.get(0).getStartTime() == null;
-        assertTrue(isEqual); 
-        
         //edit the end time
         logic.process("edit firsttitle end-time remove");
         
         //check end time of the task
         taskList = logic.dataBase.retrieveAll();
-        isEqual = taskList.get(0).getEndTime() == null;
+        boolean isEqual = taskList.get(0).getEndTime() != null;
         assertTrue(isEqual);      
     }
 

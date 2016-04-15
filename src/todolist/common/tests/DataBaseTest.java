@@ -339,7 +339,7 @@ public class DataBaseTest {
         addEvents();
 		
 		//change the directory
-		assertTrue(db.setNewFile("/Users/Xyx/Desktop/jim"));
+		assertTrue(db.setNewFile("/Users/Larry/Desktop/"));
 	}
 
 }
