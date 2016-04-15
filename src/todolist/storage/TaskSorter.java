@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import todolist.model.Category;
 import todolist.model.Task;
 
 
@@ -32,7 +33,7 @@ public class TaskSorter {
 		case "category":
 			sort_Category(taskList);
 			break;
-		case "name":
+		case "title":
 			sort_Name(taskList);
 			break;
 		default:
@@ -72,7 +73,7 @@ public class TaskSorter {
                 return t1_Name.compareToIgnoreCase(t2_Name);
                 
             } else if (firstDate == null) {
-                return -1;
+                return 1;
                 
             } else if (secondDate == null) {
                 return 1;
@@ -107,7 +108,7 @@ public class TaskSorter {
                 return t1_Name.compareToIgnoreCase(t2_Name);
                 
             } else if (firstDate == null) {
-                return -1;
+                return 1;
                 
             } else if (secondDate == null) {
                 return 1;
@@ -128,12 +129,25 @@ public class TaskSorter {
     private class CategoryComparator implements Comparator<Task> {
     	
         public int compare(Task t1, Task t2) {
-        	
-            String firstCategory = ((todolist.model.Task) t1).getCategory().getCategory();
             
-            String secondCategory = ((todolist.model.Task) t2).getCategory().getCategory();
+            Category firstCategory = t1.getCategory();
+            Category secondCategory = t2.getCategory();
             
-            return firstCategory.compareToIgnoreCase(secondCategory);
+            String firstName = null;
+            String secondName = null;
+            
+            if (firstCategory == null && secondCategory == null) {
+                return 0;
+            } else if (firstCategory == null) {
+                return 1;
+            } else if (secondCategory == null) {
+                return 1;
+            }
+            
+            firstName = ((todolist.model.Task) t1).getCategory().getCategory();
+            secondName = ((todolist.model.Task) t2).getCategory().getCategory();
+            
+            return firstName.compareToIgnoreCase(secondName);
         }
     }
 

@@ -4,6 +4,7 @@ package todolist.logic;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import todolist.model.InputException;
 import todolist.model.SearchCommand;
@@ -491,6 +492,9 @@ public class FunctionChecker {
 			}
 		}
 
+		
+//		System.out.println(Arrays.toString(index));		
+		
 		if (flag) {
 			return checkInView(index, type, arg);
 		} else {
@@ -504,7 +508,10 @@ public class FunctionChecker {
 			if (task == null) {
 				return new InputException(type, "TASK NOT EXIST");
 			} else {
-				String taskname = logic.getMainApp().getTaskAt(index.length).getName().getName();
+				String taskname = logic.getMainApp().getTaskAt(index[i]).getName().getName();
+				
+//				System.out.println(taskname);
+				
 				InputException tempException = typeCaseSwitcher(type, taskname, arg);
 				if (!tempException.getCorrectness()) {
 					return tempException;
