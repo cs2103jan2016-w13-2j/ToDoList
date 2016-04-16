@@ -59,8 +59,13 @@ public class Logic {
 	 * @return void
 	 */
 	public void process(String input) {
-		TokenizedCommand tokenizedCommand = mainParser.parse(input);
-		caseSwitcher.execute(tokenizedCommand);
+		try{
+			TokenizedCommand tokenizedCommand = mainParser.parse(input);
+			caseSwitcher.execute(tokenizedCommand);
+		} catch (Exception e) {
+			uiHandler.sendMessage("Sorry! I can't do this.", true);
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -321,17 +326,11 @@ public class Logic {
 		Task tempTask = dataBase.retrieve(new SearchCommand("NAME", title)).get(0);
 		Boolean deleteResponse = dataBase.delete(tempTask);
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 		switch (fieldName) {
 		case "title":
 			tempTask.setName(new Name(newValue));
-			break;
-		case "done":
-			tempTask.setDoneStatus(true);
-			break;
-		case "undone":
-			tempTask.setDoneStatus(false);
 			break;
 		case "start-time":
 			LocalDateTime start = null;
@@ -345,6 +344,9 @@ public class Logic {
 					tempTask.setEndTime(start);
 				} else {
 					tempTask.setStartTime(start);
+					if(tempTask.getEndTime().isBefore(start)) {
+						tempTask.setEndTime(start);
+					}
 				}
 			}
 			break;
@@ -359,6 +361,9 @@ public class Logic {
 
 			} else {
 				end = LocalDateTime.parse(newValue, formatter);
+				if(tempTask.getStartTime().isAfter(end)) {
+					tempTask.setStartTime(end);
+				}
 				tempTask.setEndTime(end);
 			}
 			break;
@@ -807,13 +812,7 @@ public class Logic {
 
 		tempTask.setDoneStatus(true);
 		String tempName = tempTask.getName().getName();
-
-		if (tempTask.getRecurringStatus()) {
-			tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
-		}
-
-		Boolean addResponse = dataBase.add(tempTask);
-
+		
 		if (tempTask.getRecurringStatus()) {
 
 			String interval = tempTask.getInterval();
@@ -828,12 +827,32 @@ public class Logic {
 				LocalDateTime oldStartTime = tempTask.getStartTime();
 				newStartTime = oldStartTime.plus(Long.parseLong(length), generateTimeUnit(unit));
 			}
-
-			Task newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
-					tempTask.getReminder(), false, true, interval);
-			addResponse = dataBase.add(newTempTask);
+			
+			Task newTempTask = null;
+			if(tempTask.getReminder() != null && tempTask.getReminder().getStatus()) {
+				Reminder newReminder = new Reminder(true, tempTask.getReminder().getTime().plus(Long.parseLong(length), generateTimeUnit(unit)));
+				newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
+						newReminder, false, true, interval);
+			} else {
+				newTempTask = new Task(new Name(tempName), newStartTime, newEndTime, tempTask.getCategory(),
+						tempTask.getReminder(), false, true, interval);
+			}
+			
+			@SuppressWarnings("unused")
+			Boolean addResponse = dataBase.add(newTempTask);
 
 		}
+		
+		if (tempTask.getRecurringStatus()) {
+			tempTask.setName(new Name(tempName + " finished on " + getCurrentTimeStamp()));
+			tempTask.setRecurring(false);
+			tempTask.setInterval(null);
+		}
+		
+		tempTask.setReminder(new Reminder(false, null));
+
+		Boolean addResponse = dataBase.add(tempTask);
+
 
 		// UI handling
 		uiHandler.refresh();
@@ -970,7 +989,7 @@ public class Logic {
 			uiHandler.refresh();
 			uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_OPEN_DIR, path), true);
 		} else {
-			uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_FAILURE_OPEN_DIR, path), true);
+			uiHandler.sendMessage(String.format(ResponseMessage.MESSAGE_SUCCESS_OPEN_DIR, path), true);
 		}
 
 		return success;
@@ -1030,7 +1049,7 @@ public class Logic {
 	public Boolean clean() {
 		this.dataBase.clear();
 		uiHandler.refresh();
-		uiHandler.sendMessage("View cleaned!", true);
+		uiHandler.sendMessage("Schedule cleaned! All the tasks are deleted from your schedule. (not what you want? try 'undo 1')", true);
 		return true;
 	}
 

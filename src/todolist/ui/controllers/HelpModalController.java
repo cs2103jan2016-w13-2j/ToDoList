@@ -302,7 +302,7 @@ public class HelpModalController {
         actionFormatTable.put("remove-recurring <TITLE>", "sets a recurring task as a normal task");
         actionFormatTable.put("add-remind...",
                 "functions as add feature but with reminders set to trigger upon <START-TIME> or <END-TIME> of event and deadline respectively");
-        actionFormatTable.put("add-remind-bef <QUANTITY> <TIME-UNIT>...",
+        actionFormatTable.put("add-remind-bef <QUANTITY> <TIME-UNIT> <TYPE> ... see [ADD]",
                 "functions as add feature but with reminders set to trigger <DURATION> before event <START-TIME> or deadline <END-TIME>");
         actionFormatTable.put("remind-bef <TITLE> <QUANTITY> <TIME-UNIT>",
                 "sets reminder for event or deadline with specified title to trigger <DURATION> before the event <START-TIME> or the deadline <END-TIME>. <DURATION> is expressed as <QUANTITY-TIMEUNIT>");
@@ -313,10 +313,12 @@ public class HelpModalController {
 
         actionFormatTable.put("[UP-ARROW | DOWN-ARROW]", "[keyboard shortcut] browsing the task list");
         actionFormatTable.put("[ALT + UP | ALT + DOWN]", "[keyboard shortcut] browsing command history");
-        actionFormatTable.put("[ESC]", "[keyboard shortcut] closing popups for help and reminders");
+        actionFormatTable.put("[ESC]", "[keyboard shortcut] closing popups for help and reminders and exit fullscreen");
         actionFormatTable.put("[CRTL + K] for command and [CRTL + L] for list",
                 "[keyboard shortcut] change context between command field and task list");
         actionFormatTable.put("[CRTL + M]", "[keyboard shortcut] mute/unmute");
+        actionFormatTable.put("[CRTL + H]", "[keyboard shortcut] minimize window");
+        actionFormatTable.put("[CRTL + F]", "[keyboard shortcut] toggle fullscreen");
 
         for (Entry<String, String> entry : actionFormatTable.entrySet()) {
             entries.add(new CommandPair(entry.getValue(), entry.getKey()));

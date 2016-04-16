@@ -300,8 +300,9 @@ public class DataBase {
 	 */
 	public void sort(String fieldName, String order) {
 		
-		logger.logAction(COMPONENT_STORAGE, String.format(MESSAGE_SORT, fieldName, order));
+//		logger.logAction(COMPONENT_STORAGE, String.format(MESSAGE_SORT, fieldName, order));
 		
 		taskList = sorter.sortHandler(taskList, fieldName, order);
+		writeToFile();
 	}
 }

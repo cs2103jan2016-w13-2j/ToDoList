@@ -52,6 +52,8 @@ public class ErrorBase {
 				"Your command to CHANGE TAB was incomplete! Please check HELP for formats.");
 		errorBase.put(("ADD" + "REPEAT TITLE"), "You might have added this task before! Try a different TASK TITLE.");
 		errorBase.put(("SORT" + "INCOMPLETE"), "Your command to SORT was incomplete! Please check HELP for formats.");
+		errorBase.put(("SORT" + "INVALID FIELDNAME"), "The field you want to SORT in is invalid! Please check HELP for formats.");
+	      errorBase.put(("SORT" + "INVALID ORDER"), "The order you want to SORT in is invalid! Please check HELP for formats.");
 		errorBase.put(("ADD EVENT" + "INVALID TIME UNIT"),
 				"You have specified a TIME UNIT that I don't understand! Try {minute, hour, day, week, month, year}.");
 		errorBase.put(("ADD EVENT" + "INVALID QUANTITY"),
@@ -138,6 +140,13 @@ public class ErrorBase {
 				"You may only SET RECURRENCE for an EVENT or DEADLINE! Try picking an EVENT or DEADLINE instead!");
 		errorBase.put(("PARSER" + "INVALID INPUT"),
 				"Sorry! I don't understand this command! Please refer to HELP for formats.");
+		errorBase.put(("ADD"+"EMPTY TITLE"),
+				"Sorry! Title cannot be empty or space(s). Please try again.");
+		errorBase.put(("EDIT"+"WRONG DATE TIME FORMAT"),
+				"Sorry! I don't understand this date-time format. Please try again.");
+		errorBase.put(("INDEX"+"REPEAT"),
+				"Sorry! You have inputed repeated indices");
+
 	}
 
 	protected String getErrorMessage(String commandType, String errorType) {

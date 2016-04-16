@@ -192,16 +192,18 @@ public class FileHandler {
 				
 			}
 			
-			openFile(newFilePath);
+			//openFile(newFilePath);
 			
 			return false;
 		}
 		
 		//check whether the txt file contains the correct format (gson format)
+		/*
 		if(read() == null) {		
 			return false;
 			
 		}
+		*/
 		
 		FILEPATH = tempFilePath;
 		

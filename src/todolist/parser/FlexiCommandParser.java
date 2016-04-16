@@ -103,7 +103,7 @@ public class FlexiCommandParser {
 		if (result.equals("")) {
 			return new TokenizedCommand("invalid", null);
 		}
-
+		
 		return new TokenizedCommand("add", new String[] { "deadline", result, deadlineDate, deadlineTime });
 	}
 

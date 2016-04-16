@@ -76,7 +76,7 @@ public class CommandChecker {
 		case "deadline":
 			return addRecurringDeadline(arg);
 		default:
-			return new InputException("ADD RECURRING", "INCOMPLETE");
+			return new InputException("ADD", "INCOMPLETE");
 		}
 	}
 
@@ -207,7 +207,7 @@ public class CommandChecker {
 
 	protected InputException addRemindBef(String[] arg) {
 		String[] restOfArgs = new String[arg.length - 2];
-		for (int i = 0; i < arg.length; i++) {
+		for (int i = 0; i < restOfArgs.length; i++) {
 			restOfArgs[i] = arg[i + 2];
 		}
 		return functionChecker.addRemindBefChecker(arg[0], arg[1], restOfArgs);

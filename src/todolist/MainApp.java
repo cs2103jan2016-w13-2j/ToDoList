@@ -97,7 +97,7 @@ public class MainApp extends Application {
 
     // Notification messages and delay constant
     private static final String NOTIFICATION_WELCOME = "Welcome to ToDoList! Let's get started...";
-    private static final int DELAY_PERIOD = 5;
+    private static final int DELAY_PERIOD = 10;
 
     // Root view directories
     private static final String DIRECTORY_ROOT = "ui/views/RootLayout.fxml";
@@ -284,6 +284,8 @@ public class MainApp extends Application {
         KeyCodeCombination focusOnCommand = new KeyCodeCombination(KeyCode.K, KeyCombination.CONTROL_DOWN);
         KeyCodeCombination focusOnList = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
         KeyCodeCombination toggleMute = new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN);
+        KeyCodeCombination minimize = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN);
+        KeyCodeCombination maximize = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
 
         IS_MUTE.addListener(new ChangeListener<Boolean>() {
 
@@ -297,6 +299,53 @@ public class MainApp extends Application {
                 }
             }
         });
+        
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (minimize.match(event)) {
+                    
+                    commandField.requestFocus();
+                    
+                    boolean state = primaryStage.iconifiedProperty().get();
+                    primaryStage.setIconified(!state);
+                }
+            }
+        });
+        
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (maximize.match(event)) {
+                    
+                    commandField.requestFocus();
+                    
+                    boolean state = primaryStage.isFullScreen();
+                    primaryStage.setFullScreen(!state);
+                }
+            }
+        });
+        
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (focusOnCommand.match(event)) {
+                    commandField.requestFocus();
+                    logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
+                }
+            }
+        });
+        
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (focusOnCommand.match(event)) {
+                    commandField.requestFocus();
+                    logger.logAction(UtilityLogger.Component.UI, FOCUS_COMMAND);
+                }
+            }
+        });
+        
 
         scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
             @Override
@@ -307,6 +356,7 @@ public class MainApp extends Application {
                 }
             }
         });
+        
         scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -368,8 +418,8 @@ public class MainApp extends Application {
      */
     private void setWindowDimensions(Stage primaryStage) {
         primaryStage.setTitle(WINDOW_TITLE);
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.minHeightProperty().set(MIN_HEIGHT);
+        primaryStage.minWidthProperty().set(MIN_WIDTH);
     }
 
     /*** VIEW LOADERS ***/
@@ -406,6 +456,9 @@ public class MainApp extends Application {
 
             // Shortcuts Handling
             addShortcuts(scene);
+            
+            rootView.setMinHeight(primaryStage.getMinHeight() - 20);
+            rootView.setMinWidth(primaryStage.getMinWidth() - 20);
 
             // Display
             primaryStage.setScene(scene);
@@ -612,7 +665,7 @@ public class MainApp extends Application {
                 overdueController.setPageIndex(EXPIRED_TAB);
                 overdueController.setPlaceHolder(PLACEHOLDER_OVERDUE);
             }
-
+            
             // uiHandlerUnit.refresh();
 
         } catch (IOException ioException) {
@@ -910,6 +963,9 @@ public class MainApp extends Application {
 
         // Set autohide with delay factor
         if (isAutohide) {
+            if (delay != null) {
+                delay.stop();
+            }
             delay = new PauseTransition(Duration.seconds(DELAY_PERIOD));
             delay.setOnFinished(e -> rootWithNotification.hide());
             delay.play();
