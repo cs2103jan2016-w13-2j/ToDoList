@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- @@author A0123994W -->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<HBox id="task-hbox-item" fx:id="root" alignment="CENTER_LEFT"
+	maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity"
+			minWidth="-Infinity" prefWidth="5.0">
+			<children>
+				<Rectangle fx:id="priorityLabel" fill="#1f93ff00" height="92.0"
+					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="5.0"
+					AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+			</children>
+		</AnchorPane>
+		<StackPane fx:id="numberLabel" prefWidth="50.0">
+			<children>
+				<Circle fx:id="numLabelBase" fill="#1f93ff00" radius="25.0"
+					stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+					<StackPane.margin>
+						<Insets left="10.0" right="10.0" />
+					</StackPane.margin>
+				</Circle>
+				<Label fx:id="number" textFill="WHITE">
+					<font>
+						<Font name="System Bold" size="14.0" />
+					</font>
+				</Label>
+			</children>
+		</StackPane>
+		<VBox fx:id="details" maxHeight="1.7976931348623157E308"
+			maxWidth="1.7976931348623157E308" prefHeight="80.0" prefWidth="100.0"
+			HBox.hgrow="ALWAYS">
+			<children>
+				<HBox fx:id="titleBox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308"
+					prefHeight="20.0">
+					<children>
+						<TextFlow id="titleFlow" fx:id="titleFlow" maxHeight="1.7976931348623157E308"
+							maxWidth="1.7976931348623157E308" prefHeight="20.0">
+							<children>
+								<Text id="title" fx:id="title" fontSmoothingType="LCD"
+									strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" />
+							</children>
+						</TextFlow>
+					</children>
+					<VBox.margin>
+						<Insets />
+					</VBox.margin>
+					<padding>
+						<Insets top="10.0" />
+					</padding>
+				</HBox>
+				<HBox fx:id="relativeRangeBox" alignment="CENTER_LEFT"
+					maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0"
+					prefWidth="20.0">
+					<children>
+						<Label fx:id="relativeRange" textFill="WHITE">
+							<font>
+								<Font size="12.0" />
+							</font>
+						</Label>
+					</children>
+					<VBox.margin>
+						<Insets bottom="6.0" />
+					</VBox.margin>
+				</HBox>
+				<HBox fx:id="dateRangeBox" alignment="CENTER_LEFT" layoutX="10.0"
+					layoutY="40.0" maxHeight="-Infinity" minHeight="-Infinity"
+					prefHeight="20.0" prefWidth="200.0">
+					<children>
+						<Label fx:id="dateRange" maxHeight="-Infinity" minHeight="-Infinity"
+							prefHeight="20.0" textFill="WHITE">
+							<font>
+								<Font size="10.0" />
+							</font>
+						</Label>
+					</children>
+				</HBox>
+				<HBox fx:id="categoryBox" alignment="CENTER_LEFT" maxHeight="-Infinity"
+					minHeight="-Infinity" prefHeight="20.0" prefWidth="200.0">
+					<children>
+						<Circle fx:id="categorySprite" fill="#ababab00" radius="4.0"
+							stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+							<HBox.margin>
+								<Insets right="3.0" />
+							</HBox.margin>
+						</Circle>
+						<Label fx:id="category" textFill="WHITE">
+							<font>
+								<Font size="10.0" />
+							</font>
+						</Label>
+					</children>
+					<padding>
+						<Insets bottom="10.0" />
+					</padding>
+				</HBox>
+			</children>
+		</VBox>
+		<StackPane fx:id="completeStatus" maxHeight="-Infinity"
+			minHeight="-Infinity" prefHeight="20.0">
+			<children>
+				<Rectangle fx:id="statusBacking" arcHeight="10.0"
+					arcWidth="10.0" fill="#ffe92100" height="25.0" stroke="BLACK"
+					strokeType="INSIDE" strokeWidth="0.0" width="55.0" />
+				<Label fx:id="status">
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+				</Label>
+			</children>
+			<HBox.margin>
+				<Insets left="15.0" right="15.0" />
+			</HBox.margin>
+		</StackPane>
+		<VBox fx:id="indicatorsHolder" alignment="TOP_RIGHT" maxHeight="1.7976931348623157E308"
+			maxWidth="-Infinity" prefWidth="70.0" spacing="7.0">
+			<children>
+				<HBox alignment="CENTER_RIGHT" spacing="3.0">
+					<VBox.margin>
+						<Insets right="10.0" top="10.0" />
+					</VBox.margin>
+					<children>
+						<Label fx:id="recurInterval">
+							<font>
+								<Font name="System Bold" size="10.0" />
+							</font>
+						</Label>
+						<ImageView fx:id="recurringIndicator" fitHeight="10.0"
+							fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@assets/recurring-indicator.png" />
+							</image>
+						</ImageView>
+					</children>
+				</HBox>
+				<HBox alignment="TOP_RIGHT">
+					<children>
+						<ImageView fx:id="reminderIndicator" fitHeight="10.0"
+							fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+							<image>
+								<Image url="@assets/reminder-indicator.png" />
+							</image>
+						</ImageView>
+					</children>
+					<VBox.margin>
+						<Insets right="10.0" />
+					</VBox.margin>
+				</HBox>
+			</children>
+		</VBox>
+	</children>
+	<opaqueInsets>
+		<Insets />
+	</opaqueInsets>
+</HBox>

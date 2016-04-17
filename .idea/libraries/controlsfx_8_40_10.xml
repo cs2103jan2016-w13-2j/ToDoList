@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="controlsfx-8.40.10">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/controlsfx-8.40.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/gson-2.6.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/joda-time-2.9.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/joda-time-2.9.3-no-tzdb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/natty-0.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/prettytime-4.0.0.Final.jar!/" />
+      <root url="jar://$PROJECT_DIR$/slf4j-api-1.7.19.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/gson-2.6.2-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/joda-time-2.9.3-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/prettytime-4.0.0.Final-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/gson-2.6.2-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/joda-time-2.9.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

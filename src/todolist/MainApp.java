@@ -1,15 +1,6 @@
 package todolist;
 
-import java.awt.Toolkit;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Stack;
-
-import org.controlsfx.control.NotificationPane;
-import org.controlsfx.control.textfield.TextFields;
-
 import com.sun.javafx.css.StyleManager;
-
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
@@ -36,21 +27,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.textfield.TextFields;
 import todolist.common.UtilityLogger;
 import todolist.common.UtilityLogger.Component;
 import todolist.logic.Logic;
 import todolist.logic.UIHandler;
 import todolist.model.Task;
 import todolist.ui.TaskWrapper;
-import todolist.ui.controllers.ArchiveController;
-import todolist.ui.controllers.HelpModalController;
-import todolist.ui.controllers.MainViewController;
-import todolist.ui.controllers.OverdueController;
-import todolist.ui.controllers.SettingsController;
-import todolist.ui.controllers.SideBarController;
-import todolist.ui.controllers.TodayController;
-import todolist.ui.controllers.WeekController;
+import todolist.ui.controllers.*;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Stack;
 
 //@@author A0123994W
 
@@ -223,13 +213,13 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        // Setting application icon for MAC
-        if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
-            com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
-            java.awt.Image image = Toolkit.getDefaultToolkit()
-                    .getImage(MainApp.class.getResource(getApplicationIcon()));
-            application.setDockIconImage(image);
-        }
+//        // Setting application icon for MAC
+//        if (System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0) {
+//            com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
+//            java.awt.Image image = Toolkit.getDefaultToolkit()
+//                    .getImage(MainApp.class.getResource(getApplicationIcon()));
+//            application.setDockIconImage(image);
+//        }
 
         // Initializing utilities
         logger = new UtilityLogger();

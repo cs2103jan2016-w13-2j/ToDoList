@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- @@author A0123994W -->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308"
+	maxWidth="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="60.0"
+	spacing="20.0" styleClass="side-bar" xmlns="http://javafx.com/javafx/8.0.65"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="todolist.ui.controllers.SideBarController">
+	<children>
+		<StackPane>
+			<VBox.margin>
+				<Insets top="20.0" />
+			</VBox.margin>
+			<children>
+				<Button fx:id="all" contentDisplay="TOP" mnemonicParsing="false"
+					prefHeight="50.0" prefWidth="50.0" text="ALL">
+					<graphic>
+						<ImageView id="home-icon" fx:id="allIcon" fitHeight="30.0"
+							fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+							<viewport>
+								<Rectangle2D />
+							</viewport>
+							<image>
+								<Image url="@assets/all.png" />
+							</image>
+						</ImageView>
+					</graphic>
+				</Button>
+				<Label id="bubble" fx:id="allBubble" alignment="TOP_RIGHT"
+					contentDisplay="RIGHT" ellipsisString="&gt;10K" maxHeight="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT"
+					prefHeight="15.0" text="0" textAlignment="CENTER"
+					StackPane.alignment="TOP_LEFT">
+					<padding>
+						<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+					</padding>
+					<StackPane.margin>
+						<Insets left="35.0" />
+					</StackPane.margin>
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+				</Label>
+			</children>
+		</StackPane>
+		<StackPane>
+			<children>
+				<Button fx:id="expired" contentDisplay="TOP" mnemonicParsing="false"
+					prefHeight="50.0" prefWidth="50.0" text="EXPIRED">
+					<graphic>
+						<ImageView id="button-graphics" fx:id="expiredIcon"
+							fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+							preserveRatio="true">
+							<viewport>
+								<Rectangle2D />
+							</viewport>
+							<image>
+								<Image url="@assets/overdue.png" />
+							</image>
+						</ImageView>
+					</graphic>
+				</Button>
+				<Label id="bubble" fx:id="expiredBubble" alignment="TOP_RIGHT"
+					contentDisplay="RIGHT" ellipsisString="&gt;10K" maxHeight="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT"
+					prefHeight="15.0" text="10" textAlignment="CENTER"
+					StackPane.alignment="TOP_LEFT">
+					<padding>
+						<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+					</padding>
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+					<StackPane.margin>
+						<Insets left="35.0" />
+					</StackPane.margin>
+				</Label>
+			</children>
+		</StackPane>
+		<StackPane fx:id="todayStack" prefHeight="50.0" prefWidth="50.0">
+			<children>
+				<Button fx:id="today" contentDisplay="TOP" mnemonicParsing="false"
+					prefHeight="50.0" prefWidth="50.0" text="TODAY">
+					<graphic>
+						<ImageView id="button-graphics" fx:id="todayIcon"
+							fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+							preserveRatio="true">
+							<viewport>
+								<Rectangle2D />
+							</viewport>
+							<image>
+								<Image url="@assets/today.png" />
+							</image>
+						</ImageView>
+					</graphic>
+				</Button>
+				<Label id="today-label" fx:id="todayLabel" contentDisplay="CENTER"
+					text="00" />
+				<Label id="bubble" fx:id="todayBubble" alignment="TOP_RIGHT"
+					contentDisplay="RIGHT" ellipsisString="&gt;10K" maxHeight="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT"
+					prefHeight="15.0" text="100" textAlignment="CENTER"
+					StackPane.alignment="TOP_LEFT">
+					<padding>
+						<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+					</padding>
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+					<StackPane.margin>
+						<Insets left="35.0" />
+					</StackPane.margin>
+				</Label>
+			</children>
+		</StackPane>
+		<StackPane>
+			<children>
+				<Button fx:id="week" contentDisplay="TOP" mnemonicParsing="false"
+					prefHeight="50.0" prefWidth="50.0" text="WEEK">
+					<graphic>
+						<ImageView id="button-graphics" fx:id="weekIcon"
+							fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+							preserveRatio="true">
+							<viewport>
+								<Rectangle2D />
+							</viewport>
+							<image>
+								<Image url="@assets/week.png" />
+							</image>
+						</ImageView>
+					</graphic>
+				</Button>
+				<Label id="bubble" fx:id="weekBubble" alignment="TOP_RIGHT"
+					contentDisplay="RIGHT" ellipsisString="&gt;10K" maxHeight="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT"
+					prefHeight="15.0" text="1000" textAlignment="CENTER"
+					StackPane.alignment="TOP_LEFT">
+					<padding>
+						<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+					</padding>
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+					<StackPane.margin>
+						<Insets left="35.0" />
+					</StackPane.margin>
+				</Label>
+			</children>
+		</StackPane>
+		<StackPane>
+			<children>
+				<Button fx:id="done" contentDisplay="TOP" mnemonicParsing="false"
+					prefHeight="50.0" prefWidth="50.0" text="DONE">
+					<graphic>
+						<ImageView id="button-graphics" fx:id="doneIcon"
+							fitHeight="30.0" fitWidth="30.0" pickOnBounds="true"
+							preserveRatio="true">
+							<viewport>
+								<Rectangle2D />
+							</viewport>
+							<image>
+								<Image url="@assets/archived.png" />
+							</image>
+						</ImageView>
+					</graphic>
+				</Button>
+				<Label id="bubble" fx:id="doneBubble" alignment="TOP_RIGHT"
+					contentDisplay="RIGHT" ellipsisString="&gt;10K" maxHeight="-Infinity"
+					minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT"
+					prefHeight="15.0" text="10000" textAlignment="CENTER"
+					StackPane.alignment="TOP_LEFT">
+					<padding>
+						<Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+					</padding>
+					<font>
+						<Font name="System Bold" size="10.0" />
+					</font>
+					<StackPane.margin>
+						<Insets left="35.0" />
+					</StackPane.margin>
+				</Label>
+			</children>
+		</StackPane>
+		<Button fx:id="options" contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="OPTIONS">
+			<graphic>
+				<ImageView id="button-graphics" fx:id="optionsIcon"
+					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@assets/settings.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+		<Button fx:id="help" contentDisplay="TOP" mnemonicParsing="false"
+			prefHeight="50.0" prefWidth="50.0" text="HELP">
+			<graphic>
+				<ImageView id="button-graphics" fx:id="helpIcon"
+					fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+					<viewport>
+						<Rectangle2D />
+					</viewport>
+					<image>
+						<Image url="@assets/help.png" />
+					</image>
+				</ImageView>
+			</graphic>
+		</Button>
+	</children>
+</VBox>

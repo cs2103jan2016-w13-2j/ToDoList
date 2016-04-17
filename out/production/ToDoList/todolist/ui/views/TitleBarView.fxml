@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- @@author A0123994W -->
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox alignment="CENTER" prefHeight="40.0" prefWidth="800.0"
+	xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<ImageView fitHeight="28.0" fitWidth="1000.0" pickOnBounds="true"
+			preserveRatio="true">
+			<HBox.margin>
+				<Insets />
+			</HBox.margin>
+			<image>
+				<Image url="@assets/logo.png" />
+			</image>
+		</ImageView>
+	</children>
+	<styleClass>
+		<String fx:value="title-bar" />
+		<String fx:value="image-view" />
+		<String fx:value="hbox-group" />
+	</styleClass>
+</HBox>
