@@ -104,3 +104,5 @@ src/collated/zhangjiyi.md
 updatedDirectory.txt
 
 .idea/workspace.xml
+
+*.lck
